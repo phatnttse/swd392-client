@@ -1,14 +1,28 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    loadComponent() {
+      return import('./components/home/home.component').then(
+        (m) => m.HomeComponent
+      );
+    },
   },
   {
-    path: 'login',
-    component: LoginComponent,
+    path: 'signin',
+    loadComponent() {
+      return import('./components/sign-in/sign-in.component').then(
+        (m) => m.SignInComponent
+      );
+    },
+  },
+  {
+    path: 'signup',
+    loadComponent() {
+      return import('./components/sign-up/sign-up.component').then(
+        (m) => m.SignUpComponent
+      );
+    },
   },
 ];

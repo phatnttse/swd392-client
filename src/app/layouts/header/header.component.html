@@ -412,8 +412,22 @@
               class="dropdown-menu border-0 p-3 rounded-0 shadow"
               aria-labelledby="users"
             >
-              <li><a href="index.html" class="dropdown-item">Sign In</a></li>
-              <li><a href="index.html" class="dropdown-item">Sign Up</a></li>
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <mat-icon class="me-2">login</mat-icon
+                  ><a class="text-decoration-none" routerLink="/signin"
+                    >Sign In</a
+                  >
+                </div>
+              </li>
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <mat-icon class="me-2">app_registration</mat-icon
+                  ><a class="text-decoration-none" routerLink="/signup"
+                    >Sign Up</a
+                  >
+                </div>
+              </li>
             </ul>
           </li>
           <li>

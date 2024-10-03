@@ -10,12 +10,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
-
 @Component({
-  selector: 'app-login',
+  selector: 'app-sign-in',
   standalone: true,
   imports: [
     HeaderComponent,
@@ -24,11 +23,12 @@ import { AuthService } from '../../services/auth.service';
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './sign-in.component.html',
+  styleUrl: './sign-in.component.scss',
 })
-export class LoginComponent {
+export class SignInComponent {
   formLogin: FormGroup; // Form đăng nhập
 
   constructor(
