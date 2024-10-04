@@ -56,4 +56,23 @@ export class SignInComponent {
         console.error('Error during Google login:', error);
       });
   }
+
+  loginWithPassword() {
+    if (this.formLogin.invalid) {
+      this.formLogin.markAllAsTouched();
+      return;
+    }
+
+    const email = this.formLogin.get('email')?.value;
+    const password = this.formLogin.get('password')?.value;
+
+    this.authService.loginWithPassword(email, password).subscribe({
+      next: (response) => {
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Error during login:', error);
+      },
+    });
+  }
 }
