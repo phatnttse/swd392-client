@@ -1,4 +1,3 @@
-<app-header></app-header>
 <div class="content">
   <div class="container">
     <div class="row">
@@ -28,18 +27,16 @@
                   type="email"
                   required
                   formControlName="email"
-                  [class.is-invalid]="
-                  "
+                  [class.is-invalid]=""
                 />
-                
+
                 <mat-error style="font-size: 12px">
                   Email không được để trống
                 </mat-error>
-               
+
                 <mat-error style="font-size: 12px">
                   Email không đúng định dạng. Ex: vit&#64;gmail.com
                 </mat-error>
-
               </mat-form-field>
               <mat-form-field class="w-100" appearance="outline">
                 <mat-label style="font-size: 14px">Password</mat-label>
@@ -48,8 +45,7 @@
                   type="text"
                   required
                   formControlName="password"
-                  [class.is-invalid]="
-                  "
+                  [class.is-invalid]=""
                 />
                 <mat-error style="font-size: 12px">
                   Password không được để trống
@@ -63,8 +59,7 @@
                   type="text"
                   required
                   formControlName="confirmPassword"
-                  [class.is-invalid]="
-                  "
+                  [class.is-invalid]=""
                 />
                 <mat-error style="font-size: 12px">
                   Password reset không được để trống
@@ -78,19 +73,23 @@
                   type="text"
                   required
                   formControlName="name"
-                  [class.is-invalid]="
-                  "
+                  [class.is-invalid]=""
                 />
                 <mat-error style="font-size: 12px">
                   Name không được để trống
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field  class="w-100" appearance="outline">
+              <mat-form-field class="w-100" appearance="outline">
                 <mat-label style="font-size: 14px">Gender</mat-label>
-                <mat-select [(ngModel)]="selectedValue" formControlName="accountGender">
+                <mat-select
+                  [(ngModel)]="selectedValue"
+                  formControlName="accountGender"
+                >
                   @for (gender of genders; track gender) {
-                    <mat-option [value]="gender.value">{{gender.viewValue}}</mat-option>
+                  <mat-option [value]="gender.value">{{
+                    gender.viewValue
+                  }}</mat-option>
                   }
                 </mat-select>
                 <mat-error style="font-size: 12px">
@@ -164,4 +163,3 @@
     </div>
   </div>
 </div>
-<app-footer></app-footer>
