@@ -1,5 +1,5 @@
 {
-  "API_URL": "http://localhost:6868/api/v1",
+  "API_URL": "http://103.250.78.50:6868/api/v1",
   "Config_Language": [
     {
       "id": 1,

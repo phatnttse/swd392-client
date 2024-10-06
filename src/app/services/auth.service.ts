@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import {
+  Injectable
+} from '@angular/core';
 
 import {
   Auth,
@@ -6,13 +8,31 @@ import {
   GoogleAuthProvider,
   User,
 } from '@angular/fire/auth'; // Cập nhật import
-import { NavigationExtras, Router } from '@angular/router';
-import { LocalStoreManager } from './local-storage.service';
-import { AppConfigurationService } from './configuration.service';
-import { DBkeys } from './db-keys';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable, Subject } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
+import {
+  NavigationExtras,
+  Router
+} from '@angular/router';
+import {
+  LocalStoreManager
+} from './local-storage.service';
+import {
+  AppConfigurationService
+} from './configuration.service';
+import {
+  DBkeys
+} from './db-keys';
+import {
+  HttpClient,
+  HttpHeaders
+} from '@angular/common/http';
+import {
+  map,
+  Observable,
+  Subject
+} from 'rxjs';
+import {
+  ToastrService
+} from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +41,10 @@ export class AuthService {
   API_URL: string = '';
   loginUrl: string = '';
   private previousIsLoggedInCheck = false;
-  private loginStatus = new Subject<boolean>();
-  public reLoginDelegate: { (): void } | undefined;
+  private loginStatus = new Subject < boolean > ();
+  public reLoginDelegate: {
+    (): void
+  } | undefined;
   public loginRedirectUrl: string | null = null;
 
   constructor(
@@ -58,9 +80,12 @@ export class AuthService {
     this.router.navigate([page], navigationExtras);
   }
 
-  loginWithPassword(email: string, password: string): Observable<any> {
+  loginWithPassword(email: string, password: string): Observable < any > {
     return this.http
-      .post(`${this.API_URL}/auth/login`, { email, password })
+      .post(`${this.API_URL}/auth/login`, {
+        email,
+        password
+      })
       .pipe(map((response: any) => this.processLoginResponse(response)));
   }
 
@@ -88,6 +113,19 @@ export class AuthService {
       .pipe(map((response: any) => this.processLoginResponse(response)));
   }
 
+  register(email: string, password: string, name: string, accountGender: string) {
+    return this.http
+      .post(`${this.API_URL}/auth/register`, {
+        email,
+        password,
+        name,
+        accountGender
+      })
+      .pipe(
+        map((response: any) => this.processRegisterResponse(response)) // Xử lý phản hồi
+      );
+  }
+
   private processLoginResponse(response: any) {
     const accessToken = response.accessToken;
     const refreshToken = response.refreshToken;
@@ -99,9 +137,24 @@ export class AuthService {
     return user;
   }
 
-  private reevaluateLoginStatus(currentUser?: User | null) {
+  private processRegisterResponse(response: any) {
+    const accessToken = response.accessToken;
+    const refreshToken = response.refreshToken;
+
+    // Lưu dữ liệu vào LocalStorage
+    this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
+    this.localStorage.savePermanentData(refreshToken, DBkeys.REFRESH_TOKEN);
+
+    // Thêm xử lý khác (nếu cần) như hiển thị thông báo đăng ký thành công
+    this.toastr.success('Registration successful!');
+
+    const user: User = response; // Chuyển phản hồi thành đối tượng người dùng
+    return user;
+  }
+
+  private reevaluateLoginStatus(currentUser ? : User | null) {
     const user =
-      currentUser ?? this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
+      currentUser ?? this.localStorage.getDataObject < User > (DBkeys.CURRENT_USER);
     const isLoggedIn = user != null;
 
     if (this.previousIsLoggedInCheck !== isLoggedIn) {
@@ -125,7 +178,7 @@ export class AuthService {
   }
 
   get currentUser(): User | null {
-    const user = this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
+    const user = this.localStorage.getDataObject < User > (DBkeys.CURRENT_USER);
     this.reevaluateLoginStatus(user);
 
     return user;
@@ -136,7 +189,7 @@ export class AuthService {
   }
 
   get accessTokenExpiryDate(): Date | null {
-    return this.localStorage.getDataObject<Date>(DBkeys.TOKEN_EXPIRES_IN, true);
+    return this.localStorage.getDataObject < Date > (DBkeys.TOKEN_EXPIRES_IN, true);
   }
 
   get refreshToken(): string | null {

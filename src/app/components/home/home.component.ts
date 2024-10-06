@@ -9,4 +9,7 @@ import { HeaderComponent } from '../../layouts/header/header.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {}
+export class HomeComponent {
+
+  
+}
