@@ -1,29 +1,32 @@
 import { Injectable } from '@angular/core';
-
-import {
-  Auth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  User,
-} from '@angular/fire/auth'; // Cập nhật import
+import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
 import { NavigationExtras, Router } from '@angular/router';
 import { LocalStoreManager } from './local-storage.service';
 import { AppConfigurationService } from './configuration.service';
 import { DBkeys } from './db-keys';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable, Subject } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { UserAccount } from '../models/account.model';
+import { Utilities } from './utilities';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   API_URL: string = '';
-  loginUrl: string = '';
   private previousIsLoggedInCheck = false;
   private loginStatus = new Subject<boolean>();
   public reLoginDelegate: { (): void } | undefined;
   public loginRedirectUrl: string | null = null;
+
+  // Trạng thái của thông tin user
+  public userDataSource = new BehaviorSubject<any>(null);
+  userData$ = this.userDataSource.asObservable();
 
   constructor(
     private auth: Auth,
@@ -34,7 +37,6 @@ export class AuthService {
     private toastr: ToastrService
   ) {
     this.API_URL = appConfig['API_URL'];
-    this.loginUrl = `${this.API_URL}/auth/login`;
     this.initializeLoginStatus();
   }
 
@@ -49,24 +51,39 @@ export class AuthService {
     return signInWithPopup(this.auth, provider);
   }
 
-  gotoPage(page: string, preserveParams = true) {
-    const navigationExtras: NavigationExtras = {
-      queryParamsHandling: preserveParams ? 'merge' : '',
-      preserveFragment: preserveParams,
-    };
-
-    this.router.navigate([page], navigationExtras);
-  }
-
   loginWithPassword(email: string, password: string): Observable<any> {
     return this.http
       .post(`${this.API_URL}/auth/login`, { email, password })
       .pipe(map((response: any) => this.processLoginResponse(response)));
   }
 
+  redirectLoginUser() {
+    const redirect =
+      this.loginRedirectUrl && this.loginRedirectUrl !== '/'
+        ? this.loginRedirectUrl
+        : '/';
+    this.loginRedirectUrl = null;
+
+    const urlParamsAndFragment = Utilities.splitInTwo(redirect, '#');
+    const urlAndParams = Utilities.splitInTwo(
+      urlParamsAndFragment.firstPart,
+      '?'
+    );
+
+    const navigationExtras: NavigationExtras = {
+      fragment: urlParamsAndFragment.secondPart,
+      queryParams: urlAndParams.secondPart
+        ? Utilities.getQueryParamsFromString(urlAndParams.secondPart)
+        : null,
+      queryParamsHandling: 'merge',
+    };
+
+    this.router.navigate([urlAndParams.firstPart], navigationExtras);
+  }
+
   redirectForLogin() {
     this.loginRedirectUrl = this.router.url;
-    this.router.navigate([this.loginUrl]);
+    this.router.navigate(['/login']);
   }
 
   reLogin() {
@@ -79,7 +96,7 @@ export class AuthService {
 
   refreshLogin() {
     return this.http
-      .post(`${this.API_URL}/auth/refresh`, {
+      .post(`${this.API_URL}/auth/renew-access-token`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${DBkeys.REFRESH_TOKEN}`,
@@ -93,15 +110,35 @@ export class AuthService {
     const refreshToken = response.refreshToken;
     this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
     this.localStorage.savePermanentData(refreshToken, DBkeys.REFRESH_TOKEN);
-
-    const user: User = response;
-    this.toastr.success(response.message);
-    return user;
+    this.http
+      .get(`${this.API_URL}/account/profile`, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/plain, */*',
+        }),
+      })
+      .subscribe({
+        next: (response: any) => {
+          if (response.data) {
+            const user = {
+              ...response.data,
+            };
+            this.localStorage.savePermanentData(user, DBkeys.CURRENT_USER);
+            this.userDataSource.next(user);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
+        },
+      });
+    return response;
   }
 
-  private reevaluateLoginStatus(currentUser?: User | null) {
+  private reevaluateLoginStatus(currentUser?: UserAccount | null) {
     const user =
-      currentUser ?? this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
+      currentUser ??
+      this.localStorage.getDataObject<UserAccount>(DBkeys.CURRENT_USER);
     const isLoggedIn = user != null;
 
     if (this.previousIsLoggedInCheck !== isLoggedIn) {
@@ -124,8 +161,19 @@ export class AuthService {
     this.reevaluateLoginStatus();
   }
 
-  get currentUser(): User | null {
-    const user = this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
+  gotoPage(page: string, preserveParams = true) {
+    const navigationExtras: NavigationExtras = {
+      queryParamsHandling: preserveParams ? 'merge' : '',
+      preserveFragment: preserveParams,
+    };
+
+    this.router.navigate([page], navigationExtras);
+  }
+
+  get currentUser(): UserAccount | null {
+    const user = this.localStorage.getDataObject<UserAccount>(
+      DBkeys.CURRENT_USER
+    );
     this.reevaluateLoginStatus(user);
 
     return user;
@@ -149,5 +197,9 @@ export class AuthService {
     }
 
     return this.accessTokenExpiryDate.valueOf() <= new Date().valueOf();
+  }
+
+  get isLoggedIn(): boolean {
+    return this.currentUser != null;
   }
 }

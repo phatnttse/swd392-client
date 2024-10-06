@@ -16,7 +16,7 @@ This is main CSS file that contains custom style rules used in this template
 body {
   --heading-font: "Inter", sans-serif;
   --bs-link-color: #333;
-  --bs-link-hover-color: #333;
+  --bs-link-hover-color: #333333;
 
   --bs-link-color-rgb: 40, 40, 40;
   --bs-link-hover-color-rgb: 0, 0, 0;
@@ -45,7 +45,7 @@ body {
   --bs-primary-bg-subtle: #fff9eb;
   --bs-success-bg-subtle: #eef5e5;
 
-  --bs-border-color: #f7f7f7;
+  --bs-border-color: #e2dfdf;
 }
 .btn-primary {
   --bs-btn-color: #fff;

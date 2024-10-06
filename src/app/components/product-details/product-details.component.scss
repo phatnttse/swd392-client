@@ -1,0 +1,31 @@
+.icon-hover:hover {
+  border-color: #3b71ca !important;
+  background-color: white !important;
+  color: #3b71ca !important;
+}
+
+.icon-hover:hover i {
+  color: #3b71ca !important;
+}
+.shop-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.shop-info img {
+  border-radius: 50%;
+}
+
+.shop-info div {
+  text-align: center;
+}
+
+.shop-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+}

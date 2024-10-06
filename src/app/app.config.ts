@@ -17,12 +17,14 @@ import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { AppConfigurationService } from './services/configuration.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
+// Hàm khởi tạo ứng dụng
 const appInitializerFn = (appConfigService: AppConfigurationService) => {
   return () => appConfigService.loadConfig();
 };
 
+// Hàm cung cấp cấu hình dịch
 export const provideTranslation = () => ({
-  defaultLanguage: 'vi',
+  defaultLanguage: AppConfigurationService.Default_Language,
   loader: {
     provide: TranslateLoader,
     useFactory: HttpLoaderFactory,
@@ -30,6 +32,7 @@ export const provideTranslation = () => ({
   },
 });
 
+// Hàm tải file ngôn ngữ
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -57,6 +60,8 @@ export const appConfig: ApplicationConfig = {
       deps: [AppConfigurationService],
       multi: true, // Đảm bảo cho phép nhiều hàm APP_INITIALIZER
     },
+
+    // Cấu hình dịch
     importProvidersFrom([TranslateModule.forRoot(provideTranslation())]),
   ],
 };

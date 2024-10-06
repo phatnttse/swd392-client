@@ -4,7 +4,7 @@ import { Observable, Subject, from, throwError } from 'rxjs';
 import { mergeMap, switchMap, catchError } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
-import { User } from '@angular/fire/auth';
+import { UserAccount } from '../models/account.model';
 
 interface ServerError {
   status: number;
@@ -23,6 +23,7 @@ export class EndpointBase {
 
   constructor(protected http: HttpClient, private authService: AuthService) {}
 
+  // Tạo header cho request
   protected get requestHeaders(): {
     headers: HttpHeaders | { [header: string]: string | string[] };
   } {
@@ -35,7 +36,8 @@ export class EndpointBase {
     return { headers };
   }
 
-  public refreshLogin(): Observable<User> {
+  // Lấy thông tin tài khoản
+  public refreshLogin(): Observable<UserAccount | null> {
     return this.authService.refreshLogin().pipe(
       catchError((error: ServerError) => {
         return this.handleError(error, () => this.refreshLogin());
@@ -43,6 +45,7 @@ export class EndpointBase {
     );
   }
 
+  // Xử lý lỗi custom
   protected handleError<T>(
     error: ServerError,
     continuation: () => Observable<T>
@@ -66,11 +69,7 @@ export class EndpointBase {
           this.resumeTasks(false);
           this.authService.reLogin();
 
-          if (
-            refreshLoginError.status === 401 ||
-            (refreshLoginError.error &&
-              refreshLoginError.error.error === 'invalid_grant')
-          ) {
+          if (refreshLoginError.status === 401) {
             return throwError(() => new Error('session expired'));
           } else {
             return throwError(
@@ -81,19 +80,18 @@ export class EndpointBase {
       );
     }
 
-    if (error.error && error.error.error === 'invalid_grant') {
+    if (error.error) {
       this.authService.reLogin();
 
       return throwError(() =>
-        error.error && error.error.error_description
-          ? `session expired (${error.error.error_description})`
-          : 'session expired'
+        error.error ? `session expired` : 'session expired'
       );
     } else {
       return throwError(() => error);
     }
   }
 
+  // Tạm dừng task
   private pauseTask<T>(continuation: () => Observable<T>) {
     if (!this.taskPauser) {
       this.taskPauser = new Subject();
@@ -108,6 +106,7 @@ export class EndpointBase {
     );
   }
 
+  // Tiếp tục task
   private resumeTasks(continueOp: boolean) {
     setTimeout(() => {
       if (this.taskPauser) {
