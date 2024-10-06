@@ -21,7 +21,11 @@ export class AuthService {
   API_URL: string = '';
   private previousIsLoggedInCheck = false;
   private loginStatus = new Subject<boolean>();
-  public reLoginDelegate: { (): void } | undefined;
+  public reLoginDelegate:
+    | {
+        (): void;
+      }
+    | undefined;
   public loginRedirectUrl: string | null = null;
 
   // Trạng thái của thông tin user
@@ -53,7 +57,10 @@ export class AuthService {
 
   loginWithPassword(email: string, password: string): Observable<any> {
     return this.http
-      .post(`${this.API_URL}/auth/login`, { email, password })
+      .post(`${this.API_URL}/auth/login`, {
+        email,
+        password,
+      })
       .pipe(map((response: any) => this.processLoginResponse(response)));
   }
 
@@ -105,6 +112,24 @@ export class AuthService {
       .pipe(map((response: any) => this.processLoginResponse(response)));
   }
 
+  register(
+    email: string,
+    password: string,
+    name: string,
+    accountGender: string
+  ) {
+    return this.http
+      .post(`${this.API_URL}/auth/register`, {
+        email,
+        password,
+        name,
+        accountGender,
+      })
+      .pipe(
+        map((response: any) => this.processRegisterResponse(response)) // Xử lý phản hồi
+      );
+  }
+
   private processLoginResponse(response: any) {
     const accessToken = response.accessToken;
     const refreshToken = response.refreshToken;
@@ -133,6 +158,21 @@ export class AuthService {
         },
       });
     return response;
+  }
+
+  private processRegisterResponse(response: any) {
+    const accessToken = response.accessToken;
+    const refreshToken = response.refreshToken;
+
+    // Lưu dữ liệu vào LocalStorage
+    this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
+    this.localStorage.savePermanentData(refreshToken, DBkeys.REFRESH_TOKEN);
+
+    // Thêm xử lý khác (nếu cần) như hiển thị thông báo đăng ký thành công
+    this.toastr.success('Registration successful!');
+
+    const user: UserAccount = response; // Chuyển phản hồi thành đối tượng người dùng
+    return user;
   }
 
   private reevaluateLoginStatus(currentUser?: UserAccount | null) {
