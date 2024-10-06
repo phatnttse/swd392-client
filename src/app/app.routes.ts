@@ -25,4 +25,60 @@ export const routes: Routes = [
       );
     },
   },
+  {
+    path: 'cart',
+    loadComponent() {
+      return import('./components/cart/cart.component').then(
+        (m) => m.CartComponent
+      );
+    },
+  },
+  {
+    path: 'contact',
+    loadComponent() {
+      return import('./components/contact/contact.component').then(
+        (m) => m.ContactComponent
+      );
+    },
+  },
+  {
+    path: 'about-us',
+    loadComponent() {
+      return import('./components/about-us/about-us.component').then(
+        (m) => m.AboutUsComponent
+      );
+    },
+  },
+  {
+    path: 'blogs',
+    loadComponent() {
+      return import('./components/blog/blog.component').then(
+        (m) => m.BlogComponent
+      );
+    },
+  },
+  {
+    path: 'products',
+    loadComponent() {
+      return import('./components/products/products.component').then(
+        (m) => m.ProductsComponent
+      );
+    },
+  },
+  {
+    path: 'product-details/:id',
+    loadComponent() {
+      return import(
+        './components/product-details/product-details.component'
+      ).then((m) => m.ProductDetailsComponent);
+    },
+  },
+  {
+    path: 'order',
+    loadComponent() {
+      return import('./components/order/order.component').then(
+        (m) => m.OrderComponent
+      );
+    },
+  },
 ];

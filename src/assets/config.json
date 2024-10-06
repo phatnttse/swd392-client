@@ -5,14 +5,14 @@
       "id": 1,
       "idRefer": 1,
       "value": "vi",
-      "icon": "/flag-vi.png",
+      "icon": "/flag-vi.svg",
       "isActive": 1
     },
     {
       "id": 2,
       "idRefer": 2,
       "value": "en",
-      "icon": "/flag-en.png",
+      "icon": "/flag-en.svg",
       "isActive": 1
     }
   ]

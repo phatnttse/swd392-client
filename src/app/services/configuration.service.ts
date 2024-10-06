@@ -12,12 +12,15 @@ export class AppConfigurationService {
   private config: any;
   private API_URL: string = '';
   private Config_Language: any = []; // Cấu hình ngôn ngữ
+  public static readonly Default_Language: string = 'vi'; // Ngôn ngữ mặc định
+
   constructor(
     private http: HttpClient,
     private translate: TranslateService,
     private localStorage: LocalStoreManager
   ) {}
 
+  // Hàm tải cấu hình từ file config.json
   loadConfig(): Promise<void> {
     return this.http
       .get('/assets/config.json')
@@ -25,6 +28,7 @@ export class AppConfigurationService {
       .then((config) => {
         this.config = config;
         this.API_URL = this.config.API_URL;
+        this.Config_Language = this.config.Config_Language;
       })
       .catch((error: any) => {
         console.error('Error loading configuration file', error);
@@ -35,13 +39,10 @@ export class AppConfigurationService {
     return this.config ? this.config[key] : null;
   }
 
-  // get ngôn ngữ từ localStorage | isAction: có hành động thay đổi
-  // private langIDSource = new BehaviorSubject<any>(1);
-  // langID$ = this.langIDSource.asObservable();
-
+  // Hàm thiết lập ngôn ngữ mặc định
   private valueLangSource = new BehaviorSubject<any>(null);
   valueLang$ = this.valueLangSource.asObservable();
-  setLanguageDefalt(langID: any) {
+  setLanguageDefault(langID: any) {
     let config = this.Config_Language.find(
       (fig: any) => fig.isActive && fig.id == langID
     );

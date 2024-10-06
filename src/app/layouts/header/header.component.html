@@ -45,8 +45,23 @@
           <strong>$20</strong>
         </li>
       </ul>
+      <button
+        routerLink="/cart"
+        class="w-100 btn btn-primary btn-lg mb-2"
+        type="button"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      >
+        View cart
+      </button>
 
-      <button class="w-100 btn btn-primary btn-lg" type="submit">
+      <button
+        routerLink="/order"
+        class="w-100 btn btn-primary btn-lg"
+        type="button"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      >
         Continue to checkout
       </button>
     </div>
@@ -283,10 +298,10 @@
   <div class="container-fluid">
     <div class="row py-3 border-bottom">
       <div
-        class="col-sm-4 col-lg-2 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-start"
+        class="col-sm-4 col-lg-2 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-end"
       >
         <div class="d-flex align-items-center my-3 my-sm-0">
-          <a href="index.html">
+          <a routerLink="/">
             <img
               width="70px"
               src="./../../../assets/images/Blossom.png"
@@ -308,52 +323,12 @@
         </button>
       </div>
 
-      <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-4">
-        <div class="search-bar row bg-light p-2 rounded-4">
-          <div class="col-md-4 d-none d-md-block">
-            <select class="form-select border-0 bg-transparent">
-              <option>All Categories</option>
-              <option>Groceries</option>
-              <option>Drinks</option>
-              <option>Chocolates</option>
-            </select>
-          </div>
-          <div class="col-11 col-md-7">
-            <form
-              id="search-form"
-              class="text-center"
-              action="index.html"
-              method="post"
-            >
-              <input
-                type="text"
-                class="form-control border-0 bg-transparent"
-                placeholder="Search for more than 20,000 products"
-              />
-            </form>
-          </div>
-          <div class="col-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <ul
-          class="navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark"
+          class="pt-3 navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark"
         >
           <li class="nav-item active">
-            <a href="index.html" class="nav-link">Home</a>
+            <a routerLink="/" class="nav-link">{{ "Home" | translate }}</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -362,39 +337,80 @@
               id="pages"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              >Pages</a
+              >{{ "Page" | translate }}</a
             >
             <ul
               class="dropdown-menu border-0 p-3 rounded-0 shadow"
               aria-labelledby="pages"
             >
-              <li><a href="index.html" class="dropdown-item">About Us </a></li>
-              <li><a href="index.html" class="dropdown-item">Shop </a></li>
               <li>
-                <a href="index.html" class="dropdown-item">Single Product </a>
+                <a routerLink="/products" class="dropdown-item">{{
+                  "Product" | translate
+                }}</a>
               </li>
-              <li><a href="index.html" class="dropdown-item">Cart </a></li>
-              <li><a href="index.html" class="dropdown-item">Checkout </a></li>
-              <li><a href="index.html" class="dropdown-item">Blog </a></li>
               <li>
-                <a href="index.html" class="dropdown-item">Single Post </a>
+                <a routerLink="/about-us" class="dropdown-item">{{
+                  "AboutUs" | translate
+                }}</a>
               </li>
-              <li><a href="index.html" class="dropdown-item">Styles </a></li>
-              <li><a href="index.html" class="dropdown-item">Contact </a></li>
-              <li><a href="index.html" class="dropdown-item">Thank You </a></li>
+              <li><a routerLink="/blogs" class="dropdown-item">Blog </a></li>
               <li>
-                <a href="index.html" class="dropdown-item">My Account </a>
+                <a routerLink="/contact" class="dropdown-item"
+                  >{{ "Contact" | translate }}
+                </a>
               </li>
-              <li><a href="index.html" class="dropdown-item">404 Error </a></li>
             </ul>
+          </li>
+          <li class="nav-item active">
+            <a routerLink="/" class="nav-link">{{
+              "SellerChannel" | translate
+            }}</a>
           </li>
         </ul>
       </div>
 
       <div
-        class="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end"
+        class="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end pt-4"
       >
         <ul class="d-flex justify-content-end list-unstyled m-0">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle pe-3"
+              role="button"
+              id="languages"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              @if (defaultLang) {
+              <a href="javascript:;" class="p-2 mx-1">
+                <img
+                  width="32px"
+                  [src]="'./../../../assets/images' + defaultLang.icon"
+                  alt="Viet Nam"
+                />
+              </a>
+              }
+            </a>
+            <ul
+              class="dropdown-menu border-0 p-3 rounded-0 shadow"
+              aria-labelledby="languages"
+            >
+              @for (lang of listLanguage; track $index) { @if (lang !=
+              defaultLang) {
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <a href="javascript:;" (click)="btnChangeLang(lang)">
+                    <img
+                      width="32px"
+                      [src]="'./../../../assets/images' + lang.icon"
+                      [alt]="lang.value"
+                    />
+                  </a>
+                </div>
+              </li>
+              } }
+            </ul>
+          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle pe-3"
@@ -403,31 +419,63 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <a href="#" class="p-2 mx-1">
+              <a href="javascript:;" class="p-2 mx-1">
+                @if(account) {
+                <img
+                  class="rounded"
+                  width="32px"
+                  src="./../../../assets/images/reviewer-1.jpg"
+                  alt="Avatar"
+                />
+                }@else {
                 <svg width="24" height="24">
                   <use xlink:href="#user"></use>
-                </svg> </a
-            ></a>
+                </svg>
+                }
+              </a></a
+            >
             <ul
               class="dropdown-menu border-0 p-3 rounded-0 shadow"
               aria-labelledby="users"
             >
+              @if(account) {
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <mat-icon class="me-2">account_circle</mat-icon
+                  ><a class="text-decoration-none" routerLink="/profile">{{
+                    "MyAccount" | translate
+                  }}</a>
+                </div>
+              </li>
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <mat-icon class="me-2">logout</mat-icon
+                  ><a
+                    class="text-decoration-none"
+                    href="javascript:;"
+                    (click)="btnLogOut()"
+                    >{{ "LogOut" | translate }}</a
+                  >
+                </div>
+              </li>
+              }@else {
               <li>
                 <div class="dropdown-item d-flex align-items-center">
                   <mat-icon class="me-2">login</mat-icon
-                  ><a class="text-decoration-none" routerLink="/signin"
-                    >Sign In</a
-                  >
+                  ><a class="text-decoration-none" routerLink="/signin">{{
+                    "SignIn" | translate
+                  }}</a>
                 </div>
               </li>
               <li>
                 <div class="dropdown-item d-flex align-items-center">
                   <mat-icon class="me-2">app_registration</mat-icon
-                  ><a class="text-decoration-none" routerLink="/signup"
-                    >Sign Up</a
-                  >
+                  ><a class="text-decoration-none" routerLink="/signup">{{
+                    "SignUp" | translate
+                  }}</a>
                 </div>
               </li>
+              }
             </ul>
           </li>
           <li>
@@ -437,7 +485,7 @@
               </svg>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a
               href="#"
               class="p-2 mx-1"
@@ -448,6 +496,14 @@
               <svg width="24" height="24">
                 <use xlink:href="#shopping-bag"></use>
               </svg>
+              <!-- Badge hiển thị số lượng sản phẩm -->
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                id="cartItemCount"
+              >
+                5
+                <!-- Đây là số lượng sản phẩm, bạn có thể thay bằng dữ liệu động -->
+              </span>
             </a>
           </li>
         </ul>

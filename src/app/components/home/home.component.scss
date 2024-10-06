@@ -1,6 +1,10 @@
+.product-name {
+  font-size: 20px;
+  text-decoration: none;
+}
 .background-container {
   height: 400px; // Chiều cao của phần tử
-  background-image: url('./../../../assets/images/banner_home.jpg'); // Đường dẫn tới hình ảnh
+  background-image: url("./../../../assets/images/banner_home.jpg"); // Đường dẫn tới hình ảnh
   background-size: cover; // Đảm bảo hình ảnh phủ toàn bộ phần tử
   background-position: center; // Căn giữa hình ảnh
   background-repeat: no-repeat; // Không lặp lại hình ảnh
@@ -8,13 +12,18 @@
 
   // Lớp phủ để làm mờ
   &::before {
-    content: ''; // Tạo một lớp giả
+    content: ""; // Tạo một lớp giả
     position: absolute; // Đặt vị trí tuyệt đối
     top: 0; // Đặt ở trên cùng
     left: 0; // Đặt ở bên trái
     right: 0; // Đặt ở bên phải
     bottom: 0; // Đặt ở dưới cùng
-    background-color: rgba(197, 191, 191, 0.5); // Màu đen với độ mờ 50% (thay đổi giá trị alpha để điều chỉnh độ mờ)
+    background-color: rgba(
+      197,
+      191,
+      191,
+      0.5
+    ); // Màu đen với độ mờ 50% (thay đổi giá trị alpha để điều chỉnh độ mờ)
     z-index: 1; // Đưa lớp phủ lên trên hình ảnh
   }
 
@@ -46,19 +55,25 @@ h1,
 }
 
 h1 {
-    color: #4CAF50; /* Màu chữ */
-    font-size: 3rem; /* Kích thước chữ lớn */
-    font-weight: bold; /* Chữ đậm */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Thêm bóng đổ */
-    transition: transform 0.3s ease; /* Hiệu ứng chuyển động */
+  color: #4caf50; /* Màu chữ */
+  font-size: 3rem; /* Kích thước chữ lớn */
+  font-weight: bold; /* Chữ đậm */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Thêm bóng đổ */
+  transition: transform 0.3s ease; /* Hiệu ứng chuyển động */
 }
 
 h1:hover {
-    animation: wave 1s infinite; /* Hiệu ứng gợn sóng */
+  animation: wave 1s infinite; /* Hiệu ứng gợn sóng */
 }
 
 @keyframes wave {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

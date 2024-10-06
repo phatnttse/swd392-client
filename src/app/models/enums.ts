@@ -9,3 +9,10 @@ export enum Role {
   USER,
   ADMIN,
 }
+
+export enum WalletLogType {
+  ADD,
+  SUBTRACT,
+  DEPOSIT,
+  WITHDRAW,
+}
