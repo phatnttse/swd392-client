@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 export class ProductDetailsComponent implements OnInit {
   flowerId: number = 0;
   flower: Flower | null = null;
+  quantityInput: number = 1;
 
   constructor(
     private productService: ProductService,
@@ -42,5 +43,15 @@ export class ProductDetailsComponent implements OnInit {
         console.log(error);
       },
     });
+  }
+
+  btnIncreaseQuantity() {
+    this.quantityInput++;
+  }
+
+  bntDecreaseQuantity() {
+    if (this.quantityInput > 1) {
+      this.quantityInput--;
+    }
   }
 }

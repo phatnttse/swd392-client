@@ -36,8 +36,7 @@ export class SignInComponent {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
-    private authService: AuthService,
-    private accountService: AccountService
+    private authService: AuthService
   ) {
     this.formLogin = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],

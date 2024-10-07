@@ -6,6 +6,7 @@
     object-fit: cover;
     background-position: center center;
   "
+  class="banner"
 >
   <div class="container-lg">
     <div class="background-container">
@@ -22,13 +23,13 @@
 
           <div class="d-flex gap-3">
             <a
-              href="#"
-              class="btn btn-primary text-uppercase fs-6 rounded-pill px-4 py-3 mt-3"
+              routerLink="/products"
+              class="btn btn-primary text-uppercase fs-6 rounded-pill py-3 mt-3"
               >Mua ngay</a
             >
             <a
-              href="#"
-              class="btn btn-dark text-uppercase fs-6 rounded-pill px-4 py-3 mt-3"
+              routerLink="/signup"
+              class="btn btn-dark text-uppercase fs-6 rounded-pill py-3 mt-3"
               >Đăng ký bán hoa</a
             >
           </div>
@@ -321,15 +322,7 @@
                 </div>
                 <div class="button-area p-3 pt-0">
                   <div class="row g-1 mt-2">
-                    <div class="col-3">
-                      <input
-                        type="number"
-                        name="quantity"
-                        class="form-control border-dark-subtle input-number quantity"
-                        value="1"
-                      />
-                    </div>
-                    <div class="col-7">
+                    <div class="col-8">
                       <a
                         href="#"
                         class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
@@ -339,13 +332,15 @@
                         Add to Cart</a
                       >
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
                       <a
                         href="#"
-                        class="btn btn-outline-dark rounded-1 p-2 fs-6"
+                        style="padding: 8px 20px"
+                        class="btn btn-outline-dark rounded-1 fs-6"
                         ><svg width="18" height="18">
-                          <use xlink:href="#heart"></use></svg
-                      ></a>
+                          <use xlink:href="#search"></use>
+                        </svg>
+                      </a>
                     </div>
                   </div>
                 </div>

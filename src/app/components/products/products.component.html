@@ -1,1 +1,162 @@
-<p>products works!</p>
+<section class="section-product">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-3 order-2 order-lg-1">
+        <aside>
+          <div class="mb-5">
+            <!-- <h5>Categories</h5>
+            <ul class="nav nav-link">
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html">Accessories</a>
+              </li>
+              <li>
+                <a class="nav-link" href="shop.html">Collection</a>
+              </li>
+              <li>
+                <a class="nav-link" href="shop.html">Crafted</a>
+              </li>
+            </ul> -->
+            <div class="mb-5">
+              <h5 class="mb-4">Danh mục</h5>
+              <mat-checkbox>Amazon Essentials (2)</mat-checkbox>
+              <mat-checkbox>Fruit of the Loom (1)</mat-checkbox>
+              <mat-checkbox>Hanes (4)</mat-checkbox>
+            </div>
+          </div>
+          <div class="mb-5">
+            <h5 class="mb-3">Lọc theo giá</h5>
+            <mat-slider min="200" max="500">
+              <input value="300" matSliderStartThumb />
+              <input value="400" matSliderEndThumb />
+            </mat-slider>
+
+            <button mat-button color="primary" class="fw-bold">Áp dụng</button>
+          </div>
+        </aside>
+      </div>
+
+      <div class="col-12 col-lg-9 order-1 order-lg-2">
+        <div
+          class="d-flex align-items-center justify-content-between mb-3 col-8"
+        >
+          <div class="d-flex align-items-center">
+            <div class="me-3">
+              <p class="fs-20 text-dark">Tất cả sản phẩm</p>
+            </div>
+          </div>
+          <div class="align-items-center d-flex col-4">
+            <img
+              width="16"
+              height="16"
+              alt="Sắp xếp"
+              src="https://res.cloudinary.com/dlpust9lj/image/upload/v1721068180/ascwklmvjzdnmhdex8g2.png"
+              class="mr-2"
+            />
+            <p class="mt-3" style="font-size: 14px; margin-left: 6px">
+              Sắp xếp: Mặc định
+            </p>
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="mb-3">
+              <span class="material-icons"> view_list </span>
+            </button>
+            <mat-menu #menu="matMenu"></mat-menu>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div
+              class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-4"
+            >
+              @for (flower of listFlower; track $index) {
+              <div class="col">
+                <div class="product-item">
+                  <figure>
+                    <a
+                      href="javascript:;"
+                      title="Product Title"
+                      (click)="viewFlowerDetails(flower.id)"
+                    >
+                      <img
+                        [src]="flower.imageUrl"
+                        [alt]="flower.name"
+                        class="tab-image w-100"
+                      />
+                    </a>
+                  </figure>
+                  <div class="d-flex flex-column text-center">
+                    <a
+                      href="javascript:;"
+                      class="product-name"
+                      (click)="viewFlowerDetails(flower.id)"
+                    >
+                      <h3 class="fs-6 fw-normal">{{ flower.name }}</h3>
+                    </a>
+                    <div>
+                      <span class="rating">
+                        <svg width="18" height="18" class="text-warning">
+                          <use xlink:href="#star-full"></use>
+                        </svg>
+                        <svg width="18" height="18" class="text-warning">
+                          <use xlink:href="#star-full"></use>
+                        </svg>
+                        <svg width="18" height="18" class="text-warning">
+                          <use xlink:href="#star-full"></use>
+                        </svg>
+                        <svg width="18" height="18" class="text-warning">
+                          <use xlink:href="#star-full"></use>
+                        </svg>
+                        <svg width="18" height="18" class="text-warning">
+                          <use xlink:href="#star-half"></use>
+                        </svg>
+                      </span>
+                      <span>(222)</span>
+                    </div>
+                    <div
+                      class="d-flex justify-content-center align-items-center gap-2"
+                    >
+                      <del>{{ flower.price }}$</del>
+                      <span class="text-dark fw-semibold"
+                        >{{ flower.price }}$</span
+                      >
+
+                      <span
+                        class="badge border border-dark-subtle rounded-0 fw-normal px-1 fs-7 lh-1 text-body-tertiary"
+                        >10% OFF</span
+                      >
+                    </div>
+                    <div class="button-area p-3 pt-0">
+                      <div class="row g-1 mt-2">
+                        <div class="col-8">
+                          <a
+                            href="#"
+                            class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
+                            ><svg width="18" height="18">
+                              <use xlink:href="#cart"></use>
+                            </svg>
+                            Add to Cart</a
+                          >
+                        </div>
+                        <div class="col-4">
+                          <a
+                            href="#"
+                            style="padding: 8px 20px"
+                            class="btn btn-outline-dark rounded-1 fs-6"
+                            ><svg width="18" height="18">
+                              <use xlink:href="#search"></use>
+                            </svg>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+            <!-- / product-grid -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

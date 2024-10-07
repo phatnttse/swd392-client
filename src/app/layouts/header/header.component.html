@@ -15,8 +15,8 @@
   <div class="offcanvas-body">
     <div class="order-md-last">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-primary">Your cart</span>
-        <span class="badge bg-primary rounded-pill">3</span>
+        <span class="text-dark">Your cart</span>
+        <span class="badge bg-secondary rounded-pill">3</span>
       </h4>
       <ul class="list-group mb-3">
         <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -68,6 +68,45 @@
   </div>
 </div>
 
+<!-- Offcanvas Tìm Kiếm -->
+<div
+  class="offcanvas offcanvas-top"
+  tabindex="-1"
+  id="offcanvasSearch"
+  aria-labelledby="offcanvasSearchLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasSearchLabel">Search</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <form>
+      <div class="input-group p-3">
+        <span class="input-group-text bg-white border-0">
+          <svg width="32" height="32">
+            <use xlink:href="#search"></use>
+          </svg>
+        </span>
+        <input
+          type="text"
+          class="form-control border-0 text-dark"
+          id="searchInput"
+          placeholder="Tìm kiếm trên Blossom..."
+          aria-label="Search"
+          [autofocus]="true"
+          style="font-size: 1.25rem"
+          height="50px"
+        />
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
   <div class="offcanvas-header justify-content-between">
     <h4 class="fw-normal text-uppercase fs-6">Menu</h4>
@@ -94,105 +133,7 @@
           <span>Fruits and vegetables</span>
         </a>
       </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#dairy"></use>
-          </svg>
-          <span>Dairy and Eggs</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#meat"></use>
-          </svg>
-          <span>Meat and Poultry</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#seafood"></use>
-          </svg>
-          <span>Seafood</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#bakery"></use>
-          </svg>
-          <span>Bakery and Bread</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#canned"></use>
-          </svg>
-          <span>Canned Goods</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#frozen"></use>
-          </svg>
-          <span>Frozen Foods</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#pasta"></use>
-          </svg>
-          <span>Pasta and Rice</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#breakfast"></use>
-          </svg>
-          <span>Breakfast Foods</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#snacks"></use>
-          </svg>
-          <span>Snacks and Chips</span>
-        </a>
-      </li>
+
       <li class="nav-item border-dashed">
         <button
           class="btn btn-toggle dropdown-toggle position-relative w-100 d-flex justify-content-between align-items-center text-dark p-2"
@@ -224,86 +165,20 @@
           </ul>
         </div>
       </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#spices"></use>
-          </svg>
-          <span>Spices and Seasonings</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#baby"></use>
-          </svg>
-          <span>Baby Food and Formula</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#health"></use>
-          </svg>
-          <span>Health and Wellness</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#household"></use>
-          </svg>
-          <span>Household Supplies</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#personal"></use>
-          </svg>
-          <span>Personal Care</span>
-        </a>
-      </li>
-      <li class="nav-item border-dashed">
-        <a
-          href="index.html"
-          class="nav-link d-flex align-items-center gap-3 text-dark p-2"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <use xlink:href="#pet"></use>
-          </svg>
-          <span>Pet Food and Supplies</span>
-        </a>
-      </li>
     </ul>
   </div>
 </div>
 
 <header>
   <div class="container-fluid">
-    <div class="row py-3 border-bottom">
+    <div class="row py-3 border-bottom align-items-center">
       <div
         class="col-sm-4 col-lg-2 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-end"
       >
-        <div class="d-flex align-items-center my-3 my-sm-0">
+        <div class="d-flex align-items-center my-sm-0">
           <a routerLink="/">
             <img
-              width="70px"
+              width="60px"
               src="./../../../assets/images/Blossom.png"
               alt="logo"
               class="img-fluid"
@@ -325,7 +200,7 @@
 
       <div class="col-lg-6">
         <ul
-          class="pt-3 navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark"
+          class="header-page navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark"
         >
           <li class="nav-item active">
             <a routerLink="/" class="nav-link">{{ "Home" | translate }}</a>
@@ -370,9 +245,11 @@
       </div>
 
       <div
-        class="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end pt-4"
+        class="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end"
       >
-        <ul class="d-flex justify-content-end list-unstyled m-0">
+        <ul
+          class="d-flex justify-content-end list-unstyled m-0 align-items-center"
+        >
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle pe-3"
@@ -479,13 +356,19 @@
             </ul>
           </li>
           <li>
-            <a href="#" class="p-2 mx-1">
+            <a
+              href="javascript:;"
+              class="p-2 mx-1"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasSearch"
+              aria-controls="offcanvasSearch"
+            >
               <svg width="24" height="24">
-                <use xlink:href="#wishlist"></use>
+                <use xlink:href="#search"></use>
               </svg>
             </a>
           </li>
-          <li class="position-relative">
+          <li class="position-relative d-flex align-items-center">
             <a
               href="#"
               class="p-2 mx-1"
@@ -498,7 +381,7 @@
               </svg>
               <!-- Badge hiển thị số lượng sản phẩm -->
               <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger"
                 id="cartItemCount"
               >
                 5
@@ -808,18 +691,6 @@
           stroke-linecap="round"
           d="M17.97 20c-.16-2.892-1.045-5-5.97-5s-5.81 2.108-5.97 5"
         />
-      </g>
-    </symbol>
-    <symbol
-      xmlns="http://www.w3.org/2000/svg"
-      id="wishlist"
-      viewBox="0 0 24 24"
-    >
-      <g fill="none" stroke="currentColor" stroke-width="1.5">
-        <path
-          d="M21 16.09v-4.992c0-4.29 0-6.433-1.318-7.766C18.364 2 16.242 2 12 2C7.757 2 5.636 2 4.318 3.332C3 4.665 3 6.81 3 11.098v4.993c0 3.096 0 4.645.734 5.321c.35.323.792.526 1.263.58c.987.113 2.14-.907 4.445-2.946c1.02-.901 1.529-1.352 2.118-1.47c.29-.06.59-.06.88 0c.59.118 1.099.569 2.118 1.47c2.305 2.039 3.458 3.059 4.445 2.945c.47-.053.913-.256 1.263-.579c.734-.676.734-2.224.734-5.321Z"
-        />
-        <path stroke-linecap="round" d="M15 6H9" />
       </g>
     </symbol>
     <symbol

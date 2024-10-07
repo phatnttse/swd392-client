@@ -1,0 +1,20 @@
+header {
+  position: fixed; /* Dính cố định */
+  top: 0; /* Giữ nó ở đầu trang */
+  left: 0; /* Đảm bảo nó nằm bên trái */
+  width: 100%; /* Chiều rộng 100% */
+  z-index: 1000; /* Đảm bảo nó ở trên các thành phần khác */
+  background-color: white; /* Màu nền cho header */
+}
+.form-control:focus {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  outline: 0;
+  box-shadow: none;
+}
+
+@media screen and (max-width: 414px) {
+  .header-page {
+    font-size: 12px;
+  }
+}

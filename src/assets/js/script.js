@@ -1,28 +1,26 @@
-(function($) {
-
+(function ($) {
   "use strict";
 
-  var initPreloader = function() {
-    $(document).ready(function($) {
-    var Body = $('body');
-        Body.addClass('preloader-site');
+  var initPreloader = function () {
+    $(document).ready(function ($) {
+      var Body = $("body");
+      Body.addClass("preloader-site");
     });
-    $(window).load(function() {
-        $('.preloader-wrapper').fadeOut();
-        $('body').removeClass('preloader-site');
+    $(window).load(function () {
+      $(".preloader-wrapper").fadeOut();
+      $("body").removeClass("preloader-site");
     });
-  }
+  };
 
   // init Chocolat light box
-	var initChocolat = function() {
-		Chocolat(document.querySelectorAll('.image-link'), {
-		  imageSize: 'contain',
-		  loop: true,
-		})
-	}
+  var initChocolat = function () {
+    Chocolat(document.querySelectorAll(".image-link"), {
+      imageSize: "contain",
+      loop: true,
+    });
+  };
 
-  var initSwiper = function() {
-
+  var initSwiper = function () {
     var swiper = new Swiper(".main-swiper", {
       speed: 500,
       pagination: {
@@ -52,19 +50,19 @@
         1500: {
           slidesPerView: 8,
         },
-      }
+      },
     });
 
-    $(".products-carousel").each(function(){
-      var $el_id = $(this).attr('id');
+    $(".products-carousel").each(function () {
+      var $el_id = $(this).attr("id");
 
-      var products_swiper = new Swiper("#"+$el_id+" .swiper", {
+      var products_swiper = new Swiper("#" + $el_id + " .swiper", {
         slidesPerView: 5,
         spaceBetween: 30,
         speed: 500,
         navigation: {
-          nextEl: "#"+$el_id+" .products-carousel-next",
-          prevEl: "#"+$el_id+" .products-carousel-prev",
+          nextEl: "#" + $el_id + " .products-carousel-next",
+          prevEl: "#" + $el_id + " .products-carousel-prev",
         },
         breakpoints: {
           0: {
@@ -79,11 +77,9 @@
           1500: {
             slidesPerView: 5,
           },
-        }
+        },
       });
-
     });
-
 
     // product single page
     var thumb_slider = new Swiper(".product-thumbnail-slider", {
@@ -93,10 +89,10 @@
       direction: "vertical",
       breakpoints: {
         0: {
-          direction: "horizontal"
+          direction: "horizontal",
         },
         992: {
-          direction: "vertical"
+          direction: "vertical",
         },
       },
     });
@@ -105,7 +101,7 @@
       slidesPerView: 1,
       // autoplay: true,
       spaceBetween: 0,
-      effect: 'fade',
+      effect: "fade",
       thumbs: {
         swiper: thumb_slider,
       },
@@ -114,52 +110,45 @@
         clickable: true,
       },
     });
-  }
+  };
 
   // input spinner
-  var initProductQty = function(){
-
-    $('.product-qty').each(function(){
-      
+  var initProductQty = function () {
+    $(".product-qty").each(function () {
       var $el_product = $(this);
       var quantity = 0;
-      
-      $el_product.find('.quantity-right-plus').click(function(e){
+
+      $el_product.find(".quantity-right-plus").click(function (e) {
         e.preventDefault();
-        quantity = parseInt($el_product.find('#quantity').val());
-        $el_product.find('#quantity').val(quantity + 1);
+        quantity = parseInt($el_product.find("#quantity").val());
+        $el_product.find("#quantity").val(quantity + 1);
       });
 
-      $el_product.find('.quantity-left-minus').click(function(e){
+      $el_product.find(".quantity-left-minus").click(function (e) {
         e.preventDefault();
-        quantity = parseInt($el_product.find('#quantity').val());
-        if(quantity>0){
-          $el_product.find('#quantity').val(quantity - 1);
+        quantity = parseInt($el_product.find("#quantity").val());
+        if (quantity > 0) {
+          $el_product.find("#quantity").val(quantity - 1);
         }
       });
-
     });
-
-  }
+  };
 
   // init jarallax parallax
-  var initJarallax = function() {
+  var initJarallax = function () {
     jarallax(document.querySelectorAll(".jarallax"));
 
     jarallax(document.querySelectorAll(".jarallax-keep-img"), {
       keepImg: true,
     });
-  }
+  };
 
   // document ready
-  $(document).ready(function() {
-    
+  $(document).ready(function () {
     initPreloader();
     initSwiper();
     initProductQty();
     initJarallax();
     initChocolat();
-
   }); // End of a document
-
 })(jQuery);

@@ -1,6 +1,19 @@
 .content {
-  padding: 5rem 0;
+  padding-top: 9rem;
+  padding-bottom: 5rem;
 }
+
 .forgot-pass {
   font-size: 0.9rem;
+}
+@media screen and (max-width: 430px) {
+  .content {
+    padding-top: 13rem !important;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .content {
+    padding-top: 14rem !important;
+  }
 }

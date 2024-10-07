@@ -60,13 +60,11 @@ export class ProductService extends EndpointBase {
   }
 
   getFlowerById(id: number): Observable<Flower> {
-    return this.http
-      .get<Flower>(`${this.API_URL}/flowers/${id}`, this.requestHeaders)
-      .pipe(
-        catchError((error) => {
-          return this.handleError(error, () => this.getFlowerById(id));
-        })
-      );
+    return this.http.get<Flower>(`${this.API_URL}/flowers/${id}`).pipe(
+      catchError((error) => {
+        return this.handleError(error, () => this.getFlowerById(id));
+      })
+    );
   }
 
   addFlower(flower: Flower): Observable<Flower> {

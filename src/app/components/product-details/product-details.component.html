@@ -108,21 +108,24 @@
                   type="button"
                   id="button-addon1"
                   data-mdb-ripple-color="dark"
+                  (click)="bntDecreaseQuantity()"
                 >
                   <mat-icon class="mt-2">remove</mat-icon>
                 </button>
                 <input
                   type="text"
                   class="form-control text-center border border-secondary"
-                  placeholder="14"
                   aria-label="Example text with button addon"
                   aria-describedby="button-addon1"
+                  readonly
+                  [value]="quantityInput"
                 />
                 <button
                   class="btn btn-white border border-secondary"
                   type="button"
                   id="button-addon2"
                   data-mdb-ripple-color="dark"
+                  (click)="btnIncreaseQuantity()"
                 >
                   <mat-icon class="mt-2">add</mat-icon>
                 </button>
