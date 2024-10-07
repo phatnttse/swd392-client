@@ -90,7 +90,12 @@ export class AuthService {
 
   redirectForLogin() {
     this.loginRedirectUrl = this.router.url;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/signin']);
+    this.toastr.warning(
+      'Phiên đăng nhập đã hết hạn',
+      'Vui lòng đăng nhập lại!',
+      { progressBar: true }
+    );
   }
 
   reLogin() {
@@ -112,22 +117,18 @@ export class AuthService {
       .pipe(map((response: any) => this.processLoginResponse(response)));
   }
 
-  register(
+  registerAccount(
     email: string,
     password: string,
     name: string,
     accountGender: string
-  ) {
-    return this.http
-      .post(`${this.API_URL}/auth/register`, {
-        email,
-        password,
-        name,
-        accountGender,
-      })
-      .pipe(
-        map((response: any) => this.processRegisterResponse(response)) // Xử lý phản hồi
-      );
+  ): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/auth/register`, {
+      email,
+      password,
+      name,
+      accountGender,
+    });
   }
 
   private processLoginResponse(response: any) {
@@ -158,21 +159,6 @@ export class AuthService {
         },
       });
     return response;
-  }
-
-  private processRegisterResponse(response: any) {
-    const accessToken = response.accessToken;
-    const refreshToken = response.refreshToken;
-
-    // Lưu dữ liệu vào LocalStorage
-    this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
-    this.localStorage.savePermanentData(refreshToken, DBkeys.REFRESH_TOKEN);
-
-    // Thêm xử lý khác (nếu cần) như hiển thị thông báo đăng ký thành công
-    this.toastr.success('Registration successful!');
-
-    const user: UserAccount = response; // Chuyển phản hồi thành đối tượng người dùng
-    return user;
   }
 
   private reevaluateLoginStatus(currentUser?: UserAccount | null) {

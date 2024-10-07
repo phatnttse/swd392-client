@@ -1,6 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { HeaderComponent } from '../../layouts/header/header.component';
-import { FooterComponent } from '../../layouts/footer/footer.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,8 +18,6 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-sign-in',
   standalone: true,
   imports: [
-    HeaderComponent,
-    FooterComponent,
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
@@ -34,7 +30,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class SignInComponent {
   formLogin: FormGroup; // Form đăng nhập
-  hide = signal(true);
+  hide = signal(true); // Ẩn hiện mật khẩu
 
   constructor(
     private formBuilder: FormBuilder,

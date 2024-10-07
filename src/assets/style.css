@@ -30,8 +30,9 @@ body {
   --bs-body-line-height: 2;
   --bs-body-color: #747474;
 
-  --bs-primary: #6bb252;
-  --bs-primary-rgb: 107, 178, 82;
+  --bs-primary: #f199a1;
+  /* --bs-primary-rgb: 107, 178, 82; */
+  --bs-primary-rgb: 250, 218, 221;
 
   --bs-secondary: #364127;
   --bs-secondary-rgb: 54, 65, 39;
@@ -52,7 +53,7 @@ body {
   --bs-btn-bg: var(--bs-primary);
   --bs-btn-border-color: transparent;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #f7a422;
+  --bs-btn-hover-bg: #f8b8c0;
   --bs-btn-hover-border-color: transparent;
   --bs-btn-focus-shadow-rgb: 49, 132, 253;
   --bs-btn-active-color: #fff;
@@ -629,5 +630,5 @@ a.btn-link.text-light:after {
 /* ============ mobile view .end// ============ */
 
 .primary-color {
-  color: #15af81 !important;
+  color: #f199a1 !important;
 }

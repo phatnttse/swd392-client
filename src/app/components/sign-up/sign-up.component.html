@@ -6,16 +6,16 @@
       </div>
       <div class="col-md-6 contents">
         <div class="row justify-content-center">
-          <div class="col-md-8">
+          <div class="col-md-9">
             <div class="mb-4">
-              <h3>Sign In to <strong class="primary-color">SWD392</strong></h3>
-              <p class="my-5">
-                Do not have an account?
+              <h3>Sign Up to <strong class="primary-color">SWD392</strong></h3>
+              <p class="my-4">
+                Already have an account?
                 <a
-                  routerLink="/signup"
+                  routerLink="/signin"
                   class="primary-color"
                   style="text-decoration: underline"
-                  >Sign Up</a
+                  >Sign In</a
                 >
               </p>
             </div>
@@ -29,43 +29,16 @@
                   formControlName="email"
                   [class.is-invalid]=""
                 />
-
+                @if(formSignUp.get('email')?.hasError('required')) {
                 <mat-error style="font-size: 12px">
                   Email không được để trống
                 </mat-error>
-
+                } @if (formSignUp.get('email')?.hasError('email')) {
                 <mat-error style="font-size: 12px">
                   Email không đúng định dạng. Ex: vit&#64;gmail.com
                 </mat-error>
+                }
               </mat-form-field>
-              <mat-form-field class="w-100" appearance="outline">
-                <mat-label style="font-size: 14px">Password</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  required
-                  formControlName="password"
-                  [class.is-invalid]=""
-                />
-                <mat-error style="font-size: 12px">
-                  Password không được để trống
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="w-100" appearance="outline">
-                <mat-label style="font-size: 14px">Reset Password</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  required
-                  formControlName="confirmPassword"
-                  [class.is-invalid]=""
-                />
-                <mat-error style="font-size: 12px">
-                  Password reset không được để trống
-                </mat-error>
-              </mat-form-field>
-
               <mat-form-field class="w-100" appearance="outline">
                 <mat-label style="font-size: 14px">Name</mat-label>
                 <input
@@ -75,27 +48,65 @@
                   formControlName="name"
                   [class.is-invalid]=""
                 />
+                @if (formSignUp.get('name')?.hasError('required')) {
                 <mat-error style="font-size: 12px">
                   Name không được để trống
                 </mat-error>
+                }
               </mat-form-field>
 
-              <mat-form-field class="w-100" appearance="outline">
-                <mat-label style="font-size: 14px">Gender</mat-label>
-                <mat-select
-                  [(ngModel)]="selectedValue"
-                  formControlName="accountGender"
-                >
-                  @for (gender of genders; track gender) {
-                  <mat-option [value]="gender.value">{{
-                    gender.viewValue
-                  }}</mat-option>
-                  }
-                </mat-select>
-                <mat-error style="font-size: 12px">
-                  Gender không được để trống
-                </mat-error>
-              </mat-form-field>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label style="font-size: 14px">Gender</mat-label>
+                    <mat-select formControlName="accountGender">
+                      @for (gender of genders; track gender) {
+                      <mat-option [value]="gender.value">{{
+                        gender.viewValue
+                      }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (formSignUp.get('accountGender')?.hasError('required'))
+                    {
+                    <mat-error style="font-size: 12px">
+                      Gender không được để trống
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label style="font-size: 14px">Password</mat-label>
+                    <input
+                      matInput
+                      [type]="hide() ? 'password' : 'text'"
+                      required
+                      formControlName="password"
+                      [class.is-invalid]="
+                        formSignUp.get('password')?.invalid &&
+                        formSignUp.get('password')?.touched
+                      "
+                    />
+                    <button
+                      mat-icon-button
+                      type="button"
+                      matSuffix
+                      (click)="btnHidePassword($event)"
+                      [attr.aria-label]="'Hide password'"
+                      [attr.aria-pressed]="hide()"
+                    >
+                      <mat-icon color="primary" class="fs-18">{{
+                        hide() ? "visibility_off" : "visibility"
+                      }}</mat-icon>
+                    </button>
+                    @if (formSignUp.get('password')?.hasError('required')) {
+                    <mat-error style="font-size: 12px">
+                      Password không được để trống
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
 
               <div class="d-flex mb-3 align-items-center justify-content-end">
                 <span class="ml-auto"
@@ -121,6 +132,7 @@
               <div class="social-login">
                 <div class="d-flex w-100">
                   <button
+                    (click)="btnLoginGoogle()"
                     type="button"
                     class="flex w-100 rounded border border-gray-600 bg-white p-2 shadow transition"
                   >

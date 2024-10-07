@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FooterComponent } from '../../layouts/footer/footer.component';
-import { HeaderComponent } from '../../layouts/header/header.component';
 import { Flower, FlowerPaginated } from '../../models/flower.model';
 import { ProductService } from '../../services/product.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -10,7 +8,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FooterComponent, HeaderComponent],
+  imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -76,7 +74,6 @@ export class HomeComponent implements OnInit {
           this.numberOfElements = response.numberOfElements;
           this.totalElements = response.totalElements;
           this.productService.flowerDataSource.next(response.content); // Lưu vào BehaviorSubject
-          console.log(this.listFlower);
         },
         error: (error: HttpErrorResponse) => {
           console.log(error);
