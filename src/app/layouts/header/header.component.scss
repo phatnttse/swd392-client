@@ -18,3 +18,17 @@ header {
     font-size: 12px;
   }
 }
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 50%;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 430px) {
+  .input-group {
+    width: 100%;
+  }
+}

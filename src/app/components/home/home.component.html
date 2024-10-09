@@ -120,123 +120,46 @@
           <h2 class="section-title">Danh mục sản phẩm</h2>
 
           <div class="d-flex align-items-center">
-            <a href="#" class="btn btn-primary me-2">Xem tất cả</a>
-            <div class="swiper-buttons">
-              <button class="swiper-prev category-carousel-prev btn btn-yellow">
-                ❮
-              </button>
-              <button class="swiper-next category-carousel-next btn btn-yellow">
-                ❯
-              </button>
-            </div>
+            <a href="javascript:;" class="btn btn-primary me-2">Xem tất cả</a>
           </div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="category-carousel swiper">
-          <div class="swiper-wrapper">
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-1.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Hoa</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-2.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">
-                Breads & Sweets
-              </h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-3.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Fruits & Veges</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-4.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Beverages</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-5.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Meat Products</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-6.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Breads</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-7.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Fruits & Veges</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-8.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">
-                Breads & Sweets
-              </h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-1.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Fruits & Veges</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-1.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Beverages</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-1.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Meat Products</h4>
-            </a>
-            <a href="category.html" class="nav-link swiper-slide text-center">
-              <img
-                src="images/category-thumb-1.jpg"
-                class="rounded-circle"
-                alt="Category Thumbnail"
-              />
-              <h4 class="fs-6 mt-3 fw-normal category-title">Breads</h4>
-            </a>
+        <div
+          class="swiper_cates swiper-container control-top swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events"
+        >
+          <div
+            class="swiper-wrapper box_cate_index"
+            style="
+              transform: translate3d(0px, 0px, 0px);
+              transition-duration: 0ms;
+            "
+          >
+            @for (category of listCategory; track $index) {
+            <div class="swiper-slide" style="width: 180px; margin-right: 20px">
+              <div class="item-cate">
+                <a
+                  routerLink="/products"
+                  [title]="category.name"
+                  class="opaci_href"
+                ></a>
+                <div class="icon_cate">
+                  <img
+                    width="100"
+                    height="100"
+                    class="lazyload loaded"
+                    src="https://plus.unsplash.com/premium_photo-1676475964992-6404b8db0b53?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Zmxvd2VyfGVufDB8fDB8fHww"
+                    [alt]="category.name"
+                    data-was-processed="true"
+                  />
+                </div>
+                <h3>{{ category.name }}</h3>
+                <span> {{ category.children.length }} danh mục</span>
+              </div>
+            </div>
+            }
           </div>
         </div>
       </div>
@@ -251,10 +174,12 @@
         <div
           class="section-header d-flex flex-wrap justify-content-between my-4"
         >
-          <h2 class="section-title">Sản phẩm bán chạy nhất</h2>
+          <h2 class="section-title">Sản phẩm mới nhất</h2>
 
           <div class="d-flex align-items-center">
-            <a href="#" class="btn btn-primary rounded-1">View All</a>
+            <a routerLink="/products" class="btn btn-primary rounded-1"
+              >Xem tất cả</a
+            >
           </div>
         </div>
       </div>
@@ -314,33 +239,19 @@
                 >
                   <del>{{ flower.price }}$</del>
                   <span class="text-dark fw-semibold">{{ flower.price }}$</span>
-
-                  <span
-                    class="badge border border-dark-subtle rounded-0 fw-normal px-1 fs-7 lh-1 text-body-tertiary"
-                    >10% OFF</span
-                  >
                 </div>
                 <div class="button-area p-3 pt-0">
                   <div class="row g-1 mt-2">
-                    <div class="col-8">
+                    <div class="col-12">
                       <a
-                        href="#"
+                        href="javascript:;"
+                        (click)="btnInsertUpdateCart(flower.id, 1)"
                         class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
                         ><svg width="18" height="18">
                           <use xlink:href="#cart"></use>
                         </svg>
                         Add to Cart</a
                       >
-                    </div>
-                    <div class="col-4">
-                      <a
-                        href="#"
-                        style="padding: 8px 20px"
-                        class="btn btn-outline-dark rounded-1 fs-6"
-                        ><svg width="18" height="18">
-                          <use xlink:href="#search"></use>
-                        </svg>
-                      </a>
                     </div>
                   </div>
                 </div>

@@ -1,3 +1,5 @@
+<div #topElement></div>
+
 <div
   class="offcanvas offcanvas-end"
   data-bs-scroll="true"
@@ -16,51 +18,43 @@
     <div class="order-md-last">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-dark">Your cart</span>
-        <span class="badge bg-secondary rounded-pill">3</span>
+        <span class="badge bg-secondary rounded-pill">{{ totalCartItem }}</span>
       </h4>
-      <ul class="list-group mb-3">
+      <ul class="list-group mb-5">
+        @for (item of listCartItem; track $index) {
         <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
-            <h6 class="my-0">Growers cider</h6>
-            <small class="text-body-secondary">Brief description</small>
+            <h6 class="my-0">{{ item.flowerName }}</h6>
+            <small class="text-body-secondary">x{{ item.quantity }}</small>
           </div>
-          <span class="text-body-secondary">$12</span>
+          <span class="text-body-secondary">${{ item.flowerPrice }}</span>
         </li>
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
-            <h6 class="my-0">Fresh grapes</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary">$8</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
-            <h6 class="my-0">Heinz tomato ketchup</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary">$5</span>
-        </li>
+        }
         <li class="list-group-item d-flex justify-content-between">
           <span>Total (USD)</span>
-          <strong>$20</strong>
+          <strong class="text-danger">${{ totalAmount }}</strong>
         </li>
       </ul>
       <button
+        mat-raised-button
         routerLink="/cart"
-        class="w-100 btn btn-primary btn-lg mb-2"
+        class="w-100 btn btn-primary btn-lg mb-3"
         type="button"
         data-bs-dismiss="offcanvas"
         aria-label="Close"
+        color="primary"
       >
         View cart
       </button>
 
       <button
+        mat-raised-button
         routerLink="/order"
         class="w-100 btn btn-primary btn-lg"
         type="button"
         data-bs-dismiss="offcanvas"
         aria-label="Close"
+        color="accent"
       >
         Continue to checkout
       </button>
@@ -87,21 +81,30 @@
   <div class="offcanvas-body">
     <form>
       <div class="input-group p-3">
-        <span class="input-group-text bg-white border-0">
-          <svg width="32" height="32">
-            <use xlink:href="#search"></use>
-          </svg>
-        </span>
         <input
           type="text"
+          [(ngModel)]="searchValue"
+          [ngModelOptions]="{ standalone: true }"
           class="form-control border-0 text-dark"
-          id="searchInput"
           placeholder="Tìm kiếm trên Blossom..."
           aria-label="Search"
           [autofocus]="true"
           style="font-size: 1.25rem"
-          height="50px"
+          height="80px"
         />
+        <span class="input-group-text bg-white border-0">
+          <button
+            mat-icon-button
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasSearch"
+            aria-controls="offcanvasSearch"
+            (click)="btnSearch(searchValue)"
+          >
+            <mat-icon class="primary-color" style="font-size: 30px"
+              >search</mat-icon
+            >
+          </button>
+        </span>
       </div>
     </form>
   </div>
@@ -122,7 +125,7 @@
     <ul
       class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0"
     >
-      <li class="nav-item border-dashed active">
+      <!-- <li class="nav-item border-dashed active">
         <a
           href="index.html"
           class="nav-link d-flex align-items-center gap-3 text-dark p-2"
@@ -132,39 +135,42 @@
           </svg>
           <span>Fruits and vegetables</span>
         </a>
-      </li>
-
+      </li> -->
+      @for (category of convertedCategories; track $index) {
       <li class="nav-item border-dashed">
         <button
           class="btn btn-toggle dropdown-toggle position-relative w-100 d-flex justify-content-between align-items-center text-dark p-2"
           data-bs-toggle="collapse"
-          data-bs-target="#beverages-collapse"
+          [attr.data-bs-target]="'#' + category.id"
           aria-expanded="false"
         >
           <div class="d-flex gap-3">
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <use xlink:href="#beverages"></use>
-            </svg>
-            <span>Beverages</span>
+            <!-- <svg width="24" height="24" viewBox="0 0 24 24">
+              <use xlink:href="#flower"></use>
+            </svg> -->
+            <mat-icon>filter_vintage</mat-icon>
+            <span class="text-dark">{{ category.name }}</span>
           </div>
         </button>
-        <div class="collapse" id="beverages-collapse">
+        <div class="collapse" [id]="category.id">
           <ul class="btn-toggle-nav list-unstyled fw-normal ps-5 pb-1">
+            @for (subcategory of category.children; track $index) {
             <li class="border-bottom py-2">
-              <a href="index.html" class="dropdown-item">Water</a>
+              <a
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar"
+                href="javascript:;"
+                (click)="goToProductListPageByCategory(subcategory.id)"
+                class="dropdown-item text-danger"
+                >{{ subcategory.name }}</a
+              >
             </li>
-            <li class="border-bottom py-2">
-              <a href="index.html" class="dropdown-item">Juice</a>
-            </li>
-            <li class="border-bottom py-2">
-              <a href="index.html" class="dropdown-item">Soda</a>
-            </li>
-            <li class="border-bottom py-2">
-              <a href="index.html" class="dropdown-item">Tea</a>
-            </li>
+            }
           </ul>
         </div>
       </li>
+      }
     </ul>
   </div>
 </div>
@@ -301,7 +307,7 @@
                 <img
                   class="rounded"
                   width="32px"
-                  src="./../../../assets/images/reviewer-1.jpg"
+                  [src]="account.avatar"
                   alt="Avatar"
                 />
                 }@else {
@@ -384,7 +390,7 @@
                 class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger"
                 id="cartItemCount"
               >
-                5
+                {{ totalCartItem }}
                 <!-- Đây là số lượng sản phẩm, bạn có thể thay bằng dữ liệu động -->
               </span>
             </a>

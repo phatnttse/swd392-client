@@ -4,24 +4,33 @@
       <div class="col-12 col-lg-3 order-2 order-lg-1">
         <aside>
           <div class="mb-5">
-            <!-- <h5>Categories</h5>
-            <ul class="nav nav-link">
+            <h5 class="mb-4">Danh mục</h5>
+            <ul class="nav nav-link flex-column">
+              @for (category of convertedCategories; track $index) {
               <li class="nav-item">
-                <a class="nav-link" href="shop.html">Accessories</a>
+                <button
+                  class="btn btn-toggle dropdown-toggle text-dark"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapse' + category.id"
+                  aria-expanded="false"
+                >
+                  {{ category.name }}
+                </button>
+                <div class="collapse" [id]="'collapse' + category.id">
+                  <ul class="nav flex-column ms-3">
+                    @for (subcategory of category.children; track $index) {
+                    <li class="nav-item">
+                      <mat-checkbox
+                        (change)="onCategoryChange(subcategory.id, $event)"
+                        >{{ subcategory.name }}</mat-checkbox
+                      >
+                    </li>
+                    }
+                  </ul>
+                </div>
               </li>
-              <li>
-                <a class="nav-link" href="shop.html">Collection</a>
-              </li>
-              <li>
-                <a class="nav-link" href="shop.html">Crafted</a>
-              </li>
-            </ul> -->
-            <div class="mb-5">
-              <h5 class="mb-4">Danh mục</h5>
-              <mat-checkbox>Amazon Essentials (2)</mat-checkbox>
-              <mat-checkbox>Fruit of the Loom (1)</mat-checkbox>
-              <mat-checkbox>Hanes (4)</mat-checkbox>
-            </div>
+              }
+            </ul>
           </div>
           <div class="mb-5">
             <h5 class="mb-3">Lọc theo giá</h5>
@@ -36,29 +45,52 @@
       </div>
 
       <div class="col-12 col-lg-9 order-1 order-lg-2">
-        <div
-          class="d-flex align-items-center justify-content-between mb-3 col-8"
-        >
-          <div class="d-flex align-items-center">
-            <div class="me-3">
-              <p class="fs-20 text-dark">Tất cả sản phẩm</p>
-            </div>
-          </div>
-          <div class="align-items-center d-flex col-4">
-            <img
-              width="16"
-              height="16"
-              alt="Sắp xếp"
-              src="https://res.cloudinary.com/dlpust9lj/image/upload/v1721068180/ascwklmvjzdnmhdex8g2.png"
-              class="mr-2"
-            />
-            <p class="mt-3" style="font-size: 14px; margin-left: 6px">
-              Sắp xếp: Mặc định
+        <div class="d-flex align-items-center justify-content-between mb-5">
+          <p class="text-dark" style="margin-top: 20px">
+            {{ titleSearch }}
+            @if (searchString) {
+            <strong class="primary-color">'{{ searchString }}'</strong>
+            }
+          </p>
+          <div class="align-items-center d-flex">
+            <p style="font-size: 14px; margin-left: 6px; margin-top: 20px">
+              Sắp xếp: {{ titleTypeArrange }}
             </p>
             <button mat-icon-button [matMenuTriggerFor]="menu" class="mb-3">
               <span class="material-icons"> view_list </span>
             </button>
-            <mat-menu #menu="matMenu"></mat-menu>
+            <mat-menu #menu="matMenu">
+              <button
+                (click)="setSortingOption(this.order, this.sortBy, 'Mặc định')"
+                mat-menu-item
+              >
+                <span> Mặc định </span>
+              </button>
+              <button
+                (click)="setSortingOption('asc', 'name', 'A → Z')"
+                mat-menu-item
+              >
+                <span> A → Z</span>
+              </button>
+              <button
+                (click)="setSortingOption('desc', 'name', 'Z → A')"
+                mat-menu-item
+              >
+                <span> Z → A</span>
+              </button>
+              <button
+                (click)="setSortingOption('asc', 'price', 'Giá: Thấp đến cao')"
+                mat-menu-item
+              >
+                <span> Giá: Thấp đến cao</span>
+              </button>
+              <button
+                (click)="setSortingOption('desc', 'price', 'Giá: Cao đến thấp')"
+                mat-menu-item
+              >
+                <span> Giá: Cao đến thấp</span>
+              </button>
+            </mat-menu>
           </div>
         </div>
 
@@ -119,32 +151,23 @@
                         >{{ flower.price }}$</span
                       >
 
-                      <span
+                      <!-- <span
                         class="badge border border-dark-subtle rounded-0 fw-normal px-1 fs-7 lh-1 text-body-tertiary"
                         >10% OFF</span
-                      >
+                      > -->
                     </div>
                     <div class="button-area p-3 pt-0">
                       <div class="row g-1 mt-2">
-                        <div class="col-8">
+                        <div class="col-12">
                           <a
-                            href="#"
+                            href="javascript:;"
+                            (click)="btnInsertUpdateCart(flower.id, 1)"
                             class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
                             ><svg width="18" height="18">
                               <use xlink:href="#cart"></use>
                             </svg>
                             Add to Cart</a
                           >
-                        </div>
-                        <div class="col-4">
-                          <a
-                            href="#"
-                            style="padding: 8px 20px"
-                            class="btn btn-outline-dark rounded-1 fs-6"
-                            ><svg width="18" height="18">
-                              <use xlink:href="#search"></use>
-                            </svg>
-                          </a>
                         </div>
                       </div>
                     </div>
@@ -153,8 +176,77 @@
               </div>
               }
             </div>
-            <!-- / product-grid -->
           </div>
+          <!-- / product-grid -->
+          @if (totalPages > 1) {
+          <div
+            class="section pagenav clearfix d-flex justify-content-center mt-5"
+          >
+            <nav class="collection-paginate clearfix nav_pagi w_100 relative">
+              <ul class="pagination clearfix">
+                @if (currentPage > 0) {
+                <li class="page-item">
+                  <a
+                    class="page-link"
+                    href="javascript:;"
+                    (click)="onPageChange(currentPage - 1)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="20"
+                      viewBox="0 0 12 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M0.827131 10.5488L10.0777 19.7738C10.3808 20.0759 10.8715 20.0754 11.1741 19.7723C11.4764 19.4692 11.4756 18.9782 11.1725 18.6759L2.47255 9.99996L11.1728 1.32406C11.4759 1.02172 11.4767 0.531057 11.1744 0.227934C11.0227 0.0759811 10.824 3.76429e-06 10.6253 3.74691e-06C10.4271 3.72959e-06 10.2292 0.0754737 10.0778 0.226372L0.827131 9.45114C0.681155 9.59637 0.599241 9.79403 0.599241 9.99996C0.599241 10.2059 0.68139 10.4033 0.827131 10.5488Z"
+                        fill="#9D9D9D"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+                } @for (page of visiblePages; track $index) {
+                <li
+                  class="page-item"
+                  [ngClass]="{ active: page === currentPage + 1 }"
+                >
+                  <a
+                    class="page-link"
+                    href="javascript:;"
+                    [style]="{
+                      'pointer-events: none': page === currentPage + 1
+                    }"
+                    (click)="onPageChange(page - 1)"
+                    >{{ page }}</a
+                  >
+                </li>
+                } @if (currentPage < totalPages) {
+                <li class="page-item">
+                  <a
+                    class="page-link link-next-pre"
+                    onclick="doSearch(2)"
+                    href="javascript:;"
+                    (click)="onPageChange(currentPage + 1)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="20"
+                      viewBox="0 0 12 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M11.1729 9.45117L1.92228 0.226167C1.6192 -0.0759023 1.12849 -0.0753945 0.825918 0.227729C0.523575 0.530814 0.524357 1.02179 0.827481 1.32409L9.52745 10L0.827168 18.6759C0.524083 18.9783 0.523302 19.4689 0.825605 19.7721C0.977285 19.924 1.17599 20 1.37471 20C1.57291 20 1.77084 19.9245 1.92224 19.7736L11.1729 10.5489C11.3188 10.4036 11.4008 10.206 11.4008 10C11.4008 9.7941 11.3186 9.59668 11.1729 9.45117Z"
+                        fill="#9D9D9D"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+                }
+              </ul>
+            </nav>
+          </div>
+          }
         </div>
       </div>
     </div>
