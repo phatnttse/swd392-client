@@ -3,17 +3,20 @@ import { EndpointBase } from './endpoint-base.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import {
   AddBalanceResponse,
+  UserAccount,
   UserBalanceResponse,
 } from '../models/account.model';
+import { User } from '../models/flower.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService extends EndpointBase {
   API_URL: string = '';
+  localStorage?: Storage;
 
   constructor(
     http: HttpClient,
@@ -49,5 +52,28 @@ export class AccountService extends EndpointBase {
           return this.handleError(error, () => this.addBalance(amount));
         })
       );
+  }
+
+  getUserResponseFromLocalStorage(): Observable<UserAccount | null> {
+    try {
+      const userJSON = this.localStorage?.getItem('current_user');
+      if (userJSON == null || userJSON == undefined) {
+        return of(null);
+      }
+
+      const userResponse = JSON.parse(userJSON!);
+      return of(userResponse);
+    } catch (error) {
+      console.error('Error retrieving user response from local storage:', error);
+      return of(null);
+    }
+  }
+
+  resetPassword(newPassword: string, repeatPassword: string): Observable<any>{
+    const payload = {
+      newPassword: newPassword,
+      repeatPassword: repeatPassword
+  };
+    return this.http.post<any>(`${this.API_URL}/auth/reset-password`, payload, this.requestHeaders);
   }
 }
