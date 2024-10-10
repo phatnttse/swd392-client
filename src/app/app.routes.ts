@@ -81,4 +81,28 @@ export const routes: Routes = [
       );
     },
   },
+  {
+    path: 'forgot-password',
+    loadComponent() {
+      return import('./components/forgot-password/forgot-password.component').then(
+        (m) => m.ForgotPasswordComponent
+      );
+    }
+  },
+  {
+    path: 'reset-password',
+    loadComponent() {
+      return import('./components/reset-password/reset-password.component').then(
+        (m) => m.ResetPasswordComponent
+      );
+    }
+  },
+  {
+    path: 'profile',
+    loadComponent() {
+      return import('./components/profile/profile.component').then(
+        (m) => m.ProfileComponent
+      );
+    }
+  }
 ];

@@ -13,6 +13,7 @@ import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { UserAccount } from '../models/account.model';
 import { Utilities } from './utilities';
+import { HttpUtilService } from './http.util.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +24,8 @@ export class AuthService {
   private loginStatus = new Subject<boolean>();
   public reLoginDelegate:
     | {
-        (): void;
-      }
+      (): void;
+    }
     | undefined;
   public loginRedirectUrl: string | null = null;
 
@@ -32,16 +33,25 @@ export class AuthService {
   public userDataSource = new BehaviorSubject<any>(null);
   userData$ = this.userDataSource.asObservable();
 
+  private apiConfig = {
+    headers: this.httpUtilService.createHeaders(),
+  };
+
   constructor(
     private auth: Auth,
     private router: Router,
     private localStorage: LocalStoreManager,
     private appConfig: AppConfigurationService,
     private http: HttpClient,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private httpUtilService: HttpUtilService,
   ) {
     this.API_URL = appConfig['API_URL'];
     this.initializeLoginStatus();
+  }
+  forgotPassword(email: string): Observable<any> {
+    const payload = { email };
+    return this.http.post<any>(`${this.API_URL}/auth/forgot-password`, payload, this.apiConfig)
   }
 
   private initializeLoginStatus() {
