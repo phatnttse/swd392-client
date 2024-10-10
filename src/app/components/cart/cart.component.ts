@@ -9,6 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
 
 @Component({
   selector: 'app-cart',
@@ -21,6 +23,8 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     TranslateModule,
     CommonModule,
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',

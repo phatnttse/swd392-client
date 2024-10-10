@@ -1,11 +1,6 @@
-@defer () { @if (statusPage === 0) {
-<app-header></app-header>
+@defer (){
 <router-outlet></router-outlet>
-<app-footer></app-footer>
-} @else {
-<router-outlet></router-outlet>
-
-} }@loading {
+} @loading {
 <div class="preloader-wrapper">
   <div class="preloader"></div>
 </div>

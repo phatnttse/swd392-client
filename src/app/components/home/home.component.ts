@@ -10,11 +10,13 @@ import { InsertUpdateCartResponse } from '../../models/cart.model';
 import { CategoryService } from '../../services/category.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../../layouts/header/header.component";
+import { FooterComponent } from "../../layouts/footer/footer.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule, TranslateModule, CommonModule],
+  imports: [RouterModule, TranslateModule, CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

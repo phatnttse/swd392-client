@@ -13,6 +13,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Utilities } from '../../services/utilities';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
 
 @Component({
   selector: 'app-product-details',
@@ -24,6 +26,8 @@ import { TranslateModule } from '@ngx-translate/core';
     RouterModule,
     CommonModule,
     TranslateModule,
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',

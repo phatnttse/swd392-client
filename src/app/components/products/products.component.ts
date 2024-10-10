@@ -27,6 +27,8 @@ import { Utilities } from '../../services/utilities';
 import { CartService } from '../../services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
 
 @Component({
   selector: 'app-products',
@@ -50,6 +52,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatPaginatorModule,
     MatMenuModule,
     TranslateModule,
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',

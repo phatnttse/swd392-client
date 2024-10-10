@@ -17,6 +17,8 @@ import { AccountService } from '../../services/account.service';
 import { AddBalanceResponse } from '../../models/account.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
 
 @Component({
   selector: 'app-wallet',
@@ -30,6 +32,8 @@ import { AuthService } from '../../services/auth.service';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.scss',

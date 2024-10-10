@@ -22,15 +22,13 @@ export class AppComponent implements OnInit {
   title = 'swd392-client';
   isUserLoggedIn: boolean = false; // Kiểm tra người dùng đã đăng nhập hay chưa
   isLoading: boolean = false; // Kiểm tra trạng thái loading
-  statusPage: number = 0; // 0 mặc đinh, 1: Seller Channel or Admin
 
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private statusService: StatusService,
     private cartService: CartService,
-    private categoryService: CategoryService,
-    private router: Router
+    private categoryService: CategoryService
   ) {}
   ngOnInit(): void {
     this.isUserLoggedIn = this.authService.isLoggedIn;
@@ -48,17 +46,6 @@ export class AppComponent implements OnInit {
 
     this.statusService.statusLoadingSpinner$.subscribe((status) => {
       this.isLoading = status;
-    });
-
-    this.router.events.subscribe(() => {
-      if (
-        this.router.url.includes('/seller-channel') ||
-        this.router.url.includes('/admin')
-      ) {
-        this.statusPage = 1;
-      } else {
-        this.statusPage = 0;
-      }
     });
   }
 

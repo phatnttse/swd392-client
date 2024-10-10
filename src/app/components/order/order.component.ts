@@ -21,6 +21,8 @@ import { UserAccount } from '../../models/account.model';
 import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
 
 @Component({
   selector: 'app-order',
@@ -36,6 +38,8 @@ import { ToastrService } from 'ngx-toastr';
     MatIconModule,
     RouterModule,
     TranslateModule,
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss',

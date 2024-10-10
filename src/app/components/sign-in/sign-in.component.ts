@@ -14,6 +14,8 @@ import { AuthService } from '../../services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { FooterComponent } from '../../layouts/footer/footer.component';
+import { HeaderComponent } from '../../layouts/header/header.component';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -25,6 +27,8 @@ import { TranslateModule } from '@ngx-translate/core';
     RouterModule,
     MatIconModule,
     TranslateModule,
+    FooterComponent,
+    HeaderComponent,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',

@@ -5,11 +5,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Order, OrderResponse } from '../../models/order.model';
 import { CommonModule } from '@angular/common';
 import { OrderStatus } from '../../models/enums';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
 
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [MatTabsModule, CommonModule],
+  imports: [MatTabsModule, CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss',
 })

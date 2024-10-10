@@ -17,6 +17,8 @@ import { Gender } from '../../models/enums';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
 
 @Component({
   selector: 'app-sign-up',
@@ -31,6 +33,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatSelectModule,
     MatIconModule,
     TranslateModule,
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
