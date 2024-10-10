@@ -1,79 +1,12 @@
-// .product-name {
-//   font-size: 20px;
-//   text-decoration: none;
-// }
-// .background-container {
-//   height: 400px; // Chiều cao của phần tử
-//   background-image: url("./../../../assets/images/banner_home.jpg"); // Đường dẫn tới hình ảnh
-//   background-size: cover; // Đảm bảo hình ảnh phủ toàn bộ phần tử
-//   background-position: center; // Căn giữa hình ảnh
-//   background-repeat: no-repeat; // Không lặp lại hình ảnh
-//   position: relative; // Đặt vị trí tương đối để sử dụng cho lớp phủ
 
-//   // Lớp phủ để làm mờ
-//   &::before {
-//     content: ""; // Tạo một lớp giả
-//     position: absolute; // Đặt vị trí tuyệt đối
-//     top: 0; // Đặt ở trên cùng
-//     left: 0; // Đặt ở bên trái
-//     right: 0; // Đặt ở bên phải
-//     bottom: 0; // Đặt ở dưới cùng
-//     background-color: rgba(
-//       197,
-//       191,
-//       191,
-//       0.5
-//     ); // Màu đen với độ mờ 50% (thay đổi giá trị alpha để điều chỉnh độ mờ)
-//     z-index: 1; // Đưa lớp phủ lên trên hình ảnh
-//   }
+.product-name {
+  font-size: 20px;
+  text-decoration: none;
+}
 
-//   h2 {
-//     font-size: 2.5rem; // Tăng kích thước chữ cho thẻ h2
-//     z-index: 2; // Đặt trên lớp phủ
-//     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); // Thêm bóng chữ
-//   }
 
-//   p {
-//     font-size: 1.5rem; // Tăng kích thước chữ cho thẻ p
-//     z-index: 2; // Đặt trên lớp phủ
-//     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); // Thêm bóng chữ
-//   }
-
-//   z-index: 1;
-// }
-
-// .row {
-//   z-index: 2;
-// }
-
-// h1,
-// .btn {
-//   position: relative;
-//   /* Đặt vị trí tương đối */
-//   z-index: 2;
-//   /* Đặt z-index cao hơn để nổi bật lên */
-// }
-
-// h1 {
-//   color: #4caf50; /* Màu chữ */
-//   font-size: 3rem; /* Kích thước chữ lớn */
-//   font-weight: bold; /* Chữ đậm */
-//   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Thêm bóng đổ */
-//   transition: transform 0.3s ease; /* Hiệu ứng chuyển động */
-// }
-
-// h1:hover {
-//   animation: wave 1s infinite; /* Hiệu ứng gợn sóng */
-// }
-
-// @keyframes wave {
-//   0% {
-//     transform: translateY(0);
-//   }
-//   50% {
-//     transform: translateY(-10px);
-//   }
-//   100% {
-//     transform: translateY(0);
-//   }
-// }
+h1,
+.btn {
+  position: relative;
+  /* Đặt vị trí tương đối */
+}

@@ -1,0 +1,114 @@
+<form [formGroup]="profileForm">
+    <div class="container">
+        <div class="main-body">
+            <div class="row">
+                <!-- Avatar Section -->
+                <div class="col-lg-6 d-flex flex-column my-5">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <div style="position: relative; display: inline-block">
+                                <img
+                                    src="https://via.placeholder.com/150"
+                                    alt="Admin"
+                                    class="rounded-circle bg-primary"
+                                    width="170"
+                                    height="170"
+                                    style="display: block; max-width: 100%; border-radius: 30%; object-fit: cover;"
+                                />
+                                <button
+                                    style="
+                                    position: absolute;
+                                    top: 100px; 
+                                    right: 10px; 
+                                    padding: 6px; 
+                                    background-color: #0f0f0f; 
+                                    cursor: pointer; 
+                                    z-index: 1; 
+                                    margin-top: 30px; 
+                                    border-radius: 100%; 
+                                    width: 30px; 
+                                    height: 30px;
+                                    display: flex; 
+                                    justify-content: center; 
+                                    align-items: center;"
+                                    type="button"
+                                    class="rounded-circle"
+                                >
+                                    <i class="fa-solid fa-image" style="color: #fff; font-size: 15px"></i>
+                                </button>
+                            </div>
+                            <div class="mt-3">
+                                <h5>{{userAccount?.name}}</h5>
+                                <p class="mb-1 text-secondary">{{userAccount?.role}}</p>
+                                <!-- Đổi mật khẩu button -->
+                                <div class="d-flex justify-content-center align-items-center ">
+                                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="account_balance_wallet"></mat-icon>
+                                    <span style="margin-left: 8px;">Số dư ví: {{userAccount?.balance}}</span>
+                                </div>
+                                <button color="primary" class="btn mt-2" style="padding: 20px;" mat-raised-button>Đổi mật khẩu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Section -->
+                <div class="col-lg-6 mt-5 mb-1">
+                    <div class="card">
+                        <div class="card-body">
+                                <!-- <div class="col-md-6">
+                                    <label for="name">Họ và tên</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Họ và tên">
+                                </div> -->
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <mat-label>Họ và tên</mat-label>
+                                        <input matInput
+                                         type="text"
+                                         id="name"
+                                         formControlName="name"
+                                         required
+                                         [class.is-invalid]="
+                                         profileForm.get('name')!.invalid &&
+                                         profileForm.get('name')!.touched">
+                                      </mat-form-field>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <mat-label for="email">Email</mat-label>
+                                        <input matInput
+                                         type="email"
+                                         id="email"
+                                         formControlName="email"
+                                         [class.is-invalid]="profileForm.get('email')!.invalid
+                                         && profileForm.get('email')!.touched">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-6">
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <mat-label for="phone">Số điện thoại</mat-label>
+                                        <input matInput
+                                         type="phone"
+                                         id="phone"
+                                         formControlName="phone"
+                                         [class.is-invalid]="profileForm.get('phone')!.invalid
+                                         && profileForm.get('phone')!.touched">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <mat-form-field class="w-100" appearance="outline">
+                                    <mat-label for="address">Địa chỉ</mat-label>
+                                    <input matInput type="text" id="address">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="example-button-row d-flex justify-content-center align-items-center">
+                                <button color="primary" class="btn" style="padding: 20px" mat-raised-button>Lưu thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
