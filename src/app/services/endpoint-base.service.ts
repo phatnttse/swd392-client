@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Observable, Subject, from, throwError } from 'rxjs';
 import { mergeMap, switchMap, catchError } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 import { UserAccount } from '../models/account.model';
-
-interface ServerError {
-  status: number;
-  error: {
-    error: string;
-    error_description: string;
-  };
-}
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +35,7 @@ export class EndpointBase {
   // Lấy thông tin tài khoản
   public refreshLogin(): Observable<UserAccount | null> {
     return this.authService.refreshLogin().pipe(
-      catchError((error: ServerError) => {
+      catchError((error: HttpErrorResponse) => {
         return this.handleError(error, () => this.refreshLogin());
       })
     );
@@ -47,7 +43,7 @@ export class EndpointBase {
 
   // Xử lý lỗi custom
   protected handleError<T>(
-    error: ServerError,
+    error: HttpErrorResponse,
     continuation: () => Observable<T>
   ) {
     if (error.status === 401) {
@@ -69,7 +65,11 @@ export class EndpointBase {
           this.resumeTasks(false);
           this.authService.reLogin();
 
-          if (refreshLoginError.status === 401) {
+          if (
+            refreshLoginError.status === 401 ||
+            (refreshLoginError.error &&
+              refreshLoginError.error.error === 'invalid_grant')
+          ) {
             return throwError(() => new Error('session expired'));
           } else {
             return throwError(
@@ -80,11 +80,13 @@ export class EndpointBase {
       );
     }
 
-    if (error.error) {
+    if (error.error && error.error.error === 'invalid_grant') {
       this.authService.reLogin();
 
       return throwError(() =>
-        error.error ? `session expired` : 'session expired'
+        error.error && error.error.error_description
+          ? `session expired (${error.error.error_description})`
+          : 'session expired'
       );
     } else {
       return throwError(() => error);

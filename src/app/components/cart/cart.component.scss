@@ -1,0 +1,131 @@
+.section-cart {
+  padding-top: 12rem;
+  padding-bottom: 5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .section-cart {
+    padding-bottom: 2rem;
+  }
+}
+
+.section-cart {
+  .table {
+    width: 100%;
+    text-align: center;
+    th,
+    td {
+      padding: 1rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f1d7da;
+      font-weight: 600;
+      color: #333;
+      text-transform: uppercase;
+    }
+
+    .product-thumbnail {
+      width: 15%;
+    }
+
+    .product-name {
+      text-align: left;
+    }
+
+    .product-price,
+    .product-quantity,
+    .product-total {
+      width: 15%;
+    }
+
+    .product-remove {
+      width: 10%;
+      button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        &:hover {
+          color: #ff4d4f;
+        }
+      }
+    }
+  }
+
+  // Styling the quantity input
+  .quantity-container {
+    .btn {
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &:hover {
+        background-color: var(--bs-primary);
+      }
+    }
+
+    input.quantity-amount {
+      max-width: 60px;
+      padding: 0.5rem;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 0;
+    }
+  }
+
+  .btn-outline-black {
+    border: 1px solid #fff;
+    color: #333;
+    &:hover {
+      background-color: var(--bs-primary-rgb);
+      color: #fff;
+    }
+  }
+}
+
+// Cart totals section
+.row {
+  .col-md-6 {
+    .h4 {
+      font-weight: 700;
+      color: #000;
+    }
+
+    .border-bottom {
+      padding-bottom: 1rem;
+    }
+
+    .text-black {
+      color: #333;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 2px;
+    }
+
+    .btn-lg {
+      padding: 1.25rem;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// Empty cart message
+.empty-cart {
+  text-align: center;
+  img {
+    margin: 1.5rem 0;
+  }
+  h4 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}

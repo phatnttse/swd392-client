@@ -109,6 +109,8 @@ export class AuthService {
   }
 
   reLogin() {
+    debugger;
+
     if (this.reLoginDelegate) {
       this.reLoginDelegate();
     } else {
@@ -117,14 +119,18 @@ export class AuthService {
   }
 
   refreshLogin() {
+    debugger;
     return this.http
-      .post(`${this.API_URL}/auth/renew-access-token`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${DBkeys.REFRESH_TOKEN}`,
-        }),
-      })
-      .pipe(map((response: any) => this.processLoginResponse(response)));
+      .post(
+        `${this.API_URL}/auth/renew-access-token`,
+        {},
+        {
+          headers: new HttpHeaders({
+            'x-refresh-token': this.localStorage.getData(DBkeys.REFRESH_TOKEN),
+          }),
+        }
+      )
+      .pipe(map((response: any) => this.processRefreshTokenResponse(response)));
   }
 
   registerAccount(
@@ -168,6 +174,12 @@ export class AuthService {
           console.log(error);
         },
       });
+    return response;
+  }
+  private processRefreshTokenResponse(response: any) {
+    const accessToken = response.data.accessToken;
+    this.localStorage.deleteData(DBkeys.ACCESS_TOKEN);
+    this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
     return response;
   }
 

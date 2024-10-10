@@ -16,3 +16,10 @@ export enum WalletLogType {
   DEPOSIT,
   WITHDRAW,
 }
+
+export enum FlowerListingStatusEnum {
+  PENDING,
+  APPROVED,
+  REJECTED,
+  EXPIRED,
+}

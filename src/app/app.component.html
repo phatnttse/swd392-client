@@ -1,8 +1,12 @@
+@defer () {
 <app-header></app-header>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
-
-@if (isLoading) {
+}@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+} @if (isLoading) {
 <div class="preloader-wrapper">
   <div class="preloader"></div>
 </div>

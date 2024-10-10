@@ -42,4 +42,19 @@ export class Utilities {
 
     return params;
   }
+
+  public static openOffCanvas(id: string) {
+    const offcanvas = document.getElementById(id);
+    if (offcanvas) {
+      const bsOffcanvas = new (window as any).bootstrap.Offcanvas(offcanvas);
+      bsOffcanvas.show();
+    }
+  }
+  public static closeOffCanvas(id: string) {
+    const offcanvas = document.getElementById(id);
+    if (offcanvas) {
+      const bsOffcanvas = new (window as any).bootstrap.Offcanvas(offcanvas);
+      bsOffcanvas.hide();
+    }
+  }
 }

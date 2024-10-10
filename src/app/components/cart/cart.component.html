@@ -1,10 +1,11 @@
-<div class="untree_co-section before-footer-section" style="padding: 7rem 0">
+<div class="untree_co-section before-footer-section section-cart">
+  <!-- @if (listCartItem.length > 0) { -->
   <div class="container">
     <div class="row mb-5">
-      <form class="col-md-12" method="post">
+      <form class="col-md-12">
         <div class="site-blocks-table">
           <table class="table">
-            <thead>
+            <thead class="mb-2">
               <tr>
                 <th class="product-thumbnail">Image</th>
                 <th class="product-name">Product</th>
@@ -15,25 +16,27 @@
               </tr>
             </thead>
             <tbody>
+              @for (item of listCartItem; track $index) {
               <tr>
                 <td class="product-thumbnail">
                   <img
-                    src="images/product-1.png"
+                    width="70"
+                    src="https://bizweb.dktcdn.net/thumb/large/100/447/023/products/moi-20.jpg?v=1643134572273"
                     alt="Image"
-                    class="img-fluid"
                   />
                 </td>
                 <td class="product-name">
-                  <h2 class="h5 text-black">Product 1</h2>
+                  <h2 class="h5 text-black">{{ item.flowerName }}</h2>
                 </td>
-                <td>$49.00</td>
+                <td class="text-black">${{ item.flowerPrice }}</td>
                 <td>
                   <div
-                    class="input-group mb-3 d-flex align-items-center quantity-container"
+                    class="input-group d-flex align-items-center quantity-container"
                     style="max-width: 120px"
                   >
                     <div class="input-group-prepend">
                       <button
+                        (click)="btnInsertUpdateCart(item.flowerId, -1)"
                         class="btn btn-outline-black decrease"
                         type="button"
                       >
@@ -43,13 +46,14 @@
                     <input
                       type="text"
                       class="form-control text-center quantity-amount"
-                      value="1"
+                      [value]="item.quantity"
                       placeholder=""
                       aria-label="Example text with button addon"
                       aria-describedby="button-addon1"
                     />
                     <div class="input-group-append">
                       <button
+                        (click)="btnInsertUpdateCart(item.flowerId, 1)"
                         class="btn btn-outline-black increase"
                         type="button"
                       >
@@ -58,56 +62,22 @@
                     </div>
                   </div>
                 </td>
-                <td>$49.00</td>
-                <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-              </tr>
-
-              <tr>
-                <td class="product-thumbnail">
-                  <img
-                    src="images/product-2.png"
-                    alt="Image"
-                    class="img-fluid"
-                  />
+                <td class="text-black">
+                  ${{ item.flowerPrice * item.quantity }}
                 </td>
-                <td class="product-name">
-                  <h2 class="h5 text-black">Product 2</h2>
-                </td>
-                <td>$49.00</td>
                 <td>
-                  <div
-                    class="input-group mb-3 d-flex align-items-center quantity-container"
-                    style="max-width: 120px"
+                  <button
+                    type="button"
+                    (click)="btnRemoveCartItem(item.id)"
+                    mat-icon-button
+                    color="accent"
+                    class="btn btn-black btn-sm"
                   >
-                    <div class="input-group-prepend">
-                      <button
-                        class="btn btn-outline-black decrease"
-                        type="button"
-                      >
-                        &minus;
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      class="form-control text-center quantity-amount"
-                      value="1"
-                      placeholder=""
-                      aria-label="Example text with button addon"
-                      aria-describedby="button-addon1"
-                    />
-                    <div class="input-group-append">
-                      <button
-                        class="btn btn-outline-black increase"
-                        type="button"
-                      >
-                        &plus;
-                      </button>
-                    </div>
-                  </div>
+                    <mat-icon>close</mat-icon>
+                  </button>
                 </td>
-                <td>$49.00</td>
-                <td><a href="#" class="btn btn-black btn-sm">X</a></td>
               </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -115,32 +85,36 @@
     </div>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6 col-sm-12 mb-5">
         <div class="row mb-5">
           <div class="col-md-6 mb-3 mb-md-0">
-            <button class="btn btn-black btn-sm btn-block">Update Cart</button>
-          </div>
-          <div class="col-md-6">
-            <button class="btn btn-outline-black btn-sm btn-block">
+            <button
+              routerLink="/products"
+              mat-button
+              color="primary"
+              extend
+              class="fw-bold"
+            >
+              <mat-icon>keyboard_backspace</mat-icon>
               Continue Shopping
             </button>
           </div>
         </div>
-        <div class="row">
+        <div class="row align-items-center">
           <div class="col-md-12">
-            <label class="text-black h4" for="coupon">Coupon</label>
-            <p>Enter your coupon code if you have one.</p>
+            <label class="text-black h4">Clear Cart</label>
+            <p>Click the button below to clear your cart.</p>
           </div>
-          <div class="col-md-8 mb-3 mb-md-0">
-            <input
-              type="text"
-              class="form-control py-3"
-              id="coupon"
-              placeholder="Coupon Code"
-            />
-          </div>
-          <div class="col-md-4">
-            <button class="btn btn-black">Apply Coupon</button>
+          <div class="col-md-12">
+            <button
+              mat-raised-button
+              color="warn"
+              class="btn p-20"
+              style="padding: 20px"
+              (click)="btnClearCart()"
+            >
+              Clear Cart
+            </button>
           </div>
         </div>
       </div>
@@ -157,7 +131,7 @@
                 <span class="text-black">Subtotal</span>
               </div>
               <div class="col-md-6 text-right">
-                <strong class="text-black">$230.00</strong>
+                <strong class="text-black">${{ totalAmount }}</strong>
               </div>
             </div>
             <div class="row mb-5">
@@ -165,17 +139,21 @@
                 <span class="text-black">Total</span>
               </div>
               <div class="col-md-6 text-right">
-                <strong class="text-black">$230.00</strong>
+                <strong class="text-black">${{ totalAmount }}</strong>
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-12">
                 <button
+                  mat-raised-button
+                  color="primary"
                   class="btn btn-black btn-lg py-3 btn-block"
-                  onclick="window.location='checkout.html'"
+                  routerLink="/order"
+                  class="btn p-20"
+                  style="padding: 20px"
                 >
-                  Proceed To Checkout
+                  Proceed To Order
                 </button>
               </div>
             </div>
@@ -184,4 +162,34 @@
       </div>
     </div>
   </div>
+  <!-- }
+  @else {
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <span class="icon-shopping-cart h1 d-block"></span>
+        <img
+          class="mb-5"
+          width="160"
+          src="./../../../assets/images/empty-cart-svg.svg"
+          alt=""
+        />
+        <h4 class="text-black mb-5">Your cart is currently empty.</h4>
+        <p>
+          <button
+            style="font-size: 16px"
+            mat-button
+            routerLink="/products"
+            class="primary-color"
+            extend
+          >
+            <mat-icon>arrow_back_ios</mat-icon>
+            Return to shop
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+  }
+</div> -->
 </div>
