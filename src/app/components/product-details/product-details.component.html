@@ -1,5 +1,6 @@
 <!-- content -->
 @if (flower) {
+<div #topElement></div>
 <section class="py-5 section-products">
   <div class="container">
     <div class="row gx-5">
@@ -53,18 +54,24 @@
               <span class="ms-1"> 4.5 </span>
             </div>
             <span class="text-muted"
-              ><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span
+              ><i class="fas fa-shopping-basket fa-sm mx-1"></i
+              >{{ flower.stockBalance }}
+              {{ "ProductDetail.Available" | translate }}</span
             >
             @if (flower.stockBalance > 0) {
-            <span class="text-success ms-2 fw-bold">In stock</span>
+            <span class="text-success ms-2 fw-bold">{{
+              "ProductDetail.InStock" | translate
+            }}</span>
             }@else {
-            <span class="text-danger ms-2 fw-bold">Out of stock</span>
+            <span class="text-danger ms-2 fw-bold">{{
+              "ProductDetail.OutStock" | translate
+            }}</span>
             }
           </div>
 
           <div class="mb-3">
-            <span class="h5">{{ flower.price }}$</span>
-            <span class="text-muted">/per box</span>
+            <span class="h5">{{ flower.price | number : "1.0" }}₫</span>
+            <!-- <span class="text-muted">/per box</span> -->
           </div>
 
           <p>
@@ -72,17 +79,10 @@
           </p>
 
           <div class="row">
-            <dt class="col-3">Type:</dt>
-            <dd class="col-9">Regular</dd>
-
-            <dt class="col-3">Color</dt>
-            <dd class="col-9">Brown</dd>
-
-            <dt class="col-3">Material</dt>
-            <dd class="col-9">Cotton, Jeans</dd>
-
-            <dt class="col-3">Brand</dt>
-            <dd class="col-9">Reebook</dd>
+            @for (category of flower.categories; track $index) {
+            <dt class="col-3">{{ category.categoryParent }}</dt>
+            <dd class="col-9">{{ category.name }}</dd>
+            }
           </div>
 
           <hr />
@@ -132,13 +132,13 @@
               </div>
               <button
                 style="padding: 26px; font-size: 16px"
-                class="me-3"
+                class="me-3 btn-buy-now"
                 mat-raised-button
                 color="accent"
                 extended
               >
                 <mat-icon>shopping_bag</mat-icon>
-                Mua ngay
+                {{ "Home.BuyNow" | translate }}
               </button>
               <button
                 style="padding: 26px; font-size: 16px"
@@ -148,7 +148,7 @@
                 (click)="btnInsertUpdateCart(flower.id, quantityInput)"
               >
                 <mat-icon>add_shopping_cart</mat-icon>
-                Thêm vào giỏ
+                {{ "AddToCart" | translate }}
               </button>
             </div>
           </div>
@@ -190,7 +190,7 @@
       <div class="col-md-3 text-center">
         <button mat-raised-button extend class="info">
           <mat-icon>storefront</mat-icon>
-          Visit Shop
+          {{ "ProductDetail.VisitShop" | translate }}
         </button>
       </div>
     </div>
@@ -202,219 +202,93 @@
 <section class="bg-light border-top py-4">
   <div class="container">
     <div class="row gx-4">
-      <div class="col-lg-8 mb-4">
-        <div class="border rounded-2 px-3 py-2 bg-white">
-          <!-- Pills navs -->
-          <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-            <li class="nav-item d-flex" role="presentation">
-              <a
-                class="nav-link d-flex align-items-center justify-content-center w-100 active"
-                id="ex1-tab-1"
-                data-mdb-toggle="pill"
-                href="#ex1-pills-1"
-                role="tab"
-                aria-controls="ex1-pills-1"
-                aria-selected="true"
-                >Specification</a
-              >
-            </li>
-            <li class="nav-item d-flex" role="presentation">
-              <a
-                class="nav-link d-flex align-items-center justify-content-center w-100"
-                id="ex1-tab-2"
-                data-mdb-toggle="pill"
-                href="#ex1-pills-2"
-                role="tab"
-                aria-controls="ex1-pills-2"
-                aria-selected="false"
-                >Warranty info</a
-              >
-            </li>
-            <li class="nav-item d-flex" role="presentation">
-              <a
-                class="nav-link d-flex align-items-center justify-content-center w-100"
-                id="ex1-tab-3"
-                data-mdb-toggle="pill"
-                href="#ex1-pills-3"
-                role="tab"
-                aria-controls="ex1-pills-3"
-                aria-selected="false"
-                >Shipping info</a
-              >
-            </li>
-            <li class="nav-item d-flex" role="presentation">
-              <a
-                class="nav-link d-flex align-items-center justify-content-center w-100"
-                id="ex1-tab-4"
-                data-mdb-toggle="pill"
-                href="#ex1-pills-4"
-                role="tab"
-                aria-controls="ex1-pills-4"
-                aria-selected="false"
-                >Seller profile</a
-              >
-            </li>
-          </ul>
-          <!-- Pills navs -->
-
-          <!-- Pills content -->
-          <div class="tab-content" id="ex1-content">
-            <div
-              class="tab-pane fade show active"
-              id="ex1-pills-1"
-              role="tabpanel"
-              aria-labelledby="ex1-tab-1"
-            >
-              <p>
-                With supporting text below as a natural lead-in to additional
-                content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-                aute irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur.
-              </p>
-              <div class="row mb-2">
-                <div class="col-12 col-md-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <i class="fas fa-check text-success me-2"></i>Some great
-                      feature name here
-                    </li>
-                    <li>
-                      <i class="fas fa-check text-success me-2"></i>Lorem ipsum
-                      dolor sit amet, consectetur
-                    </li>
-                    <li>
-                      <i class="fas fa-check text-success me-2"></i>Duis aute
-                      irure dolor in reprehenderit
-                    </li>
-                    <li>
-                      <i class="fas fa-check text-success me-2"></i>Optical
-                      heart sensor
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-12 col-md-6 mb-0">
-                  <ul class="list-unstyled">
-                    <li>
-                      <i class="fas fa-check text-success me-2"></i>Easy fast
-                      and ver good
-                    </li>
-                    <li>
-                      <i class="fas fa-check text-success me-2"></i>Some great
-                      feature name here
-                    </li>
-                    <li>
-                      <i class="fas fa-check text-success me-2"></i>Modern style
-                      and design
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <table class="table border mt-3 mb-2">
-                <tr>
-                  <th class="py-2">Display:</th>
-                  <td class="py-2">13.3-inch LED-backlit display with IPS</td>
-                </tr>
-                <tr>
-                  <th class="py-2">Processor capacity:</th>
-                  <td class="py-2">2.3GHz dual-core Intel Core i5</td>
-                </tr>
-                <tr>
-                  <th class="py-2">Camera quality:</th>
-                  <td class="py-2">720p FaceTime HD camera</td>
-                </tr>
-                <tr>
-                  <th class="py-2">Memory</th>
-                  <td class="py-2">8 GB RAM or 16 GB RAM</td>
-                </tr>
-                <tr>
-                  <th class="py-2">Graphics</th>
-                  <td class="py-2">Intel Iris Plus Graphics 640</td>
-                </tr>
-              </table>
-            </div>
-            <div
-              class="tab-pane fade mb-2"
-              id="ex1-pills-2"
-              role="tabpanel"
-              aria-labelledby="ex1-tab-2"
-            >
-              Tab content or sample information now <br />
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo
-            </div>
-            <div
-              class="tab-pane fade mb-2"
-              id="ex1-pills-3"
-              role="tabpanel"
-              aria-labelledby="ex1-tab-3"
-            >
-              Another tab content or sample information now <br />
-              Dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-              minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-            <div
-              class="tab-pane fade mb-2"
-              id="ex1-pills-4"
-              role="tabpanel"
-              aria-labelledby="ex1-tab-4"
-            >
-              Some other tab content or sample information now <br />
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-          </div>
-          <!-- Pills content -->
-        </div>
-      </div>
-      <div class="col-lg-4">
+      <div class="col-lg-12">
         <div class="px-0 border rounded-2 shadow-0">
-          <div class="card">
+          <div class="card p-5">
             <div class="card-body">
-              <h5 class="card-title">Similar items</h5>
-              @for (item of listSimilarFlowers; track $index) {
-              <div class="d-flex mb-3">
-                <a
-                  href="javascript:;"
-                  (click)="onSimilarFlowerClick(item.id)"
-                  class="me-3"
-                >
-                  <img
-                    (click)="onSimilarFlowerClick(item.id)"
-                    [src]="item.imageUrl"
-                    style="min-width: 96px; height: 96px"
-                    class="img-md img-thumbnail"
-                  />
-                </a>
-                <div class="info">
-                  <a href="#" class="nav-link mb-1">
-                    {{ item.name }}
-                  </a>
-                  <strong class="text-dark"> ${{ item.price }}</strong>
+              <h5 class="card-title text-black fw-bold mb-5">
+                {{ "ProductDetail.SimilarProduct" | translate }}
+              </h5>
+              <div class="row">
+                <div class="col-md-12">
+                  <div
+                    class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-4"
+                  >
+                    @for (flower of listSimilarFlowers; track $index) {
+                    <div class="col">
+                      <div class="product-item">
+                        <figure>
+                          <a
+                            href="javascript:;"
+                            title="Product Title"
+                            (click)="onSimilarFlowerClick(flower.id)"
+                          >
+                            <img
+                              [src]="flower.imageUrl"
+                              [alt]="flower.name"
+                              class="tab-image w-100"
+                            />
+                          </a>
+                        </figure>
+                        <div class="d-flex flex-column text-center">
+                          <a
+                            href="javascript:;"
+                            class="product-name"
+                            (click)="onSimilarFlowerClick(flower.id)"
+                          >
+                            <h3 class="fs-6 fw-normal">{{ flower.name }}</h3>
+                          </a>
+                          <div>
+                            <span class="rating">
+                              <svg width="18" height="18" class="text-warning">
+                                <use xlink:href="#star-full"></use>
+                              </svg>
+                              <svg width="18" height="18" class="text-warning">
+                                <use xlink:href="#star-full"></use>
+                              </svg>
+                              <svg width="18" height="18" class="text-warning">
+                                <use xlink:href="#star-full"></use>
+                              </svg>
+                              <svg width="18" height="18" class="text-warning">
+                                <use xlink:href="#star-full"></use>
+                              </svg>
+                              <svg width="18" height="18" class="text-warning">
+                                <use xlink:href="#star-half"></use>
+                              </svg>
+                            </span>
+                            <span>(222)</span>
+                          </div>
+                          <div
+                            class="d-flex justify-content-center align-items-center gap-2"
+                          >
+                            <del>{{ flower.price | number : "1.0" }}₫</del>
+                            <span class="text-dark fw-semibold"
+                              >{{ flower.price | number : "1.0" }}₫</span
+                            >
+                          </div>
+                          <div class="button-area p-3 pt-0">
+                            <div class="row g-1 mt-2">
+                              <div class="col-12">
+                                <a
+                                  href="javascript:;"
+                                  (click)="btnInsertUpdateCart(flower.id, 1)"
+                                  class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
+                                  ><svg width="18" height="18">
+                                    <use xlink:href="#cart"></use>
+                                  </svg>
+                                  {{ "AddToCart" | translate }}</a
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    }
+                  </div>
                 </div>
+                <!-- / product-grid -->
               </div>
-              }
             </div>
           </div>
         </div>

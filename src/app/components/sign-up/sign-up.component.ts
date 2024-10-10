@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Gender } from '../../models/enums';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sign-up',
@@ -29,6 +30,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     FormsModule,
     MatSelectModule,
     MatIconModule,
+    TranslateModule,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
@@ -58,6 +60,7 @@ export class SignUpComponent {
     });
   }
 
+  // Đăng ký tài khoản
   btnSignUp() {
     if (this.formSignUp.invalid) {
       this.formSignUp.markAllAsTouched();
@@ -96,6 +99,7 @@ export class SignUpComponent {
       });
   }
 
+  // Đăng nhập bằng Google
   async btnLoginGoogle() {
     this.authService
       .loginWithGoogle()
@@ -110,6 +114,7 @@ export class SignUpComponent {
       });
   }
 
+  // Ẩn hiện mật khẩu
   btnHidePassword(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();

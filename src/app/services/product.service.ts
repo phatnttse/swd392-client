@@ -12,9 +12,12 @@ import { Flower, FlowerPaginated } from '../models/flower.model';
 export class ProductService extends EndpointBase {
   API_URL: string = '';
 
-  // Trạng thái của flower
-  public flowerDataSource = new BehaviorSubject<Flower[] | null>(null);
-  flowerData$ = this.flowerDataSource.asObservable();
+  // Trạng thái của danh sách hoa mới nhất
+  public flowerNewestDataSource = new BehaviorSubject<Flower[] | null>(null);
+  flowerNewestData$ = this.flowerNewestDataSource.asObservable();
+
+  public flowerPaginatedDataSource = new BehaviorSubject<Flower[] | null>(null);
+  flowerPaginatedData$ = this.flowerPaginatedDataSource.asObservable();
 
   constructor(
     http: HttpClient,

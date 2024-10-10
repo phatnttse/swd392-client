@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cart',
@@ -17,6 +19,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
+    TranslateModule,
+    CommonModule,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
@@ -28,6 +32,8 @@ export class CartComponent implements OnInit {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
+
     this.cartService.cartDataSource.subscribe((cartData: CartItem[]) => {
       if (cartData) {
         this.listCartItem = cartData;

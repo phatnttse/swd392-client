@@ -8,14 +8,17 @@
         <div class="row justify-content-center">
           <div class="col-md-9">
             <div class="mb-4">
-              <h3>Sign In to <strong class="primary-color">SWD392</strong></h3>
+              <h3>
+                {{ "Sign.SignIn" | translate }}
+                <strong class="primary-color">SWD392</strong>
+              </h3>
               <p class="my-3">
-                Do not have an account?
+                {{ "Sign.DontHaveAccount" | translate }}
                 <a
                   routerLink="/signup"
                   class="primary-color"
                   style="text-decoration: underline"
-                  >Sign Up</a
+                  >{{ "Sign.SignUpNow" | translate }}</a
                 >
               </p>
             </div>
@@ -32,18 +35,21 @@
                     formLogin.get('email')?.touched
                   "
                 />
-                @if (formLogin.get('email')?.hasError('required')) {
+                @if(formLogin.get('email')?.hasError('required')) {
                 <mat-error style="font-size: 12px">
-                  Email không được để trống
+                  {{ "Sign.EmailRequired" | translate }}
                 </mat-error>
                 } @if (formLogin.get('email')?.hasError('email')) {
                 <mat-error style="font-size: 12px">
-                  Email không đúng định dạng. Ex: vit&#64;gmail.com
+                  {{ "Sign.EmailInvalid" | translate }}
                 </mat-error>
                 }
               </mat-form-field>
+
               <mat-form-field class="w-100" appearance="outline">
-                <mat-label style="font-size: 14px">Password</mat-label>
+                <mat-label style="font-size: 14px">{{
+                  "Sign.Password" | translate
+                }}</mat-label>
                 <input
                   matInput
                   [type]="hide() ? 'password' : 'text'"
@@ -62,21 +68,23 @@
                   [attr.aria-label]="'Hide password'"
                   [attr.aria-pressed]="hide()"
                 >
-                  <mat-icon color="primary" class="fs-18">{{
-                    hide() ? "visibility_off" : "visibility"
-                  }}</mat-icon>
+                  <mat-icon color="primary" class="fs-18">
+                    {{ hide() ? "visibility_off" : "visibility" }}
+                  </mat-icon>
                 </button>
                 @if (formLogin.get('password')?.hasError('required')) {
                 <mat-error style="font-size: 12px">
-                  Password không được để trống
+                  {{ "Sign.PasswordRequired" | translate }}
                 </mat-error>
                 }
               </mat-form-field>
 
               <div class="d-flex mb-3 align-items-center justify-content-end">
-                <span class="ml-auto"
-                  ><a href="#" class="forgot-pass">Forgot Password</a></span
-                >
+                <span class="ml-auto">
+                  <a href="#" class="forgot-pass">{{
+                    "Sign.ForgotPassword" | translate
+                  }}</a>
+                </span>
               </div>
 
               <button
@@ -85,14 +93,14 @@
                 color="primary"
                 class="w-100 p-20"
               >
-                Sign In
+                {{ "Sign.LoginButton" | translate }}
               </button>
 
               <span
                 class="d-flex text-left my-4 text-muted justify-content-center"
               >
-                or sign in with</span
-              >
+                {{ "Sign.OrSignInWith" | translate }}
+              </span>
 
               <div class="social-login">
                 <div class="d-flex w-100">
@@ -127,9 +135,9 @@
                         d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
                       ></path>
                     </svg>
-                    <span class="fs-14 text-gray-700"
-                      >Đăng nhập với Google</span
-                    >
+                    <span class="fs-14 text-gray-700">{{
+                      "Sign.LoginWithGoogle" | translate
+                    }}</span>
                   </button>
                 </div>
               </div>

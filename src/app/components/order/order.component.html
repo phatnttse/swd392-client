@@ -3,14 +3,15 @@
     @if (statusOrder === 0) {
     <div class="row">
       <div class="col-md-6 mb-5 mb-md-0">
-        <h2 class="h3 mb-3 text-black">Chi tiết thanh toán</h2>
+        <h2 class="h3 mb-3 text-black">{{ "Order.OrderInfo" | translate }}</h2>
         <div class="p-3 p-lg-5 border bg-white">
           <label for="c_fname" class="text-black"
-            >Họ và tên <span class="text-danger">*</span></label
+            >{{ "Sign.FullName" | translate
+            }}<span class="text-danger">*</span></label
           >
           <form class="form-group" [formGroup]="orderForm">
-            <mat-form-field class="w-100 fs-12 my-2" appearance="outline">
-              <mat-label>Họ và tên</mat-label>
+            <mat-form-field class="w-100 fs-14 my-2" appearance="outline">
+              <mat-label>{{ "Sign.FullName" | translate }}</mat-label>
               <input
                 matInput
                 type="text"
@@ -22,22 +23,19 @@
                 "
               />
               @if(orderForm.get('name')!.hasError('required')) {
-              <mat-error class="fs-12">
-                Họ và tên không được để trống
-              </mat-error>
-              } @if (orderForm.get('name')!.hasError('minlength')) {
-              <mat-error class="fs-12">
-                Họ và tên quá ngắn. Tối thiểu 5 ký tự
+              <mat-error class="fs-14">
+                {{ "Sign.NameRequired" | translate }}
               </mat-error>
               }
             </mat-form-field>
             <div class="form-group row">
               <div class="col-md-6">
-                <label for="c_fname" class="text-black"
-                  >Số điện thoại<span class="text-danger">*</span></label
+                <label for="c_fname" class="text-black">
+                  {{ "Order.Phone" | translate
+                  }}<span class="text-danger">*</span></label
                 >
-                <mat-form-field class="w-100 fs-12 my-2" appearance="outline">
-                  <mat-label>Số điện thoại</mat-label>
+                <mat-form-field class="w-100 fs-14 my-2" appearance="outline">
+                  <mat-label>{{ "Order.Phone" | translate }}</mat-label>
                   <input
                     matInput
                     type="phone"
@@ -49,23 +47,24 @@
                     "
                   />
                   @if(orderForm.get('phone')!.hasError('required')) {
-                  <mat-error class="fs-12">
-                    Số điện thoại không được để trống
+                  <mat-error class="fs-14">
+                    {{ "Order.PhoneRequired" | translate }}
                   </mat-error>
                   } @if(orderForm.get('phone')!.hasError('minlength') ||
                   orderForm.get('phone')!.hasError('maxlength')) {
-                  <mat-error class="fs-12">
-                    Số điện thoại phải đúng 10 chữ số.
+                  <mat-error class="fs-14">
+                    {{ "Order.PhoneInvalid" | translate }}
                   </mat-error>
                   }
                 </mat-form-field>
               </div>
               <div class="col-md-6">
-                <label for="c_lname" class="text-black"
-                  >Địa chỉ <span class="text-danger">*</span></label
+                <label for="c_lname" class="text-black">
+                  {{ "Order.Address" | translate
+                  }}<span class="text-danger">*</span></label
                 >
-                <mat-form-field class="w-100 fs-12 my-2" appearance="outline">
-                  <mat-label>Địa chỉ</mat-label>
+                <mat-form-field class="w-100 fs-14 my-2" appearance="outline">
+                  <mat-label>{{ "Order.Address" | translate }}</mat-label>
                   <input
                     matInput
                     type="text"
@@ -77,13 +76,13 @@
                     "
                   />
                   @if(orderForm.get('deliveryAddress')!.hasError('required')) {
-                  <mat-error class="fs-12">
-                    Địa chỉ không được để trống
+                  <mat-error class="fs-14">
+                    {{ "Order.AddressRequired" | translate }}
                   </mat-error>
                   } @if(orderForm.get('deliveryAddress')!.hasError('minlength'))
                   {
-                  <mat-error class="fs-12">
-                    Địa chỉ quá ngắn. Tối thiểu 10 ký tự
+                  <mat-error class="fs-14">
+                    {{ "Order.AddressInvalid" | translate }}
                   </mat-error>
                   }
                 </mat-form-field>
@@ -92,9 +91,11 @@
 
             <div class="form-group row">
               <div class="col-md-12">
-                <label for="c_companyname" class="text-black">Ghi chú </label>
-                <mat-form-field class="w-100 fs-12 mt-2" appearance="outline">
-                  <mat-label>Ghi chú</mat-label>
+                <label for="c_companyname" class="text-black">
+                  {{ "Order.Note" | translate }}</label
+                >
+                <mat-form-field class="w-100 fs-14 mt-2" appearance="outline">
+                  <mat-label>{{ "Order.Note" | translate }}</mat-label>
                   <textarea
                     matInput
                     rows="4"
@@ -105,8 +106,8 @@
                     "
                   ></textarea>
                   @if(orderForm.get('note')!.hasError('maxlength')) {
-                  <mat-error class="fs-12">
-                    Ghi chú quá dài. Tối đa 200 ký tự
+                  <mat-error class="fs-14">
+                    {{ "Order.NoteInvalid" | translate }}
                   </mat-error>
                   }
                 </mat-form-field>
@@ -148,13 +149,15 @@
 
         <div class="row mb-5">
           <div class="col-md-12">
-            <h2 class="h3 mb-3 text-black">Your Order</h2>
+            <h2 class="h3 mb-3 text-black">
+              {{ "Order.OrderDetails" | translate }}
+            </h2>
             <form [formGroup]="orderForm" class="p-3 p-lg-5 border bg-white">
               <table class="table site-block-order-table mb-5">
                 <thead>
-                  <th class="text-black">Image</th>
-                  <th class="text-black">Product</th>
-                  <th class="text-black">Total</th>
+                  <th class="text-black">{{ "Cart.Image" | translate }}</th>
+                  <th class="text-black">{{ "Cart.Name" | translate }}</th>
+                  <th class="text-black">{{ "Cart.Total" | translate }}</th>
                 </thead>
                 <tbody>
                   @for (item of listCartItem; track $index) {
@@ -166,25 +169,31 @@
                       {{ item.flowerName }}<strong class="mx-2">x</strong
                       >{{ item.quantity }}
                     </td>
-                    <td>${{ item.quantity }}</td>
+                    <td>
+                      {{ item.flowerPrice * item.quantity | number : "1.0" }}₫
+                    </td>
                   </tr>
                   }
                   <tr>
                     <td class="text-black font-weight-bold">
-                      <strong>Cart Subtotal</strong>
+                      <strong>{{ "Cart.SubTotal" | translate }}</strong>
                     </td>
                     <td></td>
 
-                    <td class="text-danger">${{ totalAmount }}</td>
+                    <td class="text-danger">
+                      {{ totalAmount | number : "1.0" }}₫
+                    </td>
                   </tr>
                   <tr>
                     <td class="text-black font-weight-bold">
-                      <strong>Order Total</strong>
+                      <strong>{{ "Cart.Total" | translate }}</strong>
                     </td>
                     <td></td>
 
                     <td class="text-black font-weight-bold">
-                      <strong class="text-danger">${{ totalAmount }}</strong>
+                      <strong class="text-danger"
+                        >{{ totalAmount | number }}₫</strong
+                      >
                     </td>
                   </tr>
                 </tbody>
@@ -195,9 +204,20 @@
                   <div
                     class="d-flex align-items-center justify-content-between"
                   >
-                    <mat-radio-button value="Wallet"
-                      >Thanh toán bằng ví</mat-radio-button
-                    >
+                    <mat-radio-button value="WALLET">
+                      {{ "Order.PaymentByWallet" | translate }}
+                    </mat-radio-button>
+                    <div class="fw-bold d-flex align-items-center">
+                      <span class="me-2"
+                        >{{ "Order.Balance" | translate }}:</span
+                      >
+                      <span
+                        class="border rounded p-1"
+                        style="font-size: 18px; color: #fb9678"
+                      >
+                        {{ userAccount?.balance | number : "1.0" }}₫
+                      </span>
+                    </div>
                     <img
                       width="60"
                       src="./../../../assets/images/wallet-payment-svg.svg"
@@ -208,9 +228,9 @@
                   <div
                     class="d-flex align-items-center justify-content-between"
                   >
-                    <mat-radio-button value="PayOs"
-                      >Thanh toán bằng PayOs</mat-radio-button
-                    >
+                    <mat-radio-button value="PAYOS">{{
+                      "Order.PaymentByPayOs" | translate
+                    }}</mat-radio-button>
                     <img
                       width="60"
                       src="./../../../assets/images/payos-logo.svg"
@@ -225,9 +245,10 @@
                   (click)="placeOrder()"
                   color="accent"
                   mat-raised-button
-                  style="font-size: 18px"
+                  style="font-size: 18px; padding: 20px"
+                  class="btn p-20"
                 >
-                  Place Order
+                  {{ "Order.Order" | translate }}
                 </button>
               </div>
             </form>

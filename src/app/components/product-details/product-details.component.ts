@@ -11,11 +11,20 @@ import { InsertUpdateCartResponse } from '../../models/cart.model';
 import { CartService } from '../../services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { Utilities } from '../../services/utilities';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatInputModule, RouterModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    RouterModule,
+    CommonModule,
+    TranslateModule,
+  ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
 })
@@ -36,6 +45,8 @@ export class ProductDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
+
     const idParam = this.route.snapshot.paramMap.get('id');
 
     if (idParam) {
@@ -56,6 +67,8 @@ export class ProductDetailsComponent implements OnInit {
       },
     });
   }
+
+  // Lấy danh sách hoa tương tự
   getSimilarFlowers() {
     this.productService
       .getFlowers('', 'asc', 'createdAt', 0, 4, [this.flowerId])
@@ -69,6 +82,7 @@ export class ProductDetailsComponent implements OnInit {
       });
   }
 
+  // Chuyển đến trang chi tiết sản phẩm khác
   onSimilarFlowerClick(similarFlowerId: number) {
     this.router.navigate(['/product-details', similarFlowerId]);
     this.flowerId = similarFlowerId;
@@ -99,16 +113,19 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
+  // Cuộn lên đầu trang
   scrollToTop() {
     if (this.topElement) {
       this.topElement.nativeElement.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
+  // Tăng số lượng input
   btnIncreaseQuantity() {
     this.quantityInput++;
   }
 
+  // Giảm số lượng input
   bntDecreaseQuantity() {
     if (this.quantityInput > 1) {
       this.quantityInput--;

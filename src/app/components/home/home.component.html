@@ -18,19 +18,19 @@
             >
           </h1>
           <p class="fs-4" style="margin-left: 20px; color: aliceblue">
-            Hãy chọn những đoá hoa đẹp nhất
+            {{ "Home.Slogan" | translate }}
           </p>
 
           <div class="d-flex gap-3">
             <a
               routerLink="/products"
               class="btn btn-primary text-uppercase fs-6 rounded-pill py-3 mt-3"
-              >Mua ngay</a
+              >{{ "Home.BuyNow" | translate }}</a
             >
             <a
               routerLink="/signup"
               class="btn btn-dark text-uppercase fs-6 rounded-pill py-3 mt-3"
-              >Đăng ký bán hoa</a
+              >{{ "Home.RegisterToSellFlower" | translate }}</a
             >
           </div>
         </div>
@@ -117,10 +117,14 @@
         <div
           class="section-header d-flex flex-wrap justify-content-between mb-5"
         >
-          <h2 class="section-title">Danh mục sản phẩm</h2>
+          <h2 class="section-title">
+            {{ "Home.ProductCategory" | translate }}
+          </h2>
 
           <div class="d-flex align-items-center">
-            <a href="javascript:;" class="btn btn-primary me-2">Xem tất cả</a>
+            <a href="javascript:;" class="btn btn-primary me-2">
+              {{ "Home.ViewAll" | translate }}</a
+            >
           </div>
         </div>
       </div>
@@ -174,12 +178,12 @@
         <div
           class="section-header d-flex flex-wrap justify-content-between my-4"
         >
-          <h2 class="section-title">Sản phẩm mới nhất</h2>
+          <h2 class="section-title">{{ "Home.NewestProduct" | translate }}</h2>
 
           <div class="d-flex align-items-center">
-            <a routerLink="/products" class="btn btn-primary rounded-1"
-              >Xem tất cả</a
-            >
+            <a routerLink="/products" class="btn btn-primary rounded-1">{{
+              "Home.ViewAll" | translate
+            }}</a>
           </div>
         </div>
       </div>
@@ -190,7 +194,7 @@
         <div
           class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5"
         >
-          @for (flower of listFlower; track $index) {
+          @for (flower of listFlowerNewest; track $index) {
           <div class="col">
             <div class="product-item">
               <figure>
@@ -237,8 +241,10 @@
                 <div
                   class="d-flex justify-content-center align-items-center gap-2"
                 >
-                  <del>{{ flower.price }}$</del>
-                  <span class="text-dark fw-semibold">{{ flower.price }}$</span>
+                  <del>{{ flower.price | number : "1.0" }}₫</del>
+                  <span class="text-dark fw-semibold"
+                    >{{ flower.price | number : "1.0" }}₫</span
+                  >
                 </div>
                 <div class="button-area p-3 pt-0">
                   <div class="row g-1 mt-2">
@@ -250,7 +256,7 @@
                         ><svg width="18" height="18">
                           <use xlink:href="#cart"></use>
                         </svg>
-                        Add to Cart</a
+                        {{ "AddToCart" | translate }}</a
                       >
                     </div>
                   </div>
@@ -396,11 +402,7 @@
         <article class="post-item card border-0 shadow-sm p-3">
           <div class="image-holder zoom-effect">
             <a href="#">
-              <img
-                src="images/post-thumbnail-1.jpg"
-                alt="post"
-                class="card-img-top"
-              />
+              <img src="" alt="post" class="card-img-top" />
             </a>
           </div>
           <div class="card-body">
@@ -437,11 +439,7 @@
         <article class="post-item card border-0 shadow-sm p-3">
           <div class="image-holder zoom-effect">
             <a href="#">
-              <img
-                src="images/post-thumbnail-2.jpg"
-                alt="post"
-                class="card-img-top"
-              />
+              <img src="" alt="post" class="card-img-top" />
             </a>
           </div>
           <div class="card-body">
@@ -478,11 +476,7 @@
         <article class="post-item card border-0 shadow-sm p-3">
           <div class="image-holder zoom-effect">
             <a href="#">
-              <img
-                src="images/post-thumbnail-3.jpg"
-                alt="post"
-                class="card-img-top"
-              />
+              <img src="" alt="post" class="card-img-top" />
             </a>
           </div>
           <div class="card-body">

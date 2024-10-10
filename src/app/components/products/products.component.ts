@@ -26,6 +26,7 @@ import { InsertUpdateCartResponse } from '../../models/cart.model';
 import { Utilities } from '../../services/utilities';
 import { CartService } from '../../services/cart.service';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-products',
@@ -48,6 +49,7 @@ import { ToastrService } from 'ngx-toastr';
     MatSliderModule,
     MatPaginatorModule,
     MatMenuModule,
+    TranslateModule,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
@@ -67,8 +69,8 @@ export class ProductsComponent implements OnInit {
   visiblePages: number[] = []; // Các trang hiển thị
   convertedCategories: any[] = []; // Danh sách danh mục đã convert
   debounceTimer: any; // Timer debounce
-  titleSearch: string = 'Tất cả sản phẩm'; // Tiêu đề tìm kiếm
-  titleTypeArrange: string = 'Mặc định'; // Tiêu đề sắp xếp
+  titleSearch: string = 'Products.All'; // Tiêu đề tìm kiếm
+  titleTypeArrange: string = 'Products.Default'; // Tiêu đề sắp xếp
 
   constructor(
     private productService: ProductService,
@@ -85,8 +87,8 @@ export class ProductsComponent implements OnInit {
 
     // Theo dõi sự thay đổi của queryParams
     this.route.queryParams.subscribe((params) => {
-      if (params['categoryId']) {
-        this.categoryIds = [params['categoryId']];
+      if (params['c']) {
+        this.categoryIds = [params['c']];
         this.getFlowers(
           this.searchString,
           this.order,
@@ -106,22 +108,22 @@ export class ProductsComponent implements OnInit {
           this.pageSize,
           this.categoryIds
         );
-        this.titleSearch = `Kết quả tìm kiếm cho từ khoá`;
+        this.titleSearch = `Products.ResultByKeyword`;
       } else {
-        this.titleSearch = 'Tất cả sản phẩm';
+        this.titleSearch = 'Products.All';
         this.searchString = '';
         this.categoryIds = [];
       }
     });
-
-    this.getFlowers(
-      this.searchString,
-      this.order,
-      this.sortBy,
-      this.pageNumber,
-      this.pageSize,
-      this.categoryIds
-    );
+    this.productService.flowerPaginatedDataSource.subscribe({
+      next: (flowerData: Flower[] | null) => {
+        if (flowerData) {
+          this.listFlower = flowerData;
+        } else {
+          this.getAllFlowers();
+        }
+      },
+    });
     this.categoryService.convertedCategoryDataSource.subscribe(
       (categoryData: any[]) => {
         if (categoryData) {
@@ -131,7 +133,7 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  // Lấy danh sách hoa và lưu vào BehaviorSubject
+  // Lấy danh sách hoa theo điều kiện
   getFlowers(
     searchString: string,
     order: string,
@@ -170,10 +172,36 @@ export class ProductsComponent implements OnInit {
       });
   }
 
+  // Lấy danh sách tất cả hoa
+  getAllFlowers() {
+    this.productService
+      .getFlowers('', 'desc', 'createdAt', 0, 16, [])
+      .subscribe({
+        next: (response: FlowerPaginated) => {
+          this.listFlower = response.content;
+          this.pageNumber = response.pageNumber;
+          this.pageSize = response.pageSize;
+          this.totalPages = response.totalPages;
+          this.numberOfElements = response.numberOfElements;
+          this.totalElements = response.totalElements;
+          this.visiblePages = this.generateVisiblePageArray(
+            this.currentPage,
+            this.totalPages
+          );
+          this.productService.flowerPaginatedDataSource.next(response.content); // Lưu vào BehaviorSubject
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
+        },
+      });
+  }
+
+  // Xem chi tiết hoa
   viewFlowerDetails(id: number) {
     this.router.navigate(['/product-details', id]);
   }
 
+  // Xử lý khi thay đổi trang
   onPageChange(page: number) {
     this.currentPage = page < 0 ? 0 : page;
     this.localStorage.savePermanentData(
@@ -190,6 +218,7 @@ export class ProductsComponent implements OnInit {
     );
   }
 
+  // Xử lý khi thay đổi danh mục
   onCategoryChange(categoryId: number, event: any) {
     if (event.checked) {
       this.categoryIds.push(categoryId);
@@ -232,6 +261,7 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  // Tạo mảng các trang hiển thị
   generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
     const maxVisiblePages = 5;
     const halfVisiblePages = Math.floor(maxVisiblePages / 2);
@@ -248,6 +278,7 @@ export class ProductsComponent implements OnInit {
       .map((_, index) => startPage + index);
   }
 
+  // Xử lý khi thay đổi sắp xếp
   setSortingOption(order: string, sortBy: string, title: string) {
     this.getFlowers(
       this.searchString,

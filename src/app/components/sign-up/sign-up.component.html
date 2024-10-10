@@ -8,14 +8,17 @@
         <div class="row justify-content-center">
           <div class="col-md-9">
             <div class="mb-4">
-              <h3>Sign Up to <strong class="primary-color">SWD392</strong></h3>
+              <h3>
+                {{ "Sign.SignUp" | translate }}
+                <strong class="primary-color">SWD392</strong>
+              </h3>
               <p class="my-4">
-                Already have an account?
+                {{ "Sign.AlreadyHaveAccount" | translate }}
                 <a
                   routerLink="/signin"
                   class="primary-color"
                   style="text-decoration: underline"
-                  >Sign In</a
+                  >{{ "Sign.SignInNow" | translate }}</a
                 >
               </p>
             </div>
@@ -31,16 +34,18 @@
                 />
                 @if(formSignUp.get('email')?.hasError('required')) {
                 <mat-error style="font-size: 12px">
-                  Email không được để trống
+                  {{ "Sign.EmailRequired" | translate }}
                 </mat-error>
                 } @if (formSignUp.get('email')?.hasError('email')) {
                 <mat-error style="font-size: 12px">
-                  Email không đúng định dạng. Ex: vit&#64;gmail.com
+                  {{ "Sign.EmailInvalid" | translate }}
                 </mat-error>
                 }
               </mat-form-field>
               <mat-form-field class="w-100" appearance="outline">
-                <mat-label style="font-size: 14px">Name</mat-label>
+                <mat-label style="font-size: 14px">{{
+                  "Sign.FullName" | translate
+                }}</mat-label>
                 <input
                   matInput
                   type="text"
@@ -50,7 +55,7 @@
                 />
                 @if (formSignUp.get('name')?.hasError('required')) {
                 <mat-error style="font-size: 12px">
-                  Name không được để trống
+                  {{ "Sign.NameRequired" | translate }}
                 </mat-error>
                 }
               </mat-form-field>
@@ -58,7 +63,9 @@
               <div class="row">
                 <div class="col-md-6">
                   <mat-form-field class="w-100" appearance="outline">
-                    <mat-label style="font-size: 14px">Gender</mat-label>
+                    <mat-label style="font-size: 14px">
+                      {{ "Sign.Gender" | translate }}</mat-label
+                    >
                     <mat-select formControlName="accountGender">
                       @for (gender of genders; track gender) {
                       <mat-option [value]="gender.value">{{
@@ -69,14 +76,16 @@
                     @if (formSignUp.get('accountGender')?.hasError('required'))
                     {
                     <mat-error style="font-size: 12px">
-                      Gender không được để trống
+                      {{ "Sign.GenderRequired" | translate }}
                     </mat-error>
                     }
                   </mat-form-field>
                 </div>
                 <div class="col-md-6">
                   <mat-form-field class="w-100" appearance="outline">
-                    <mat-label style="font-size: 14px">Password</mat-label>
+                    <mat-label style="font-size: 14px">{{
+                      "Sign.Password" | translate
+                    }}</mat-label>
                     <input
                       matInput
                       [type]="hide() ? 'password' : 'text'"
@@ -101,7 +110,7 @@
                     </button>
                     @if (formSignUp.get('password')?.hasError('required')) {
                     <mat-error style="font-size: 12px">
-                      Password không được để trống
+                      {{ "Sign.PasswordRequired" | translate }}
                     </mat-error>
                     }
                   </mat-form-field>
@@ -110,7 +119,9 @@
 
               <div class="d-flex mb-3 align-items-center justify-content-end">
                 <span class="ml-auto"
-                  ><a href="#" class="forgot-pass">Forgot Password</a></span
+                  ><a href="#" class="forgot-pass">{{
+                    "Sign.ForgotPassword" | translate
+                  }}</a></span
                 >
               </div>
 
@@ -120,13 +131,13 @@
                 class="w-100 p-20"
                 (click)="btnSignUp()"
               >
-                Sign Up
+                {{ "Sign.SignUp" | translate }}
               </button>
 
               <span
                 class="d-flex text-left my-4 text-muted justify-content-center"
               >
-                or sign in with</span
+                {{ "Sign.OrSignInWith" | translate }}</span
               >
 
               <div class="social-login">
@@ -162,9 +173,9 @@
                         d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
                       ></path>
                     </svg>
-                    <span class="fs-14 text-gray-700"
-                      >Đăng nhập với Google</span
-                    >
+                    <span class="fs-14 text-gray-700">{{
+                      "Sign.LoginWithGoogle" | translate
+                    }}</span>
                   </button>
                 </div>
               </div>

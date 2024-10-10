@@ -19,7 +19,7 @@
     font-size: 15px;
 
     &.activelink {
-      background-color: $info !important;
+      background-color: $bladePink !important;
       color: $white !important;
     }
   }
@@ -28,5 +28,25 @@
     background-color: $light-primary;
     border-radius: 10px;
   }
+}
 
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+svg {
+  vertical-align: initial !important;
 }

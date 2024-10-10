@@ -1,0 +1,77 @@
+<section class="container section-order-history">
+  <mat-tab-group class="fw-bold text-black">
+    @for (tab of tabs; track $index) {
+    <mat-tab [label]="tab.label + ' (' + tab.count + ')'"></mat-tab>
+    }
+  </mat-tab-group>
+  @for (order of listOrder; track $index) {
+  <article class="card mt-5">
+    <div class="card-body">
+      <h6 class="mb-4">
+        <span class="primary-color">Mã đơn hàng:</span>
+        <span> #{{ order.id }}</span>
+      </h6>
+      <article class="card">
+        <div class="card-body row">
+          <div class="col">
+            <strong class="primary-color">SĐT người nhận:</strong> <br />
+            <i class="fa fa-phone me-3"></i>
+            <span class="text-black">{{ order.buyerPhone }}</span>
+          </div>
+          <div class="col">
+            <strong class="primary-color">Địa chỉ giao hàng</strong> <br />
+            <span class="text-black"> {{ order.buyerAddress }}</span>
+          </div>
+          <div class="col">
+            <strong class="primary-color">Tên người nhận:</strong> <br />
+            <span class="text-black"> {{ order.buyerName }}</span>
+          </div>
+          <div class="col">
+            <strong class="primary-color">Ngày đặt hàng</strong> <br />
+            <span class="text-black">
+              {{ order.createdAt | date : "dd-MM-yyyy" }}</span
+            >
+          </div>
+        </div>
+      </article>
+      <div class="track custom-track text-black">
+        <div
+          class="step"
+          [ngClass]="{
+            active: isActiveStep(order.status, step.status)
+          }"
+        >
+          <span class="icon"> <i [class]="step.icon"></i> </span>
+          <span class="text">{{ step.label }}</span>
+        </div>
+      </div>
+      <hr />
+      <ul class="row">
+        @for (orderDetail of order.orderDetails; track $index) {
+        <li class="col-md-4 text-black">
+          <figure class="itemside mb-3">
+            <div class="aside">
+              <img
+                [src]="orderDetail.flowerListing.imageUrl"
+                class="img-sm border"
+              />
+            </div>
+            <figcaption class="info align-self-center">
+              <p class="title primary-color fw-bold">
+                {{ orderDetail.flowerListing.name }}
+                <br />
+                x {{ orderDetail.quantity }}
+              </p>
+              <span class="text-black fw-bold"
+                >{{ orderDetail.price | number : "1.0" }}₫</span
+              >
+            </figcaption>
+          </figure>
+        </li>
+        }
+      </ul>
+      <hr />
+    </div>
+  </article>
+  }
+</section>

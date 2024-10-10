@@ -31,10 +31,7 @@ export class CategoryService extends EndpointBase {
 
   getAllCategories(): Observable<FlowerCategory[]> {
     return this.http
-      .get<FlowerCategory[]>(
-        `${this.API_URL}/flower-categories`,
-        this.requestHeaders
-      )
+      .get<FlowerCategory[]>(`${this.API_URL}/flower-categories`)
       .pipe(
         catchError((error) => {
           return this.handleError(error, () => this.getAllCategories());

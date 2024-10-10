@@ -32,3 +32,9 @@
 .section-products {
   margin-top: 150px;
 }
+
+@media screen and (max-width: 376px) {
+  .btn-buy-now {
+    margin-bottom: 20px;
+  }
+}

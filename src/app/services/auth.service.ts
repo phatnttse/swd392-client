@@ -13,6 +13,7 @@ import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { UserAccount } from '../models/account.model';
 import { Utilities } from './utilities';
+import { Role } from '../models/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -239,5 +240,9 @@ export class AuthService {
 
   get isLoggedIn(): boolean {
     return this.currentUser != null;
+  }
+
+  get isAdmin(): boolean {
+    return this.isLoggedIn && this.currentUser?.role === Role.ADMIN;
   }
 }

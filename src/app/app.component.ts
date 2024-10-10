@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './layouts/header/header.component';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { AuthService } from './services/auth.service';
@@ -22,19 +22,20 @@ export class AppComponent implements OnInit {
   title = 'swd392-client';
   isUserLoggedIn: boolean = false; // Kiểm tra người dùng đã đăng nhập hay chưa
   isLoading: boolean = false; // Kiểm tra trạng thái loading
+  statusPage: number = 0; // 0 mặc đinh, 1: Seller Channel or Admin
 
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private statusService: StatusService,
     private cartService: CartService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.isUserLoggedIn = this.authService.isLoggedIn;
 
     if (this.isUserLoggedIn) {
-      this.toastr.info('Welcome Back');
       this.authService.userDataSource.next(this.authService.currentUser);
       if (this.cartService.cartDataSource.value.length === 0) {
         this.getCartByUser();
@@ -48,8 +49,20 @@ export class AppComponent implements OnInit {
     this.statusService.statusLoadingSpinner$.subscribe((status) => {
       this.isLoading = status;
     });
+
+    this.router.events.subscribe(() => {
+      if (
+        this.router.url.includes('/seller-channel') ||
+        this.router.url.includes('/admin')
+      ) {
+        this.statusPage = 1;
+      } else {
+        this.statusPage = 0;
+      }
+    });
   }
 
+  // Lấy giỏ hàng ban đầu và phân phối dữ liệu
   getCartByUser() {
     this.cartService.getCartByUser().subscribe({
       next: (response: GetCartByUserResponse) => {
@@ -65,6 +78,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // Lấy tất cả danh mục ban đầu và phân phối dữ liệu
   getAllCategories() {
     this.categoryService.getAllCategories().subscribe({
       next: (response: FlowerCategory[]) => {
@@ -73,6 +87,7 @@ export class AppComponent implements OnInit {
         this.categoryService.convertedCategoryDataSource.next(
           convertedCategories
         );
+        console.log('Converted Categories:', convertedCategories);
       },
       error: (error: HttpErrorResponse) => {
         console.error(error);
@@ -83,6 +98,15 @@ export class AppComponent implements OnInit {
   // Hàm chuyển đổi danh mục
   convertCategories(categories: FlowerCategory[]): any[] {
     const categoryMap: { [key: string]: any } = {};
+
+    // Bản đồ ánh xạ tên danh mục cha từ tiếng Anh sang tiếng Việt
+    const categoryTranslations: { [key: string]: string } = {
+      TYPE: 'Theo loại',
+      COLOR: 'Theo màu sắc',
+      EVENT_TYPE: 'Theo loại sự kiện',
+      SUBJECT: 'Theo đối tượng',
+      DISPLAY: 'Theo cách trình bày',
+    };
 
     // Tạo bản đồ các danh mục
     categories.forEach((category) => {
@@ -101,7 +125,9 @@ export class AppComponent implements OnInit {
         if (!categoryMap[category.categoryParent]) {
           categoryMap[category.categoryParent] = {
             id: category.categoryParent,
-            name: category.name || 'Unnamed Category', // Gán tên mặc định nếu không có tên
+            name:
+              categoryTranslations[category.categoryParent] ||
+              'Unnamed Category', // Gán tên tiếng Việt nếu có
             children: [],
           };
         }

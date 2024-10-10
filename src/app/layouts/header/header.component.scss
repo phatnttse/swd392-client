@@ -1,10 +1,10 @@
 header {
-  position: fixed; /* Dính cố định */
-  top: 0; /* Giữ nó ở đầu trang */
-  left: 0; /* Đảm bảo nó nằm bên trái */
-  width: 100%; /* Chiều rộng 100% */
-  z-index: 1000; /* Đảm bảo nó ở trên các thành phần khác */
-  background-color: white; /* Màu nền cho header */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
 }
 .form-control:focus {
   color: var(--bs-body-color);

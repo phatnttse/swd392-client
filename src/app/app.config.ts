@@ -5,7 +5,7 @@ import {
   importProvidersFrom,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouterModule } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -16,6 +16,8 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { AppConfigurationService } from './services/configuration.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { SellerChannelRoutes } from './components/seller-admin/seller-channel-routes';
+import { AdminRoutes } from './components/seller-admin/admin-routes';
 
 // Hàm khởi tạo ứng dụng
 const appInitializerFn = (appConfigService: AppConfigurationService) => {
@@ -41,6 +43,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    importProvidersFrom(RouterModule.forChild(SellerChannelRoutes)),
+    importProvidersFrom(RouterModule.forChild(AdminRoutes)),
     provideAnimationsAsync(),
     provideHttpClient(withFetch()),
     provideToastr(),

@@ -1,5 +1,5 @@
 import { BaseResponse } from './base.model';
-import { FlowerListingStatusEnum } from './enums';
+import { FlowerListingStatus } from './enums';
 
 export interface CartItem {
   id: number;
@@ -11,7 +11,7 @@ export interface CartItem {
   eventType: string;
   stockBalance: number;
   address: string;
-  status: FlowerListingStatusEnum;
+  status: FlowerListingStatus;
 }
 
 export interface InsertUpdateCartResponse extends BaseResponse<CartItem> {}

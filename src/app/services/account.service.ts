@@ -41,7 +41,7 @@ export class AccountService extends EndpointBase {
     return this.http
       .post<AddBalanceResponse>(
         `${this.API_URL}/account/add-balance`,
-        amount,
+        { amount },
         this.requestHeaders
       )
       .pipe(

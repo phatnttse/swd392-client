@@ -1,5 +1,5 @@
 <div class="untree_co-section before-footer-section section-cart">
-  <!-- @if (listCartItem.length > 0) { -->
+  @if (listCartItem.length > 0) {
   <div class="container">
     <div class="row mb-5">
       <form class="col-md-12">
@@ -7,12 +7,16 @@
           <table class="table">
             <thead class="mb-2">
               <tr>
-                <th class="product-thumbnail">Image</th>
-                <th class="product-name">Product</th>
-                <th class="product-price">Price</th>
-                <th class="product-quantity">Quantity</th>
-                <th class="product-total">Total</th>
-                <th class="product-remove">Remove</th>
+                <th class="product-thumbnail">
+                  {{ "Cart.Image" | translate }}
+                </th>
+                <th class="product-name">{{ "Cart.Name" | translate }}</th>
+                <th class="product-price">{{ "Cart.Price" | translate }}</th>
+                <th class="product-quantity">
+                  {{ "Cart.Quantity" | translate }}
+                </th>
+                <th class="product-total">{{ "Cart.Total" | translate }}</th>
+                <th class="product-remove">{{ "Cart.Remove" | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -28,7 +32,9 @@
                 <td class="product-name">
                   <h2 class="h5 text-black">{{ item.flowerName }}</h2>
                 </td>
-                <td class="text-black">${{ item.flowerPrice }}</td>
+                <td class="text-black">
+                  {{ item.flowerPrice | number : "1.0" }}₫
+                </td>
                 <td>
                   <div
                     class="input-group d-flex align-items-center quantity-container"
@@ -63,7 +69,7 @@
                   </div>
                 </td>
                 <td class="text-black">
-                  ${{ item.flowerPrice * item.quantity }}
+                  {{ item.flowerPrice * item.quantity | number : "1.0" }}₫
                 </td>
                 <td>
                   <button
@@ -96,14 +102,16 @@
               class="fw-bold"
             >
               <mat-icon>keyboard_backspace</mat-icon>
-              Continue Shopping
+              {{ "Cart.ContinueShopping" | translate }}
             </button>
           </div>
         </div>
         <div class="row align-items-center">
           <div class="col-md-12">
-            <label class="text-black h4">Clear Cart</label>
-            <p>Click the button below to clear your cart.</p>
+            <label class="text-black h4">
+              {{ "Cart.ClearCart" | translate }}</label
+            >
+            <p>{{ "Cart.ClearCartTitle" | translate }}</p>
           </div>
           <div class="col-md-12">
             <button
@@ -113,7 +121,7 @@
               style="padding: 20px"
               (click)="btnClearCart()"
             >
-              Clear Cart
+              {{ "Cart.ClearCart" | translate }}
             </button>
           </div>
         </div>
@@ -123,23 +131,31 @@
           <div class="col-md-7">
             <div class="row">
               <div class="col-md-12 text-right border-bottom mb-5">
-                <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                <h3 class="text-black h4 text-uppercase">
+                  {{ "Cart.CartTotal" | translate }}
+                </h3>
               </div>
             </div>
             <div class="row mb-3">
               <div class="col-md-6">
-                <span class="text-black">Subtotal</span>
+                <span class="text-black">
+                  {{ "Cart.SubTotal" | translate }}</span
+                >
               </div>
               <div class="col-md-6 text-right">
-                <strong class="text-black">${{ totalAmount }}</strong>
+                <strong class="text-black"
+                  >{{ totalAmount | number : "1.0" }}₫</strong
+                >
               </div>
             </div>
             <div class="row mb-5">
               <div class="col-md-6">
-                <span class="text-black">Total</span>
+                <span class="text-black"> {{ "Cart.Total" | translate }}</span>
               </div>
               <div class="col-md-6 text-right">
-                <strong class="text-black">${{ totalAmount }}</strong>
+                <strong class="text-black"
+                  >{{ totalAmount | number : "1.0" }}₫</strong
+                >
               </div>
             </div>
 
@@ -153,7 +169,7 @@
                   class="btn p-20"
                   style="padding: 20px"
                 >
-                  Proceed To Order
+                  {{ "Cart.ProceedToOrder" | translate }}
                 </button>
               </div>
             </div>
@@ -162,8 +178,7 @@
       </div>
     </div>
   </div>
-  <!-- }
-  @else {
+  } @else {
   <div class="container my-5">
     <div class="row">
       <div class="col-md-12 text-center">
@@ -191,5 +206,4 @@
     </div>
   </div>
   }
-</div> -->
 </div>

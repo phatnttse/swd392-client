@@ -4,7 +4,7 @@
       <div class="col-12 col-lg-3 order-2 order-lg-1">
         <aside>
           <div class="mb-5">
-            <h5 class="mb-4">Danh mục</h5>
+            <h5 class="mb-4">{{ "Products.Category" | translate }}</h5>
             <ul class="nav nav-link flex-column">
               @for (category of convertedCategories; track $index) {
               <li class="nav-item">
@@ -33,13 +33,15 @@
             </ul>
           </div>
           <div class="mb-5">
-            <h5 class="mb-3">Lọc theo giá</h5>
+            <h5 class="mb-3">{{ "Products.FilterByPrice" | translate }}</h5>
             <mat-slider min="200" max="500">
               <input value="300" matSliderStartThumb />
               <input value="400" matSliderEndThumb />
             </mat-slider>
 
-            <button mat-button color="primary" class="fw-bold">Áp dụng</button>
+            <button mat-button color="primary" class="fw-bold">
+              {{ "Products.Apply" | translate }}
+            </button>
           </div>
         </aside>
       </div>
@@ -47,24 +49,27 @@
       <div class="col-12 col-lg-9 order-1 order-lg-2">
         <div class="d-flex align-items-center justify-content-between mb-5">
           <p class="text-dark" style="margin-top: 20px">
-            {{ titleSearch }}
+            {{ titleSearch | translate }}
             @if (searchString) {
             <strong class="primary-color">'{{ searchString }}'</strong>
             }
           </p>
           <div class="align-items-center d-flex">
             <p style="font-size: 14px; margin-left: 6px; margin-top: 20px">
-              Sắp xếp: {{ titleTypeArrange }}
+              {{ "Products.Arrange" | translate }}:
+              {{ titleTypeArrange | translate }}
             </p>
             <button mat-icon-button [matMenuTriggerFor]="menu" class="mb-3">
               <span class="material-icons"> view_list </span>
             </button>
             <mat-menu #menu="matMenu">
               <button
-                (click)="setSortingOption(this.order, this.sortBy, 'Mặc định')"
+                (click)="
+                  setSortingOption(this.order, this.sortBy, 'Products.Default')
+                "
                 mat-menu-item
               >
-                <span> Mặc định </span>
+                <span> {{ "Products.Default" | translate }} </span>
               </button>
               <button
                 (click)="setSortingOption('asc', 'name', 'A → Z')"
@@ -79,16 +84,18 @@
                 <span> Z → A</span>
               </button>
               <button
-                (click)="setSortingOption('asc', 'price', 'Giá: Thấp đến cao')"
+                (click)="setSortingOption('asc', 'price', 'Products.PriceAsc')"
                 mat-menu-item
               >
-                <span> Giá: Thấp đến cao</span>
+                <span> {{ "Products.PriceAsc" | translate }}</span>
               </button>
               <button
-                (click)="setSortingOption('desc', 'price', 'Giá: Cao đến thấp')"
+                (click)="
+                  setSortingOption('desc', 'price', 'Products.PriceDesc')
+                "
                 mat-menu-item
               >
-                <span> Giá: Cao đến thấp</span>
+                <span> {{ "Products.PriceDesc" | translate }}</span>
               </button>
             </mat-menu>
           </div>
@@ -146,9 +153,9 @@
                     <div
                       class="d-flex justify-content-center align-items-center gap-2"
                     >
-                      <del>{{ flower.price }}$</del>
+                      <del>{{ flower.price | number : "1.0" }}₫</del>
                       <span class="text-dark fw-semibold"
-                        >{{ flower.price }}$</span
+                        >{{ flower.price | number : "1.0" }}₫</span
                       >
 
                       <!-- <span
@@ -166,7 +173,7 @@
                             ><svg width="18" height="18">
                               <use xlink:href="#cart"></use>
                             </svg>
-                            Add to Cart</a
+                            {{ "AddToCart" | translate }}</a
                           >
                         </div>
                       </div>

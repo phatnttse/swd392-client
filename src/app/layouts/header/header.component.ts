@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,7 +10,6 @@ import { CartItem } from '../../models/cart.model';
 import { MatButtonModule } from '@angular/material/button';
 import { CategoryService } from '../../services/category.service';
 import { FlowerCategory } from '../../models/category.model';
-import { Utilities } from '../../services/utilities';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -48,18 +47,27 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Đăng ký lấy thông tin người dùng
     this.authService.userData$.subscribe(
       (userData: UserAccount) => (this.account = userData)
     );
+
+    // Đăng ký lấy thông tin giỏ hàng
     this.cartService.cartData$.subscribe(
       (cartData: CartItem[]) => (this.listCartItem = cartData)
     );
+
+    // Đăng ký lấy tổng số lượng sản phẩm trong giỏ hàng
     this.cartService.totalQuantity$.subscribe(
       (totalQuantity: number) => (this.totalCartItem = totalQuantity)
     );
+
+    // Đăng ký lấy tổng tiền trong giỏ hàng
     this.cartService.totalAmount$.subscribe(
       (totalAmount: number) => (this.totalAmount = totalAmount)
     );
+
+    // Đăng ký lấy danh sách danh mục
     this.categoryService.convertedCategoryDataSource.subscribe(
       (categoryData: any[]) => {
         if (categoryData) {
@@ -72,12 +80,14 @@ export class HeaderComponent implements OnInit {
     this.defaultLang = this.listLanguage[0];
   }
 
+  // Chuyển đến trang chi tiết sản phẩm
   goToProductListPageByCategory(categoryId: number) {
     this.router.navigate(['/products'], {
-      queryParams: { categoryId: categoryId },
+      queryParams: { c: categoryId },
     });
   }
 
+  // Tìm kiếm sản phẩm
   btnSearch(searchString: string) {
     this.router.navigate(['/products'], {
       queryParams: { query: searchString },
@@ -85,11 +95,13 @@ export class HeaderComponent implements OnInit {
     this.searchValue = '';
   }
 
+  // Thay đổi ngôn ngữ
   btnChangeLang(lang: any) {
     this.appConfig.setLanguageDefault(lang.id);
     this.defaultLang = lang;
   }
 
+  // Đăng xuất
   btnLogOut() {
     this.authService.logout();
     this.authService.userDataSource.next(null);

@@ -1,0 +1,143 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar -->
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <div class="p-16">
+      <div class="mb-16">
+        @if (this.authService.isAdmin) {
+        <a class="d-flex align-items-center justify-content-center mb-4">
+          <img
+            width="80"
+            src="./../../../assets/images/Blossom.png"
+            alt=""
+            style="object-fit: cover"
+          />
+        </a>
+        }@else if (!this.authService.isAdmin || this.authService.isLoggedIn) {
+        <a
+          routerLink="/"
+          class="d-flex align-items-center justify-content-center mb-4"
+        >
+          <img
+            width="80"
+            src="./../../../assets/images/Blossom.png"
+            alt=""
+            style="object-fit: cover"
+          />
+        </a>
+        }
+      </div>
+      <ul>
+        @if (this.authService.isAdmin) { @for (sidenav of adminMenu; track
+        $index) {
+        <li class="list-group mb-2">
+          <a
+            matRipple
+            [matRippleColor]="'#f7f8f443'"
+            routerLink="{{ sidenav.link }}"
+            class="sidebar-menu w-100 d-flex align-items-center"
+            routerLinkActive="activelink"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <mat-icon>{{ sidenav.icon }}</mat-icon>
+            <span class="ps-3">{{ sidenav.menu }}</span>
+          </a>
+        </li>
+        } }@else if (this.authService.isLoggedIn || !this.authService.isAdmin) {
+        @for (sidenav of sellerChannelMenu; track $index) {
+        <li class="list-group mb-2">
+          <a
+            matRipple
+            [matRippleColor]="'#f7f8f443'"
+            routerLink="{{ sidenav.link }}"
+            class="sidebar-menu w-100 d-flex align-items-center"
+            routerLinkActive="activelink"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <mat-icon>{{ sidenav.icon }}</mat-icon>
+            <span class="ps-3">{{ sidenav.menu }}</span>
+          </a>
+        </li>
+        } }
+      </ul>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <!-- Header -->
+    <mat-toolbar class="header pe-24 ps-24">
+      <button
+        type="button"
+        class="ms-4"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="ms-auto">
+        <button
+          mat-button
+          class="fs-16 text-light-muted d-flex align-items-center pb-4 pe-8 ps-8 pt-4"
+          [matMenuTriggerFor]="menu"
+        >
+          <div class="d-flex align-items-center">
+            <img
+              [src]="userAccount?.avatar"
+              width="32"
+              class="rounded"
+              alt=""
+            />
+            <span class="fw-light ms-2"
+              >Hi,
+              <strong class="primary-color fw-bold">{{
+                userAccount?.name
+              }}</strong></span
+            >
+            <span class="fw-bold ms-2"></span>
+          </div>
+        </button>
+        <mat-menu #menu="matMenu" class="profile-dropdown">
+          <div class="mb-4 p-16">
+            <button mat-menu-item class="fs-16">Tài khoản của tôi</button>
+            <button mat-menu-item class="fs-16">Xem ví</button>
+          </div>
+
+          <hr />
+
+          <div class="p-16">
+            <button
+              (click)="btnLogOut()"
+              mat-flat-button
+              color="accent"
+              class="w-100 text-white"
+            >
+              Logout
+            </button>
+          </div>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <!-- Content -->
+    <div class="body-wrapper">
+      <div class="page-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+
+    <!-- <p class="fs-16 pb-24 text-center">
+      © 2024 Website of
+      <a href="https://github.com/phatnttse" target="_blank" class="text-indigo"
+        >phatnttse</a
+      >
+    </p> -->
+  </mat-sidenav-content>
+</mat-sidenav-container>

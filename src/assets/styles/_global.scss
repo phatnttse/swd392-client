@@ -5,9 +5,9 @@
   font-family: $bodyfont;
 }
 
-// .mat-drawer-container {
-//   background-color: $body-color;
-// }
+.mat-drawer-container {
+  background-color: $body-color;
+}
 
 a:hover,
 a:focus,
@@ -90,13 +90,19 @@ ul {
 .overflow-x-hidden {
   overflow-x: hidden;
 }
-.mdc-data-table__cell, .mdc-data-table__header-cell {
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
   padding: 16px 16px 16px 16px !important;
 }
-.mat-body p,.mat-body-1 p,.mat-typography .mat-body p,.mat-typography .mat-body-1 p,.mat-typography p {
-  margin: 0 0 12px
+.mat-body p,
+.mat-body-1 p,
+.mat-typography .mat-body p,
+.mat-typography .mat-body-1 p,
+.mat-typography p {
+  margin: 0 0 12px;
 }
-.mat-card-subtitle, .mat-mdc-card-content {
+.mat-card-subtitle,
+.mat-mdc-card-content {
   font-size: 14px;
 }
 .mat-mdc-card-title {
@@ -113,22 +119,26 @@ ul {
   margin-bottom: 5px;
   margin-right: 5px;
 }
-.mdc-button{
+.mdc-button {
   color: $white;
 }
 .mat-mdc-unelevated-button:not(:disabled) {
   color: $white !important;
 }
-.mat-mdc-fab.mat-accent, .mat-mdc-mini-fab.mat-accent{
+.mat-mdc-fab.mat-accent,
+.mat-mdc-mini-fab.mat-accent {
   color: $white;
 }
-.mat-mdc-tab-header{
+.mat-mdc-tab-header {
   border-bottom: 1px solid #e8e8e8;
 }
-.mdc-checkbox .mdc-checkbox__native-control:enabled~.mdc-checkbox__background .mdc-checkbox__checkmark {
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled
+  ~ .mdc-checkbox__background
+  .mdc-checkbox__checkmark {
   color: $white !important;
 }
-.mdc-button{
+.mdc-button {
   border-radius: 7px !important;
 }
 
@@ -139,7 +149,7 @@ ul {
 .d-flex {
   display: flex;
 }
-.flex-wrap{
+.flex-wrap {
   flex-wrap: wrap;
 }
 
@@ -183,9 +193,6 @@ ul {
   text-align: end;
 }
 
-
-
-
 // @=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@
 // Margins
 // @=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@
@@ -222,8 +229,6 @@ ul {
   margin-right: auto;
 }
 
-
-
 // @=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@
 // Borders
 // @=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@
@@ -239,7 +244,6 @@ ul {
 .border-2 {
   border: 2px solid $border-color;
 }
-
 
 // @=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@
 // Thumb size
@@ -262,8 +266,6 @@ ul {
 .rounded {
   border-radius: 4px;
 }
-
-
 
 // @=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@
 // Opacity

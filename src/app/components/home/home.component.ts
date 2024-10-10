@@ -8,16 +8,18 @@ import { CartService } from '../../services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { InsertUpdateCartResponse } from '../../models/cart.model';
 import { CategoryService } from '../../services/category.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, TranslateModule, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  listFlower?: Flower[] = [];
+  listFlowerNewest?: Flower[] = [];
   searchString: string = '';
   order: string = 'desc';
   sortBy: string = 'createdAt';
@@ -38,20 +40,24 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.productService.flowerDataSource.subscribe((flowerData) => {
-      if (flowerData) {
-        this.listFlower = flowerData;
-      } else {
-        this.getFlowers(
-          this.searchString,
-          this.order,
-          this.sortBy,
-          this.pageNumber,
-          this.pageSize,
-          this.categoryIds
-        );
+    window.scrollTo(0, 0);
+
+    this.productService.flowerNewestDataSource.subscribe(
+      (flowerNewestData: Flower[] | null) => {
+        if (flowerNewestData) {
+          this.listFlowerNewest = flowerNewestData;
+        } else {
+          this.getFlowers(
+            this.searchString,
+            this.order,
+            this.sortBy,
+            this.pageNumber,
+            this.pageSize,
+            this.categoryIds
+          );
+        }
       }
-    });
+    );
     this.categoryService.convertedCategoryDataSource.subscribe(
       (categoryData: any[]) => {
         if (categoryData) {
@@ -81,13 +87,13 @@ export class HomeComponent implements OnInit {
       )
       .subscribe({
         next: (response: FlowerPaginated) => {
-          this.listFlower = response.content;
+          this.listFlowerNewest = response.content;
           this.pageNumber = response.pageNumber;
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
           this.numberOfElements = response.numberOfElements;
           this.totalElements = response.totalElements;
-          this.productService.flowerDataSource.next(response.content); // Lưu vào BehaviorSubject
+          this.productService.flowerNewestDataSource.next(response.content); // Lưu vào BehaviorSubject
         },
         error: (error: HttpErrorResponse) => {
           console.log(error);

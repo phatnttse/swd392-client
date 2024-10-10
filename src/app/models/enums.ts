@@ -1,25 +1,40 @@
 export enum Gender {
-  FEMALE,
-  MALE,
-  OTHERS,
+  FEMALE = 'FEMALE',
+  MALE = 'MALE',
+  OTHERS = 'OTHERS',
 }
 
 export enum Role {
-  MANAGER,
-  USER,
-  ADMIN,
+  MANAGER = 'MANAGER',
+  USER = 'USER',
+  ADMIN = 'ADMIN',
 }
 
 export enum WalletLogType {
-  ADD,
-  SUBTRACT,
-  DEPOSIT,
-  WITHDRAW,
+  ADD = 'ADD',
+  SUBTRACT = 'SUBTRACT',
+  DEPOSIT = 'DEPOSIT',
+  WITHDRAW = 'WITHDRAW',
 }
 
-export enum FlowerListingStatusEnum {
-  PENDING,
-  APPROVED,
-  REJECTED,
-  EXPIRED,
+export enum FlowerListingStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  EXPIRED = 'EXPIRED',
+}
+
+export enum PaymentMethod {
+  VNPAY = 'VNPAY',
+  BANKING = 'BANKING',
+  WALLET = 'WALLET',
+  PAYOS = 'PAYOS',
+}
+
+export enum OrderStatus {
+  PENDING = 'PENDING',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+  REFUNDED = 'REFUNDED',
+  PARTIALLY_DELIVERED = 'PARTIALLY_DELIVERED',
 }

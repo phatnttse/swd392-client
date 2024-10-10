@@ -1,0 +1,148 @@
+<section class="container section-wallet">
+  <div class="wallet rounded shadow-sm">
+    <div class="header text-white">
+      <div class="d-flex align-items-center justify-content-between p-5">
+        <div>
+          <h5 class="text-white mb-3">{{ "Wallet.MyBalance" | translate }}</h5>
+          <h2 class="text-white">
+            {{ this.authService.currentUser?.balance | number : "1.0" }}₫
+          </h2>
+        </div>
+        <div>
+          <img
+            width="50"
+            src="./../../../assets/images/wallet-payment-svg.svg"
+            alt="User Profile"
+            class="rounded-circle"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="content p-4">
+      <div class="card mb-5">
+        <div class="card-body">
+          <div class="d-flex justify-content-around">
+            <div class="icon-item text-center">
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#topupModal"
+                mat-icon-button
+                class="btn"
+              >
+                <mat-icon style="color: var(--bs-primary)">add_card</mat-icon>
+              </button>
+              <div class="text-black fw-bold">
+                {{ "Wallet.TopUpToWallet" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="transactions">
+        <h6 class="t-desc">{{ "Wallet.RecentTransaction" | translate }}</h6>
+
+        <div
+          class="transaction d-flex justify-content-between align-items-center p-3 mb-2 bg-light rounded shadow-sm"
+        >
+          <div class="t-icon-container">
+            <img
+              width="80"
+              src="./../../../assets/images/wallet-payment-svg.svg"
+              alt="Transaction Icon"
+              class="img-fluid"
+            />
+          </div>
+          <div class="t-details flex-grow-1 ms-3">
+            <div class="t-title text-black">
+              {{ "Wallet.TopUp" | translate }}
+            </div>
+            <div class="t-time text-black">03:45 PM</div>
+          </div>
+          <div class="t-amount text-success fw-bold">+750.000₫</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Nút Nạp Tiền -->
+<div class="icon-item text-center">
+  <button class="btn" data-bs-toggle="modal" data-bs-target="#topupModal">
+    <mat-icon style="color: var(--bs-primary)">add_card</mat-icon>
+  </button>
+  <div class="text-black fw-bold">Nạp tiền vào ví</div>
+</div>
+
+<!-- Modal Nạp Tiền -->
+<div
+  class="modal fade"
+  id="topupModal"
+  tabindex="-1"
+  aria-labelledby="topupModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="topupModalLabel">
+          {{ "Wallet.TopUpToWallet" | translate }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="topupForm" [formGroup]="formTopUp" (ngSubmit)="btnTopUp()">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ "Wallet.Amount" | translate }} (₫)</mat-label>
+            <input
+              matInput
+              type="text"
+              id="amount"
+              formControlName="amount"
+              [class.is-invalid]="
+                formTopUp.get('amount')?.invalid &&
+                formTopUp.get('amount')?.touched
+              "
+            />
+            @if(formTopUp.get('amount')?.hasError('required')) {
+            <mat-error style="font-size: 12px">
+              {{ "Wallet.AmountRequired" | translate }}
+            </mat-error>
+            } @if(formTopUp.get('amount')?.hasError('min')) {
+            <mat-error style="font-size: 12px">
+              {{ "Wallet.AmountInvalid" | translate }}
+            </mat-error>
+            }
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          mat-raised-button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          color="warn"
+        >
+          {{ "Wallet.Cancel" | translate }}
+        </button>
+        <button
+          (click)="btnTopUp()"
+          mat-raised-button
+          type="submit"
+          class="btn btn-primary"
+          id="confirmTopup"
+          color="accent"
+        >
+          {{ "Wallet.TopUp" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

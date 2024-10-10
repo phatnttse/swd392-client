@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
+import { Order, OrderResponse } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +58,19 @@ export class OrderService extends EndpointBase {
               orderDetails
             )
           );
+        })
+      );
+  }
+
+  getOrdersByAccount(): Observable<OrderResponse> {
+    return this.http
+      .get<OrderResponse>(
+        `${this.API_URL}/orders/by-account`,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getOrdersByAccount());
         })
       );
   }

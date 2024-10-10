@@ -17,6 +17,10 @@ import { OrderService } from '../../services/order.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { UserAccount } from '../../models/account.model';
+import { AuthService } from '../../services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-order',
@@ -31,11 +35,13 @@ import { RouterModule } from '@angular/router';
     MatRadioModule,
     MatIconModule,
     RouterModule,
+    TranslateModule,
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss',
 })
 export class OrderComponent implements OnInit {
+  userAccount: UserAccount | null = null;
   orderForm: FormGroup;
   listCartItem: CartItem[] = [];
   totalAmount: number = 0;
@@ -45,7 +51,9 @@ export class OrderComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private cartService: CartService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private authService: AuthService,
+    private toastr: ToastrService
   ) {
     this.orderForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -64,6 +72,8 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
+
     this.cartService.cartDataSource.subscribe((cartData: CartItem[]) => {
       if (cartData) {
         this.listCartItem = cartData;
@@ -72,11 +82,33 @@ export class OrderComponent implements OnInit {
     this.cartService.totalAmountSubject.subscribe(
       (totalAmount: number) => (this.totalAmount = totalAmount)
     );
+    this.userAccount = this.authService.currentUser;
   }
   placeOrder() {
     debugger;
     if (this.orderForm.invalid) {
       this.orderForm.markAllAsTouched();
+      if (this.orderForm.get('paymentMethod')?.invalid) {
+        this.toastr.warning(
+          'Vui lòng chọn phương thức thanh toán',
+          'Đặt hàng thất bại',
+          {
+            progressBar: true,
+          }
+        );
+      }
+      return;
+    }
+    if (this.totalAmount === 0) {
+      this.toastr.warning('Giỏ hàng của bạn đang trống', 'Đặt hàng thất bại', {
+        progressBar: true,
+      });
+      return;
+    }
+    if (this.userAccount?.balance! < this.totalAmount) {
+      this.toastr.warning('Số dư ví của bạn không đủ', 'Đặt hàng thất bại', {
+        progressBar: true,
+      });
       return;
     }
     const buyerName = this.orderForm.get('name')?.value;
@@ -88,7 +120,7 @@ export class OrderComponent implements OnInit {
       return {
         flowerListingId: item.flowerId,
         quantity: item.quantity,
-        price: item.flowerPrice,
+        price: String(item.flowerPrice),
       };
     });
 

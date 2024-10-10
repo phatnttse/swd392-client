@@ -1,5 +1,3 @@
-<div #topElement></div>
-
 <div
   class="offcanvas offcanvas-end"
   data-bs-scroll="true"
@@ -17,7 +15,7 @@
   <div class="offcanvas-body">
     <div class="order-md-last">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-dark">Your cart</span>
+        <span class="text-dark">{{ "Header.Cart" | translate }}</span>
         <span class="badge bg-secondary rounded-pill">{{ totalCartItem }}</span>
       </h4>
       <ul class="list-group mb-5">
@@ -31,7 +29,7 @@
         </li>
         }
         <li class="list-group-item d-flex justify-content-between">
-          <span>Total (USD)</span>
+          <span>{{ "Header.Total" | translate }} (USD)</span>
           <strong class="text-danger">${{ totalAmount }}</strong>
         </li>
       </ul>
@@ -44,7 +42,7 @@
         aria-label="Close"
         color="primary"
       >
-        View cart
+        {{ "Header.ViewCart" | translate }}
       </button>
 
       <button
@@ -56,7 +54,7 @@
         aria-label="Close"
         color="accent"
       >
-        Continue to checkout
+        {{ "Header.ContinueToOrder" | translate }}
       </button>
     </div>
   </div>
@@ -70,7 +68,9 @@
   aria-labelledby="offcanvasSearchLabel"
 >
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasSearchLabel">Search</h5>
+    <h5 class="offcanvas-title" id="offcanvasSearchLabel">
+      {{ "Header.Search" | translate }}
+    </h5>
     <button
       type="button"
       class="btn-close"
@@ -86,7 +86,7 @@
           [(ngModel)]="searchValue"
           [ngModelOptions]="{ standalone: true }"
           class="form-control border-0 text-dark"
-          placeholder="Tìm kiếm trên Blossom..."
+          [placeholder]="'Header.SearchPlaceHolder' | translate"
           aria-label="Search"
           [autofocus]="true"
           style="font-size: 1.25rem"
@@ -209,7 +209,9 @@
           class="header-page navbar-nav list-unstyled d-flex flex-row gap-3 gap-lg-5 justify-content-center flex-wrap align-items-center mb-0 fw-bold text-uppercase text-dark"
         >
           <li class="nav-item active">
-            <a routerLink="/" class="nav-link">{{ "Home" | translate }}</a>
+            <a routerLink="/" class="nav-link">{{
+              "Header.Home" | translate
+            }}</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -218,33 +220,37 @@
               id="pages"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              >{{ "Page" | translate }}</a
+              >{{ "Header.Page" | translate }}</a
             >
             <ul
               class="dropdown-menu border-0 p-3 rounded-0 shadow"
               aria-labelledby="pages"
             >
               <li>
-                <a routerLink="/products" class="dropdown-item">{{
-                  "Product" | translate
+                <a routerLink="/products" class="dropdown-item text-black">{{
+                  "Header.Product" | translate
                 }}</a>
               </li>
               <li>
-                <a routerLink="/about-us" class="dropdown-item">{{
-                  "AboutUs" | translate
+                <a routerLink="/about-us" class="dropdown-item text-black">{{
+                  "Header.AboutUs" | translate
                 }}</a>
               </li>
-              <li><a routerLink="/blogs" class="dropdown-item">Blog </a></li>
               <li>
-                <a routerLink="/contact" class="dropdown-item"
-                  >{{ "Contact" | translate }}
+                <a routerLink="/blogs" class="dropdown-item text-black"
+                  >Blog
+                </a>
+              </li>
+              <li>
+                <a routerLink="/contact" class="dropdown-item text-black"
+                  >{{ "Header.Contact" | translate }}
                 </a>
               </li>
             </ul>
           </li>
           <li class="nav-item active">
-            <a routerLink="/" class="nav-link">{{
-              "SellerChannel" | translate
+            <a routerLink="/seller-channel" class="nav-link">{{
+              "Header.SellerChannel" | translate
             }}</a>
           </li>
         </ul>
@@ -326,8 +332,26 @@
                 <div class="dropdown-item d-flex align-items-center">
                   <mat-icon class="me-2">account_circle</mat-icon
                   ><a class="text-decoration-none" routerLink="/profile">{{
-                    "MyAccount" | translate
+                    "Header.MyAccount" | translate
                   }}</a>
+                </div>
+              </li>
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <mat-icon class="me-2">wallet</mat-icon
+                  ><a class="text-decoration-none" routerLink="/wallet">{{
+                    "Header.ViewWallet" | translate
+                  }}</a>
+                </div>
+              </li>
+              <li>
+                <div class="dropdown-item d-flex align-items-center">
+                  <mat-icon class="me-2">local_shipping</mat-icon
+                  ><a
+                    class="text-decoration-none"
+                    routerLink="/order-history"
+                    >{{ "Header.OrderHistory" | translate }}</a
+                  >
                 </div>
               </li>
               <li>
@@ -337,7 +361,7 @@
                     class="text-decoration-none"
                     href="javascript:;"
                     (click)="btnLogOut()"
-                    >{{ "LogOut" | translate }}</a
+                    >{{ "Header.LogOut" | translate }}</a
                   >
                 </div>
               </li>
@@ -346,7 +370,7 @@
                 <div class="dropdown-item d-flex align-items-center">
                   <mat-icon class="me-2">login</mat-icon
                   ><a class="text-decoration-none" routerLink="/signin">{{
-                    "SignIn" | translate
+                    "Header.SignIn" | translate
                   }}</a>
                 </div>
               </li>
@@ -354,7 +378,7 @@
                 <div class="dropdown-item d-flex align-items-center">
                   <mat-icon class="me-2">app_registration</mat-icon
                   ><a class="text-decoration-none" routerLink="/signup">{{
-                    "SignUp" | translate
+                    "Header.SignUp" | translate
                   }}</a>
                 </div>
               </li>

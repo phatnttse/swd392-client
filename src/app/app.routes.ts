@@ -81,4 +81,20 @@ export const routes: Routes = [
       );
     },
   },
+  {
+    path: 'wallet',
+    loadComponent() {
+      return import('./components/wallet/wallet.component').then(
+        (m) => m.WalletComponent
+      );
+    },
+  },
+  {
+    path: 'order-history',
+    loadComponent() {
+      return import('./components/order-history/order-history.component').then(
+        (m) => m.OrderHistoryComponent
+      );
+    },
+  },
 ];
