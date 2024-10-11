@@ -8,15 +8,6 @@ export const AdminRoutes: Routes = [
         (m) => m.SellerAdminComponent
       );
     },
-    children: [
-      {
-        path: 'product-management',
-        loadComponent() {
-          return import(
-            '../seller-admin/product-management/product-management.component'
-          ).then((m) => m.ProductManagementComponent);
-        },
-      },
-    ],
+    children: [],
   },
 ];

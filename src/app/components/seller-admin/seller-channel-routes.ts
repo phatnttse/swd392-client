@@ -13,8 +13,8 @@ export const SellerChannelRoutes: Routes = [
         path: 'product-management',
         loadComponent() {
           return import(
-            '../seller-admin/product-management/product-management.component'
-          ).then((m) => m.ProductManagementComponent);
+            './../seller-admin/seller/seller-product-management/seller-product-management.component'
+          ).then((m) => m.SellerProductManagementComponent);
         },
       },
     ],

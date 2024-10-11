@@ -8,15 +8,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
-import { Flower, FlowerPaginated } from '../../../models/flower.model';
-import { LocalStoreManager } from '../../../services/local-storage.service';
-import { DBkeys } from '../../../services/db-keys';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ProductService } from '../../../services/product.service';
 import { MatSort } from '@angular/material/sort';
+import { Flower, FlowerPaginated } from '../../../../models/flower.model';
+import { LocalStoreManager } from '../../../../services/local-storage.service';
+import { ProductService } from '../../../../services/product.service';
+import { DBkeys } from '../../../../services/db-keys';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-product-management',
+  selector: 'app-seller-product-management',
   standalone: true,
   imports: [
     MatIconModule,
@@ -29,10 +29,10 @@ import { MatSort } from '@angular/material/sort';
     MatTabsModule,
     CommonModule,
   ],
-  templateUrl: './product-management.component.html',
-  styleUrl: './product-management.component.scss',
+  templateUrl: './seller-product-management.component.html',
+  styleUrl: './seller-product-management.component.scss',
 })
-export class ProductManagementComponent implements OnInit, AfterViewInit {
+export class SellerProductManagementComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource: MatTableDataSource<Flower> = new MatTableDataSource<Flower>();
