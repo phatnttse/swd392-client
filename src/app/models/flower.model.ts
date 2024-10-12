@@ -1,3 +1,4 @@
+import { FlowerListingStatus } from './enums';
 import { PaginatedResponse } from './paginated.model';
 
 export interface User {
@@ -21,6 +22,7 @@ export interface Flower {
   stockBalance: number;
   categories: Category[];
   imageUrl: string;
+  status: FlowerListingStatus;
   createdAt: string;
   updatedAt: string;
   deleted: boolean;

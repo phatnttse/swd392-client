@@ -135,4 +135,11 @@ export class ProductDetailsComponent implements OnInit {
       this.quantityInput--;
     }
   }
+
+  btnVisitShop() {
+    const name = Utilities.formatStringToSlug(this.flower?.user.name || '');
+    this.router.navigate(['/seller-profile', `${name}`], {
+      queryParams: { shop: this.flower?.user.id },
+    });
+  }
 }

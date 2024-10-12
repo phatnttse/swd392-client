@@ -86,13 +86,13 @@ export class SellerAdminComponent {
   sellerChannelMenu: sidebarMenu[] = [
     {
       link: '/seller-channel',
-      icon: 'dashboard',
+      icon: 'bar_chart',
       menu: 'Dashboard',
     },
     {
       link: '/seller-channel/product-management',
       icon: 'inventory',
-      menu: 'Kho hàng',
+      menu: 'Quản lý sản phẩm',
     },
   ];
 

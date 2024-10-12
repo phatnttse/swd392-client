@@ -9,7 +9,7 @@ import { CartService } from './services/cart.service';
 import { GetCartByUserResponse } from './models/cart.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CategoryService } from './services/category.service';
-import { FlowerCategory } from './models/category.model';
+import { ConvertedCategory, FlowerCategory } from './models/category.model';
 
 @Component({
   selector: 'app-root',
@@ -70,7 +70,8 @@ export class AppComponent implements OnInit {
     this.categoryService.getAllCategories().subscribe({
       next: (response: FlowerCategory[]) => {
         this.categoryService.categoryDataSource.next(response);
-        const convertedCategories = this.convertCategories(response);
+        const convertedCategories: ConvertedCategory[] =
+          this.convertCategories(response);
         this.categoryService.convertedCategoryDataSource.next(
           convertedCategories
         );
@@ -83,7 +84,7 @@ export class AppComponent implements OnInit {
   }
 
   // Hàm chuyển đổi danh mục
-  convertCategories(categories: FlowerCategory[]): any[] {
+  convertCategories(categories: FlowerCategory[]): ConvertedCategory[] {
     const categoryMap: { [key: string]: any } = {};
 
     // Bản đồ ánh xạ tên danh mục cha từ tiếng Anh sang tiếng Việt

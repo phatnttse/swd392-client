@@ -3,6 +3,12 @@
   padding-bottom: 4rem;
 }
 
+@media screen and (max-width: 768px) {
+  .order-section {
+    padding-top: 14rem;
+  }
+}
+
 .fs-14 {
   font-size: 14px;
 }

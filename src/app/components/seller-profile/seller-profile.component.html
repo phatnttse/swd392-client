@@ -1,0 +1,164 @@
+@defer () {
+<app-header></app-header>
+<section class="section-seller-profile">
+  <mat-card class="p-4 p-md-5 w-100 mx-auto">
+    <mat-card-content>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6 col-md-3 text-center mb-2">
+          <img
+            src="./../../../assets/images/flag-vi.svg"
+            alt="Profile Image"
+            class="rounded mb-2"
+            width="100"
+          />
+          @if (sellerInfo) {
+          <h5 class="mb-0">{{ sellerInfo.name }}</h5>
+          <p class="text-muted">Online 3 phút trước</p>
+          <div
+            class="d-flex justify-content-center align-items-center flex-wrap"
+          >
+            <button
+              mat-flat-button
+              color="warn"
+              class="btn btn-danger btn-sm me-2"
+            >
+              Yêu Thích
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              class="btn btn-primary btn-sm"
+            >
+              ĐANG THEO DÕI
+            </button>
+          </div>
+          }
+        </div>
+
+        <!-- Shop Info -->
+        <div
+          class="col-12 col-lg-6 col-md-9 mt-3 text-dark justify-content-center"
+        >
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <div class="d-flex align-items-center mb-2">
+                <mat-icon>inventory_2</mat-icon>
+                <span class="ms-2">Sản Phẩm: <strong>76</strong></span>
+              </div>
+              <div class="d-flex align-items-center">
+                <mat-icon>cancel</mat-icon>
+                <span class="ms-2"
+                  >Tỉ Lệ Shop Hủy Đơn: <strong>5%</strong></span
+                >
+              </div>
+            </div>
+
+            <div class="col-12 col-md-8 text-dark">
+              <div class="d-flex align-items-center mb-2">
+                <mat-icon>star</mat-icon>
+                <span class="ms-2"
+                  >Đánh Giá: <strong>4.9</strong> (13k Đánh Giá)</span
+                >
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <mat-icon>calendar_today</mat-icon>
+                <span class="ms-2"
+                  >Tham Gia: <strong>11 Tháng Trước</strong></span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="mt-4 mt-md-5">
+        <mat-tab-group class="text-dark fw-bold">
+          <mat-tab label="TẤT CẢ SẢN PHẨM"> </mat-tab>
+          <mat-tab label="Hoa Sự Kiện"></mat-tab>
+          <mat-tab label="Hoa Quà Tặng"></mat-tab>
+        </mat-tab-group>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <div class="container mt-4">
+    <div class="col-12 col-lg-12">
+      <div class="row">
+        <div class="col-md-12">
+          <div
+            class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-5"
+          >
+            @for (flower of listFlower; track $index) {
+            <div class="col">
+              <div class="product-item">
+                <figure>
+                  <a
+                    href="javascript:;"
+                    title="Product Title"
+                    (click)="viewFlowerDetails(flower.id)"
+                  >
+                    <img
+                      [src]="flower.imageUrl"
+                      [alt]="flower.name"
+                      class="tab-image w-100"
+                    />
+                  </a>
+                </figure>
+                <div class="d-flex flex-column text-center">
+                  <a
+                    href="javascript:;"
+                    class="product-name"
+                    (click)="viewFlowerDetails(flower.id)"
+                  >
+                    <h3 class="fs-6 fw-normal">{{ flower.name }}</h3>
+                  </a>
+                  <div class="product-description">
+                    <p>{{ flower.description | truncate : 20 }}</p>
+                  </div>
+
+                  <div
+                    class="d-flex justify-content-center align-items-center gap-2"
+                  >
+                    <del>{{ flower.price | number : "1.0" }}₫</del>
+                    <span class="text-dark fw-semibold"
+                      >{{ flower.price | number : "1.0" }}₫</span
+                    >
+
+                    <!-- <span
+                              class="badge border border-dark-subtle rounded-0 fw-normal px-1 fs-7 lh-1 text-body-tertiary"
+                              >10% OFF</span
+                            > -->
+                  </div>
+                  <div class="button-area p-3 pt-0">
+                    <div class="row g-1 mt-2">
+                      <div class="col-12">
+                        <a
+                          href="javascript:;"
+                          (click)="btnInsertUpdateCart(flower.id, 1)"
+                          class="btn btn-primary rounded-1 p-2 fs-7 btn-cart"
+                          ><svg width="18" height="18">
+                            <use xlink:href="#cart"></use>
+                          </svg>
+                          {{ "AddToCart" | translate }}</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+        <!-- / product-grid -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
+}@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

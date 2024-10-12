@@ -9,9 +9,10 @@ import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cart.model';
 import { MatButtonModule } from '@angular/material/button';
 import { CategoryService } from '../../services/category.service';
-import { FlowerCategory } from '../../models/category.model';
+import { ConvertedCategory, FlowerCategory } from '../../models/category.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Utilities } from '../../services/utilities';
 
 @Component({
   selector: 'app-header',
@@ -69,7 +70,7 @@ export class HeaderComponent implements OnInit {
 
     // Đăng ký lấy danh sách danh mục
     this.categoryService.convertedCategoryDataSource.subscribe(
-      (categoryData: any[]) => {
+      (categoryData: ConvertedCategory[]) => {
         if (categoryData) {
           this.convertedCategories = categoryData;
           console.log(this.convertedCategories);
@@ -88,9 +89,11 @@ export class HeaderComponent implements OnInit {
   }
 
   // Tìm kiếm sản phẩm
-  btnSearch(searchString: string) {
+  btnSearch(event: Event, searchString: string) {
+    event.preventDefault();
+    const searchQuery = searchString.trim();
     this.router.navigate(['/products'], {
-      queryParams: { query: searchString },
+      queryParams: { query: searchQuery },
     });
     this.searchValue = '';
   }

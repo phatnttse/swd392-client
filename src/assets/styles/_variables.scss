@@ -34,10 +34,21 @@ $flexy-warn: (
   ),
 );
 
+$flexy-success: (
+  100: #fcf1ed,
+  500: #15af81,
+  700: #425a61,
+  contrast: (
+    100: #393939,
+    500: #ffffff,
+    700: #ffffff,
+  ),
+);
+
 $flexy-angular-primary: mat.m2-define-palette($flexy-primary);
 $flexy-angular-accent: mat.m2-define-palette($flexy-accent);
-
 $flexy-angular-warn: mat.m2-define-palette($flexy-warn);
+$flexy-angular-success: mat.m2-define-palette($flexy-success);
 
 $flexy-angular-theme: mat.m2-define-light-theme(
   (
@@ -45,6 +56,7 @@ $flexy-angular-theme: mat.m2-define-light-theme(
       primary: $flexy-angular-primary,
       accent: $flexy-angular-accent,
       warn: $flexy-angular-warn,
+      success: $flexy-success,
     ),
   )
 );

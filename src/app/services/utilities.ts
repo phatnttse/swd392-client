@@ -57,4 +57,15 @@ export class Utilities {
       bsOffcanvas.hide();
     }
   }
+
+  public static formatStringToSlug(string: string): string {
+    return string
+      .toLowerCase() // Chuyển thành chữ thường
+      .replace(/\s+/g, '-') // Thay dấu cách bằng dấu gạch ngang
+      .replace(/[^a-zA-Z0-9\-]/g, ''); // Loại bỏ các ký tự đặc biệt
+  }
+
+  public static replaceSpacesWithPlus(query: string): string {
+    return query.replace(/ /g, '+');
+  }
 }

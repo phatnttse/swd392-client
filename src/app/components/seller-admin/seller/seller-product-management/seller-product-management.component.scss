@@ -1,0 +1,124 @@
+.file-square {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  margin: 10px;
+  transition: all 0.3s ease;
+}
+
+.file-square-error {
+  border-color: #e46a76;
+}
+
+.file-square label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-square i.material-icons {
+  font-size: 48px;
+  color: #666;
+}
+
+.file-square:hover {
+  border-color: #66afe9;
+  background-color: #e3f2fd;
+  cursor: pointer;
+}
+.file-square .upload-title {
+  &:hover {
+    color: #66afe9;
+    cursor: pointer;
+  }
+}
+
+.file-square:focus-within {
+  border-color: #66afe9;
+  box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.example-full-width {
+  width: 100%;
+}
+
+td {
+  padding-right: 8px;
+}
+
+.error-msg {
+  display: block;
+  color: var(--mat-form-field-error-text-color);
+}
+.error-msg::before {
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--mat-form-field-subscript-text-font);
+  line-height: var(--mat-form-field-subscript-text-line-height);
+  font-size: var(--mat-form-field-subscript-text-size);
+  letter-spacing: var(--mat-form-field-subscript-text-tracking);
+  font-weight: var(--mat-form-field-subscript-text-weight);
+}
+.upload-section {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.uploaded-images {
+  display: flex;
+  gap: 10px;
+}
+
+.uploaded-image img {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .uploaded-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.no-upload {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.no-upload:hover {
+  background-color: #f8d7da;
+}
+.table-responsive {
+  overflow-x: auto;
+}
+th,
+td {
+  min-width: 100px;
+}
+@media (max-width: 768px) {
+  .example-full-width {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .example-full-width td,
+  .example-full-width th {
+    display: block;
+  }
+}
+@media (max-width: 768px) {
+  button {
+    padding: 8px 10px;
+  }
+  .fs-16 {
+    font-size: 14px;
+  }
+}

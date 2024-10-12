@@ -6,3 +6,12 @@ export interface FlowerCategory {
   createdAt: string;
   updatedAt: string;
 }
+export interface ConvertedCategory {
+  id: string;
+  name: string;
+  children: SubCategory[];
+}
+export interface SubCategory {
+  id: number;
+  name: string;
+}

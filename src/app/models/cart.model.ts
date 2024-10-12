@@ -8,6 +8,7 @@ export interface CartItem {
   flowerName: string;
   flowerDescription: string;
   flowerPrice: number;
+  flowerImageUrl: string;
   eventType: string;
   stockBalance: number;
   address: string;

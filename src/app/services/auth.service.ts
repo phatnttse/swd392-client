@@ -14,7 +14,6 @@ import { ToastrService } from 'ngx-toastr';
 import { UserAccount } from '../models/account.model';
 import { Utilities } from './utilities';
 import { Role } from '../models/enums';
-import { HttpUtilService } from './http.util.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,29 +33,20 @@ export class AuthService {
   public userDataSource = new BehaviorSubject<any>(null);
   userData$ = this.userDataSource.asObservable();
 
-  private apiConfig = {
-    headers: this.httpUtilService.createHeaders(),
-  };
-
   constructor(
     private auth: Auth,
     private router: Router,
     private localStorage: LocalStoreManager,
     private appConfig: AppConfigurationService,
     private http: HttpClient,
-    private toastr: ToastrService,
-    private httpUtilService: HttpUtilService
+    private toastr: ToastrService
   ) {
     this.API_URL = appConfig['API_URL'];
     this.initializeLoginStatus();
   }
   forgotPassword(email: string): Observable<any> {
     const payload = { email };
-    return this.http.post<any>(
-      `${this.API_URL}/auth/forgot-password`,
-      payload,
-      this.apiConfig
-    );
+    return this.http.post<any>(`${this.API_URL}/auth/forgot-password`, payload);
   }
 
   private initializeLoginStatus() {

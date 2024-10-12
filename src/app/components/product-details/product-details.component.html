@@ -1,5 +1,6 @@
+@defer () { @if (flower) {
 <app-header></app-header>
-@if (flower) {
+
 <div #topElement></div>
 <section class="py-5 section-products">
   <div class="container">
@@ -188,7 +189,7 @@
         <h6 class="text-muted">Đã bán 68 sản phẩm</h6>
       </div>
       <div class="col-md-3 text-center">
-        <button mat-raised-button extend class="info">
+        <button mat-raised-button extend class="info" (click)="btnVisitShop()">
           <mat-icon>storefront</mat-icon>
           {{ "ProductDetail.VisitShop" | translate }}
         </button>
@@ -296,5 +297,9 @@
     </div>
   </div>
 </section>
-}
 <app-footer></app-footer>
+} }@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

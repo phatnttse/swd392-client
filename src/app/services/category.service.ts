@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
-import { FlowerCategory } from '../models/category.model';
+import { ConvertedCategory, FlowerCategory } from '../models/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,9 @@ export class CategoryService extends EndpointBase {
   categoryData$ = this.categoryDataSource.asObservable();
 
   // Trạng thái của category đã convert
-  public convertedCategoryDataSource = new BehaviorSubject<any[]>([]);
+  public convertedCategoryDataSource = new BehaviorSubject<ConvertedCategory[]>(
+    []
+  );
   convertedCategoryData$ = this.convertedCategoryDataSource.asObservable();
 
   constructor(

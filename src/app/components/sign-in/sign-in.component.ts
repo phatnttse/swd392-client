@@ -76,7 +76,11 @@ export class SignInComponent {
 
     this.authService.loginWithPassword(email, password).subscribe({
       next: (response) => {
-        this.router.navigate(['']);
+        if (this.authService.isAdmin) {
+          this.router.navigate(['admin']);
+        } else {
+          this.router.navigate(['']);
+        }
         this.toastr.success(response.message, 'Success', { progressBar: true });
       },
 

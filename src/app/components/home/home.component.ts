@@ -10,13 +10,21 @@ import { InsertUpdateCartResponse } from '../../models/cart.model';
 import { CategoryService } from '../../services/category.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from "../../layouts/header/header.component";
-import { FooterComponent } from "../../layouts/footer/footer.component";
+import { HeaderComponent } from '../../layouts/header/header.component';
+import { FooterComponent } from '../../layouts/footer/footer.component';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule, TranslateModule, CommonModule, HeaderComponent, FooterComponent],
+  imports: [
+    RouterModule,
+    TranslateModule,
+    CommonModule,
+    HeaderComponent,
+    FooterComponent,
+    TruncatePipe,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

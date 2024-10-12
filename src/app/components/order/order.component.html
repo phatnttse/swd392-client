@@ -1,10 +1,13 @@
+@defer () {
 <app-header></app-header>
 <div class="untree_co-section order-section">
   <div class="container">
     @if (statusOrder === 0) {
     <div class="row">
       <div class="col-md-6 mb-5 mb-md-0">
-        <h2 class="h3 mb-3 text-black">{{ "Order.OrderInfo" | translate }}</h2>
+        <h2 class="mb-4 primary-color fw-bold">
+          {{ "Order.OrderInfo" | translate }}
+        </h2>
         <div class="p-3 p-lg-5 border bg-white">
           <label for="c_fname" class="text-black"
             >{{ "Sign.FullName" | translate
@@ -150,7 +153,7 @@
 
         <div class="row mb-5">
           <div class="col-md-12">
-            <h2 class="h3 mb-3 text-black">
+            <h2 class="mb-4 primary-color fw-bold">
               {{ "Order.OrderDetails" | translate }}
             </h2>
             <form [formGroup]="orderForm" class="p-3 p-lg-5 border bg-white">
@@ -164,14 +167,28 @@
                   @for (item of listCartItem; track $index) {
                   <tr>
                     <td>
-                      <img width="50" [src]="" alt="Image" class="img-fluid" />
+                      <img
+                        width="50"
+                        [src]="item.flowerImageUrl"
+                        alt="Image"
+                        class="img-fluid"
+                      />
                     </td>
                     <td>
-                      {{ item.flowerName }}<strong class="mx-2">x</strong
-                      >{{ item.quantity }}
+                      <span class="primary-color fw-bold">{{
+                        item.flowerName
+                      }}</span
+                      ><strong class="mx-2 fw-bold">x</strong>
+                      <span class="fw-bold text-black">{{
+                        item.quantity
+                      }}</span>
                     </td>
                     <td>
-                      {{ item.flowerPrice * item.quantity | number : "1.0" }}₫
+                      <span class="text-black fw-bold"
+                        >{{
+                          item.flowerPrice * item.quantity | number : "1.0"
+                        }}₫</span
+                      >
                     </td>
                   </tr>
                   }
@@ -203,7 +220,7 @@
               <div class="border p-3 mb-3">
                 <mat-radio-group formControlName="paymentMethod">
                   <div
-                    class="d-flex align-items-center justify-content-between"
+                    class="d-flex align-items-center justify-content-between flex-wrap"
                   >
                     <mat-radio-button value="WALLET">
                       {{ "Order.PaymentByWallet" | translate }}
@@ -340,3 +357,8 @@
   </div>
 </div>
 <app-footer></app-footer>
+}@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

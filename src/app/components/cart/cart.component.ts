@@ -50,11 +50,16 @@ export class CartComponent implements OnInit {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
-    this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      },
-    });
+    const cartItem = this.listCartItem.find((x) => x.flowerId === flowerId);
+    if (cartItem?.quantity! + quantity === 0) {
+      this.btnRemoveCartItem(cartItem?.id!);
+    } else {
+      this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
+        },
+      });
+    }
   }
 
   btnRemoveCartItem(cartItemId: number) {

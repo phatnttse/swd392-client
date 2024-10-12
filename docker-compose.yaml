@@ -1,0 +1,5 @@
+#docker build -t swd392-client:1.0.4 -f ./DockerfileAngular .
+#docker images
+#docker tag swd392-client:1.0.4 phatnttse1923/swd392-client:1.0.4
+#docker push phatnttse1923/swd392-client:1.0.4
+#docker run -d -p 8386:80 phatnttse1923/swd392-client:1.0.4

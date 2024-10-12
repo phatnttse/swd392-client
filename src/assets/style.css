@@ -25,7 +25,7 @@ body {
   --bs-danger: #f95f09;
   --bs-danger-rgb: 249, 95, 9;
 
-  --bs-success: #a3be4c;
+  --bs-success: #15af81;
   --bs-success-rgb: 163, 190, 76;
 
   --bs-primary-bg-subtle: #fff9eb;
@@ -102,16 +102,16 @@ body {
   --bs-btn-bg: #eef5e4;
   --bs-btn-border-color: #eef5e4;
   --bs-btn-hover-color: #222;
-  --bs-btn-hover-bg: #9de3c2;
-  --bs-btn-hover-border-color: #9de3c2;
+  --bs-btn-hover-bg: #15af81;
+  --bs-btn-hover-border-color: #15af81;
   --bs-btn-focus-shadow-rgb: 60, 153, 110;
   --bs-btn-active-color: #222;
-  --bs-btn-active-bg: #9de3c2;
-  --bs-btn-active-border-color: #9de3c2;
+  --bs-btn-active-bg: #15af81;
+  --bs-btn-active-border-color: #15af81;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #222;
-  --bs-btn-disabled-bg: #eef5e4;
-  --bs-btn-disabled-border-color: #eef5e4;
+  --bs-btn-disabled-bg: #15af81;
+  --bs-btn-disabled-border-color: #15af81;
 }
 .btn-danger {
   --bs-btn-color: #222;

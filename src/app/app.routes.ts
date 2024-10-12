@@ -121,4 +121,12 @@ export const routes: Routes = [
       );
     },
   },
+  {
+    path: 'seller-profile/:name',
+    loadComponent() {
+      return import(
+        './components/seller-profile/seller-profile.component'
+      ).then((m) => m.SellerProfileComponent);
+    },
+  },
 ];
