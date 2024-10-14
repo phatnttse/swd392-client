@@ -1,7 +1,3 @@
-tạo cho tôi pipeline jenkins cho https://github.com/phatnttse/swd392-client.git 
-
-có docker file là 
-
 # 1: Build ứng dụng Angular với Node.js
 FROM node:latest AS build
 
