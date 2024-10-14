@@ -1,3 +1,7 @@
+tạo cho tôi pipeline jenkins cho https://github.com/phatnttse/swd392-client.git 
+
+có docker file là 
+
 # 1: Build ứng dụng Angular với Node.js
 FROM node:latest AS build
 
@@ -25,8 +29,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy build từ bước trước vào thư mục phục vụ của Nginx
 COPY --from=build /usr/src/app/dist/browser /usr/share/nginx/html
 
-# Mở cổng 80
-EXPOSE 80
+# Mở cổng 3000
+EXPOSE 3000
 
 # Khởi động Nginx
 CMD ["nginx", "-g", "daemon off;"]
