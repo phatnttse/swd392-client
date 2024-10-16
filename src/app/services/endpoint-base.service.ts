@@ -46,7 +46,6 @@ export class EndpointBase {
     error: any,
     continuation: () => Observable<T>
   ): Observable<T> {
-    debugger;
     if (error.status === 401) {
       if (this.isRefreshingLogin) {
         return this.pauseTask(continuation);

@@ -13,6 +13,8 @@ import { ConvertedCategory, FlowerCategory } from '../../models/category.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Utilities } from '../../services/utilities';
+import { ProductService } from '../../services/product.service';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-header',
@@ -44,7 +46,9 @@ export class HeaderComponent implements OnInit {
     private cartService: CartService,
     private categoryService: CategoryService,
     private appConfig: AppConfigurationService,
-    private router: Router
+    private router: Router,
+    private productService: ProductService,
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
@@ -106,8 +110,13 @@ export class HeaderComponent implements OnInit {
 
   // Đăng xuất
   btnLogOut() {
+    debugger;
     this.authService.logout();
-    this.authService.userDataSource.next(null);
+    this.cartService.totalAmountSubject.next(0);
+    this.cartService.cartDataSource.next([]);
+    this.cartService.totalQuantitySubject.next(0);
+    this.productService.flowerByUserDataSource.next([]);
+    this.orderService.orderBySellerDataSource.next([]);
     this.router.navigate(['/signin']);
   }
 }

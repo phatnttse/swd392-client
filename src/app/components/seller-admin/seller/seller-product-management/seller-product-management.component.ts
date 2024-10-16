@@ -1,5 +1,11 @@
 import { MatCardModule } from '@angular/material/card';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -26,6 +32,9 @@ import {
 } from '../../../../models/category.model';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../../services/auth.service';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-seller-product-management',
@@ -41,11 +50,15 @@ import { AuthService } from '../../../../services/auth.service';
     MatTabsModule,
     CommonModule,
     MatMenuModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
   templateUrl: './seller-product-management.component.html',
   styleUrl: './seller-product-management.component.scss',
 })
-export class SellerProductManagementComponent implements OnInit, AfterViewInit {
+export class SellerProductManagementComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource: MatTableDataSource<Flower> = new MatTableDataSource<Flower>(); // Dữ liệu bảng
@@ -61,19 +74,21 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
   totalElements: number = 0; // Tổng số lượng sản phẩm
   currentPage: number = 0; // Trang hiện tại
   visiblePages: number[] = []; // Các trang hiển thị
-  statusPage: number = 0; // trạng thái của trang 0: all, 1: create or update
+  statusPage: number = 0; // trạng thái của trang 0: all, 1: create , 2: update
+  private flowerSubscription: Subscription | null = null; // Biến lưu subscription
   displayedColumns: string[] = [
     // Các cột hiển thị
     'image',
     'name',
     'category',
     'price',
-    'stockBalance',
+    'stockQuantity',
+    'status',
     'action',
   ];
 
   // Tạo sản phẩm mới
-  createProductForm: FormGroup; // Form tạo sản phẩm
+  productForm: FormGroup; // Form tạo sản phẩm
   uploadedImage: string = ''; // Ảnh đã tải lên
   fileImage: File | null = null; // File ảnh
   isPictureError: boolean = false; // Lỗi không tải ảnh
@@ -81,6 +96,7 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
   isCategoryError: boolean = false; // Lỗi không chọn danh mục
   categories: ConvertedCategory[] = []; // Danh sách danh mục
   selectedCurrentCategory: ConvertedCategory | null = null; // Danh mục được chọn hiện tại
+  selectedProduct: Flower | null = null; // Sản phẩm được chọn
 
   constructor(
     private localStorage: LocalStoreManager,
@@ -90,25 +106,24 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
     private toastr: ToastrService,
     private authService: AuthService
   ) {
-    this.createProductForm = this.formBuilder.group({
+    this.productForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       price: ['', [Validators.required, Validators.min(1000)]],
       description: ['', [Validators.required, Validators.minLength(100)]],
-      stockBalance: ['', [Validators.required, Validators.min(1)]],
+      stockQuantity: ['', [Validators.required, Validators.min(1)]],
       address: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
 
   ngOnInit(): void {
-    this.productService.flowerByUserDataSOurce.subscribe({
-      next: (flowerData: Flower[] | null) => {
-        if (flowerData != null) {
+    this.flowerSubscription =
+      this.productService.flowerByUserDataSource.subscribe({
+        next: (flowerData: Flower[]) => {
           this.listFlower = flowerData;
-        } else {
-          this.getFlowersByUserId(this.authService.currentUser?.id!);
-        }
-      },
-    });
+          this.dataSource = new MatTableDataSource(this.listFlower);
+          this.dataSource.sort = this.sort;
+        },
+      });
 
     this.categoryService.convertedCategoryData$.subscribe(
       (categoryData: ConvertedCategory[]) => {
@@ -121,24 +136,16 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  ngOnDestroy(): void {
+    if (this.flowerSubscription) {
+      this.flowerSubscription.unsubscribe();
+    }
+  }
+
   // Tìm kiếm sản phẩm theo angular material table
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  // Lấy danh sách hoa và lưu vào BehaviorSubject
-  getFlowersByUserId(userId: number): void {
-    this.productService.getFlowersByUserId(userId).subscribe({
-      next: (response: Flower[]) => {
-        this.listFlower = response;
-        this.productService.flowerByUserDataSOurce.next(response);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error);
-        console.error(error);
-      },
-    });
   }
 
   // Thay đổi trạng thái của trang
@@ -151,28 +158,47 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
   // Tạo sản phẩm mới
   btnCreateNewProduct() {
     if (
-      this.createProductForm.invalid ||
+      this.productForm.invalid ||
       !this.uploadedImage ||
       !this.selectedCategories.length
     ) {
       this.isPictureError = !this.uploadedImage;
       this.isCategoryError = !this.selectedCategories.length;
-      this.createProductForm.markAllAsTouched();
+      this.productForm.markAllAsTouched();
       return;
     }
 
+    const formData = this.createFormData();
+
+    this.productService.createFlower(formData).subscribe({
+      next: (response: Flower) => {
+        this.productForm.reset();
+        this.selectedCategories = [];
+        this.uploadedImage = '';
+        this.toastr.success('Tạo hoa mới thành công', 'Success', {
+          progressBar: true,
+        });
+        this.listFlower.push(response);
+        this.dataSource = new MatTableDataSource(this.listFlower);
+        this.dataSource.sort = this.sort;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.toastr.error('Tạo hoa mới thất bại', 'Error');
+        console.error('Error creating product: ', error);
+      },
+    });
+  }
+
+  createFormData(): FormData {
     const formData = new FormData();
-    formData.append('name', this.createProductForm.get('name')!.value);
+    formData.append('name', this.productForm.get('name')!.value);
+    formData.append('description', this.productForm.get('description')!.value);
+    formData.append('price', this.productForm.get('price')!.value);
     formData.append(
-      'description',
-      this.createProductForm.get('description')!.value
+      'stockQuantity',
+      this.productForm.get('stockQuantity')!.value
     );
-    formData.append('price', this.createProductForm.get('price')!.value);
-    formData.append(
-      'stockBalance',
-      this.createProductForm.get('stockBalance')!.value
-    );
-    formData.append('address', this.createProductForm.get('address')!.value);
+    formData.append('address', this.productForm.get('address')!.value);
 
     this.selectedCategories.forEach((category) => {
       formData.append('categories', category.id.toString());
@@ -181,22 +207,15 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
     if (this.fileImage) {
       formData.append('image', this.fileImage);
     }
-
-    this.productService.createFlower(formData).subscribe({
-      next: (response) => {
-        console.log('Product created successfully', response);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error.error, 'Error');
-        console.error('Error creating product: ', error);
-      },
-    });
+    return formData;
   }
 
+  // Hover vào danh mục
   setCurrentSelectedCategory(category: ConvertedCategory) {
     this.selectedCurrentCategory = category;
   }
 
+  // Chọn danh mục
   btnSelectCategory(category: SubCategory) {
     if (this.selectedCategories.includes(category)) {
       this.selectedCategories = this.selectedCategories.filter(
@@ -208,6 +227,7 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // Upload ảnh
   onImageUpload(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
 
@@ -218,5 +238,66 @@ export class SellerProductManagementComponent implements OnInit, AfterViewInit {
     } else {
       this.uploadedImage = '';
     }
+  }
+
+  // Xem chi tiết sản phẩm --------------------------- statusPage = 2
+  btnViewProductDetails(id: number) {
+    this.productService.getFlowerById(id).subscribe({
+      next: (response: Flower) => {
+        this.productForm.patchValue({
+          name: response.name,
+          price: response.price,
+          description: response.description,
+          stockQuantity: response.stockQuantity,
+        });
+        this.uploadedImage = response.imageUrl;
+        this.selectedCategories = response.categories;
+        this.selectedProduct = response;
+        this.statusPage = 2;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error getting product by id: ', error);
+      },
+    });
+  }
+
+  // Cập nhật sản phẩm
+  btnUpdateProduct() {
+    if (
+      this.productForm.invalid ||
+      !this.selectedCategories.length ||
+      !this.uploadedImage
+    ) {
+      this.isCategoryError = !this.selectedCategories.length;
+      this.isPictureError = !this.uploadedImage;
+      this.productForm.markAllAsTouched();
+      return;
+    }
+
+    const formData = this.createFormData();
+
+    this.productService
+      .updateFlower(this.selectedProduct?.id!, formData)
+      .subscribe({
+        next: (response: Flower) => {
+          this.productForm.reset();
+          this.selectedCategories = [];
+          this.uploadedImage = '';
+          this.toastr.success('Cập nhật thành công', 'Success', {
+            progressBar: true,
+          });
+          this.listFlower.map((flower) => {
+            if (flower.id === response.id) {
+              flower = response;
+            }
+          });
+          this.dataSource = new MatTableDataSource(this.listFlower);
+          this.dataSource.sort = this.sort;
+        },
+        error: (error: HttpErrorResponse) => {
+          this.toastr.error('Cập nhật thất bại', 'Error');
+          console.error('Error update product: ', error);
+        },
+      });
   }
 }

@@ -4,14 +4,14 @@
   <mat-card class="p-4 p-md-5 w-100 mx-auto">
     <mat-card-content>
       <div class="row align-items-center">
+        @if (sellerInfo) {
         <div class="col-12 col-lg-6 col-md-3 text-center mb-2">
           <img
-            src="./../../../assets/images/flag-vi.svg"
+            [src]="sellerInfo.avatar"
             alt="Profile Image"
             class="rounded mb-2"
             width="100"
           />
-          @if (sellerInfo) {
           <h5 class="mb-0">{{ sellerInfo.name }}</h5>
           <p class="text-muted">Online 3 phút trước</p>
           <div
@@ -32,8 +32,8 @@
               ĐANG THEO DÕI
             </button>
           </div>
-          }
         </div>
+        }
 
         <!-- Shop Info -->
         <div
@@ -74,9 +74,9 @@
       <!-- Tab Navigation -->
       <div class="mt-4 mt-md-5">
         <mat-tab-group class="text-dark fw-bold">
-          <mat-tab label="TẤT CẢ SẢN PHẨM"> </mat-tab>
-          <mat-tab label="Hoa Sự Kiện"></mat-tab>
-          <mat-tab label="Hoa Quà Tặng"></mat-tab>
+          @for (category of listCategory; track $index) {
+          <mat-tab [label]="category.name"> </mat-tab>
+          }
         </mat-tab-group>
       </div>
     </mat-card-content>

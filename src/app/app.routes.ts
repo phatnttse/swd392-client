@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { UserGuard } from './guards/guards/user.guard';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
         (m) => m.CartComponent
       );
     },
+    canActivate: [UserGuard],
   },
   {
     path: 'contact',
@@ -80,6 +82,7 @@ export const routes: Routes = [
         (m) => m.OrderComponent
       );
     },
+    canActivate: [UserGuard],
   },
   {
     path: 'wallet',
@@ -88,6 +91,7 @@ export const routes: Routes = [
         (m) => m.WalletComponent
       );
     },
+    canActivate: [UserGuard],
   },
   {
     path: 'order-history',
@@ -96,6 +100,7 @@ export const routes: Routes = [
         (m) => m.OrderHistoryComponent
       );
     },
+    canActivate: [UserGuard],
   },
   {
     path: 'forgot-password',
@@ -120,6 +125,7 @@ export const routes: Routes = [
         (m) => m.ProfileComponent
       );
     },
+    canActivate: [UserGuard],
   },
   {
     path: 'seller-profile/:name',

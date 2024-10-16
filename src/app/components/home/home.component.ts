@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { ConvertedCategory } from '../../models/category.model';
 
 @Component({
   selector: 'app-home',
@@ -39,7 +40,7 @@ export class HomeComponent implements OnInit {
   categoryIds: number[] = [];
   numberOfElements: number = 0;
   totalElements: number = 0;
-  listCategory: any[] = [];
+  listCategory: ConvertedCategory[] = [];
 
   constructor(
     private productService: ProductService,
@@ -53,62 +54,19 @@ export class HomeComponent implements OnInit {
     window.scrollTo(0, 0);
 
     this.productService.flowerNewestDataSource.subscribe(
-      (flowerNewestData: Flower[] | null) => {
-        if (flowerNewestData) {
-          this.listFlowerNewest = flowerNewestData;
-        } else {
-          this.getFlowers(
-            this.searchString,
-            this.order,
-            this.sortBy,
-            this.pageNumber,
-            this.pageSize,
-            this.categoryIds
-          );
+      (flowerNewestData: FlowerPaginated | null) => {
+        if (flowerNewestData !== null) {
+          this.listFlowerNewest = flowerNewestData.content;
         }
       }
     );
     this.categoryService.convertedCategoryDataSource.subscribe(
-      (categoryData: any[]) => {
+      (categoryData: ConvertedCategory[]) => {
         if (categoryData) {
           this.listCategory = categoryData;
         }
       }
     );
-  }
-
-  // Lấy danh sách hoa và lưu vào BehaviorSubject
-  getFlowers(
-    searchString: string,
-    order: string,
-    sortBy: string,
-    pageNumber: number,
-    pageSize: number,
-    categoryIds: number[]
-  ) {
-    this.productService
-      .getFlowers(
-        searchString,
-        order,
-        sortBy,
-        pageNumber,
-        pageSize,
-        categoryIds
-      )
-      .subscribe({
-        next: (response: FlowerPaginated) => {
-          this.listFlowerNewest = response.content;
-          this.pageNumber = response.pageNumber;
-          this.pageSize = response.pageSize;
-          this.totalPages = response.totalPages;
-          this.numberOfElements = response.numberOfElements;
-          this.totalElements = response.totalElements;
-          this.productService.flowerNewestDataSource.next(response.content); // Lưu vào BehaviorSubject
-        },
-        error: (error: HttpErrorResponse) => {
-          console.log(error);
-        },
-      });
   }
 
   // Xem chi tiết sản phẩm

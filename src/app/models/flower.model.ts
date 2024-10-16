@@ -18,8 +18,9 @@ export interface Flower {
   user: User;
   name: string;
   description: string;
+  address: string;
   price: number;
-  stockBalance: number;
+  stockQuantity: number;
   categories: Category[];
   imageUrl: string;
   status: FlowerListingStatus;

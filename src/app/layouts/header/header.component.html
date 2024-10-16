@@ -25,12 +25,16 @@
             <h6 class="my-0">{{ item.flowerName }}</h6>
             <small class="text-body-secondary">x{{ item.quantity }}</small>
           </div>
-          <span class="text-body-secondary">${{ item.flowerPrice }}</span>
+          <span class="text-body-secondary"
+            >{{ item.flowerPrice | number : "1.0" }}₫</span
+          >
         </li>
         }
         <li class="list-group-item d-flex justify-content-between">
-          <span>{{ "Header.Total" | translate }} (USD)</span>
-          <strong class="text-danger">${{ totalAmount }}</strong>
+          <span>{{ "Header.Total" | translate }} (VNĐ)</span>
+          <strong class="text-danger"
+            >{{ totalAmount | number : "1.0" }}₫</strong
+          >
         </li>
       </ul>
       <button
@@ -179,7 +183,7 @@
   <div class="container-fluid">
     <div class="row py-3 border-bottom align-items-center">
       <div
-        class="col-sm-4 col-lg-2 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-end"
+        class="col-sm-4 col-lg-2 col-md-7 text-center text-sm-start d-flex gap-3 justify-content-center justify-content-md-end"
       >
         <div class="d-flex align-items-center my-sm-0">
           <a routerLink="/">
@@ -257,7 +261,7 @@
       </div>
 
       <div
-        class="col-sm-8 col-lg-2 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end"
+        class="col-sm-8 col-lg-3 d-flex gap-5 align-items-center justify-content-center justify-content-sm-end"
       >
         <ul
           class="d-flex justify-content-end list-unstyled m-0 align-items-center"

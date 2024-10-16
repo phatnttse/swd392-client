@@ -10,6 +10,8 @@ import { GetCartByUserResponse } from './models/cart.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CategoryService } from './services/category.service';
 import { ConvertedCategory, FlowerCategory } from './models/category.model';
+import { FlowerPaginated } from './models/flower.model';
+import { ProductService } from './services/product.service';
 
 @Component({
   selector: 'app-root',
@@ -20,20 +22,25 @@ import { ConvertedCategory, FlowerCategory } from './models/category.model';
 })
 export class AppComponent implements OnInit {
   title = 'swd392-client';
-  isUserLoggedIn: boolean = false; // Kiểm tra người dùng đã đăng nhập hay chưa
   isLoading: boolean = false; // Kiểm tra trạng thái loading
+  searchString: string = '';
+  order: string = 'desc';
+  sortBy: string = 'createdAt';
+  totalPages: number = 0;
+  pageNumber: number = 0;
+  pageSize: number = 16;
+  categoryIds: number[] = [];
 
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private statusService: StatusService,
     private cartService: CartService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private productService: ProductService
   ) {}
   ngOnInit(): void {
-    this.isUserLoggedIn = this.authService.isLoggedIn;
-
-    if (this.isUserLoggedIn) {
+    if (this.authService.isLoggedIn) {
       this.authService.userDataSource.next(this.authService.currentUser);
       if (this.cartService.cartDataSource.value.length === 0) {
         this.getCartByUser();
@@ -44,9 +51,34 @@ export class AppComponent implements OnInit {
       this.getAllCategories();
     }
 
+    if (this.productService.flowerNewestDataSource.value == null) {
+      this.getNewestFlowers();
+    }
+
     this.statusService.statusLoadingSpinner$.subscribe((status) => {
       this.isLoading = status;
     });
+  }
+
+  // Lấy danh sách hoa và lưu vào BehaviorSubject
+  getNewestFlowers() {
+    this.productService
+      .getFlowers(
+        this.searchString,
+        this.order,
+        this.sortBy,
+        this.pageNumber,
+        this.pageSize,
+        this.categoryIds
+      )
+      .subscribe({
+        next: (response: FlowerPaginated) => {
+          this.productService.flowerNewestDataSource.next(response);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
+        },
+      });
   }
 
   // Lấy giỏ hàng ban đầu và phân phối dữ liệu
@@ -75,7 +107,6 @@ export class AppComponent implements OnInit {
         this.categoryService.convertedCategoryDataSource.next(
           convertedCategories
         );
-        console.log('Converted Categories:', convertedCategories);
       },
       error: (error: HttpErrorResponse) => {
         console.error(error);
@@ -91,9 +122,9 @@ export class AppComponent implements OnInit {
     const categoryTranslations: { [key: string]: string } = {
       TYPE: 'Theo loại',
       COLOR: 'Theo màu sắc',
-      EVENT_TYPE: 'Theo loại sự kiện',
+      EVENT_TYPE: 'Theo sự kiện',
       SUBJECT: 'Theo đối tượng',
-      DISPLAY: 'Theo cách trình bày',
+      DISPLAY: 'Theo trình bày',
     };
 
     // Tạo bản đồ các danh mục

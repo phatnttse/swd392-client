@@ -56,10 +56,10 @@
             </div>
             <span class="text-muted"
               ><i class="fas fa-shopping-basket fa-sm mx-1"></i
-              >{{ flower.stockBalance }}
+              >{{ flower.stockQuantity }}
               {{ "ProductDetail.Available" | translate }}</span
             >
-            @if (flower.stockBalance > 0) {
+            @if (flower.stockQuantity > 0) {
             <span class="text-success ms-2 fw-bold">{{
               "ProductDetail.InStock" | translate
             }}</span>
