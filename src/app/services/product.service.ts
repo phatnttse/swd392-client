@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { AppConfigurationService } from './configuration.service';
 import { Flower, FlowerPaginated } from '../models/flower.model';
+import { FlowerCategory } from '../models/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -89,4 +90,20 @@ export class ProductService extends EndpointBase {
         })
       );
   }
+
+  approveFlowerListing(id: number): Observable<Flower>{
+    return this.http
+    .put<Flower>(`${this.API_URL}/admin/flower-listings/approve/${id}`, {}, this.requestHeaders)
+    .pipe(
+      catchError((error) => {
+        return this.handleError(error, () => this.approveFlowerListing(id));
+      })
+    );
+  }
+
+  getFlowerCategory(){
+    return this.http
+    .get<FlowerCategory>(`${this.API_URL}/flowers-categories`, this.requestHeaders);
+  }
+
 }

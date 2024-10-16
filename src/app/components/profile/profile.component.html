@@ -8,21 +8,14 @@
           <div class="card h-100">
             <div class="card-body text-center">
               <div style="position: relative; display: inline-block">
-                <img
-                  src="https://via.placeholder.com/150"
-                  alt="Admin"
-                  class="rounded-circle bg-primary"
-                  width="170"
-                  height="170"
-                  style="
+                <img src="https://via.placeholder.com/150" alt="Admin" class="rounded-circle bg-primary" width="170"
+                  height="170" style="
                     display: block;
                     max-width: 100%;
                     border-radius: 30%;
                     object-fit: cover;
-                  "
-                />
-                <button
-                  style="
+                  " />
+                <button style="
                     position: absolute;
                     top: 100px;
                     right: 10px;
@@ -37,14 +30,8 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                  "
-                  type="button"
-                  class="rounded-circle"
-                >
-                  <i
-                    class="fa-solid fa-image"
-                    style="color: #fff; font-size: 15px"
-                  ></i>
+                  " type="button" class="rounded-circle">
+                  <i class="fa-solid fa-image" style="color: #fff; font-size: 15px"></i>
                 </button>
               </div>
               <div class="mt-3">
@@ -52,21 +39,12 @@
                 <p class="mb-1 text-secondary">{{ userAccount?.role }}</p>
                 <!-- Đổi mật khẩu button -->
                 <div class="d-flex justify-content-center align-items-center">
-                  <mat-icon
-                    aria-hidden="false"
-                    aria-label="Example home icon"
-                    fontIcon="account_balance_wallet"
-                  ></mat-icon>
-                  <span style="margin-left: 8px"
-                    >Số dư ví: {{ userAccount?.balance }}</span
-                  >
+                  <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="account_balance_wallet">
+                  </mat-icon>
+                  <span style="margin-left: 8px">Số dư ví: {{ userAccount?.balance }}</span>
                 </div>
-                <button
-                  color="primary"
-                  class="btn mt-2"
-                  style="padding: 20px"
-                  mat-raised-button
-                >
+                <button data-bs-toggle="modal" data-bs-target="#changePasswordModal" color="primary" class="btn mt-2"
+                  style="padding: 20px" mat-raised-button>
                   Đổi mật khẩu
                 </button>
               </div>
@@ -84,47 +62,28 @@
                                 </div> -->
               <mat-form-field class="w-100" appearance="outline">
                 <mat-label>Họ và tên</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  id="name"
-                  formControlName="name"
-                  required
-                  [class.is-invalid]="
+                <input matInput type="text" id="name" formControlName="name" required [class.is-invalid]="
                     profileForm.get('name')!.invalid &&
                     profileForm.get('name')!.touched
-                  "
-                />
+                  " />
               </mat-form-field>
               <div class="row">
                 <div class="col-lg-6">
                   <mat-form-field class="w-100" appearance="outline">
                     <mat-label for="email">Email</mat-label>
-                    <input
-                      matInput
-                      type="email"
-                      id="email"
-                      formControlName="email"
-                      [class.is-invalid]="
+                    <input matInput type="email" id="email" formControlName="email" [class.is-invalid]="
                         profileForm.get('email')!.invalid &&
                         profileForm.get('email')!.touched
-                      "
-                    />
+                      " />
                   </mat-form-field>
                 </div>
                 <div class="col-lg-6">
                   <mat-form-field class="w-100" appearance="outline">
                     <mat-label for="phone">Số điện thoại</mat-label>
-                    <input
-                      matInput
-                      type="phone"
-                      id="phone"
-                      formControlName="phone"
-                      [class.is-invalid]="
+                    <input matInput type="phone" id="phone" formControlName="phone" [class.is-invalid]="
                         profileForm.get('phone')!.invalid &&
                         profileForm.get('phone')!.touched
-                      "
-                    />
+                      " />
                   </mat-form-field>
                 </div>
               </div>
@@ -136,15 +95,8 @@
                 </mat-form-field>
               </div>
 
-              <div
-                class="example-button-row d-flex justify-content-center align-items-center"
-              >
-                <button
-                  color="primary"
-                  class="btn"
-                  style="padding: 20px"
-                  mat-raised-button
-                >
+              <div class="example-button-row d-flex justify-content-center align-items-center">
+                <button color="primary" class="btn" style="padding: 20px" mat-raised-button>
                   Lưu thay đổi
                 </button>
               </div>
@@ -155,4 +107,104 @@
     </div>
   </div>
 </form>
+<!-- wallet -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel">
+          Đổi mật khẩu
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="changePasswordForm">
+          <div class="mb-3">
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Nhập mật khẩu hiện tại</mat-label>
+              <input matInput type="password" required formControlName="currentPassword" [class.is-invalid]="
+                            changePasswordForm.get('currentPassword')?.invalid &&
+                            changePasswordForm.get('currentPassword')?.touched
+                          " />
+              @if (changePasswordForm.get('currentPassword')?.hasError('required')) {
+              <mat-error>Mật khẩu không được để trống</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="mb-3">
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Nhập mật khẩu mới</mat-label>
+              <input matInput type="password" required formControlName="newPassword" [class.is-invalid]="
+                            changePasswordForm.get('newPassword')?.invalid &&
+                            changePasswordForm.get('newPassword')?.touched
+                          " />
+              @if (changePasswordForm.get('newPassword')?.hasError('required')) {
+              <mat-error>Mật khẩu không được để trống</mat-error>
+              }
+              @else if (changePasswordForm.get('newPassword')?.hasError('minlength')) {
+              <mat-error>Mật khẩu mới phải có ít nhất 8 ký tự</mat-error>
+              }
+              @else if (changePasswordForm.get('newPassword')?.hasError('pattern')) {
+              <mat-error>Mật khẩu mới phải bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một chữ số và
+                một ký tự đặc biệt</mat-error>
+              } @else if (changePasswordForm.hasError('mismatch') && changePasswordForm.get('newPassword')?.touched) {
+              <mat-error>Mật khẩu mới và xác nhận mật khẩu mới không khớp</mat-error>
+              }
+
+            </mat-form-field>
+          </div>
+
+          <div class="mb-3">
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Nhập lại mật khẩu mới</mat-label>
+              <input matInput type="password" required formControlName="confirmPassword" [class.is-invalid]="
+                            changePasswordForm.get('confirmPassword')?.invalid &&
+                            changePasswordForm.get('confirmPassword')?.touched
+                          " />
+              @if (changePasswordForm.get('confirmPassword')?.hasError('required')) {
+              <mat-error>Mật khẩu không được để trống</mat-error>
+              }
+              @else if (changePasswordForm.get('confirmPassword')?.hasError('minlength')) {
+              <mat-error>Xác nhận mật khẩu mới phải có ít nhất 8 ký tự</mat-error>
+              }
+              @else if (changePasswordForm.get('confirmPassword')?.hasError('pattern')) {
+              <mat-error>Xác nhận mật khẩu mới phải bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một
+                chữ số và một ký tự đặc biệt</mat-error>
+              }
+              @else if (changePasswordForm.hasError('mismatch') && changePasswordForm.get('newPassword')?.touched) {
+              <mat-error>Mật khẩu mới và xác nhận mật khẩu mới không khớp</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Thay đổi mật khẩu</button>
+        </form>
+
+
+      </div>
+      <!-- <div class="modal-footer">
+        <button
+          mat-raised-button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          color="warn"
+        >
+        <p>Đổi mật khẩu</p>
+      </button>
+        <button
+          mat-raised-button
+          type="submit"
+          class="btn btn-primary"
+          id="confirmTopup"
+          color="accent"
+        >
+          Đổi mật khẩu
+        </button>
+      </div> -->
+    </div>
+  </div>
+</div>
 <app-footer></app-footer>

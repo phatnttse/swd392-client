@@ -20,6 +20,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, Observable, shareReplay } from 'rxjs';
 import { UserAccount } from '../../models/account.model';
 import { AuthService } from '../../services/auth.service';
+import { BrowserModule } from '@angular/platform-browser';
 
 interface sidebarMenu {
   link: string;
@@ -105,7 +106,12 @@ export class SellerAdminComponent {
     {
       link: '/admin/product-management',
       icon: 'inventory',
-      menu: 'Kho hàng',
+      menu: 'Quản lý kho hàng',
+    },
+    {
+      link: '/admin/category-management',
+      icon: 'list',
+      menu: 'Quản lý danh mục',
     },
   ];
 }

@@ -46,6 +46,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
   userAccount: UserAccount | null = null;
+  changePasswordForm: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private accountService: AccountService,
@@ -62,6 +63,23 @@ export class ProfileComponent implements OnInit {
       balance: [0], // Nếu cần
       externalAuthType: [''], // Nếu cần
     });
+    this.changePasswordForm = this.formBuilder.group({
+      currentPassword: ['', [Validators.required]],
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+        ),
+      ]],
+      confirmPassword: ['',[
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+        ),
+      ]],
+    }, {validator: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
@@ -84,5 +102,10 @@ export class ProfileComponent implements OnInit {
     } else {
       console.warn('No account found');
     }
+  }
+
+  passwordMatchValidator(formGroup: FormGroup){
+    return formGroup.get('newPassword')?.value === formGroup.get('confirmPassword')?.value
+    ? null : { mismatch: true };
   }
 }

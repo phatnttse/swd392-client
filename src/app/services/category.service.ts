@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EndpointBase } from './endpoint-base.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
@@ -27,6 +27,7 @@ export class CategoryService extends EndpointBase {
   ) {
     super(http, authService);
     this.API_URL = appConfig['API_URL'];
+    
   }
 
   getAllCategories(): Observable<FlowerCategory[]> {
@@ -38,4 +39,5 @@ export class CategoryService extends EndpointBase {
         })
       );
   }
+
 }

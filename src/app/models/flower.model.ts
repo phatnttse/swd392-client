@@ -24,6 +24,7 @@ export interface Flower {
   createdAt: string;
   updatedAt: string;
   deleted: boolean;
+  status:  'PENDING' | 'APPROVED' | 'REJECTED';
 }
 
 export interface FlowerPaginated extends PaginatedResponse<Flower> {}

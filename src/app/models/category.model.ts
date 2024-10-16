@@ -1,3 +1,5 @@
+import { PaginatedResponse } from "./paginated.model";
+
 export interface FlowerCategory {
   id: number;
   name: string;
@@ -6,3 +8,4 @@ export interface FlowerCategory {
   createdAt: string;
   updatedAt: string;
 }
+
