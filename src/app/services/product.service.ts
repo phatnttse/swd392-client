@@ -13,7 +13,9 @@ export class ProductService extends EndpointBase {
   API_URL: string = '';
 
   // Trạng thái của danh sách hoa mới nhất
-  public flowerNewestDataSource = new BehaviorSubject<Flower[] | null>(null);
+  public flowerNewestDataSource = new BehaviorSubject<FlowerPaginated | null>(
+    null
+  );
   flowerNewestData$ = this.flowerNewestDataSource.asObservable();
 
   // Trạng thái của danh sách hoa đã phân trang
@@ -22,8 +24,8 @@ export class ProductService extends EndpointBase {
   flowerPaginatedData$ = this.flowerPaginatedDataSource.asObservable();
 
   // Trạng thái của hoa theo user
-  public flowerByUserDataSOurce = new BehaviorSubject<Flower[] | null>(null);
-  flowerByUserData$ = this.flowerByUserDataSOurce.asObservable();
+  public flowerByUserDataSource = new BehaviorSubject<Flower[]>([]);
+  flowerByUserData$ = this.flowerByUserDataSource.asObservable();
 
   constructor(
     http: HttpClient,
@@ -86,12 +88,18 @@ export class ProductService extends EndpointBase {
       );
   }
 
-  updateFlower(flower: Flower): Observable<Flower> {
+  updateFlower(flowerId: number, formData: FormData): Observable<Flower> {
     return this.http
-      .put<Flower>(`${this.API_URL}/flowers`, flower, this.requestHeaders)
+      .put<Flower>(
+        `${this.API_URL}/flowers/${flowerId}`,
+        formData,
+        this.requestHeaders
+      )
       .pipe(
         catchError((error) => {
-          return this.handleError(error, () => this.updateFlower(flower));
+          return this.handleError(error, () =>
+            this.updateFlower(flowerId, formData)
+          );
         })
       );
   }

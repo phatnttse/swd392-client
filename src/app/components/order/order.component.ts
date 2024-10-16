@@ -51,6 +51,7 @@ export class OrderComponent implements OnInit {
   totalAmount: number = 0;
   selectedPaymentMethod: string = '';
   statusOrder: number = 0; // 0: Chưa đặt hàng, 1: Đặt hàng thành công, 2: Đặt hàng thất bại
+  isBalanceInsufficient: boolean = false; // Kiểm tra số dư ví có đủ để thanh toán không
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,8 +66,7 @@ export class OrderComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(10),
-          Validators.maxLength(10),
+          Validators.pattern(/^(84|0[3|5|7|8|9])[0-9]{9}$/),
         ],
       ],
       deliveryAddress: ['', [Validators.required, Validators.minLength(10)]],
@@ -87,6 +87,7 @@ export class OrderComponent implements OnInit {
       (totalAmount: number) => (this.totalAmount = totalAmount)
     );
     this.userAccount = this.authService.currentUser;
+    this.checkBalance();
   }
   placeOrder() {
     debugger;
@@ -140,6 +141,10 @@ export class OrderComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.cartService.clearCart();
+          this.cartService.totalAmountSubject.next(0);
+          this.cartService.cartDataSource.next([]);
+          this.cartService.totalQuantitySubject.next(0);
+          this.orderForm.reset();
           this.statusOrder = 1;
         },
         error: (error: HttpErrorResponse) => {
@@ -148,6 +153,12 @@ export class OrderComponent implements OnInit {
         },
       });
   }
+  checkBalance(): void {
+    if (this.userAccount && this.totalAmount) {
+      this.isBalanceInsufficient = this.userAccount.balance < this.totalAmount;
+    }
+  }
+
   retryOrder() {
     this.statusOrder = 0;
   }

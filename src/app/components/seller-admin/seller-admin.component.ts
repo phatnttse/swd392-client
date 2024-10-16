@@ -20,6 +20,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, Observable, shareReplay } from 'rxjs';
 import { UserAccount } from '../../models/account.model';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
+import { ProductService } from '../../services/product.service';
+import { Flower } from '../../models/flower.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface sidebarMenu {
   link: string;
@@ -69,30 +73,55 @@ export class SellerAdminComponent {
   constructor(
     private breakpointObserver: BreakpointObserver,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cartService: CartService,
+    private productService: ProductService
   ) {}
 
   ngOnInit(): void {
     this.userAccount = this.authService.currentUser;
+    if (this.authService.isLoggedIn) {
+      this.getFlowersByUserId(this.userAccount?.id!);
+    }
   }
 
   btnLogOut() {
     this.authService.logout();
     this.authService.userDataSource.next(null);
+    this.cartService.cartDataSource.next([]);
+    this.cartService.totalAmountSubject.next(0);
+    this.cartService.totalQuantitySubject.next(0);
     this.router.navigate(['/signin']);
+  }
+
+  // Lấy danh sách hoa và lưu vào BehaviorSubject
+  getFlowersByUserId(userId: number): void {
+    this.productService.getFlowersByUserId(userId).subscribe({
+      next: (response: Flower[]) => {
+        this.productService.flowerByUserDataSource.next(response);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+      },
+    });
   }
 
   routerLinkActive = 'activelink';
   sellerChannelMenu: sidebarMenu[] = [
     {
       link: '/seller-channel',
-      icon: 'bar_chart',
+      icon: 'storefront',
       menu: 'Dashboard',
     },
     {
       link: '/seller-channel/product-management',
       icon: 'inventory',
       menu: 'Quản lý sản phẩm',
+    },
+    {
+      link: '/seller-channel/order-management',
+      icon: 'receipt_long',
+      menu: 'Quản lý đơn hàng',
     },
   ];
 

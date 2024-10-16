@@ -16,6 +16,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { HeaderComponent } from '../../layouts/header/header.component';
+import { GetCartByUserResponse } from '../../models/cart.model';
+import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -41,7 +43,8 @@ export class SignInComponent {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cartService: CartService
   ) {
     this.formLogin = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -76,12 +79,12 @@ export class SignInComponent {
 
     this.authService.loginWithPassword(email, password).subscribe({
       next: (response) => {
-        if (this.authService.isAdmin) {
-          this.router.navigate(['admin']);
-        } else {
-          this.router.navigate(['']);
-        }
         this.toastr.success(response.message, 'Success', { progressBar: true });
+        this.getCartByUser();
+
+        setTimeout(() => {
+          this.authService.redirectLogin();
+        }, 200);
       },
 
       error: (error: HttpErrorResponse) => {
@@ -89,6 +92,22 @@ export class SignInComponent {
           progressBar: true,
         });
         console.error('Error during login:', error);
+      },
+    });
+  }
+
+  // Lấy giỏ hàng ban đầu và phân phối dữ liệu
+  getCartByUser() {
+    this.cartService.getCartByUser().subscribe({
+      next: (response: GetCartByUserResponse) => {
+        if (response.code === 200 && response.data) {
+          this.cartService.cartDataSource.next(response.data);
+          this.cartService.updateTotalQuantity(response.data);
+          this.cartService.updateTotalAmount(response.data);
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
       },
     });
   }

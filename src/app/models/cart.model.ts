@@ -10,7 +10,7 @@ export interface CartItem {
   flowerPrice: number;
   flowerImageUrl: string;
   eventType: string;
-  stockBalance: number;
+  stockQuantity: number;
   address: string;
   status: FlowerListingStatus;
 }

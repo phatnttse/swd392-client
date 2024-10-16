@@ -54,8 +54,7 @@
                   <mat-error class="fs-14">
                     {{ "Order.PhoneRequired" | translate }}
                   </mat-error>
-                  } @if(orderForm.get('phone')!.hasError('minlength') ||
-                  orderForm.get('phone')!.hasError('maxlength')) {
+                  } @if(orderForm.get('phone')!.hasError('pattern')) {
                   <mat-error class="fs-14">
                     {{ "Order.PhoneInvalid" | translate }}
                   </mat-error>
@@ -222,7 +221,10 @@
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
-                    <mat-radio-button value="WALLET">
+                    <mat-radio-button
+                      value="WALLET"
+                      [disabled]="isBalanceInsufficient"
+                    >
                       {{ "Order.PaymentByWallet" | translate }}
                     </mat-radio-button>
                     <div class="fw-bold d-flex align-items-center">
@@ -239,19 +241,6 @@
                     <img
                       width="60"
                       src="./../../../assets/images/wallet-payment-svg.svg"
-                      alt=""
-                    />
-                  </div>
-                  <hr />
-                  <div
-                    class="d-flex align-items-center justify-content-between"
-                  >
-                    <mat-radio-button value="PAYOS">{{
-                      "Order.PaymentByPayOs" | translate
-                    }}</mat-radio-button>
-                    <img
-                      width="60"
-                      src="./../../../assets/images/payos-logo.svg"
                       alt=""
                     />
                   </div>
@@ -301,7 +290,7 @@
           </button>
           <button
             mat-button
-            routerLink="/order-tracking"
+            routerLink="/order-history"
             class="btn btn-sm btn-outline-black"
             color="accent"
             style="font-size: 20px"

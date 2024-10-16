@@ -1,3 +1,4 @@
+import { CategoryService } from './../../services/category.service';
 import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { ConvertedCategory } from '../../models/category.model';
 
 @Component({
   selector: 'app-seller-profile',
@@ -35,13 +37,15 @@ import { TruncatePipe } from '../../pipes/truncate.pipe';
 export class SellerProfileComponent {
   listFlower: Flower[] | null = null; // Danh sách hoa
   sellerInfo: any = null; // Thông tin người bán
+  listCategory: ConvertedCategory[] = []; // Danh sách danh mục
 
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private router: Router,
     private cartService: CartService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +56,11 @@ export class SellerProfileComponent {
         this.getFlowersByUserId(userId);
       }
     });
+    this.categoryService.convertedCategoryData$.subscribe(
+      (data: ConvertedCategory[]) => {
+        this.listCategory = data;
+      }
+    );
   }
 
   getFlowersByUserId(userId: number): void {

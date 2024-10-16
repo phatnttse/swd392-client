@@ -18,6 +18,7 @@ import { AppConfigurationService } from './services/configuration.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { SellerChannelRoutes } from './components/seller-admin/seller-channel-routes';
 import { AdminRoutes } from './components/seller-admin/admin-routes';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 // Hàm khởi tạo ứng dụng
 const appInitializerFn = (appConfigService: AppConfigurationService) => {
@@ -48,6 +49,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(withFetch()),
     provideToastr(),
+    provideNativeDateAdapter(),
 
     // Cấu hình Firebase
     provideFirebaseApp(() =>

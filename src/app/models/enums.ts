@@ -38,3 +38,31 @@ export enum OrderStatus {
   REFUNDED = 'REFUNDED',
   PARTIALLY_DELIVERED = 'PARTIALLY_DELIVERED',
 }
+export enum WalletLogStatus {
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+  PENDING = 'PENDING',
+  EXPIRED = 'EXPIRED',
+}
+
+export enum WalletLogActor {
+  SELLER = 'SELLER',
+  BUYER = 'BUYER',
+  ADMIN = 'ADMIN',
+  DEPOSITOR = 'DEPOSITOR',
+}
+export enum TransactionType {
+  ORDER = 'ORDER',
+  DEPOSIT = 'DEPOSIT',
+  WITHDRAW = 'WITHDRAW',
+}
+
+export enum OrderDetailStatus {
+  PENDING = 'PENDING',
+  PREPARING = 'PREPARING',
+  SHIPPED = 'SHIPPED',
+  DELIVERED = 'DELIVERED',
+  BUYER_CANCELED = 'BUYER_CANCELED',
+  SELLER_CANCELED = 'SELLER_CANCELED',
+  REFUNDED = 'REFUNDED',
+}

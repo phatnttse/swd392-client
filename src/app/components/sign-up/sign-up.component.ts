@@ -19,6 +19,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-sign-up',
@@ -35,6 +36,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
     TranslateModule,
     HeaderComponent,
     FooterComponent,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
@@ -42,6 +44,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 export class SignUpComponent {
   formSignUp: FormGroup;
   hide = signal(true); // Ẩn hiện mật khẩu
+  loadingBtn = signal(false);
 
   // Mảng các lựa chọn giới tính
   genders = [
@@ -70,6 +73,8 @@ export class SignUpComponent {
       this.formSignUp.markAllAsTouched();
       return;
     }
+    this.loadingBtn.set(true);
+
     const email = this.formSignUp.get('email')?.value;
     const password = this.formSignUp.get('password')?.value;
     const name = this.formSignUp.get('name')?.value;
@@ -79,6 +84,7 @@ export class SignUpComponent {
       .registerAccount(email, password, name, accountGender)
       .subscribe({
         next: (response: any) => {
+          this.loadingBtn.set(false);
           if (response.status === 201) {
             this.router.navigate(['/signin']);
             this.toastr.info(
@@ -91,6 +97,7 @@ export class SignUpComponent {
           }
         },
         error: (errorResponse: HttpErrorResponse) => {
+          this.loadingBtn.set(false);
           this.toastr.warning(
             errorResponse.error.error,
             errorResponse.error.message,

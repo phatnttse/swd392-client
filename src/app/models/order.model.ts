@@ -1,7 +1,10 @@
 import { BaseResponse } from './base.model';
+import { OrderDetailStatus, OrderStatus } from './enums';
 import { Flower } from './flower.model';
+import { PaginatedResponse } from './paginated.model';
 
 export interface OrderDetail {
+  id: number;
   flowerListing: Flower;
   quantity: number;
   price: number;
@@ -23,4 +26,27 @@ export interface Order {
   createdAt: Date;
 }
 
+export interface OrderSummary {
+  id: number;
+  note: string;
+  buyerName: string;
+  buyerPhone: string;
+  buyerEmail: string;
+  buyerAddress: string;
+}
+
+export interface OrderByAccount {
+  id: number;
+  flowerListing: Flower;
+  orderSummary: OrderSummary;
+  quantity: number;
+  price: number;
+  status: OrderDetailStatus;
+  createAt: Date;
+}
+
 export interface OrderResponse extends BaseResponse<Order[]> {}
+export interface PaginatedOrderByAccountResponse
+  extends PaginatedResponse<OrderByAccount[]> {}
+export interface OrderByAccountResponse
+  extends BaseResponse<PaginatedOrderByAccountResponse> {}

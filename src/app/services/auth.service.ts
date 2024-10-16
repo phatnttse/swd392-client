@@ -33,6 +33,10 @@ export class AuthService {
   public userDataSource = new BehaviorSubject<any>(null);
   userData$ = this.userDataSource.asObservable();
 
+  reset() {
+    this.logout();
+  }
+
   constructor(
     private auth: Auth,
     private router: Router,
@@ -69,7 +73,7 @@ export class AuthService {
       .pipe(map((response: any) => this.processLoginResponse(response)));
   }
 
-  redirectLoginUser() {
+  redirectLogin() {
     const redirect =
       this.loginRedirectUrl && this.loginRedirectUrl !== '/'
         ? this.loginRedirectUrl
@@ -163,6 +167,7 @@ export class AuthService {
             };
             this.localStorage.savePermanentData(user, DBkeys.CURRENT_USER);
             this.userDataSource.next(user);
+            this.reevaluateLoginStatus(user);
           }
         },
         error: (error: HttpErrorResponse) => {
@@ -193,14 +198,13 @@ export class AuthService {
     this.previousIsLoggedInCheck = isLoggedIn;
   }
 
-  async logout() {
+  logout() {
     this.localStorage.deleteData(DBkeys.ACCESS_TOKEN);
     this.localStorage.deleteData(DBkeys.REFRESH_TOKEN);
     this.localStorage.deleteData(DBkeys.TOKEN_EXPIRES_IN);
     this.localStorage.deleteData(DBkeys.CURRENT_USER);
-
     this.localStorage.clearAllStorage();
-
+    this.userDataSource.next(null);
     this.reevaluateLoginStatus();
   }
 

@@ -78,7 +78,7 @@
     "OrderDetails": "Chi tiết đơn hàng",
     "Phone": "Số điện thoại",
     "PhoneRequired": "Số điện thoại không được trống",
-    "PhoneInvalid": "Số điện thoại phải đúng 10 số",
+    "PhoneInvalid": "Số điện thoại không hợp lệ",
     "Address": "Địa chỉ",
     "AddressRequired": "Địa chỉ không được trống",
     "AddressInvalid": "Địa chỉ tổi thiểu 10 ký tự",
