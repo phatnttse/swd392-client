@@ -68,15 +68,16 @@ export class SignUpComponent {
   // Đăng ký tài khoản
   btnSignUp() {
     if (this.formSignUp.invalid) {
-      if (
-        this.formSignUp.get('password')?.value !==
-        this.formSignUp.get('repeatPassword')?.value
-      ) {
-        this.toastr.warning('Enter repeat password mismatch', 'Warning', {
-          progressBar: true,
-        });
-      }
       this.formSignUp.markAllAsTouched();
+      return;
+    }
+    if (
+      this.formSignUp.get('password')?.value !==
+      this.formSignUp.get('repeatPassword')?.value
+    ) {
+      this.toastr.warning('Enter repeat password mismatch', 'Warning', {
+        progressBar: true,
+      });
       return;
     }
     this.loadingBtn.set(true);
@@ -95,6 +96,7 @@ export class SignUpComponent {
             this.router.navigate(['/signin']);
             this.toastr.info(response.message, 'Notification', {
               progressBar: true,
+              timeOut: 6000,
             });
           }
         },
