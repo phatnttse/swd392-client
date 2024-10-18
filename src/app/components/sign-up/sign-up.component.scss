@@ -1,6 +1,18 @@
-.content {
-  padding: 9rem 0;
+.sign-up-section {
+  padding-top: 9rem;
+  padding-bottom: 4rem;
 }
 .forgot-pass {
   font-size: 0.9rem;
+}
+
+@media screen and (max-width: 768px) {
+  .sign-up-section {
+    padding-top: 12rem;
+  }
+}
+@media screen and (max-width: 360px) {
+  .sign-up-section {
+    padding-top: 18rem;
+  }
 }

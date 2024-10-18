@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminGuard } from '../../guards/guards/admin.guard';
 
 export const AdminRoutes: Routes = [
   {
@@ -8,6 +9,8 @@ export const AdminRoutes: Routes = [
         (m) => m.SellerAdminComponent
       );
     },
+    canActivate: [AdminGuard],
+    canActivateChild: [AdminGuard],
     children: [],
   },
 ];

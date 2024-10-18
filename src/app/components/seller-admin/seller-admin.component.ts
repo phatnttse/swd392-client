@@ -24,6 +24,8 @@ import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
 import { Flower } from '../../models/flower.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { OrderService } from '../../services/order.service';
+import { OrderByAccountResponse } from '../../models/order.model';
 
 interface sidebarMenu {
   link: string;
@@ -75,13 +77,15 @@ export class SellerAdminComponent {
     public authService: AuthService,
     private router: Router,
     private cartService: CartService,
-    private productService: ProductService
+    private productService: ProductService,
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
     this.userAccount = this.authService.currentUser;
     if (this.authService.isLoggedIn) {
       this.getFlowersByUserId(this.userAccount?.id!);
+      this.getOrdersBySeller();
     }
   }
 
@@ -104,6 +108,22 @@ export class SellerAdminComponent {
         console.error(error);
       },
     });
+  }
+
+  // Lấy danh sách đơn hàng theo người bán
+  getOrdersBySeller() {
+    this.orderService
+      .getOrdersBySeller('', 'desc', 'createdAt', 0, 8, '', '', '')
+      .subscribe({
+        next: (response: OrderByAccountResponse) => {
+          if (response.success) {
+            this.orderService.orderBySellerDataSource.next(response);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
+        },
+      });
   }
 
   routerLinkActive = 'activelink';

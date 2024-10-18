@@ -1,5 +1,51 @@
-import { CanActivateChildFn } from '@angular/router';
+import { Injectable } from '@angular/core';
+import {
+  CanActivate,
+  CanActivateChild,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
-export const adminGuard: CanActivateChildFn = (childRoute, state) => {
-  return true;
-};
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminGuard implements CanActivate, CanActivateChild {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
+
+  // CanActivate: Bảo vệ các route chính
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
+    if (this.authService.isAdmin && this.authService.isLoggedIn) {
+      return true;
+    } else {
+      this.authService.loginRedirectUrl = state.url;
+      this.router.navigate(['/signin']);
+      this.toastr.info('Đăng nhập để tiếp tục', 'Thông báo');
+      return false;
+    }
+  }
+
+  // CanActivateChild: Bảo vệ các route con
+  canActivateChild(
+    childRoute: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
+    if (this.authService.isAdmin && this.authService.isLoggedIn) {
+      return true;
+    } else {
+      this.authService.loginRedirectUrl = state.url;
+      this.router.navigate(['/signin']);
+      this.toastr.info('Đăng nhập để tiếp tục', 'Thông báo');
+      return false;
+    }
+  }
+}

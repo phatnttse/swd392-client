@@ -3,6 +3,7 @@ import {
   APP_INITIALIZER,
   ApplicationConfig,
   importProvidersFrom,
+  Injector,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter, RouterModule } from '@angular/router';
@@ -11,7 +12,6 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideToastr } from 'ngx-toastr';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { FIRE_BASE } from './configurations/firebase.config';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { AppConfigurationService } from './services/configuration.service';
@@ -52,11 +52,12 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
 
     // Cấu hình Firebase
-    provideFirebaseApp(() =>
-      initializeApp({
-        ...FIRE_BASE.firebaseConfig,
-      })
-    ),
+    provideFirebaseApp((injector: Injector) => {
+      const appConfigService = injector.get(AppConfigurationService);
+      return initializeApp({
+        ...appConfigService.getConfig('firebaseConfig'),
+      });
+    }),
     provideAuth(() => getAuth()),
 
     // Cấu hình APP_INITIALIZER để tải hàm khởi tạo
