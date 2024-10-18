@@ -1,11 +1,7 @@
+import { UserAccount } from './account.model';
 import { FlowerListingStatus } from './enums';
 import { PaginatedResponse } from './paginated.model';
 
-export interface User {
-  id: number;
-  name: string;
-  avatar: string;
-}
 export interface Category {
   id: number;
   name: string;
@@ -15,7 +11,7 @@ export interface Category {
 }
 export interface Flower {
   id: number;
-  user: User;
+  user: UserAccount;
   name: string;
   description: string;
   address: string;
@@ -24,6 +20,8 @@ export interface Flower {
   categories: Category[];
   imageUrl: string;
   status: FlowerListingStatus;
+  views: number;
+  rejectReason: string;
   createdAt: string;
   updatedAt: string;
   deleted: boolean;

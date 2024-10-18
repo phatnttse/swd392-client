@@ -12,9 +12,8 @@ import { CategoryService } from '../../services/category.service';
 import { ConvertedCategory, FlowerCategory } from '../../models/category.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Utilities } from '../../services/utilities';
 import { ProductService } from '../../services/product.service';
-import { OrderService } from '../../services/order.service';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-header',
@@ -38,7 +37,7 @@ export class HeaderComponent implements OnInit {
   totalCartItem: number = 0; // Tổng số lượng sản phẩm trong giỏ hàng
   totalAmount: number = 0; // Tổng tiền trong giỏ hàng
   listCategory: FlowerCategory[] = []; // Danh sách danh mục
-  convertedCategories: any[] = []; // Danh sách danh mục đã chuyển đổi
+  convertedCategories: ConvertedCategory[] = []; // Danh sách danh mục đã chuyển đổi
   searchValue: string = ''; // Giá trị tìm kiếm
 
   constructor(
@@ -48,7 +47,7 @@ export class HeaderComponent implements OnInit {
     private appConfig: AppConfigurationService,
     private router: Router,
     private productService: ProductService,
-    private orderService: OrderService
+    public statusService: StatusService
   ) {}
 
   ngOnInit(): void {
@@ -77,15 +76,18 @@ export class HeaderComponent implements OnInit {
       (categoryData: ConvertedCategory[]) => {
         if (categoryData) {
           this.convertedCategories = categoryData;
-          console.log(this.convertedCategories);
         }
       }
     );
-    this.listLanguage = this.appConfig['Config_Language'];
-    this.defaultLang = this.listLanguage[0];
+    this.listLanguage = this.appConfig['Config_Language'].filter(
+      (lang: any) => lang.isActive === 1
+    );
+    this.statusService.statusLanguage$.subscribe((lang) => {
+      this.defaultLang = lang ? lang : this.listLanguage[0];
+    });
   }
 
-  // Chuyển đến trang chi tiết sản phẩm
+  // Chuyển đến trang sản phẩm theo danh mục
   goToProductListPageByCategory(categoryId: number) {
     this.router.navigate(['/products'], {
       queryParams: { c: categoryId },
@@ -105,18 +107,14 @@ export class HeaderComponent implements OnInit {
   // Thay đổi ngôn ngữ
   btnChangeLang(lang: any) {
     this.appConfig.setLanguageDefault(lang.id);
-    this.defaultLang = lang;
+    this.statusService.statusLanguageSource.next(lang);
   }
 
   // Đăng xuất
   btnLogOut() {
-    debugger;
     this.authService.logout();
-    this.cartService.totalAmountSubject.next(0);
-    this.cartService.cartDataSource.next([]);
-    this.cartService.totalQuantitySubject.next(0);
-    this.productService.flowerByUserDataSource.next([]);
-    this.orderService.orderBySellerDataSource.next([]);
+    this.cartService.reset();
+    this.productService.reset();
     this.router.navigate(['/signin']);
   }
 }

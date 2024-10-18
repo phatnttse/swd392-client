@@ -66,3 +66,9 @@ export enum OrderDetailStatus {
   SELLER_CANCELED = 'SELLER_CANCELED',
   REFUNDED = 'REFUNDED',
 }
+
+export enum NonProcessOrderStatus {
+  BUYER_CANCELED = 'BUYER_CANCELED',
+  SELLER_CANCELED = 'SELLER_CANCELED',
+  REFUNDED = 'REFUNDED',
+}

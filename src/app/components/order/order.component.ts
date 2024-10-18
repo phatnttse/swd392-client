@@ -52,6 +52,7 @@ export class OrderComponent implements OnInit {
   selectedPaymentMethod: string = '';
   statusOrder: number = 0; // 0: Chưa đặt hàng, 1: Đặt hàng thành công, 2: Đặt hàng thất bại
   isBalanceInsufficient: boolean = false; // Kiểm tra số dư ví có đủ để thanh toán không
+  isDisabledBtn: boolean = false; // Kiểm tra xem nút đặt hàng có bị disable không
 
   constructor(
     private formBuilder: FormBuilder,
@@ -90,7 +91,6 @@ export class OrderComponent implements OnInit {
     this.checkBalance();
   }
   placeOrder() {
-    debugger;
     if (this.orderForm.invalid) {
       this.orderForm.markAllAsTouched();
       if (this.orderForm.get('paymentMethod')?.invalid) {
@@ -156,6 +156,7 @@ export class OrderComponent implements OnInit {
   checkBalance(): void {
     if (this.userAccount && this.totalAmount) {
       this.isBalanceInsufficient = this.userAccount.balance < this.totalAmount;
+      this.isDisabledBtn = this.isBalanceInsufficient;
     }
   }
 

@@ -46,24 +46,4 @@ export class ResetPasswordComponent {
       confirmPassword: ['', Validators.required],
     });
   }
-
-  onSubmit() {
-    const password = this.resetPasswordForm.get('password')?.value;
-    const confirmPassword =
-      this.resetPasswordForm.get('confirmPassword')?.value;
-    if (password != confirmPassword) {
-      this.toastr.error(
-        'Mật khẩu nhập lại phải trùng khớp với mật khẩu đã nhập!'
-      );
-    }
-
-    this.accountService.resetPassword(password, confirmPassword).subscribe(
-      (response) => {
-        this.toastr.success('Mật khẩu mới đã được cập nhật!');
-      },
-      (error) => {
-        this.toastr.error('Có vấn đề khi cập nhật mật khẩu mới!');
-      }
-    );
-  }
 }

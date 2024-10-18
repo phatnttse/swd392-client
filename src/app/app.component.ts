@@ -107,6 +107,7 @@ export class AppComponent implements OnInit {
         this.categoryService.convertedCategoryDataSource.next(
           convertedCategories
         );
+        this.categoryService.categoryDataSource.next(response);
       },
       error: (error: HttpErrorResponse) => {
         console.error(error);

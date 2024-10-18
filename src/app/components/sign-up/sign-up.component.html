@@ -1,7 +1,7 @@
 @defer () {
 <app-header></app-header>
 
-<div class="content">
+<div class="content sign-up-section">
   <div class="container">
     <div class="row">
       <div class="col-md-6 order-md-2">
@@ -45,25 +45,27 @@
                 </mat-error>
                 }
               </mat-form-field>
-              <mat-form-field class="w-100" appearance="outline">
-                <mat-label style="font-size: 14px">{{
-                  "Sign.FullName" | translate
-                }}</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  required
-                  formControlName="name"
-                  [class.is-invalid]=""
-                />
-                @if (formSignUp.get('name')?.hasError('required')) {
-                <mat-error style="font-size: 12px">
-                  {{ "Sign.NameRequired" | translate }}
-                </mat-error>
-                }
-              </mat-form-field>
 
               <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label style="font-size: 14px">{{
+                      "Sign.FullName" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      type="text"
+                      required
+                      formControlName="name"
+                      [class.is-invalid]=""
+                    />
+                    @if (formSignUp.get('name')?.hasError('required')) {
+                    <mat-error style="font-size: 12px">
+                      {{ "Sign.NameRequired" | translate }}
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
                 <div class="col-md-6">
                   <mat-form-field class="w-100" appearance="outline">
                     <mat-label style="font-size: 14px">
@@ -71,9 +73,7 @@
                     >
                     <mat-select formControlName="accountGender">
                       @for (gender of genders; track gender) {
-                      <mat-option [value]="gender.value">{{
-                        gender.viewValue
-                      }}</mat-option>
+                      <mat-option [value]="gender">{{ gender }}</mat-option>
                       }
                     </mat-select>
                     @if (formSignUp.get('accountGender')?.hasError('required'))
@@ -84,41 +84,71 @@
                     }
                   </mat-form-field>
                 </div>
-                <div class="col-md-6">
-                  <mat-form-field class="w-100" appearance="outline">
-                    <mat-label style="font-size: 14px">{{
-                      "Sign.Password" | translate
-                    }}</mat-label>
-                    <input
-                      matInput
-                      [type]="hide() ? 'password' : 'text'"
-                      required
-                      formControlName="password"
-                      [class.is-invalid]="
-                        formSignUp.get('password')?.invalid &&
-                        formSignUp.get('password')?.touched
-                      "
-                    />
-                    <button
-                      mat-icon-button
-                      type="button"
-                      matSuffix
-                      (click)="btnHidePassword($event)"
-                      [attr.aria-label]="'Hide password'"
-                      [attr.aria-pressed]="hide()"
-                    >
-                      <mat-icon color="primary" class="fs-18">{{
-                        hide() ? "visibility_off" : "visibility"
-                      }}</mat-icon>
-                    </button>
-                    @if (formSignUp.get('password')?.hasError('required')) {
-                    <mat-error style="font-size: 12px">
-                      {{ "Sign.PasswordRequired" | translate }}
-                    </mat-error>
-                    }
-                  </mat-form-field>
-                </div>
               </div>
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label style="font-size: 14px">{{
+                  "Sign.Password" | translate
+                }}</mat-label>
+                <input
+                  matInput
+                  [type]="hidePassword() ? 'password' : 'text'"
+                  required
+                  formControlName="password"
+                  [class.is-invalid]="
+                    formSignUp.get('password')?.invalid &&
+                    formSignUp.get('password')?.touched
+                  "
+                />
+                <button
+                  mat-icon-button
+                  type="button"
+                  matSuffix
+                  (click)="btnHidePassword($event)"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hidePassword()"
+                >
+                  <mat-icon color="primary" class="fs-18">{{
+                    hidePassword() ? "visibility_off" : "visibility"
+                  }}</mat-icon>
+                </button>
+                @if (formSignUp.get('password')?.hasError('required')) {
+                <mat-error style="font-size: 12px">
+                  {{ "Sign.PasswordRequired" | translate }}
+                </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label style="font-size: 14px">{{
+                  "RepeatPassword" | translate
+                }}</mat-label>
+                <input
+                  matInput
+                  [type]="hideRepeatPassword() ? 'password' : 'text'"
+                  required
+                  formControlName="repeatPassword"
+                  [class.is-invalid]="
+                    formSignUp.get('repeatPassword')?.invalid &&
+                    formSignUp.get('repeatPassword')?.touched
+                  "
+                />
+                <button
+                  mat-icon-button
+                  type="button"
+                  matSuffix
+                  (click)="btnHideRepeatPassword($event)"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hideRepeatPassword()"
+                >
+                  <mat-icon color="primary" class="fs-18">{{
+                    hideRepeatPassword() ? "visibility_off" : "visibility"
+                  }}</mat-icon>
+                </button>
+                @if (formSignUp.get('repeatPassword')?.hasError('required')) {
+                <mat-error style="font-size: 12px">
+                  {{ "RepeatPasswordRequired" | translate }}
+                </mat-error>
+                }
+              </mat-form-field>
 
               <div class="d-flex mb-3 align-items-center justify-content-end">
                 <span class="ml-auto"

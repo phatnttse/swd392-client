@@ -13,6 +13,7 @@ export class AppConfigurationService {
   private API_URL: string = '';
   private Config_Language: any = []; // Cấu hình ngôn ngữ
   public static readonly Default_Language: string = 'vi'; // Ngôn ngữ mặc định
+  private firebaseConfig: any; // Cấu hình firebase
 
   constructor(
     private http: HttpClient,
@@ -29,6 +30,7 @@ export class AppConfigurationService {
         this.config = config;
         this.API_URL = this.config.API_URL;
         this.Config_Language = this.config.Config_Language;
+        this.firebaseConfig = this.config.firebaseConfig;
       })
       .catch((error: any) => {
         console.error('Error loading configuration file', error);
@@ -37,6 +39,10 @@ export class AppConfigurationService {
 
   getConfig(key: string): any {
     return this.config ? this.config[key] : null;
+  }
+
+  getFirebaseConfig(): any {
+    return this.firebaseConfig;
   }
 
   // Hàm thiết lập ngôn ngữ mặc định

@@ -1,7 +1,10 @@
 import { BaseResponse } from './base.model';
 import { OrderDetailStatus, OrderStatus } from './enums';
 import { Flower } from './flower.model';
-import { PaginatedResponse } from './paginated.model';
+import {
+  PaginatedPageableResponse,
+  PaginatedResponse,
+} from './paginated.model';
 
 export interface OrderDetail {
   id: number;
@@ -47,6 +50,6 @@ export interface OrderByAccount {
 
 export interface OrderResponse extends BaseResponse<Order[]> {}
 export interface PaginatedOrderByAccountResponse
-  extends PaginatedResponse<OrderByAccount[]> {}
+  extends PaginatedPageableResponse<OrderByAccount> {}
 export interface OrderByAccountResponse
   extends BaseResponse<PaginatedOrderByAccountResponse> {}

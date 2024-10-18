@@ -105,7 +105,29 @@
     "Cancel": "Cancel",
     "AmountRequired": "Please enter the amount",
     "AmountInvalid": "Minimum top-up is 20,000₫",
-    "Amount": "Amount"
+    "Amount": "Amount",
+    "Add": "Added",
+    "Subtract": "Subtracted",
+    "Deposit": "Deposit",
+    "Withdraw": "Withdrawal",
+    "Unknown": "Unknown Transaction"
   },
-  "AddToCart": "Add to Cart"
+  "AddToCart": "Add to Cart",
+  "Support": "Support",
+  "SupportContent": "Get fast, free help from our friendly assistants",
+  "SaveChanges": "Save Changes",
+  "Joined": "Joined",
+  "Male": "Male",
+  "Female": "Female",
+  "Other": "Other",
+  "UploadImage": "Upload Image",
+  "Overview": "Overview",
+  "ChangePassword": "Change Password",
+  "CurrentPassword": "Current Password",
+  "CurrentPasswordRequired": "Current Password is required",
+  "NewPassword": "New Password",
+  "NewPasswordRequired": "New Password is required",
+  "RepeatPassword": "Repeat Password",
+  "RepeatPasswordRequired": "Repeat Password is required",
+  "PasswordMismatch": "Repeat password mismatch"
 }

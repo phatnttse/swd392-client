@@ -18,6 +18,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { GetCartByUserResponse } from '../../models/cart.model';
 import { CartService } from '../../services/cart.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -31,6 +32,7 @@ import { CartService } from '../../services/cart.service';
     TranslateModule,
     FooterComponent,
     HeaderComponent,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
@@ -38,6 +40,7 @@ import { CartService } from '../../services/cart.service';
 export class SignInComponent {
   formLogin: FormGroup; // Form đăng nhập
   hide = signal(true); // Ẩn hiện mật khẩu
+  loadingBtn = signal(false); // Trạng thái nút đăng ký
 
   constructor(
     private formBuilder: FormBuilder,
@@ -73,6 +76,7 @@ export class SignInComponent {
       this.formLogin.markAllAsTouched();
       return;
     }
+    this.loadingBtn.set(true);
 
     const email = this.formLogin.get('email')?.value;
     const password = this.formLogin.get('password')?.value;
@@ -84,10 +88,12 @@ export class SignInComponent {
 
         setTimeout(() => {
           this.authService.redirectLogin();
-        }, 200);
+          this.loadingBtn.set(false);
+        }, 400);
       },
 
       error: (error: HttpErrorResponse) => {
+        this.loadingBtn.set(false);
         this.toastr.warning(error.error.message, error.error.error, {
           progressBar: true,
         });

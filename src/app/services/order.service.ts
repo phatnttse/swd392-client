@@ -4,11 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
-import {
-  Order,
-  OrderByAccountResponse,
-  OrderResponse,
-} from '../models/order.model';
+import { OrderByAccountResponse, OrderResponse } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +13,8 @@ export class OrderService extends EndpointBase {
   API_URL: string = '';
 
   // Trạng thái của order
-  public orderBySellerDataSource = new BehaviorSubject<any>(null);
+  public orderBySellerDataSource =
+    new BehaviorSubject<OrderByAccountResponse | null>(null);
   orderBySeller$ = this.orderBySellerDataSource.asObservable();
 
   constructor(
@@ -66,15 +63,30 @@ export class OrderService extends EndpointBase {
       );
   }
 
-  getOrdersByAccount(): Observable<OrderResponse> {
+  getOrdersByAccount(
+    order: string,
+    sortBy: string,
+    pageNumber: number,
+    pageSize: number,
+    status: string
+  ): Observable<OrderByAccountResponse> {
+    let params = new HttpParams()
+      .set('order', order)
+      .set('sortBy', sortBy)
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString())
+      .set('status', status ?? '');
+
     return this.http
-      .get<OrderResponse>(
-        `${this.API_URL}/orders/by-account`,
-        this.requestHeaders
-      )
+      .get<OrderByAccountResponse>(`${this.API_URL}/orders/by-buyer`, {
+        params: params,
+        headers: this.requestHeaders.headers,
+      })
       .pipe(
         catchError((error) => {
-          return this.handleError(error, () => this.getOrdersByAccount());
+          return this.handleError(error, () =>
+            this.getOrdersByAccount(order, sortBy, pageNumber, pageSize, status)
+          );
         })
       );
   }
@@ -85,7 +97,9 @@ export class OrderService extends EndpointBase {
     sortBy: string,
     pageNumber: number,
     pageSize: number,
-    status: string[]
+    status: string,
+    startDate?: string, // Ngày bắt đầu (yyyy-mm-dd)
+    endDate?: string // Ngày kết thúc (yyyy-mm-dd)
   ): Observable<OrderByAccountResponse> {
     let params = new HttpParams()
       .set('search', searchString)
@@ -93,10 +107,17 @@ export class OrderService extends EndpointBase {
       .set('sortBy', sortBy)
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString())
-      .set('status', status.join(',') ?? []);
+      .set('status', status ?? '');
+
+    if (startDate) {
+      params = params.set('startDate', startDate);
+    }
+    if (endDate) {
+      params = params.set('endDate', endDate);
+    }
 
     return this.http
-      .get<OrderByAccountResponse>(`${this.API_URL}/orders/by-account`, {
+      .get<OrderByAccountResponse>(`${this.API_URL}/orders/by-seller`, {
         params: params,
         headers: this.requestHeaders.headers,
       })
@@ -109,7 +130,9 @@ export class OrderService extends EndpointBase {
               sortBy,
               pageNumber,
               pageSize,
-              status
+              status,
+              startDate,
+              endDate
             )
           );
         })

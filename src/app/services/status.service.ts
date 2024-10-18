@@ -14,4 +14,8 @@ export class StatusService {
   // Trạng thái tải dữ liệu của app
   public statusLoadingDataAppSource = new BehaviorSubject<boolean>(true);
   statusLoadingDataApp$ = this.statusLoadingDataAppSource.asObservable();
+
+  // Trạng thái ngôn ngữ
+  public statusLanguageSource = new BehaviorSubject<any>(null);
+  statusLanguage$ = this.statusLanguageSource.asObservable();
 }

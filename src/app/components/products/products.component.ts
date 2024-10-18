@@ -20,8 +20,6 @@ import { Flower, FlowerPaginated } from '../../models/flower.model';
 import { ProductService } from '../../services/product.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { CategoryService } from '../../services/category.service';
-import { LocalStoreManager } from '../../services/local-storage.service';
-import { DBkeys } from '../../services/db-keys';
 import { InsertUpdateCartResponse } from '../../models/cart.model';
 import { Utilities } from '../../services/utilities';
 import { CartService } from '../../services/cart.service';
@@ -68,9 +66,8 @@ export class ProductsComponent implements OnInit {
   sortBy: string = 'createdAt'; // Sắp xếp theo trường nào
   totalPages: number = 0; // Tổng số trang
   pageNumber: number = 0; // Số trang hiện tại
-  pageSize: number = 8; // Số lượng sản phẩm trên mỗi trang
+  pageSize: number = 16; // Số lượng sản phẩm trên mỗi trang
   categoryIds: number[] = []; // Danh sách id danh mục
-  numberOfElements: number = 0; // Số lượng sản phẩm hiện tại
   totalElements: number = 0; // Tổng số lượng sản phẩm
   currentPage: number = 0; // Trang hiện tại
   visiblePages: number[] = []; // Các trang hiển thị
@@ -82,7 +79,6 @@ export class ProductsComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
-    private localStorage: LocalStoreManager,
     private router: Router,
     private route: ActivatedRoute,
     private cartService: CartService,
@@ -130,7 +126,6 @@ export class ProductsComponent implements OnInit {
           this.pageNumber = flowerData.pageNumber;
           this.pageSize = flowerData.pageSize;
           this.totalPages = flowerData.totalPages;
-          this.numberOfElements = flowerData.numberOfElements;
           this.totalElements = flowerData.totalElements;
           this.visiblePages = this.generateVisiblePageArray(
             this.currentPage,
@@ -159,8 +154,6 @@ export class ProductsComponent implements OnInit {
     pageSize: number,
     categoryIds: number[]
   ) {
-    this.currentPage =
-      Number(this.localStorage.getData(DBkeys.CURRENT_PRODUCTS_PAGE)) || 0;
     this.productService
       .getFlowers(
         searchString,
@@ -176,7 +169,6 @@ export class ProductsComponent implements OnInit {
           this.pageNumber = response.pageNumber;
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
-          this.numberOfElements = response.numberOfElements;
           this.totalElements = response.totalElements;
           this.visiblePages = this.generateVisiblePageArray(
             this.currentPage,
@@ -192,14 +184,13 @@ export class ProductsComponent implements OnInit {
   // Lấy danh sách tất cả hoa
   getAllFlowers() {
     this.productService
-      .getFlowers('', 'desc', 'createdAt', 0, 8, [])
+      .getFlowers('', 'desc', 'createdAt', 0, 16, [])
       .subscribe({
         next: (response: FlowerPaginated) => {
           this.listFlower = response.content;
           this.pageNumber = response.pageNumber;
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
-          this.numberOfElements = response.numberOfElements;
           this.totalElements = response.totalElements;
           this.visiblePages = this.generateVisiblePageArray(
             this.currentPage,
@@ -221,17 +212,17 @@ export class ProductsComponent implements OnInit {
   // Xử lý khi thay đổi trang
   onPageChange(page: number) {
     this.currentPage = page < 0 ? 0 : page;
-    this.localStorage.savePermanentData(
-      String(page),
-      DBkeys.CURRENT_PRODUCTS_PAGE
-    );
     this.getFlowers(
       this.searchString,
       this.order,
       this.sortBy,
-      page,
+      this.currentPage,
       this.pageSize,
       this.categoryIds
+    );
+    this.visiblePages = this.generateVisiblePageArray(
+      this.currentPage,
+      this.totalPages
     );
   }
 
