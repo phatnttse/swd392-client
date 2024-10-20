@@ -20,10 +20,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, Observable, shareReplay } from 'rxjs';
 import { UserAccount } from '../../models/account.model';
 import { AuthService } from '../../services/auth.service';
-import { CartService } from '../../services/cart.service';
-import { ProductService } from '../../services/product.service';
 import { Flower } from '../../models/flower.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CartService } from '../../services/cart.service';
+import { ProductService } from '../../services/product.service';
 import { OrderService } from '../../services/order.service';
 import { OrderByAccountResponse } from '../../models/order.model';
 
@@ -125,7 +125,7 @@ export class SellerAdminComponent {
         },
       });
   }
-
+  
   routerLinkActive = 'activelink';
   sellerChannelMenu: sidebarMenu[] = [
     {
@@ -154,7 +154,12 @@ export class SellerAdminComponent {
     {
       link: '/admin/product-management',
       icon: 'inventory',
-      menu: 'Kho hàng',
+      menu: 'Quản lý kho hàng',
+    },
+    {
+      link: '/admin/category-management',
+      icon: 'list',
+      menu: 'Quản lý danh mục',
     },
   ];
 }
