@@ -67,7 +67,8 @@ export class OrderComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^(84|0[3|5|7|8|9])[0-9]{9}$/),
+          // Validators.pattern(/^(84|0[3|5|7|8|9])[0-9]{9}$/),
+          Validators.pattern(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g),
         ],
       ],
       deliveryAddress: ['', [Validators.required, Validators.minLength(10)]],

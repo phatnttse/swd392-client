@@ -15,11 +15,7 @@ export class AppConfigurationService {
   public static readonly Default_Language: string = 'vi'; // Ngôn ngữ mặc định
   private firebaseConfig: any; // Cấu hình firebase
 
-  constructor(
-    private http: HttpClient,
-    private translate: TranslateService,
-    private localStorage: LocalStoreManager
-  ) {}
+  constructor(private http: HttpClient, private translate: TranslateService) {}
 
   // Hàm tải cấu hình từ file config.json
   loadConfig(): Promise<void> {
@@ -65,8 +61,6 @@ export class AppConfigurationService {
         (translations: any) => {
           this.translate.setTranslation(config?.value || 'vi', translations);
           this.translate.use(config?.value || 'vi');
-
-          this.localStorage.savePermanentData(langID, DBkeys.LANG_ID);
           this.valueLangSource.next(config);
         },
         (error: any) => {
