@@ -1,216 +1,357 @@
-@defer () {
 <app-header></app-header>
-<form [formGroup]="profileForm" class="section-profile">
-  <div class="container">
-    <div class="main-body">
+
+<mat-toolbar color="primary">
+  <span>Profile Settings</span>
+</mat-toolbar>
+
+<div class="container section-profile">
+  <div class="row flex-lg-nowrap">
+    <!-- Sidebar Menu -->
+    <div class="col-12 col-lg-auto mb-3" style="width: 240px">
+      <mat-card>
+        <mat-nav-list>
+          <a
+            mat-list-item
+            class="d-flex justify-content-start align-items-center"
+            (click)="btnChangeStatusPage(0)"
+            [ngClass]="{ active: statusPage === 0 }"
+          >
+            <mat-icon class="icon-size">settings</mat-icon>
+            <span class="ms-2">{{ "Overview" | translate }}</span>
+          </a>
+          <a
+            mat-list-item
+            class="d-flex justify-content-start align-items-center"
+            (click)="btnChangeStatusPage(1)"
+            [ngClass]="{ active: statusPage === 1 }"
+          >
+            <mat-icon class="icon-size">key</mat-icon>
+            <span class="ms-2">{{ "ChangePassword" | translate }}</span>
+          </a>
+        </mat-nav-list>
+      </mat-card>
+    </div>
+
+    <!-- Profile and Form Section -->
+    <div class="col">
       <div class="row">
-        <!-- Avatar Section -->
-        <div class="col-lg-6 d-flex flex-column my-5">
-          <div class="card h-100">
-            <div class="card-body text-center">
-              <div style="position: relative; display: inline-block">
-                <img src="https://via.placeholder.com/150" alt="Admin" class="rounded-circle bg-primary" width="170"
-                  height="170" style="
-                    display: block;
-                    max-width: 100%;
-                    border-radius: 30%;
-                    object-fit: cover;
-                  " />
-                <button style="
-                    position: absolute;
-                    top: 100px;
-                    right: 10px;
-                    padding: 6px;
-                    background-color: #0f0f0f;
-                    cursor: pointer;
-                    z-index: 1;
-                    margin-top: 30px;
-                    border-radius: 100%;
-                    width: 30px;
-                    height: 30px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                  " type="button" class="rounded-circle">
-                  <i class="fa-solid fa-image" style="color: #fff; font-size: 15px"></i>
-                </button>
-              </div>
-              <div class="mt-3">
-                <h5>{{ userAccount?.name }}</h5>
-                <p class="mb-1 text-secondary">{{ userAccount?.role }}</p>
-                <!-- Đổi mật khẩu button -->
-                <div class="d-flex justify-content-center align-items-center">
-                  <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="account_balance_wallet">
-                  </mat-icon>
-                  <span style="margin-left: 8px">Số dư ví: {{ userAccount?.balance }}</span>
-                </div>
-                <button data-bs-toggle="modal" data-bs-target="#changePasswordModal" color="primary" class="btn mt-2"
-                  style="padding: 20px" mat-raised-button>
-                  Đổi mật khẩu
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Form Section -->
-        <div class="col-lg-6 mt-5 mb-1">
-          <div class="card">
-            <div class="card-body">
-              <!-- <div class="col-md-6">
-                                    <label for="name">Họ và tên</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Họ và tên">
-                                </div> -->
-              <mat-form-field class="w-100" appearance="outline">
-                <mat-label>Họ và tên</mat-label>
-                <input matInput type="text" id="name" formControlName="name" required [class.is-invalid]="
-                    profileForm.get('name')!.invalid &&
-                    profileForm.get('name')!.touched
-                  " />
-              </mat-form-field>
+        @if (statusPage === 0) {
+        <div class="col mb-3">
+          <mat-card>
+            <mat-card-content class="mt-2">
               <div class="row">
-                <div class="col-lg-6">
-                  <mat-form-field class="w-100" appearance="outline">
-                    <mat-label for="email">Email</mat-label>
-                    <input matInput type="email" id="email" formControlName="email" [class.is-invalid]="
-                        profileForm.get('email')!.invalid &&
-                        profileForm.get('email')!.touched
-                      " />
-                  </mat-form-field>
+                <!-- Profile Image Section -->
+                <div class="col-12 col-sm-auto mb-3">
+                  <div class="profile-img-container">
+                    <div class="profile-img">
+                      <img
+                        width="140"
+                        [src]="userAccount?.avatar"
+                        alt="Profile Image"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div class="col-lg-6">
-                  <mat-form-field class="w-100" appearance="outline">
-                    <mat-label for="phone">Số điện thoại</mat-label>
-                    <input matInput type="phone" id="phone" formControlName="phone" [class.is-invalid]="
-                        profileForm.get('phone')!.invalid &&
-                        profileForm.get('phone')!.touched
-                      " />
-                  </mat-form-field>
+
+                <!-- Profile Info Section -->
+                <div
+                  class="col d-flex flex-column flex-sm-row justify-content-between mb-3"
+                >
+                  <div>
+                    <h4>{{ userAccount?.name }}</h4>
+                    <p>{{ userAccount?.gender }}</p>
+                    <mat-divider class="mb-3"></mat-divider>
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      (click)="fileInput.click()"
+                    >
+                      <input
+                        type="file"
+                        #fileInput
+                        (change)="onFileSelected($event)"
+                        hidden
+                      />
+                      <mat-icon>camera_alt</mat-icon>
+                      {{ "UploadImage" | translate }}
+                    </button>
+                  </div>
+                  <div class="text-end">
+                    <mat-chip color="accent" selected class="mb-2">
+                      {{ userAccount?.role }}
+                    </mat-chip>
+                    <div>
+                      {{ "Joined" | translate }}
+                      {{ userAccount?.createAt | date : "yyyy-MM-dd" }}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="row">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label for="address">Địa chỉ</mat-label>
-                  <input matInput type="text" id="address" />
-                </mat-form-field>
+              <form [formGroup]="profileForm">
+                <div class="row mt-3">
+                  <div class="col-12 col-md-6 mb-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label> {{ "Sign.FullName" | translate }}</mat-label>
+                      <input
+                        matInput
+                        type="text"
+                        required
+                        formControlName="name"
+                        [class.is-invalid]="
+                          profileForm.get('name')?.invalid &&
+                          profileForm.get('name')?.touched
+                        "
+                        placeholder="Enter your name"
+                      />
+                      @if(profileForm.get('name')!.hasError('required')) {
+                      <mat-error class="fs-14">
+                        {{ "Sign.NameRequired" | translate }}
+                      </mat-error>
+                      }
+                    </mat-form-field>
+                    <mat-form-field class="w-100" appearance="outline">
+                      <mat-label>{{ "Order.Phone" | translate }}</mat-label>
+                      <input
+                        matInput
+                        type="phone"
+                        required
+                        formControlName="phone"
+                        [class.is-invalid]="
+                          profileForm.get('phone')?.invalid &&
+                          profileForm.get('phone')?.touched
+                        "
+                      />
+                      @if(profileForm.get('phone')!.hasError('required')) {
+                      <mat-error class="fs-14">
+                        {{ "Order.PhoneRequired" | translate }}
+                      </mat-error>
+                      } @if(profileForm.get('phone')!.hasError('pattern')) {
+                      <mat-error class="fs-14">
+                        {{ "Order.PhoneInvalid" | translate }}
+                      </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div class="col-12 col-md-6 mb-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Email</mat-label>
+                      <input
+                        matInput
+                        type="email"
+                        formControlName="email"
+                        [class.is-invalid]="
+                          profileForm.get('email')?.invalid &&
+                          profileForm.get('email')?.touched
+                        "
+                        placeholder="Enter your email"
+                      />
+                      @if (profileForm.get('email')?.hasError('required')) {
+                      <mat-error class="mat-error" style="font-size: 12px">
+                        {{ "Sign.EmailRequired" | translate }}
+                      </mat-error>
+                      } @if (profileForm.get('email')?.hasError('email')) {
+                      <mat-error class="mat-error" style="font-size: 12px">
+                        {{ "Sign.EmailInvalid" | translate }}
+                      </mat-error>
+                      }
+                    </mat-form-field>
+                    <mat-form-field class="w-100" appearance="outline">
+                      <mat-label style="font-size: 14px">
+                        {{ "Sign.Gender" | translate }}</mat-label
+                      >
+                      <mat-select formControlName="gender">
+                        @for (gender of genders; track gender) {
+                        <mat-option [value]="gender">{{ gender }}</mat-option>
+                        }
+                      </mat-select>
+                      @if (profileForm.get('gender')?.hasError('required')) {
+                      <mat-error class="mat-error" style="font-size: 12px">
+                        {{ "Sign.GenderRequired" | translate }}
+                      </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!-- Save Button -->
+                <div class="d-flex justify-content-end">
+                  <button
+                    mat-raised-button
+                    class="fs-16 p-24 text-white btn-success mb-2"
+                    type="button"
+                    extend
+                    color="primary"
+                    (click)="btnUpdateProfile()"
+                    [disabled]="loadingBtn().valueOf()"
+                  >
+                    {{ "SaveChanges" | translate }}
+                    <mat-icon>task_alt</mat-icon>
+                  </button>
+                </div>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        }@else if (statusPage === 1) {
+        <div class="col mb-3">
+          <mat-card>
+            <mat-card-content>
+              <div class="mb-4 d-flex align-items-center">
+                <h5 class="primary-color">
+                  {{ "ChangePassword" | translate }}
+                </h5>
+                <mat-icon style="font-size: 24px" class="ms-2 mb-2"
+                  >key</mat-icon
+                >
               </div>
 
-              <div class="example-button-row d-flex justify-content-center align-items-center">
-                <button color="primary" class="btn" style="padding: 20px" mat-raised-button>
-                  Lưu thay đổi
-                </button>
-              </div>
-            </div>
-          </div>
+              <form [formGroup]="changePasswordForm">
+                <div class="row mt-3">
+                  <div class="col-12 col-md-12 mb-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>{{ "CurrentPassword" | translate }}</mat-label>
+                      <input
+                        matInput
+                        type="password"
+                        [type]="hideCurrentPassword() ? 'password' : 'text'"
+                        formControlName="currentPassword"
+                        required
+                      />
+                      <button
+                        mat-icon-button
+                        type="button"
+                        matSuffix
+                        (click)="togglePasswordVisibility('current')"
+                      >
+                        <mat-icon>{{
+                          hideCurrentPassword()
+                            ? "visibility_off"
+                            : "visibility"
+                        }}</mat-icon>
+                      </button>
+                      @if
+                      (changePasswordForm.get('currentPassword')?.hasError('required'))
+                      {
+                      <mat-error class="mat-error" style="font-size: 12px">
+                        {{ "CurrentPasswordRequired" | translate }}
+                      </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>{{ "NewPassword" | translate }}</mat-label>
+                      <input
+                        matInput
+                        type="password"
+                        [type]="hideNewPassword() ? 'password' : 'text'"
+                        formControlName="newPassword"
+                        required
+                      />
+                      <button
+                        mat-icon-button
+                        type="button"
+                        matSuffix
+                        (click)="togglePasswordVisibility('new')"
+                      >
+                        <mat-icon>{{
+                          hideNewPassword() ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </button>
+                      @if
+                      (changePasswordForm.get('newPassword')?.hasError('required'))
+                      {
+                      <mat-error class="mat-error" style="font-size: 12px">
+                        {{ "NewPasswordRequired" | translate }}
+                      </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>{{ "RepeatPassword" | translate }}</mat-label>
+                      <input
+                        matInput
+                        type="password"
+                        [type]="hideRepeatPassword() ? 'password' : 'text'"
+                        formControlName="repeatPassword"
+                        required
+                      />
+                      <button
+                        mat-icon-button
+                        type="button"
+                        matSuffix
+                        (click)="togglePasswordVisibility('repeat')"
+                      >
+                        <mat-icon>{{
+                          hideRepeatPassword() ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </button>
+                      @if
+                      (changePasswordForm.get('repeatPassword')?.hasError('required'))
+                      {
+                      <mat-error class="mat-error" style="font-size: 12px">
+                        {{ "RepeatPasswordRequired" | translate }}
+                      </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!-- Save Button -->
+                <div class="d-flex justify-content-end">
+                  <button
+                    mat-raised-button
+                    class="fs-16 p-24 text-white btn-success mb-2"
+                    type="button"
+                    extend
+                    color="primary"
+                    (click)="btnChangePassword()"
+                    [disabled]="loadingBtn().valueOf()"
+                  >
+                    @if (loadingBtn()) {
+                    <mat-spinner diameter="24"></mat-spinner>
+                    }@else {
+                    {{ "SaveChanges" | translate }}
+                    }
+
+                    <mat-icon>task_alt</mat-icon>
+                  </button>
+                </div>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        }
+        <!-- Support Section -->
+        <div class="col-12 col-md-3 mb-3">
+          <mat-card class="p-5 mb-3">
+            <button
+              mat-raised-button
+              color="warn"
+              class="w-100"
+              (click)="btnLogOut()"
+            >
+              <mat-icon>exit_to_app</mat-icon> {{ "Header.LogOut" | translate }}
+            </button>
+          </mat-card>
+          <mat-card>
+            <mat-card-title class="text-center text-black fw-bold my-2">
+              {{ "Support" | translate }}
+            </mat-card-title>
+            <mat-card-content>
+              <p>{{ "SupportContent" | translate }}</p>
+              <button
+                routerLink="/contact"
+                mat-raised-button
+                color="primary"
+                class="d-block mx-auto"
+              >
+                {{ "Header.Contact" | translate }}
+              </button>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
-    </div>
-  </div>
-</form>
-<!-- wallet -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="changePasswordModalLabel">
-          Đổi mật khẩu
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-
-        <form [formGroup]="changePasswordForm">
-          <div class="mb-3">
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Nhập mật khẩu hiện tại</mat-label>
-              <input matInput type="password" required formControlName="currentPassword" [class.is-invalid]="
-                            changePasswordForm.get('currentPassword')?.invalid &&
-                            changePasswordForm.get('currentPassword')?.touched
-                          " />
-              @if (changePasswordForm.get('currentPassword')?.hasError('required')) {
-              <mat-error>Mật khẩu không được để trống</mat-error>
-              }
-            </mat-form-field>
-          </div>
-
-          <div class="mb-3">
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Nhập mật khẩu mới</mat-label>
-              <input matInput type="password" required formControlName="newPassword" [class.is-invalid]="
-                            changePasswordForm.get('newPassword')?.invalid &&
-                            changePasswordForm.get('newPassword')?.touched
-                          " />
-              @if (changePasswordForm.get('newPassword')?.hasError('required')) {
-              <mat-error>Mật khẩu không được để trống</mat-error>
-              }
-              @else if (changePasswordForm.get('newPassword')?.hasError('minlength')) {
-              <mat-error>Mật khẩu mới phải có ít nhất 8 ký tự</mat-error>
-              }
-              @else if (changePasswordForm.get('newPassword')?.hasError('pattern')) {
-              <mat-error>Mật khẩu mới phải bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một chữ số và
-                một ký tự đặc biệt</mat-error>
-              } @else if (changePasswordForm.hasError('mismatch') && changePasswordForm.get('newPassword')?.touched) {
-              <mat-error>Mật khẩu mới và xác nhận mật khẩu mới không khớp</mat-error>
-              }
-
-            </mat-form-field>
-          </div>
-
-          <div class="mb-3">
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Nhập lại mật khẩu mới</mat-label>
-              <input matInput type="password" required formControlName="confirmPassword" [class.is-invalid]="
-                            changePasswordForm.get('confirmPassword')?.invalid &&
-                            changePasswordForm.get('confirmPassword')?.touched
-                          " />
-              @if (changePasswordForm.get('confirmPassword')?.hasError('required')) {
-              <mat-error>Mật khẩu không được để trống</mat-error>
-              }
-              @else if (changePasswordForm.get('confirmPassword')?.hasError('minlength')) {
-              <mat-error>Xác nhận mật khẩu mới phải có ít nhất 8 ký tự</mat-error>
-              }
-              @else if (changePasswordForm.get('confirmPassword')?.hasError('pattern')) {
-              <mat-error>Xác nhận mật khẩu mới phải bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một
-                chữ số và một ký tự đặc biệt</mat-error>
-              }
-              @else if (changePasswordForm.hasError('mismatch') && changePasswordForm.get('newPassword')?.touched) {
-              <mat-error>Mật khẩu mới và xác nhận mật khẩu mới không khớp</mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Thay đổi mật khẩu</button>
-        </form>
-
-
-      </div>
-      <!-- <div class="modal-footer">
-        <button
-          mat-raised-button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          color="warn"
-        >
-        <p>Đổi mật khẩu</p>
-      </button>
-        <button
-          mat-raised-button
-          type="submit"
-          class="btn btn-primary"
-          id="confirmTopup"
-          color="accent"
-        >
-          Đổi mật khẩu
-        </button>
-      </div> -->
     </div>
   </div>
 </div>
+
 <app-footer></app-footer>
-}@loading {
-<div class="preloader-wrapper">
-  <div class="preloader"></div>
-</div>
-}

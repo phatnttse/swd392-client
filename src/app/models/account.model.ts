@@ -1,3 +1,4 @@
+import { BaseResponse } from './base.model';
 import { Gender, Role, WalletLogType } from './enums';
 
 export interface UserAccount {
@@ -10,6 +11,7 @@ export interface UserAccount {
   avatar: string;
   balance: number;
   externalAuthType: string;
+  createAt: Date;
 }
 
 export interface UserBalanceResponse {
@@ -29,3 +31,5 @@ export interface AddBalanceResponse {
   paymentLinkId: string;
   createAt: Date;
 }
+
+export interface UserAccountResponse extends BaseResponse<UserAccount> {}

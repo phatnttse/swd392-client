@@ -103,7 +103,29 @@
     "Cancel": "Huỷ",
     "AmountRequired": "Vui lòng nhập số tiền",
     "AmountInvalid": "Cần nạp tối thiểu là 20.000₫",
-    "Amount": "Số tiền"
+    "Amount": "Số tiền",
+    "Add": "Nhận tiền",
+    "Subtract": "Trừ tiền",
+    "Deposit": "Nạp tiền",
+    "Withdraw": "Rút tiền",
+    "Unknown": "Không xác định"
   },
-  "AddToCart": "Thêm vào giỏ"
+  "AddToCart": "Thêm vào giỏ",
+  "Support": "Hỗ trợ",
+  "SupportContent": "Nhận sự giúp đỡ nhanh chóng, miễn phí từ các trợ lý thân thiện",
+  "SaveChanges": "Lưu thay đổi",
+  "Joined": "Đã tham gia",
+  "Male": "Nam",
+  "Female": "Nữ",
+  "Other": "Khác",
+  "UploadImage": "Tải ảnh lên",
+  "Overview": "Tổng quan",
+  "ChangePassword": "Đổi mật khẩu",
+  "CurrentPassword": "Mật khẩu hiện tại",
+  "CurrentPasswordRequired": "Mật khẩu hiện tại không được trống",
+  "NewPassword": "Mật khẩu mới",
+  "NewPasswordRequired": "Mật khẩu mới không được trống",
+  "RepeatPassword": "Nhập lại mật khẩu",
+  "RepeatPasswordRequired": "Vui lòng nhập lại mật khẩu",
+  "PasswordMismatch": "Mật khẩu nhập lại không khớp"
 }

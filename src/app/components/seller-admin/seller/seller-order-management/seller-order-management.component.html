@@ -26,8 +26,14 @@
               matStartDate
               formControlName="start"
               placeholder="Start date"
+              (dateChange)="onStartDateChange($event)"
             />
-            <input matEndDate formControlName="end" placeholder="End date" />
+            <input
+              matEndDate
+              (dateChange)="onEndDateChange($event)"
+              formControlName="end"
+              placeholder="End date"
+            />
           </mat-date-range-input>
           <mat-datepicker-toggle
             matIconSuffix
@@ -47,7 +53,10 @@
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
         <mat-form-field appearance="outline">
           <mat-label style="font-size: 14px">Trạng thái</mat-label>
-          <mat-select>
+          <mat-select
+            [(ngModel)]="selectedStatus"
+            (selectionChange)="onFilterChange()"
+          >
             @for (status of orderStatuses; track $index) {
             <mat-option [value]="status">{{ status }}</mat-option>
             }
@@ -60,7 +69,7 @@
 
 <mat-card class="w-100">
   <mat-card-content>
-    <h4>Quản lý sản phẩm</h4>
+    <h4>Quản lý đơn hàng</h4>
 
     <div
       class="col-12 d-flex align-items-center justify-content-center mb-5 mt-3"
@@ -183,6 +192,13 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
+  </mat-card-content>
+</mat-card>
+}@else {
+<mat-card class="w-100 text-center mt-5">
+  <mat-card-content>
+    <h4>Không có đơn hàng nào!</h4>
+    <p>Hiện tại chưa có đơn hàng nào trong danh sách.</p>
   </mat-card-content>
 </mat-card>
 } }

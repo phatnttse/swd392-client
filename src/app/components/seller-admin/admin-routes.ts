@@ -1,5 +1,6 @@
 import { AdminProductManagementComponent } from './admin/admin-product-management/admin-product-management.component';
 import { Routes } from '@angular/router';
+import { AdminGuard } from '../../guards/guards/admin.guard';
 
 export const AdminRoutes: Routes = [
   {
@@ -35,5 +36,7 @@ export const AdminRoutes: Routes = [
         }
       }
     ],
+    canActivate: [AdminGuard],
+    canActivateChild: [AdminGuard],
   },
 ];

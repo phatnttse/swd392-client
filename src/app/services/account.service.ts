@@ -7,9 +7,9 @@ import { catchError, Observable, of } from 'rxjs';
 import {
   AddBalanceResponse,
   UserAccount,
+  UserAccountResponse,
   UserBalanceResponse,
 } from '../models/account.model';
-import { User } from '../models/flower.model';
 
 @Injectable({
   providedIn: 'root',
@@ -54,26 +54,60 @@ export class AccountService extends EndpointBase {
       );
   }
 
-  getUserResponseFromLocalStorage(): Observable<UserAccount | null> {
-    try {
-      const userJSON = this.localStorage?.getItem('current_user');
-      if (userJSON == null || userJSON == undefined) {
-        return of(null);
-      }
-
-      const userResponse = JSON.parse(userJSON!);
-      return of(userResponse);
-    } catch (error) {
-      console.error('Error retrieving user response from local storage:', error);
-      return of(null);
-    }
+  updateProfile(
+    name: string,
+    phone: string,
+    gender: string
+  ): Observable<UserAccountResponse> {
+    return this.http
+      .patch<UserAccountResponse>(
+        `${this.API_URL}/account/update-profile`,
+        { name, phone, gender },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.updateProfile(name, phone, gender)
+          );
+        })
+      );
   }
 
-  resetPassword(newPassword: string, repeatPassword: string): Observable<any>{
-    const payload = {
-      newPassword: newPassword,
-      repeatPassword: repeatPassword
-  };
-    return this.http.post<any>(`${this.API_URL}/auth/reset-password`, payload, this.requestHeaders);
+  uploadAvatar(file: File): Observable<UserAccountResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http
+      .post<UserAccountResponse>(
+        `${this.API_URL}/account/upload-avatar`,
+        formData,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.uploadAvatar(file));
+        })
+      );
+  }
+
+  changePassword(
+    oldPassword: string,
+    newPassword: string,
+    repeatPassword: string
+  ): Observable<any> {
+    return this.http
+      .post<any>(
+        `${this.API_URL}/auth/change-password`,
+        { oldPassword, newPassword, repeatPassword },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.changePassword(oldPassword, newPassword, repeatPassword)
+          );
+        })
+      );
   }
 }

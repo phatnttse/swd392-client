@@ -119,12 +119,16 @@
         <div
           class="section-header d-flex flex-wrap justify-content-between mb-5"
         >
-          <h2 class="section-title">
+          <h4 class="section-title">
             {{ "Home.ProductCategory" | translate }}
-          </h2>
+          </h4>
 
           <div class="d-flex align-items-center">
-            <a href="javascript:;" class="btn btn-primary me-2">
+            <a
+              href="javascript:;"
+              routerLink="/products"
+              class="btn btn-primary me-2"
+            >
               {{ "Home.ViewAll" | translate }}</a
             >
           </div>
@@ -143,11 +147,14 @@
               transition-duration: 0ms;
             "
           >
-            @for (category of listCategory; track $index) {
+            @for (category of listCategory | slice:0:8 ; track $index) {
             <div class="swiper-slide" style="width: 180px; margin-right: 20px">
-              <div class="item-cate">
+              <div
+                class="item-cate"
+                (click)="goToProductListPageByCategory(category.id)"
+              >
                 <a
-                  routerLink="/products"
+                  href="javascript:;"
                   [title]="category.name"
                   class="opaci_href"
                 ></a>
@@ -156,13 +163,13 @@
                     width="100"
                     height="100"
                     class="lazyload loaded"
-                    src="https://plus.unsplash.com/premium_photo-1676475964992-6404b8db0b53?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Zmxvd2VyfGVufDB8fDB8fHww"
+                    [src]="category.imageUrl"
                     [alt]="category.name"
                     data-was-processed="true"
                   />
                 </div>
                 <h3>{{ category.name }}</h3>
-                <span> {{ category.children.length }} danh mục</span>
+                <!-- <span> {{ category.children.length }} danh mục</span> -->
               </div>
             </div>
             }
@@ -178,9 +185,9 @@
     <div class="row">
       <div class="col-md-12">
         <div
-          class="section-header d-flex flex-wrap justify-content-between my-4"
+          class="section-header d-flex flex-wrap justify-content-between my-5"
         >
-          <h2 class="section-title">{{ "Home.NewestProduct" | translate }}</h2>
+          <h4 class="section-title">{{ "Home.NewestProduct" | translate }}</h4>
 
           <div class="d-flex align-items-center">
             <a routerLink="/products" class="btn btn-primary rounded-1">{{

@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
-import { ConvertedCategory } from '../../models/category.model';
+import { FlowerCategory } from '../../models/category.model';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
   categoryIds: number[] = [];
   numberOfElements: number = 0;
   totalElements: number = 0;
-  listCategory: ConvertedCategory[] = [];
+  listCategory: FlowerCategory[] = [];
 
   constructor(
     private productService: ProductService,
@@ -60,13 +60,20 @@ export class HomeComponent implements OnInit {
         }
       }
     );
-    this.categoryService.convertedCategoryDataSource.subscribe(
-      (categoryData: ConvertedCategory[]) => {
+    this.categoryService.categoryDataSource.subscribe(
+      (categoryData: FlowerCategory[]) => {
         if (categoryData) {
           this.listCategory = categoryData;
         }
       }
     );
+  }
+
+  // Chuyển đến trang sản phẩm theo danh mục
+  goToProductListPageByCategory(categoryId: number) {
+    this.router.navigate(['/products'], {
+      queryParams: { c: categoryId },
+    });
   }
 
   // Xem chi tiết sản phẩm

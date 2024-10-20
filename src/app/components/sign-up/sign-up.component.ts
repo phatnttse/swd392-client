@@ -20,6 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BaseResponse } from '../../models/base.model';
+import { repeat } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',
@@ -43,15 +45,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class SignUpComponent {
   formSignUp: FormGroup;
-  hide = signal(true); // Ẩn hiện mật khẩu
-  loadingBtn = signal(false);
-
-  // Mảng các lựa chọn giới tính
-  genders = [
-    { value: Gender.MALE, viewValue: 'Male' },
-    { value: Gender.FEMALE, viewValue: 'Female' },
-    { value: Gender.OTHERS, viewValue: 'Other' },
-  ];
+  hidePassword = signal(true); // Ẩn hiện mật khẩu
+  loadingBtn = signal(false); // Trạng thái nút đăng ký
+  genders = Object.values(Gender);
+  hideRepeatPassword = signal(true); // Ẩn hiện nhập lại mật khẩu
 
   constructor(
     private formBuilder: FormBuilder,
@@ -64,6 +61,7 @@ export class SignUpComponent {
       password: ['', [Validators.required]],
       name: ['', Validators.required],
       accountGender: ['', Validators.required],
+      repeatPassword: ['', Validators.required],
     });
   }
 
@@ -71,6 +69,15 @@ export class SignUpComponent {
   btnSignUp() {
     if (this.formSignUp.invalid) {
       this.formSignUp.markAllAsTouched();
+      return;
+    }
+    if (
+      this.formSignUp.get('password')?.value !==
+      this.formSignUp.get('repeatPassword')?.value
+    ) {
+      this.toastr.warning('Enter repeat password mismatch', 'Warning', {
+        progressBar: true,
+      });
       return;
     }
     this.loadingBtn.set(true);
@@ -83,17 +90,14 @@ export class SignUpComponent {
     this.authService
       .registerAccount(email, password, name, accountGender)
       .subscribe({
-        next: (response: any) => {
+        next: (response: BaseResponse<string>) => {
           this.loadingBtn.set(false);
-          if (response.status === 201) {
+          if (response.code === 201) {
             this.router.navigate(['/signin']);
-            this.toastr.info(
-              'Please check your email to verify your account',
-              'Notification',
-              {
-                progressBar: true,
-              }
-            );
+            this.toastr.info(response.message, 'Notification', {
+              progressBar: true,
+              timeOut: 6000,
+            });
           }
         },
         error: (errorResponse: HttpErrorResponse) => {
@@ -127,7 +131,13 @@ export class SignUpComponent {
 
   // Ẩn hiện mật khẩu
   btnHidePassword(event: MouseEvent) {
-    this.hide.set(!this.hide());
+    this.hidePassword.set(!this.hidePassword());
+    event.stopPropagation();
+  }
+
+  // Ẩn hiện mật khẩu
+  btnHideRepeatPassword(event: MouseEvent) {
+    this.hideRepeatPassword.set(!this.hideRepeatPassword());
     event.stopPropagation();
   }
 }

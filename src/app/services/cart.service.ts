@@ -38,6 +38,12 @@ export class CartService extends EndpointBase {
     this.API_URL = appConfig['API_URL'];
   }
 
+  reset(): void {
+    this.cartDataSource.next([]);
+    this.totalQuantitySubject.next(0);
+    this.totalAmountSubject.next(0);
+  }
+
   insertUpdateCart(
     flowerListingId: number,
     quantity: number

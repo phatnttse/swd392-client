@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import { EndpointBase } from './endpoint-base.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
-import { catchError, Observable, of } from 'rxjs';
-import {
-  AddBalanceResponse,
-  UserAccount,
-  UserBalanceResponse,
-} from '../models/account.model';
-import { User } from '../models/flower.model';
+import { catchError, Observable } from 'rxjs';
 import { WalletLogResponse } from '../models/wallet.model';
 
 @Injectable({
@@ -27,15 +21,39 @@ export class WalletService extends EndpointBase {
     this.API_URL = appConfig['API_URL'];
   }
 
-  getWalletLogsByAccount(): Observable<WalletLogResponse> {
+  getWalletLogsByAccount(
+    order: string,
+    sortBy: string,
+    pageNumber: number,
+    pageSize: number,
+    status: string[],
+    type: string
+  ): Observable<WalletLogResponse> {
+    let params = new HttpParams()
+      .set('order', order)
+      .set('sortBy', sortBy)
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString())
+      .set('status', status.join(',') ?? [])
+      .set('type', type);
+
     return this.http
-      .get<WalletLogResponse>(
-        `${this.API_URL}/wallet-logs/by-account`,
-        this.requestHeaders
-      )
+      .get<WalletLogResponse>(`${this.API_URL}/wallet-logs/by-account`, {
+        params: params,
+        headers: this.requestHeaders.headers,
+      })
       .pipe(
         catchError((error) => {
-          return this.handleError(error, () => this.getWalletLogsByAccount());
+          return this.handleError(error, () =>
+            this.getWalletLogsByAccount(
+              order,
+              sortBy,
+              pageNumber,
+              pageSize,
+              status,
+              type
+            )
+          );
         })
       );
   }

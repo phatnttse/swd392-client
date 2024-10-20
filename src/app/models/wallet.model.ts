@@ -6,6 +6,7 @@ import {
   WalletLogStatus,
   WalletLogType,
 } from './enums';
+import { PaginatedPageableResponse } from './paginated.model';
 
 export interface WalletLog {
   id: number;
@@ -18,4 +19,6 @@ export interface WalletLog {
   createdAt: string;
 }
 
-export interface WalletLogResponse extends BaseResponse<WalletLog> {}
+export interface WalletLogPaginated
+  extends PaginatedPageableResponse<WalletLog> {}
+export interface WalletLogResponse extends BaseResponse<WalletLogPaginated> {}

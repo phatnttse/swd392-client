@@ -8,54 +8,30 @@
     padding-top: 12rem;
   }
 }
-
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
+.icon-size {
+  font-size: 20px;
+  vertical-align: middle;
 }
 
-input.example-right-align::-webkit-outer-spin-button,
-input.example-right-align::-webkit-inner-spin-button {
-  display: none;
-}
-.error-message {
-  color: red;
-}
-.mat-form-field-label {
-  display: block !important;
+.mat-list-item {
+  padding: 10px 0;
 }
 
-section {
-  display: table;
+.mat-list-item .mat-icon {
+  display: inline-flex;
+  align-items: center;
+}
+.active {
+  background-color: #e0e0e0;
+  font-weight: bold;
 }
 
-.example-label {
-  display: table-cell;
-  font-size: 14px;
-  margin-left: 8px;
-  min-width: 120px;
+a.mat-list-item {
+  transition: background-color 0.3s;
 }
 
-.example-button-row {
-  display: table-cell;
-  max-width: 600px;
-}
-
-.example-button-row .mat-mdc-button-base {
-  margin: 8px 8px 8px 0;
-}
-
-.example-flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.example-button-container {
-  display: flex;
-  justify-content: center;
-  width: 120px;
+.mat-error {
+  font-size: 12px;
 }
 .example-full-width {
   width: 100%;

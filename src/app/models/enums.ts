@@ -72,3 +72,9 @@ export enum ParentCategory {
     EVENT_TYPE = 'EVENT_TYPE',
     SUBJECT = 'SUBJECT',
 }
+
+export enum NonProcessOrderStatus {
+  BUYER_CANCELED = 'BUYER_CANCELED',
+  SELLER_CANCELED = 'SELLER_CANCELED',
+  REFUNDED = 'REFUNDED',
+}

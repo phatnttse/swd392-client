@@ -27,7 +27,7 @@
   position: relative;
 }
 .track .step.active:before {
-  background: #ccc;
+  background: #148609;
 }
 .track .step.active-fail:before {
   background: #aa1906;
@@ -41,11 +41,7 @@
   top: 18px;
 }
 .track .step.active .icon {
-  background: #ccc;
-  color: #fff;
-}
-.track .step.active .icon {
-  background: #ccc;
+  background: #148609;
   color: #fff;
 }
 

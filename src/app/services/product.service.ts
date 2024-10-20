@@ -37,6 +37,10 @@ export class ProductService extends EndpointBase {
     this.API_URL = appConfig['API_URL'];
   }
 
+  reset(): void {
+    this.flowerByUserDataSource.next([]);
+  }
+
   getFlowers(
     searchString: string,
     order: string,

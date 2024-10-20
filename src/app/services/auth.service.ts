@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserAccount } from '../models/account.model';
 import { Utilities } from './utilities';
 import { Role } from '../models/enums';
+import { BaseResponse } from '../models/base.model';
 
 @Injectable({
   providedIn: 'root',
@@ -61,7 +62,13 @@ export class AuthService {
 
   async loginWithGoogle() {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(this.auth, provider);
+    try {
+      const result = await signInWithPopup(this.auth, provider);
+      return result;
+    } catch (error) {
+      console.error('Error during Google login:', error);
+      throw error;
+    }
   }
 
   loginWithPassword(email: string, password: string): Observable<any> {
@@ -94,7 +101,11 @@ export class AuthService {
       queryParamsHandling: 'merge',
     };
 
-    this.router.navigate([urlAndParams.firstPart], navigationExtras);
+    if (this.isAdmin) {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate([urlAndParams.firstPart], navigationExtras);
+    }
   }
 
   redirectForLogin() {
@@ -137,13 +148,16 @@ export class AuthService {
     password: string,
     name: string,
     accountGender: string
-  ): Observable<any> {
-    return this.http.post<any>(`${this.API_URL}/auth/register`, {
-      email,
-      password,
-      name,
-      accountGender,
-    });
+  ): Observable<BaseResponse<string>> {
+    return this.http.post<BaseResponse<string>>(
+      `${this.API_URL}/auth/register`,
+      {
+        email,
+        password,
+        name,
+        accountGender,
+      }
+    );
   }
 
   private processLoginResponse(response: any) {

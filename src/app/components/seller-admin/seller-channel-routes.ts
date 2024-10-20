@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { UserGuard } from '../../guards/guards/user.guard';
 
 export const SellerChannelRoutes: Routes = [
   {
@@ -8,7 +9,17 @@ export const SellerChannelRoutes: Routes = [
         (m) => m.SellerAdminComponent
       );
     },
+    canActivate: [UserGuard],
+    canActivateChild: [UserGuard],
     children: [
+      {
+        path: '',
+        loadComponent() {
+          return import(
+            './../seller-admin/seller/seller-dashboard/seller-dashboard.component'
+          ).then((m) => m.SellerDashboardComponent);
+        },
+      },
       {
         path: 'product-management',
         loadComponent() {
