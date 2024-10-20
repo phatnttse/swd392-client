@@ -30,12 +30,11 @@ import { Router, RouterModule } from '@angular/router';
     MatTableModule,
     MatTabsModule,
     CommonModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './admin-product-management.component.html',
-  styleUrl: './admin-product-management.component.scss'
+  styleUrl: './admin-product-management.component.scss',
 })
-
 export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -53,7 +52,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   totalElements: number = 0; // Tổng số lượng sản phẩm
   currentPage: number = 0; // Trang hiện tại
   visiblePages: number[] = []; // Các trang hiển thị
-  displayedColumns : string[] = [
+  displayedColumns: string[] = [
     'image',
     'name',
     'category',
@@ -66,9 +65,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     private localStorage: LocalStoreManager,
     private productService: ProductService,
     private route: Router
-  ) {
-    
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getFlowers(
@@ -99,8 +96,6 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     pageSize: number,
     categoryIds: number[]
   ) {
-    this.currentPage =
-      Number(this.localStorage.getData(DBkeys.CURRENT_PRODUCTS_PAGE)) || 0;
     this.productService
       .getFlowers(
         searchString,
@@ -132,7 +127,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   }
 
   //Chuyển hướng sang admin-product-detail với id
-  getFlowerById(id: number){
+  getFlowerById(id: number) {
     this.route.navigate(['product-detail-management', id]);
   }
 
@@ -154,17 +149,17 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
 
   onPageChange(page: number) {
     this.currentPage = page < 0 ? 0 : page;
-    this.localStorage.savePermanentData(
-      String(page),
-      DBkeys.CURRENT_PRODUCTS_PAGE
-    );
     this.getFlowers(
       this.searchString,
       this.order,
       this.sortBy,
-      page,
+      this.currentPage,
       this.pageSize,
       this.categoryIds
+    );
+    this.visiblePages = this.generateVisiblePageArray(
+      this.currentPage,
+      this.totalPages
     );
   }
 }
