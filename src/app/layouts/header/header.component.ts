@@ -9,9 +9,12 @@ import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cart.model';
 import { MatButtonModule } from '@angular/material/button';
 import { CategoryService } from '../../services/category.service';
-import { FlowerCategory } from '../../models/category.model';
+import { ConvertedCategory, FlowerCategory } from '../../models/category.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Utilities } from '../../services/utilities';
+import { ProductService } from '../../services/product.service';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-header',
@@ -43,7 +46,9 @@ export class HeaderComponent implements OnInit {
     private cartService: CartService,
     private categoryService: CategoryService,
     private appConfig: AppConfigurationService,
-    private router: Router
+    private router: Router,
+    private productService: ProductService,
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +74,7 @@ export class HeaderComponent implements OnInit {
 
     // Đăng ký lấy danh sách danh mục
     this.categoryService.convertedCategoryDataSource.subscribe(
-      (categoryData: any[]) => {
+      (categoryData: ConvertedCategory[]) => {
         if (categoryData) {
           this.convertedCategories = categoryData;
           console.log(this.convertedCategories);
@@ -88,9 +93,11 @@ export class HeaderComponent implements OnInit {
   }
 
   // Tìm kiếm sản phẩm
-  btnSearch(searchString: string) {
+  btnSearch(event: Event, searchString: string) {
+    event.preventDefault();
+    const searchQuery = searchString.trim();
     this.router.navigate(['/products'], {
-      queryParams: { query: searchString },
+      queryParams: { query: searchQuery },
     });
     this.searchValue = '';
   }
@@ -103,8 +110,13 @@ export class HeaderComponent implements OnInit {
 
   // Đăng xuất
   btnLogOut() {
+    debugger;
     this.authService.logout();
-    this.authService.userDataSource.next(null);
+    this.cartService.totalAmountSubject.next(0);
+    this.cartService.cartDataSource.next([]);
+    this.cartService.totalQuantitySubject.next(0);
+    this.productService.flowerByUserDataSource.next([]);
+    this.orderService.orderBySellerDataSource.next([]);
     this.router.navigate(['/signin']);
   }
 }

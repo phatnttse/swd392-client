@@ -8,8 +8,9 @@ export interface CartItem {
   flowerName: string;
   flowerDescription: string;
   flowerPrice: number;
+  flowerImageUrl: string;
   eventType: string;
-  stockBalance: number;
+  stockQuantity: number;
   address: string;
   status: FlowerListingStatus;
 }

@@ -64,7 +64,7 @@
         </td>
         <td>
           <h6 class="mb-3">Số lượng sản phẩm (kg)</h6>
-          <p>{{flower?.stockBalance}}</p>
+          <p>{{flower?.stockQuantity}}</p>
         </td>
         <td>
           <h6 class="mb-3">Giảm giá (%)</h6>
@@ -80,7 +80,13 @@
       <img src="" alt="">
     </div>
     <div class="d-flex justify-content-end mt-5">
-      <button mat-raised-button class="fs-20 p-24" color="primary" type="button">
+      <button 
+      mat-raised-button 
+      class="fs-20 p-24" 
+      color="primary" 
+      type="button"
+      (click)="approveFlower(flower?.id)"
+      >
         Đồng ý
         <mat-icon>task_alt</mat-icon>
       </button>

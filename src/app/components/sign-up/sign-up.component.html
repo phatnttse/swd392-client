@@ -1,3 +1,4 @@
+@defer () {
 <app-header></app-header>
 
 <div class="content">
@@ -132,8 +133,13 @@
                 color="primary"
                 class="w-100 p-20"
                 (click)="btnSignUp()"
+                [disabled]="loadingBtn().valueOf()"
               >
+                @if (loadingBtn()) {
+                <mat-spinner diameter="24"></mat-spinner>
+                }@else {
                 {{ "Sign.SignUp" | translate }}
+                }
               </button>
 
               <span
@@ -190,3 +196,8 @@
 </div>
 
 <app-footer></app-footer>
+}@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

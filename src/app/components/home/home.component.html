@@ -1,3 +1,4 @@
+@defer () {
 <app-header></app-header>
 <section
   style="
@@ -219,25 +220,8 @@
                 >
                   <h3 class="fs-6 fw-normal">{{ flower.name }}</h3>
                 </a>
-                <div>
-                  <span class="rating">
-                    <svg width="18" height="18" class="text-warning">
-                      <use xlink:href="#star-full"></use>
-                    </svg>
-                    <svg width="18" height="18" class="text-warning">
-                      <use xlink:href="#star-full"></use>
-                    </svg>
-                    <svg width="18" height="18" class="text-warning">
-                      <use xlink:href="#star-full"></use>
-                    </svg>
-                    <svg width="18" height="18" class="text-warning">
-                      <use xlink:href="#star-full"></use>
-                    </svg>
-                    <svg width="18" height="18" class="text-warning">
-                      <use xlink:href="#star-half"></use>
-                    </svg>
-                  </span>
-                  <span>(222)</span>
+                <div class="product-description">
+                  <p>{{ flower.description | truncate : 20 }}</p>
                 </div>
                 <div
                   class="d-flex justify-content-center align-items-center gap-2"
@@ -403,7 +387,11 @@
         <article class="post-item card border-0 shadow-sm p-3">
           <div class="image-holder zoom-effect">
             <a href="#">
-              <img src="" alt="post" class="card-img-top" />
+              <img
+                src="./../../../assets/images/Những câu chuyện về hoa 1.jpg"
+                alt="post"
+                class="card-img-top"
+              />
             </a>
           </div>
           <div class="card-body">
@@ -440,7 +428,11 @@
         <article class="post-item card border-0 shadow-sm p-3">
           <div class="image-holder zoom-effect">
             <a href="#">
-              <img src="" alt="post" class="card-img-top" />
+              <img
+                src="./../../../assets/images/Những câu chuyện về hoa 2.jpg"
+                alt="post"
+                class="card-img-top"
+              />
             </a>
           </div>
           <div class="card-body">
@@ -477,7 +469,11 @@
         <article class="post-item card border-0 shadow-sm p-3">
           <div class="image-holder zoom-effect">
             <a href="#">
-              <img src="" alt="post" class="card-img-top" />
+              <img
+                src="./../../../assets/images/Những câu chuyện về hoa 3.jpg"
+                alt="post"
+                class="card-img-top"
+              />
             </a>
           </div>
           <div class="card-body">
@@ -658,3 +654,8 @@
   </div>
 </section>
 <app-footer></app-footer>
+}@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

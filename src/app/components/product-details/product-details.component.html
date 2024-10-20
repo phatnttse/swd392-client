@@ -1,5 +1,6 @@
+@defer () { @if (flower) {
 <app-header></app-header>
-@if (flower) {
+
 <div #topElement></div>
 <section class="py-5 section-products">
   <div class="container">
@@ -55,10 +56,10 @@
             </div>
             <span class="text-muted"
               ><i class="fas fa-shopping-basket fa-sm mx-1"></i
-              >{{ flower.stockBalance }}
+              >{{ flower.stockQuantity }}
               {{ "ProductDetail.Available" | translate }}</span
             >
-            @if (flower.stockBalance > 0) {
+            @if (flower.stockQuantity > 0) {
             <span class="text-success ms-2 fw-bold">{{
               "ProductDetail.InStock" | translate
             }}</span>
@@ -188,7 +189,7 @@
         <h6 class="text-muted">Đã bán 68 sản phẩm</h6>
       </div>
       <div class="col-md-3 text-center">
-        <button mat-raised-button extend class="info">
+        <button mat-raised-button extend class="info" (click)="btnVisitShop()">
           <mat-icon>storefront</mat-icon>
           {{ "ProductDetail.VisitShop" | translate }}
         </button>
@@ -296,5 +297,9 @@
     </div>
   </div>
 </section>
-}
 <app-footer></app-footer>
+} }@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

@@ -17,6 +17,14 @@ export const SellerChannelRoutes: Routes = [
           ).then((m) => m.SellerProductManagementComponent);
         },
       },
+      {
+        path: 'order-management',
+        loadComponent() {
+          return import(
+            './../seller-admin/seller/seller-order-management/seller-order-management.component'
+          ).then((m) => m.SellerOrderManagementComponent);
+        },
+      },
     ],
   },
 ];

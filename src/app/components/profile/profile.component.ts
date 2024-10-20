@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-profile',
@@ -39,6 +40,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
     MatDividerModule,
     HeaderComponent,
     FooterComponent,
+    MatCardModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',

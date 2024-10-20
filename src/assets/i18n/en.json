@@ -80,7 +80,7 @@
     "OrderDetails": "Order Details",
     "Phone": "Phone",
     "PhoneRequired": "Phone number is required",
-    "PhoneInvalid": "Phone number must be exactly 10 digits",
+    "PhoneInvalid": "Phone number is invalid",
     "Address": "Address",
     "AddressRequired": "Address is required",
     "AddressInvalid": "Address must be at least 10 characters",

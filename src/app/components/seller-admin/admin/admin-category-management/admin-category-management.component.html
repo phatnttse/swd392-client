@@ -1,19 +1,16 @@
+@if (statusPage == 0) {
 <mat-card>
   <mat-card-content>
     <div class="row justify-content-between">
       <div class="col-lg-4 negative-margin">
         <mat-form-field appearance="outline">
-          <input matInput type="text" placeholder="Tìm kiếm" />
+          <input matInput type="text" (input)="onSearch($event)" placeholder="Tìm kiếm" />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button
-          mat-raised-button
-          color="primary"
-          routerLink="/admin/categories/new"
-          style="padding: 20px 10px"
-        >
+        <button mat-raised-button color="primary" routerLink="/admin/categories/new" style="padding: 20px 10px"
+          (click)="btnChangeStatusPage(2)">
           Thêm danh mục mới
           <mat-icon>add</mat-icon>
         </button>
@@ -26,27 +23,18 @@
   <mat-card-content>
     <h4>Quản lý danh mục</h4>
     <div class="table-responsive mt-20">
-      <table
-      [dataSource]="dataSource"
-      mat-table
-      matSort 
-      class="w-100 text-nowrap">
-        <!-- <ng-container matColumnDef="image">
+      <table [dataSource]="dataSource" mat-table matSort class="w-100 text-nowrap">
+        <ng-container matColumnDef="image">
           <th mat-header-cell *matHeaderCellDef>Hình ảnh</th>
           <td mat-cell *matCellDef="let category">
-            <a href="#">
-              <img
-                class="rounded"
-                width="50px"
-                height="50px"
-                [src]="category.imageUrl"
-                alt="#"
-              />
+            <a [href]="category.imageUrl" target="_blank">
+              <img class="rounded" width="50px" height="50px" [src]="category.imageUrl" alt="Image" />
             </a>
           </td>
-        </ng-container> -->
+        </ng-container>
+
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Tên</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="id">ID</th>
           <td mat-cell *matCellDef="let category">
             <p class="fw-medium mb-0">{{category.id}}</p>
           </td>
@@ -62,14 +50,16 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Các tác vụ</th>
           <td mat-cell *matCellDef="let category">
-            <button
-              mat-icon-button
-              color="primary"
-              routerLink="/admin/categories/"
-            >
+            <button type="button" mat-icon-button color="primary" data-bs-target="#viewDetailChildren"
+              (click)="btnChangeStatusPage(1,category)">
               <mat-icon aria-label="Edit">visibility</mat-icon>
             </button>
-            <button mat-icon-button color="warn">
+            <button 
+            type="button" 
+            mat-icon-button 
+            color="warn"
+            (click)="adminDeleteCategory(category.id)"
+            >
               <mat-icon aria-label="Delete">delete</mat-icon>
             </button>
           </td>
@@ -81,3 +71,131 @@
     </div>
   </mat-card-content>
 </mat-card>
+} @else if (statusPage == 1) {
+<div class="card">
+  <div class="card-body">
+    <h4 class="mb-32" style="color: #03c9d7">Chi tiết danh mục</h4>
+    <form [formGroup]="categoryForm">
+      <h6 class="mb-3 mt-5">Ảnh danh mục</h6>
+      <a *ngIf="selectedCategory?.imageUrl" [href]="selectedCategory?.imageUrl" target="_blank">
+        <img class="rounded" width="50px" height="50px" [src]="selectedCategory?.imageUrl" alt="Category Image" />
+      </a>
+
+      <div class="upload-section">
+        <div class="file-square">
+          <label for="cover-image">
+            <button mat-button type="button">
+              <i class="material-icons">add_photo_alternate</i>
+            </button>
+            <span class="fs-12 mt-2">Thêm hình ảnh</span>
+          </label>
+        </div>
+        <div class="uploaded-images">
+
+        </div>
+      </div>
+
+
+      <h6 class="mb-3">Tên danh mục</h6>
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Nhập tên danh mục</mat-label>
+        <input matInput type="text" required formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Danh mục tổng</mat-label>
+        <mat-select formControlName="parentCategory" [(value)]="selectedCategoryParent">
+          @for (category of categories; track $index) {
+            <mat-option [value]="category">{{ category }}</mat-option>
+            }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="d-flex justify-content-end mt-5">
+        <button 
+        mat-raised-button 
+        class="fs-20 p-15" 
+        color="accent" 
+        type="submit"
+        (click)="btnUpdateCategory()" 
+        extend
+        >
+          Cập nhật
+          <mat-icon>task_alt</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+} @else if (statusPage == 2) {
+<!-- Kiểm tra trạng thái để xác định thêm danh mục mới -->
+<div class="card">
+  <div class="card-body">
+    <h4 class="mb-32" style="color: #03c9d7">Thêm danh mục mới</h4>
+    <form [formGroup]="categoryForm">
+      <h6 class="mb-3 mt-5">Ảnh danh mục</h6>
+      <div class="upload-section">
+        <div
+          class="file-square"
+          [ngClass]="{ 'file-square-error': isPictureError }"
+        >
+          <input
+            type="file"
+            id="cover-image"
+            (change)="onImageUpload($event)"
+            style="display: none"
+            accept="image/*"
+          />
+          <label for="cover-image">
+            <i class="material-icons">add_photo_alternate</i>
+            <span class="fs-12 mt-2 upload-title">Thêm hình ảnh</span>
+          </label>
+        </div>
+
+        @if (uploadedImage) {
+        <div class="uploaded-images">
+          <div class="uploaded-image ms-2">
+            <img
+              width="100px"
+              height="100px"
+              style="object-fit: cover"
+              [src]="uploadedImage"
+              alt="Product Image"
+            />
+          </div>
+        </div>
+        }
+      </div>
+
+      @if (isPictureError) {
+      <mat-error class="fs-12 mb-2 ms-3" style="visibility: visible"
+        >Vui lòng tải ảnh bìa</mat-error
+      >
+      }@else {
+      <mat-error style="visibility: hidden">Vui lòng tải ảnh bìa</mat-error>
+      }
+      <h6 class="mb-3">Tên danh mục</h6>
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Nhập tên danh mục</mat-label>
+        <input matInput type="text" required formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Danh mục tổng</mat-label>
+        <mat-select formControlName="parentCategory" [(value)]="selectedCategoryParent">
+          @for (category of categories; track $index) {
+            <mat-option [value]="category">{{ category }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="d-flex justify-content-end mt-5">
+        <button mat-raised-button class="fs-20 p-15" color="accent" type="submit" (click)="adminCreateNewCategory()">
+          Thêm danh mục
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

@@ -1,3 +1,6 @@
+<!-- Danh sach san pham -->
+@if (statusPage === 0) { @if (listFlower.length > 0) {
+
 <mat-card
   ><mat-card-content
     ><div class="row justify-content-between">
@@ -17,9 +20,9 @@
         <button
           mat-raised-button
           color="primary"
-          routerLink="/admin/products/new"
           extend
           style="padding: 20px 10px"
+          (click)="btnChangeStatusPage(1)"
         >
           Thêm sản phẩm mới
           <mat-icon>add</mat-icon>
@@ -30,7 +33,7 @@
 >
 <mat-card class="w-100">
   <mat-card-content>
-    <h4>Quản lý sản phẩm</h4>
+    <h4 class="primary-color">Quản lý sản phẩm</h4>
 
     <div
       class="col-12 d-flex align-items-center justify-content-center mb-5 mt-3"
@@ -43,7 +46,9 @@
         class="w-100 text-nowrap"
       >
         <ng-container matColumnDef="image">
-          <th mat-header-cell *matHeaderCellDef>Hình ảnh</th>
+          <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
+            Hình ảnh
+          </th>
           <td mat-cell *matCellDef="let product">
             <a [href]="product.imageUrl">
               <img
@@ -58,43 +63,108 @@
         </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Tên</th>
+          <th
+            class="fw-bold primary-color"
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header="name"
+          >
+            Tên
+          </th>
           <td mat-cell *matCellDef="let product">
-            <p class="mb-0">{{ product.name }}</p>
+            <p class="mb-0 fw-bold">{{ product.name }}</p>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef>Danh mục</th>
+          <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
+            Danh mục
+          </th>
           <td mat-cell *matCellDef="let product">
-            <span class="badge badge-success rounded-pill"></span>
+            @for (category of product.categories; track $index) {
+            <div class="fw-bold">
+              <!-- <img
+                [src]="category.imageUrl"
+                alt="{{ category.name }}"
+                width="20"
+                height="20"
+              /> -->
+              {{ category.name }}
+            </div>
+            }
           </td>
         </ng-container>
 
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="price">Giá</th>
+          <th
+            class="fw-bold primary-color"
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header="price"
+          >
+            Giá
+          </th>
           <td mat-cell *matCellDef="let product">
-            <p class="fw-medium mb-0">{{ product.price | number : "1.0" }}₫</p>
+            <p class="fw-bold mb-0">{{ product.price | number : "1.0" }}₫</p>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="stockBalance">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="stockBalance">
+        <ng-container matColumnDef="stockQuantity">
+          <th
+            class="fw-bold primary-color"
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header="stockQuantity"
+          >
             Số lượng
           </th>
           <td mat-cell *matCellDef="let product">
-            <p class="fw-medium mb-0">{{ product.stockBalance }}</p>
+            <p class="fw-bold mb-0">{{ product.stockQuantity }}</p>
+          </td>
+        </ng-container>
+        >
+
+        <ng-container matColumnDef="status">
+          <th
+            class="fw-bold primary-color"
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header="status"
+          >
+            Trạng thái
+          </th>
+          <td mat-cell *matCellDef="let product">
+            <p
+              class="badge fw-bold mb-0"
+              [ngClass]="{
+                'badge-success': product.status === 'APPROVED',
+                'badge-warning': product.status === 'PENDING'
+              }"
+            >
+              {{ product.status }}
+            </p>
           </td>
         </ng-container>
         >
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Các thao tác</th>
+          <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
+            Các thao tác
+          </th>
           <td mat-cell *matCellDef="let product">
-            <button mat-icon-button color="primary">
+            <button
+              (click)="btnViewProductDetails(product.id)"
+              mat-icon-button
+              color="primary"
+            >
               <mat-icon aria-label="Edit">edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn">
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#deleteProductModal"
+              mat-icon-button
+              color="warn"
+            >
               <mat-icon aria-label="Delete">delete</mat-icon>
             </button>
           </td>
@@ -103,71 +173,282 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      @if (totalPages > 1) {
-      <div class="section pagenav clearfix a-center mt-5">
-        <nav class="collection-paginate clearfix nav_pagi w_100 relative">
-          <ul class="pagination clearfix">
-            @if (currentPage > 0) {
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="javascript:;"
-                (click)="onPageChange(currentPage - 1)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="20"
-                  viewBox="0 0 12 20"
-                  fill="none"
-                >
-                  <path
-                    d="M0.827131 10.5488L10.0777 19.7738C10.3808 20.0759 10.8715 20.0754 11.1741 19.7723C11.4764 19.4692 11.4756 18.9782 11.1725 18.6759L2.47255 9.99996L11.1728 1.32406C11.4759 1.02172 11.4767 0.531057 11.1744 0.227934C11.0227 0.0759811 10.824 3.76429e-06 10.6253 3.74691e-06C10.4271 3.72959e-06 10.2292 0.0754737 10.0778 0.226372L0.827131 9.45114C0.681155 9.59637 0.599241 9.79403 0.599241 9.99996C0.599241 10.2059 0.68139 10.4033 0.827131 10.5488Z"
-                    fill="#9D9D9D"
-                  ></path>
-                </svg>
-              </a>
-            </li>
-            } @for (page of visiblePages; track $index) {
-            <li
-              class="page-item"
-              [ngClass]="{ active: page === currentPage + 1 }"
-            >
-              <a
-                class="page-link"
-                href="javascript:;"
-                [style]="{ 'pointer-events: none': page === currentPage + 1 }"
-                (click)="onPageChange(page - 1)"
-                >{{ page }}</a
-              >
-            </li>
-            } @if (currentPage < totalPages - 1) {
-            <li class="page-item">
-              <a
-                class="page-link link-next-pre"
-                onclick="doSearch(2)"
-                href="javascript:;"
-                (click)="onPageChange(currentPage + 1)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="20"
-                  viewBox="0 0 12 20"
-                  fill="none"
-                >
-                  <path
-                    d="M11.1729 9.45117L1.92228 0.226167C1.6192 -0.0759023 1.12849 -0.0753945 0.825918 0.227729C0.523575 0.530814 0.524357 1.02179 0.827481 1.32409L9.52745 10L0.827168 18.6759C0.524083 18.9783 0.523302 19.4689 0.825605 19.7721C0.977285 19.924 1.17599 20 1.37471 20C1.57291 20 1.77084 19.9245 1.92224 19.7736L11.1729 10.5489C11.3188 10.4036 11.4008 10.206 11.4008 10C11.4008 9.7941 11.3186 9.59668 11.1729 9.45117Z"
-                    fill="#9D9D9D"
-                  ></path>
-                </svg>
-              </a>
-            </li>
-            }
-          </ul>
-        </nav>
-      </div>
-      }
     </div>
   </mat-card-content>
 </mat-card>
+
+} @else {
+<mat-card class="w-100 text-center mt-5">
+  <mat-card-content>
+    <h4>Không có sản phẩm nào!</h4>
+    <p>Hiện tại chưa có sản phẩm nào trong danh sách.</p>
+    <button mat-raised-button color="primary" (click)="btnChangeStatusPage(1)">
+      Thêm sản phẩm mới
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-card-content>
+</mat-card>
+}
+<!-- Tạo mới sản phẩm hoặc cập nhật -->
+}@else if (statusPage === 1 || statusPage === 2) {
+<mat-card class="w-100">
+  <mat-card-content>
+    <div class="d-flex align-items-center justify-content-between flex-wrap">
+      @if (statusPage === 1) {
+      <h4 class="mb-3">Tạo mới sản phẩm</h4>
+
+      }@else if (statusPage === 2) {
+      <h4 class="mb-3">Chi tiết sản phẩm</h4>
+      }
+      <div>
+        <button
+          mat-raised-button
+          color="warn"
+          extend
+          class="btn me-2 fs-16 p-24 mb-2"
+          style="padding: 20px"
+          (click)="btnChangeStatusPage(0)"
+        >
+          Quay lại
+          <mat-icon>reply</mat-icon>
+        </button>
+        @if (statusPage === 1) {
+        <button
+          mat-raised-button
+          class="fs-16 p-24 text-white btn-success mb-2"
+          type="button"
+          extend
+          style="background-color: var(--bs-success)"
+          (click)="btnCreateNewProduct()"
+        >
+          Hoàn tất
+          <mat-icon>task_alt</mat-icon>
+        </button>
+        }@else if (statusPage === 2) {
+        <button
+          mat-raised-button
+          class="fs-16 p-24 text-white btn-success mb-2"
+          type="button"
+          extend
+          style="background-color: var(--bs-success)"
+          (click)="btnUpdateProduct()"
+        >
+          Cập nhật
+          <mat-icon>task_alt</mat-icon>
+        </button>
+        }
+      </div>
+    </div>
+    <form [formGroup]="productForm">
+      <h6 class="mb-3 mt-5">Ảnh sản phẩm</h6>
+      <div class="upload-section">
+        <div
+          class="file-square"
+          [ngClass]="{ 'file-square-error': isPictureError }"
+        >
+          <input
+            type="file"
+            id="cover-image"
+            (change)="onImageUpload($event)"
+            style="display: none"
+            accept="image/*"
+          />
+          <label for="cover-image">
+            <i class="material-icons">add_photo_alternate</i>
+            <span class="fs-12 mt-2 upload-title">Thêm hình ảnh</span>
+          </label>
+        </div>
+
+        @if (uploadedImage) {
+        <div class="uploaded-images">
+          <div class="uploaded-image ms-2">
+            <img
+              width="100px"
+              height="100px"
+              style="object-fit: cover"
+              [src]="uploadedImage"
+              alt="Product Image"
+            />
+          </div>
+        </div>
+        }
+      </div>
+
+      @if (isPictureError) {
+      <mat-error class="fs-12 mb-2 ms-3" style="visibility: visible"
+        >Vui lòng tải ảnh bìa</mat-error
+      >
+      }@else {
+      <mat-error style="visibility: hidden">Vui lòng tải ảnh bìa</mat-error>
+      }
+
+      <div class="row mb-3">
+        <div class="col-12 col-sm-8 mb-3">
+          <h6 class="mb-3">Tên sản phẩm</h6>
+          <mat-form-field class="w-100 fs-16" appearance="outline">
+            <mat-label>Nhập tên sản phẩm</mat-label>
+            <input
+              matInput
+              type="text"
+              required
+              formControlName="name"
+              [class.is-invalid]="
+                productForm.get('name')?.invalid &&
+                productForm.get('name')?.touched
+              "
+            />
+            @if (productForm.get('name')?.hasError('required')) {
+            <mat-error class="fs-12"
+              >Tên sản phẩm không được để trống</mat-error
+            >
+            }@else if (productForm.get('name')?.hasError('minlength')) {
+            <mat-error class="fs-12"
+              >Tên sản phẩm quá ngắn. Ít nhất 5 ký tự</mat-error
+            >
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+          <h6 class="mb-3">Danh mục sản phẩm</h6>
+          <div>
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              class="btn w-100"
+              style="padding: 28px 0"
+              [matMenuTriggerFor]="categoryMenu"
+            >
+              @if (selectedCategories.length > 0) { @for (category of
+              selectedCategories; track $index) {
+              {{ category.name }}. } }@else { Chọn danh mục }
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+            @if (isCategoryError) {
+            <mat-error class="fs-12 mb-2 ms-4" style="visibility: visible">
+              Danh mục không được để trống
+            </mat-error>
+            }@else {
+            <mat-error style="visibility: hidden">
+              Danh mục không được để trống
+            </mat-error>
+            }
+          </div>
+        </div>
+      </div>
+
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <h6 class="mb-3">Giá sản phẩm (VNĐ)</h6>
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Nhập giá</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="price"
+                min="1000"
+                [class.is-invalid]="
+                  productForm.get('price')?.invalid &&
+                  productForm.get('price')?.touched
+                "
+              />
+              @if (productForm.get('price')?.hasError('required')) {
+              <mat-error class="fs-12">Giá không được để trống</mat-error>
+              }@else if (productForm.get('price')?.hasError('min')) {
+              <mat-error class="fs-12">Giá sản phẩm phải trên 1.000đ</mat-error>
+              }
+            </mat-form-field>
+          </td>
+          <td>
+            <h6 class="mb-3">Số lượng sản phẩm</h6>
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Nhập số lượng</mat-label>
+              <input
+                matInput
+                type="number"
+                min="1"
+                formControlName="stockQuantity"
+                [class.is-invalid]="
+                  productForm.get('stockQuantity')?.invalid &&
+                  productForm.get('stockQuantity')?.touched
+                "
+              />
+              @if (productForm.get('stockQuantity')?.hasError('required')) {
+              <mat-error class="fs-12">Số lượng không được để trống</mat-error>
+              }@else if (productForm.get('stockQuantity')?.hasError('min')) {
+              <mat-error class="fs-12">Số lượng sản phẩm phải trên 1</mat-error>
+              }
+            </mat-form-field>
+          </td>
+          <td>
+            <h6 class="mb-3">Địa chỉ</h6>
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Nhập địa chỉ</mat-label>
+              <input
+                matInput
+                type="text"
+                min="0"
+                formControlName="address"
+                [class.is-invalid]="
+                  productForm.get('address')?.invalid &&
+                  productForm.get('address')?.touched
+                "
+              />
+              @if (productForm.get('address')?.hasError('required') ) {
+              <mat-error class="fs-12">Địa chỉ không được để trống</mat-error>
+              } @if (productForm.get('address')?.hasError('minlength') ) {
+              <mat-error class="fs-12"
+                >Địa chỉ quá ngắn. Ít nhất 5 ký tự</mat-error
+              >
+              }
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+
+      <h6 class="mb-3 mt-3">Mô tả sản phẩm</h6>
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>Nhập mô tả</mat-label>
+        <textarea
+          matInput
+          rows="6"
+          formControlName="description"
+          [class.is-invalid]="
+            productForm.get('description')?.invalid &&
+            productForm.get('description')?.touched
+          "
+        ></textarea>
+        @if (productForm.get('description')?.hasError('required')) {
+        <mat-error class="fs-12">Mô tả không được để trống</mat-error>
+        }@else if (productForm.get('description')?.hasError('minlength')) {
+        <mat-error class="fs-12"
+          >Mô tả sản phẩm quá ngắn. Ít nhất 100 ký tự</mat-error
+        >
+        }
+      </mat-form-field>
+
+      <mat-menu #categoryMenu="matMenu" yPosition="above">
+        @for (category of categories ; track $index) {
+        <button
+          mat-menu-item
+          (mouseover)="setCurrentSelectedCategory(category)"
+          [matMenuTriggerFor]="subCategoryMenu"
+        >
+          {{ category.name }}
+        </button>
+        }
+      </mat-menu>
+
+      <mat-menu #subCategoryMenu="matMenu" yPosition="above">
+        @if (selectedCurrentCategory) { @for (subcategory of
+        selectedCurrentCategory.children; track $index) {
+        <button mat-menu-item (click)="btnSelectCategory(subcategory)">
+          {{ subcategory.name }}
+        </button>
+        } }
+      </mat-menu>
+    </form>
+  </mat-card-content>
+</mat-card>
+}

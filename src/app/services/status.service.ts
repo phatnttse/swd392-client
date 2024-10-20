@@ -10,4 +10,8 @@ export class StatusService {
   // trạng thái loading spinner false: tắt xoay, true: bật xoay
   public statusLoadingSpinnerSource = new BehaviorSubject<boolean>(false);
   statusLoadingSpinner$ = this.statusLoadingSpinnerSource.asObservable();
+
+  // Trạng thái tải dữ liệu của app
+  public statusLoadingDataAppSource = new BehaviorSubject<boolean>(true);
+  statusLoadingDataApp$ = this.statusLoadingDataAppSource.asObservable();
 }

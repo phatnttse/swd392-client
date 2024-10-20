@@ -1,3 +1,4 @@
+@defer () {
 <app-header></app-header>
 <div class="untree_co-section before-footer-section section-cart">
   @if (listCartItem.length > 0) {
@@ -24,14 +25,10 @@
               @for (item of listCartItem; track $index) {
               <tr>
                 <td class="product-thumbnail">
-                  <img
-                    width="70"
-                    src="https://bizweb.dktcdn.net/thumb/large/100/447/023/products/moi-20.jpg?v=1643134572273"
-                    alt="Image"
-                  />
+                  <img width="70" [src]="item.flowerImageUrl" alt="Image" />
                 </td>
                 <td class="product-name">
-                  <h2 class="h5 text-black">{{ item.flowerName }}</h2>
+                  <p class="text-dark">{{ item.flowerName }}</p>
                 </td>
                 <td class="text-black">
                   {{ item.flowerPrice | number : "1.0" }}₫
@@ -209,3 +206,8 @@
   }
 </div>
 <app-footer></app-footer>
+}@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

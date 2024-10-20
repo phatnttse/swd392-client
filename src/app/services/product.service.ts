@@ -14,11 +14,19 @@ export class ProductService extends EndpointBase {
   API_URL: string = '';
 
   // Trạng thái của danh sách hoa mới nhất
-  public flowerNewestDataSource = new BehaviorSubject<Flower[] | null>(null);
+  public flowerNewestDataSource = new BehaviorSubject<FlowerPaginated | null>(
+    null
+  );
   flowerNewestData$ = this.flowerNewestDataSource.asObservable();
 
-  public flowerPaginatedDataSource = new BehaviorSubject<Flower[] | null>(null);
+  // Trạng thái của danh sách hoa đã phân trang
+  public flowerPaginatedDataSource =
+    new BehaviorSubject<FlowerPaginated | null>(null);
   flowerPaginatedData$ = this.flowerPaginatedDataSource.asObservable();
+
+  // Trạng thái của hoa theo user
+  public flowerByUserDataSource = new BehaviorSubject<Flower[]>([]);
+  flowerByUserData$ = this.flowerByUserDataSource.asObservable();
 
   constructor(
     http: HttpClient,
@@ -71,27 +79,46 @@ export class ProductService extends EndpointBase {
     );
   }
 
-  addFlower(flower: Flower): Observable<Flower> {
+  createFlower(formData: FormData): Observable<Flower> {
     return this.http
-      .post<Flower>(`${this.API_URL}/flowers`, flower, this.requestHeaders)
+      .post<Flower>(`${this.API_URL}/flowers`, formData, this.requestHeaders)
       .pipe(
         catchError((error) => {
-          return this.handleError(error, () => this.addFlower(flower));
+          return this.handleError(error, () => this.createFlower(formData));
         })
       );
   }
 
-  updateFlower(flower: Flower): Observable<Flower> {
+  updateFlower(flowerId: number, formData: FormData): Observable<Flower> {
     return this.http
-      .put<Flower>(`${this.API_URL}/flowers`, flower, this.requestHeaders)
+      .put<Flower>(
+        `${this.API_URL}/flowers/${flowerId}`,
+        formData,
+        this.requestHeaders
+      )
       .pipe(
         catchError((error) => {
-          return this.handleError(error, () => this.updateFlower(flower));
+          return this.handleError(error, () =>
+            this.updateFlower(flowerId, formData)
+          );
         })
       );
   }
 
-  approveFlowerListing(id: number): Observable<Flower>{
+  getFlowersByUserId(userId: number): Observable<Flower[]> {
+    return this.http
+      .get<Flower[]>(
+        `${this.API_URL}/flowers/user/${userId}`,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getFlowersByUserId(userId));
+        })
+      );
+  }
+
+  approveFlowerListing(id: number | undefined): Observable<Flower>{
     return this.http
     .put<Flower>(`${this.API_URL}/admin/flower-listings/approve/${id}`, {}, this.requestHeaders)
     .pipe(

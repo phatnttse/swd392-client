@@ -1,3 +1,4 @@
+import { FlowerListingStatus } from './enums';
 import { PaginatedResponse } from './paginated.model';
 
 export interface User {
@@ -17,14 +18,15 @@ export interface Flower {
   user: User;
   name: string;
   description: string;
+  address: string;
   price: number;
-  stockBalance: number;
+  stockQuantity: number;
   categories: Category[];
   imageUrl: string;
+  status: FlowerListingStatus;
   createdAt: string;
   updatedAt: string;
   deleted: boolean;
-  status:  'PENDING' | 'APPROVED' | 'REJECTED';
 }
 
 export interface FlowerPaginated extends PaginatedResponse<Flower> {}

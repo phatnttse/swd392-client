@@ -29,6 +29,8 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
+import { ConvertedCategory } from '../../models/category.model';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-products',
@@ -54,6 +56,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
     TranslateModule,
     HeaderComponent,
     FooterComponent,
+    TruncatePipe,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
@@ -120,16 +123,26 @@ export class ProductsComponent implements OnInit {
       }
     });
     this.productService.flowerPaginatedDataSource.subscribe({
-      next: (flowerData: Flower[] | null) => {
-        if (flowerData) {
-          this.listFlower = flowerData;
-        } else {
+      next: (flowerData: FlowerPaginated | null) => {
+        // Chỉ thực thi logic này nếu không có dữ liệu search
+        if (flowerData != null && !this.searchString) {
+          this.listFlower = flowerData.content;
+          this.pageNumber = flowerData.pageNumber;
+          this.pageSize = flowerData.pageSize;
+          this.totalPages = flowerData.totalPages;
+          this.numberOfElements = flowerData.numberOfElements;
+          this.totalElements = flowerData.totalElements;
+          this.visiblePages = this.generateVisiblePageArray(
+            this.currentPage,
+            this.totalPages
+          );
+        } else if (!this.searchString) {
           this.getAllFlowers();
         }
       },
     });
     this.categoryService.convertedCategoryDataSource.subscribe(
-      (categoryData: any[]) => {
+      (categoryData: ConvertedCategory[]) => {
         if (categoryData) {
           this.convertedCategories = categoryData;
         }
@@ -179,7 +192,7 @@ export class ProductsComponent implements OnInit {
   // Lấy danh sách tất cả hoa
   getAllFlowers() {
     this.productService
-      .getFlowers('', 'desc', 'createdAt', 0, 16, [])
+      .getFlowers('', 'desc', 'createdAt', 0, 8, [])
       .subscribe({
         next: (response: FlowerPaginated) => {
           this.listFlower = response.content;
@@ -192,7 +205,7 @@ export class ProductsComponent implements OnInit {
             this.currentPage,
             this.totalPages
           );
-          this.productService.flowerPaginatedDataSource.next(response.content); // Lưu vào BehaviorSubject
+          this.productService.flowerPaginatedDataSource.next(response); // Lưu vào BehaviorSubject
         },
         error: (error: HttpErrorResponse) => {
           console.log(error);
@@ -260,7 +273,7 @@ export class ProductsComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }

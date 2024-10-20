@@ -70,7 +70,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <!-- Header -->
-    <mat-toolbar class="header pe-24 ps-24">
+    <mat-toolbar class="header p-5 ps-24">
       <button
         type="button"
         class="ms-4"
@@ -101,13 +101,26 @@
                 userAccount?.name
               }}</strong></span
             >
-            <span class="fw-bold ms-2"></span>
+            <mat-icon>expand_more</mat-icon>
           </div>
         </button>
         <mat-menu #menu="matMenu" class="profile-dropdown">
           <div class="mb-4 p-16">
-            <button mat-menu-item class="fs-16">Tài khoản của tôi</button>
-            <button mat-menu-item class="fs-16">Xem ví</button>
+            <button routerLink="/profile" mat-menu-item class="fs-16" extend>
+              Tài khoản của tôi
+              <mat-icon>person</mat-icon>
+            </button>
+            <button routerLink="/wallet" mat-menu-item class="fs-16" extend>
+              Xem ví <mat-icon>wallet</mat-icon>
+            </button>
+            <button
+              routerLink="/order-history"
+              mat-menu-item
+              class="fs-16"
+              extend
+            >
+              Lịch sử đặt hàng <mat-icon>local_shipping</mat-icon>
+            </button>
           </div>
 
           <hr />
@@ -118,8 +131,10 @@
               mat-flat-button
               color="accent"
               class="w-100 text-white"
+              extend
             >
               Logout
+              <mat-icon>logout</mat-icon>
             </button>
           </div>
         </mat-menu>

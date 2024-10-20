@@ -25,7 +25,7 @@ export class EndpointBase {
   } {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.authService.accessToken}`,
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       Accept: 'application/json, text/plain, */*',
     });
 
@@ -43,9 +43,9 @@ export class EndpointBase {
 
   // Xử lý lỗi custom
   protected handleError<T>(
-    error: HttpErrorResponse,
+    error: any,
     continuation: () => Observable<T>
-  ) {
+  ): Observable<T> {
     if (error.status === 401) {
       if (this.isRefreshingLogin) {
         return this.pauseTask(continuation);
@@ -65,11 +65,7 @@ export class EndpointBase {
           this.resumeTasks(false);
           this.authService.reLogin();
 
-          if (
-            refreshLoginError.status === 401 ||
-            (refreshLoginError.error &&
-              refreshLoginError.error.error === 'invalid_grant')
-          ) {
+          if (refreshLoginError.status === 401 || refreshLoginError.error) {
             return throwError(() => new Error('session expired'));
           } else {
             return throwError(
@@ -79,18 +75,7 @@ export class EndpointBase {
         })
       );
     }
-
-    if (error.error && error.error.error === 'invalid_grant') {
-      this.authService.reLogin();
-
-      return throwError(() =>
-        error.error && error.error.error_description
-          ? `session expired (${error.error.error_description})`
-          : 'session expired'
-      );
-    } else {
-      return throwError(() => error);
-    }
+    return throwError(() => error);
   }
 
   // Tạm dừng task

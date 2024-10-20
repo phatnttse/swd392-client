@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FlowerListingStatus } from '../../../../models/enums';
 
 @Component({
   selector: 'app-admin-product-detail-management',
@@ -49,7 +50,7 @@ export class AdminProductDetailManagementComponent {
   isCategoryError: boolean = false;
   isPictureError: boolean = false;
   listFlower?: Flower[] = [];;
-  flower?: Flower | null = null;
+  flower: Flower | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -106,17 +107,22 @@ export class AdminProductDetailManagementComponent {
   }
 
 
-  approveFlower(id: number){
-    if(this.flower !== undefined){
-      this.productService.approveFlowerListing(id).subscribe(
-        (response) => {
-          console.log('Flower approved:', response);
-          this.flower!.status = 'APPROVED';
+  approveFlower(id: number | undefined) {
+    if (this.flower !== undefined) {
+      this.productService.approveFlowerListing(id).subscribe({
+        next: (response: Flower) => {
+          console.log('Flower approved successfully:', response);
+          
+          // Cập nhật danh sách hoặc trạng thái hiển thị
+          // this.updateFlowerList(); // Giả sử bạn có một hàm để cập nhật danh sách hoa
         },
-        (error) => {
+        error: (error) => {
+          // Xử lý lỗi nếu có
           console.error('Error approving flower:', error);
         }
-      )
+      });
+    } else {
+      console.warn('Flower is undefined');
     }
   }
 
