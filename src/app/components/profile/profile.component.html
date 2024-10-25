@@ -7,7 +7,7 @@
 <div class="container section-profile">
   <div class="row flex-lg-nowrap">
     <!-- Sidebar Menu -->
-    <div class="col-12 col-lg-auto mb-3" style="width: 240px">
+    <div class="col-12 col-lg-auto mb-3" style="width: 230px">
       <mat-card>
         <mat-nav-list>
           <a
@@ -65,6 +65,7 @@
                       mat-raised-button
                       color="primary"
                       (click)="fileInput.click()"
+                      [disabled]="loadingUploadBtn().valueOf()"
                     >
                       <input
                         type="file"
@@ -72,8 +73,12 @@
                         (change)="onFileSelected($event)"
                         hidden
                       />
-                      <mat-icon>camera_alt</mat-icon>
+                      @if (loadingUploadBtn()) {
+                      <mat-spinner diameter="24"></mat-spinner>
+                      }@else {
                       {{ "UploadImage" | translate }}
+                      }
+                      <mat-icon>camera_alt</mat-icon>
                     </button>
                   </div>
                   <div class="text-end">
@@ -182,9 +187,13 @@
                     extend
                     color="primary"
                     (click)="btnUpdateProfile()"
-                    [disabled]="loadingBtn().valueOf()"
+                    [disabled]="loadingSaveBtn().valueOf()"
                   >
+                    @if (loadingSaveBtn()) {
+                    <mat-spinner diameter="24"></mat-spinner>
+                    }@else {
                     {{ "SaveChanges" | translate }}
+                    }
                     <mat-icon>task_alt</mat-icon>
                   </button>
                 </div>
@@ -304,9 +313,9 @@
                     extend
                     color="primary"
                     (click)="btnChangePassword()"
-                    [disabled]="loadingBtn().valueOf()"
+                    [disabled]="loadingSaveBtn().valueOf()"
                   >
-                    @if (loadingBtn()) {
+                    @if (loadingSaveBtn()) {
                     <mat-spinner diameter="24"></mat-spinner>
                     }@else {
                     {{ "SaveChanges" | translate }}

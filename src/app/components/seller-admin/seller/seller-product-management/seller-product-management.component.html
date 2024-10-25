@@ -9,7 +9,7 @@
           <input
             matInput
             type="text"
-            placeholder="Tìm kiếm"
+            placeholder="{{ 'Header.Search' | translate }}"
             (keyup)="applyFilter($event)"
             #input
           />
@@ -24,7 +24,7 @@
           style="padding: 20px 10px"
           (click)="btnChangeStatusPage(1)"
         >
-          Thêm sản phẩm mới
+          {{ "AddNewProduct" | translate }}
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -33,7 +33,7 @@
 >
 <mat-card class="w-100">
   <mat-card-content>
-    <h4 class="primary-color">Quản lý sản phẩm</h4>
+    <h4 class="primary-color">{{ "ProductManagement" | translate }}</h4>
 
     <div
       class="col-12 d-flex align-items-center justify-content-center mb-5 mt-3"
@@ -47,15 +47,15 @@
       >
         <ng-container matColumnDef="image">
           <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
-            Hình ảnh
+            {{ "Cart.Image" | translate }}
           </th>
           <td mat-cell *matCellDef="let product">
-            <a [href]="product.imageUrl">
+            <a [href]="product.images[0].url">
               <img
                 class="rounded"
                 width="50px"
                 height="50px"
-                [src]="product.imageUrl"
+                [src]="product.images[0].url"
                 [alt]="product.name"
               />
             </a>
@@ -69,7 +69,7 @@
             *matHeaderCellDef
             mat-sort-header="name"
           >
-            Tên
+            {{ "Cart.Name" | translate }}
           </th>
           <td mat-cell *matCellDef="let product">
             <p class="mb-0 fw-bold">{{ product.name }}</p>
@@ -78,7 +78,7 @@
 
         <ng-container matColumnDef="category">
           <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
-            Danh mục
+            {{ "Products.Category" | translate }}
           </th>
           <td mat-cell *matCellDef="let product">
             @for (category of product.categories; track $index) {
@@ -102,7 +102,7 @@
             *matHeaderCellDef
             mat-sort-header="price"
           >
-            Giá
+            {{ "Cart.Price" | translate }}
           </th>
           <td mat-cell *matCellDef="let product">
             <p class="fw-bold mb-0">{{ product.price | number : "1.0" }}₫</p>
@@ -116,7 +116,7 @@
             *matHeaderCellDef
             mat-sort-header="stockQuantity"
           >
-            Số lượng
+            {{ "Cart.Quantity" | translate }}
           </th>
           <td mat-cell *matCellDef="let product">
             <p class="fw-bold mb-0">{{ product.stockQuantity }}</p>
@@ -131,7 +131,7 @@
             *matHeaderCellDef
             mat-sort-header="status"
           >
-            Trạng thái
+            {{ "Status" | translate }}
           </th>
           <td mat-cell *matCellDef="let product">
             <p
@@ -149,7 +149,7 @@
 
         <ng-container matColumnDef="action">
           <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
-            Các thao tác
+            {{ "Actions" | translate }}
           </th>
           <td mat-cell *matCellDef="let product">
             <button
@@ -180,10 +180,10 @@
 } @else {
 <mat-card class="w-100 text-center mt-5">
   <mat-card-content>
-    <h4>Không có sản phẩm nào!</h4>
-    <p>Hiện tại chưa có sản phẩm nào trong danh sách.</p>
+    <h4>{{ "NoProducts" | translate }}</h4>
+    <p>{{ "NoProductsInList" | translate }}</p>
     <button mat-raised-button color="primary" (click)="btnChangeStatusPage(1)">
-      Thêm sản phẩm mới
+      {{ "AddNewProduct" | translate }}
       <mat-icon>add</mat-icon>
     </button>
   </mat-card-content>
@@ -195,10 +195,10 @@
   <mat-card-content>
     <div class="d-flex align-items-center justify-content-between flex-wrap">
       @if (statusPage === 1) {
-      <h4 class="mb-3">Tạo mới sản phẩm</h4>
+      <h4 class="mb-3">{{ "AddNewProduct" | translate }}</h4>
 
       }@else if (statusPage === 2) {
-      <h4 class="mb-3">Chi tiết sản phẩm</h4>
+      <h4 class="mb-3">{{ "ProductDetails" | translate }}</h4>
       }
       <div>
         <button
@@ -209,7 +209,7 @@
           style="padding: 20px"
           (click)="btnChangeStatusPage(0)"
         >
-          Quay lại
+          {{ "Back" | translate }}
           <mat-icon>reply</mat-icon>
         </button>
         @if (statusPage === 1) {
@@ -221,7 +221,7 @@
           style="background-color: var(--bs-success)"
           (click)="btnCreateNewProduct()"
         >
-          Hoàn tất
+          {{ "Finish" | translate }}
           <mat-icon>task_alt</mat-icon>
         </button>
         }@else if (statusPage === 2) {
@@ -233,15 +233,15 @@
           style="background-color: var(--bs-success)"
           (click)="btnUpdateProduct()"
         >
-          Cập nhật
+          {{ "Update" | translate }}
           <mat-icon>task_alt</mat-icon>
         </button>
         }
       </div>
     </div>
     <form [formGroup]="productForm">
-      <h6 class="mb-3 mt-5">Ảnh sản phẩm</h6>
-      <div class="upload-section">
+      <h6 class="mb-2 mt-5">{{ "ProductImage" | translate }}</h6>
+      <div class="upload-section mb-3">
         <div
           class="file-square"
           [ngClass]="{ 'file-square-error': isPictureError }"
@@ -254,39 +254,88 @@
             accept="image/*"
           />
           <label for="cover-image">
-            <i class="material-icons">add_photo_alternate</i>
-            <span class="fs-12 mt-2 upload-title">Thêm hình ảnh</span>
+            <i class="material-icons upload-icon">add_photo_alternate</i>
+            <span class="fs-12 upload-title">{{ "AddImage" | translate }}</span>
+            <span class="text-center">({{ uploadedImages.length }}/5)</span>
           </label>
         </div>
+        @if (uploadedImages.length > 0) {
 
-        @if (uploadedImage) {
         <div class="uploaded-images">
-          <div class="uploaded-image ms-2">
+          @for (image of uploadedImages; track $index) {
+          <div
+            class="uploaded-image"
+            draggable="true"
+            (dragstart)="onDragStart($event, image)"
+            (dragover)="onDragOver($event)"
+            (drop)="onDrop($event, image)"
+          >
             <img
               width="100px"
               height="100px"
               style="object-fit: cover"
-              [src]="uploadedImage"
+              [src]="image"
               alt="Product Image"
             />
+            <button
+              type="button"
+              mat-icon-button
+              matBadge="X"
+              matBadgeColor="warn"
+              class="remove-badge"
+              (click)="removeImage(image)"
+              aria-label="Remove image"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
           </div>
+          }
         </div>
+        } @if (isPictureError) {
+        <mat-error class="fs-12 mb-2 ms-3" style="visibility: visible">{{
+          "CoverPhotoRequired" | translate
+        }}</mat-error>
+        }@else {
+        <mat-error style="visibility: hidden">{{
+          "CoverPhotoRequired" | translate
+        }}</mat-error>
         }
       </div>
-
-      @if (isPictureError) {
-      <mat-error class="fs-12 mb-2 ms-3" style="visibility: visible"
-        >Vui lòng tải ảnh bìa</mat-error
-      >
-      }@else {
-      <mat-error style="visibility: hidden">Vui lòng tải ảnh bìa</mat-error>
-      }
+      <h6 class="mb-2">{{ "CoverPhoto" | translate }}</h6>
+      <div class="d-flex flex-wrap align-items-center">
+        @if (uploadedImages.length > 0) {
+        <div class="file-square mb-5">
+          <img
+            width="100px"
+            height="100px"
+            style="object-fit: cover"
+            [src]="uploadedImages[0]"
+            alt=""
+          />
+        </div>
+        }@else {
+        <div class="file-square mb-5">
+          <label for="product-image">
+            <button mat-button type="button" disabled class="mb-2 mt-2">
+              <i class="material-icons">image</i>
+            </button>
+            <span class="text-center">(0/1)</span>
+          </label>
+        </div>
+        }
+        <ul style="list-style-type: disc !important" class="ms-3 text-muted">
+          <li>{{ "UploadImageDes1" | translate }}</li>
+          <li>
+            {{ "UploadImageDes2" | translate }}
+          </li>
+        </ul>
+      </div>
 
       <div class="row mb-3">
         <div class="col-12 col-sm-8 mb-3">
-          <h6 class="mb-3">Tên sản phẩm</h6>
+          <h6 class="mb-3">{{ "ProductName" | translate }}</h6>
           <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Nhập tên sản phẩm</mat-label>
+            <mat-label>{{ "ProductNameEnter" | translate }}</mat-label>
             <input
               matInput
               type="text"
@@ -298,18 +347,18 @@
               "
             />
             @if (productForm.get('name')?.hasError('required')) {
-            <mat-error class="fs-12"
-              >Tên sản phẩm không được để trống</mat-error
-            >
+            <mat-error class="fs-12">{{
+              "ProductNameRequired" | translate
+            }}</mat-error>
             }@else if (productForm.get('name')?.hasError('minlength')) {
-            <mat-error class="fs-12"
-              >Tên sản phẩm quá ngắn. Ít nhất 5 ký tự</mat-error
-            >
+            <mat-error class="fs-12">{{
+              "ProductNameInvalid" | translate
+            }}</mat-error>
             }
           </mat-form-field>
         </div>
         <div class="col-12 col-sm-4 mb-3">
-          <h6 class="mb-3">Danh mục sản phẩm</h6>
+          <h6 class="mb-3">{{ "ProductCategory" | translate }}</h6>
           <div>
             <button
               mat-raised-button
@@ -321,16 +370,17 @@
             >
               @if (selectedCategories.length > 0) { @for (category of
               selectedCategories; track $index) {
-              {{ category.name }}. } }@else { Chọn danh mục }
+              {{ category.name }}. } }@else {
+              {{ "SelectCategory" | translate }} }
               <mat-icon>chevron_right</mat-icon>
             </button>
             @if (isCategoryError) {
             <mat-error class="fs-12 mb-2 ms-4" style="visibility: visible">
-              Danh mục không được để trống
+              {{ "ProductCategoryRequired" | translate }}
             </mat-error>
             }@else {
             <mat-error style="visibility: hidden">
-              Danh mục không được để trống
+              {{ "ProductCategoryRequired" | translate }}
             </mat-error>
             }
           </div>
@@ -340,9 +390,9 @@
       <table class="example-full-width" cellspacing="0">
         <tr>
           <td>
-            <h6 class="mb-3">Giá sản phẩm (VNĐ)</h6>
+            <h6 class="mb-3">{{ "ProductPrice" | translate }}</h6>
             <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Nhập giá</mat-label>
+              <mat-label> {{ "ProductPriceEnter" | translate }}</mat-label>
               <input
                 matInput
                 type="number"
@@ -354,16 +404,20 @@
                 "
               />
               @if (productForm.get('price')?.hasError('required')) {
-              <mat-error class="fs-12">Giá không được để trống</mat-error>
+              <mat-error class="fs-12">
+                {{ "ProductPriceRequired" | translate }}</mat-error
+              >
               }@else if (productForm.get('price')?.hasError('min')) {
-              <mat-error class="fs-12">Giá sản phẩm phải trên 1.000đ</mat-error>
+              <mat-error class="fs-12">
+                {{ "ProductPriceInvalid" | translate }}</mat-error
+              >
               }
             </mat-form-field>
           </td>
           <td>
-            <h6 class="mb-3">Số lượng sản phẩm</h6>
+            <h6 class="mb-3">{{ "ProductQuantity" | translate }}</h6>
             <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Nhập số lượng</mat-label>
+              <mat-label>{{ "ProductQuantityEnter" | translate }}</mat-label>
               <input
                 matInput
                 type="number"
@@ -375,14 +429,18 @@
                 "
               />
               @if (productForm.get('stockQuantity')?.hasError('required')) {
-              <mat-error class="fs-12">Số lượng không được để trống</mat-error>
+              <mat-error class="fs-12">{{
+                "ProductQuantityRequired" | translate
+              }}</mat-error>
               }@else if (productForm.get('stockQuantity')?.hasError('min')) {
-              <mat-error class="fs-12">Số lượng sản phẩm phải trên 1</mat-error>
+              <mat-error class="fs-12">{{
+                "ProductQuantityInvalid" | translate
+              }}</mat-error>
               }
             </mat-form-field>
           </td>
           <td>
-            <h6 class="mb-3">Địa chỉ</h6>
+            <h6 class="mb-3">{{ "Order.Address" | translate }}</h6>
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Nhập địa chỉ</mat-label>
               <input
@@ -396,20 +454,22 @@
                 "
               />
               @if (productForm.get('address')?.hasError('required') ) {
-              <mat-error class="fs-12">Địa chỉ không được để trống</mat-error>
+              <mat-error class="fs-12">{{
+                "Order.AddressRequired" | translate
+              }}</mat-error>
               } @if (productForm.get('address')?.hasError('minlength') ) {
-              <mat-error class="fs-12"
-                >Địa chỉ quá ngắn. Ít nhất 5 ký tự</mat-error
-              >
+              <mat-error class="fs-12">{{
+                "Order.AddressInvalid" | translate
+              }}</mat-error>
               }
             </mat-form-field>
           </td>
         </tr>
       </table>
 
-      <h6 class="mb-3 mt-3">Mô tả sản phẩm</h6>
+      <h6 class="mb-3 mt-3">{{ "ProductDescription" | translate }}</h6>
       <mat-form-field class="w-100 fs-16" appearance="outline">
-        <mat-label>Nhập mô tả</mat-label>
+        <mat-label>{{ "ProductDescriptionEnter" | translate }}</mat-label>
         <textarea
           matInput
           rows="6"
@@ -420,11 +480,13 @@
           "
         ></textarea>
         @if (productForm.get('description')?.hasError('required')) {
-        <mat-error class="fs-12">Mô tả không được để trống</mat-error>
+        <mat-error class="fs-12">{{
+          "ProductDescriptionRequired" | translate
+        }}</mat-error>
         }@else if (productForm.get('description')?.hasError('minlength')) {
-        <mat-error class="fs-12"
-          >Mô tả sản phẩm quá ngắn. Ít nhất 100 ký tự</mat-error
-        >
+        <mat-error class="fs-12">{{
+          "ProductDescriptionInvalid" | translate
+        }}</mat-error>
         }
       </mat-form-field>
 

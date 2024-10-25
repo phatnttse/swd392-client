@@ -61,7 +61,7 @@
             [routerLinkActiveOptions]="{ exact: true }"
           >
             <mat-icon>{{ sidenav.icon }}</mat-icon>
-            <span class="ps-3">{{ sidenav.menu }}</span>
+            <span class="ps-3">{{ sidenav.menu | translate }}</span>
           </a>
         </li>
         } }
@@ -81,6 +81,39 @@
       >
         <mat-icon>menu</mat-icon>
       </button>
+      <div>
+        <button
+          mat-icon-button
+          class="fs-16 text-light-muted d-flex align-items-center pb-4 pe-8 ps-8 pt-4"
+          [matMenuTriggerFor]="languageMenu"
+        >
+          <div class="d-flex align-items-center">
+            <img
+              [src]="'./../../../assets/images' + defaultLang.icon"
+              width="48"
+              class="rounded"
+              alt=""
+            />
+          </div>
+        </button>
+        <mat-menu #languageMenu="matMenu">
+          <div class="mb-4 p-16">
+            @for (lang of listLanguage; track $index) { @if (lang !=
+            defaultLang) {
+            <button mat-menu-item class="fs-20" (click)="btnChangeLang(lang)">
+              <div class="d-flex align-items-center">
+                <img
+                  [src]="'./../../../assets/images' + lang.icon"
+                  width="32"
+                  class="rounded"
+                  alt=""
+                />
+              </div>
+            </button>
+            } }
+          </div>
+        </mat-menu>
+      </div>
 
       <div class="ms-auto">
         <button
@@ -96,7 +129,7 @@
               alt=""
             />
             <span class="fw-light ms-2"
-              >Hi,
+              >{{ "Hi" | translate }},
               <strong class="primary-color fw-bold">{{
                 userAccount?.name
               }}</strong></span
@@ -107,11 +140,11 @@
         <mat-menu #menu="matMenu" class="profile-dropdown">
           <div class="mb-4 p-16">
             <button routerLink="/profile" mat-menu-item class="fs-16" extend>
-              Tài khoản của tôi
+              {{ "Header.MyAccount" | translate }}
               <mat-icon>person</mat-icon>
             </button>
             <button routerLink="/wallet" mat-menu-item class="fs-16" extend>
-              Xem ví <mat-icon>wallet</mat-icon>
+              {{ "Header.ViewWallet" | translate }} <mat-icon>wallet</mat-icon>
             </button>
             <button
               routerLink="/order-history"
@@ -119,7 +152,8 @@
               class="fs-16"
               extend
             >
-              Lịch sử đặt hàng <mat-icon>local_shipping</mat-icon>
+              {{ "Header.OrderHistory" | translate }}
+              <mat-icon>local_shipping</mat-icon>
             </button>
           </div>
 
@@ -133,7 +167,7 @@
               class="w-100 text-white"
               extend
             >
-              Logout
+              {{ "Header.LogOut" | translate }}
               <mat-icon>logout</mat-icon>
             </button>
           </div>

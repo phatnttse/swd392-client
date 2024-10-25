@@ -70,7 +70,8 @@ export class ProfileComponent implements OnInit {
   hideCurrentPassword = signal(true);
   hideNewPassword = signal(true);
   hideRepeatPassword = signal(true);
-  loadingBtn = signal(false);
+  loadingSaveBtn = signal(false);
+  loadingUploadBtn = signal(false);
   selectedFile: File | null = null;
 
   constructor(
@@ -119,7 +120,7 @@ export class ProfileComponent implements OnInit {
       this.profileForm.markAllAsTouched();
       return;
     }
-    this.loadingBtn.set(true);
+    this.loadingSaveBtn.set(true);
     const name = this.profileForm.get('name')?.value;
     const gender = this.profileForm.get('gender')?.value;
     const phone = this.profileForm.get('phone')?.value;
@@ -127,19 +128,19 @@ export class ProfileComponent implements OnInit {
     this.accountService.updateProfile(name, phone, gender).subscribe({
       next: (response: UserAccountResponse) => {
         if (response.success) {
-          this.loadingBtn.set(false);
-          this.toastr.success(response.message, 'Success', {
-            progressBar: true,
-          });
           this.localStorage.deleteData(DBkeys.CURRENT_USER);
           this.localStorage.savePermanentData(
             response.data,
             DBkeys.CURRENT_USER
           );
+          this.toastr.success(response.message, 'Success', {
+            progressBar: true,
+          });
+          this.loadingSaveBtn.set(false);
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.loadingBtn.set(false);
+        this.loadingSaveBtn.set(false);
         this.toastr.warning(error.error.message, 'Error', {
           progressBar: true,
         });
@@ -162,7 +163,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.loadingBtn.set(true);
+    this.loadingSaveBtn.set(true);
     const oldPassword = this.changePasswordForm.get('currentPassword')?.value;
     const newPassword = this.changePasswordForm.get('newPassword')?.value;
     const repeatPassword = this.changePasswordForm.get('repeatPassword')?.value;
@@ -171,7 +172,7 @@ export class ProfileComponent implements OnInit {
       .changePassword(oldPassword, newPassword, repeatPassword)
       .subscribe({
         next: (response: any) => {
-          this.loadingBtn.set(false);
+          this.loadingSaveBtn.set(false);
           this.toastr.success(
             'Password has been changed successfully. Please log in again',
             'Success',
@@ -183,7 +184,7 @@ export class ProfileComponent implements OnInit {
           this.btnLogOut();
         },
         error: (error: HttpErrorResponse) => {
-          this.loadingBtn.set(false);
+          this.loadingSaveBtn.set(false);
           this.toastr.warning(error.error.error, 'Error', {
             progressBar: true,
           });
@@ -196,6 +197,7 @@ export class ProfileComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
       this.uploadAvatar();
+      this.loadingUploadBtn.set(true);
     }
   }
 
@@ -203,9 +205,6 @@ export class ProfileComponent implements OnInit {
     this.accountService.uploadAvatar(this.selectedFile!).subscribe({
       next: (response: UserAccountResponse) => {
         if (response.success) {
-          this.toastr.success(response.message, 'Success', {
-            progressBar: true,
-          });
           this.localStorage.deleteData(DBkeys.CURRENT_USER);
           this.localStorage.savePermanentData(
             response.data,
@@ -214,6 +213,10 @@ export class ProfileComponent implements OnInit {
           if (this.userAccount) {
             this.userAccount.avatar = response.data.avatar ?? '';
             this.authService.userDataSource.next(this.userAccount);
+            this.toastr.success(response.message, 'Success', {
+              progressBar: true,
+            });
+            this.loadingUploadBtn.set(false);
           }
         }
       },

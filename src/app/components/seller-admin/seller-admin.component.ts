@@ -26,12 +26,10 @@ import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
 import { OrderService } from '../../services/order.service';
 import { OrderByAccountResponse } from '../../models/order.model';
-
-interface sidebarMenu {
-  link: string;
-  icon: string;
-  menu: string;
-}
+import { AppConfigurationService } from '../../services/configuration.service';
+import { StatusService } from '../../services/status.service';
+import { SideBarMenu } from '../../models/base.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-seller-admin',
@@ -54,6 +52,7 @@ interface sidebarMenu {
     MatSidenavModule,
     MatSlideToggleModule,
     MatToolbarModule,
+    TranslateModule,
   ],
   templateUrl: './seller-admin.component.html',
   styleUrls: [
@@ -62,7 +61,7 @@ interface sidebarMenu {
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class SellerAdminComponent {
+export class SellerAdminComponent implements OnInit {
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -71,6 +70,8 @@ export class SellerAdminComponent {
     );
 
   userAccount: UserAccount | null = null;
+  listLanguage: any = null; // Danh sách ngôn ngữ lấy từ config
+  defaultLang: any = null; // Ngôn ngữ được chọn
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -78,7 +79,9 @@ export class SellerAdminComponent {
     private router: Router,
     private cartService: CartService,
     private productService: ProductService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private appConfig: AppConfigurationService,
+    private statusService: StatusService
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +90,12 @@ export class SellerAdminComponent {
       this.getFlowersByUserId(this.userAccount?.id!);
       this.getOrdersBySeller();
     }
+    this.listLanguage = this.appConfig['Config_Language'].filter(
+      (lang: any) => lang.isActive === 1
+    );
+    this.statusService.statusLanguage$.subscribe((lang) => {
+      this.defaultLang = lang ? lang : this.listLanguage[0];
+    });
   }
 
   btnLogOut() {
@@ -113,7 +122,7 @@ export class SellerAdminComponent {
   // Lấy danh sách đơn hàng theo người bán
   getOrdersBySeller() {
     this.orderService
-      .getOrdersBySeller('', 'desc', 'createdAt', 0, 8, '', '', '')
+      .getOrdersBySeller('', 'desc', 'createdAt', 0, 10, '', '', '')
       .subscribe({
         next: (response: OrderByAccountResponse) => {
           if (response.success) {
@@ -125,9 +134,14 @@ export class SellerAdminComponent {
         },
       });
   }
-  
+  // Thay đổi ngôn ngữ
+  btnChangeLang(lang: any) {
+    this.appConfig.setLanguageDefault(lang.id);
+    this.statusService.statusLanguageSource.next(lang);
+  }
+
   routerLinkActive = 'activelink';
-  sellerChannelMenu: sidebarMenu[] = [
+  sellerChannelMenu: SideBarMenu[] = [
     {
       link: '/seller-channel',
       icon: 'storefront',
@@ -136,16 +150,16 @@ export class SellerAdminComponent {
     {
       link: '/seller-channel/product-management',
       icon: 'inventory',
-      menu: 'Quản lý sản phẩm',
+      menu: 'ProductManagement',
     },
     {
       link: '/seller-channel/order-management',
       icon: 'receipt_long',
-      menu: 'Quản lý đơn hàng',
+      menu: 'OrderManagement',
     },
   ];
 
-  adminMenu: sidebarMenu[] = [
+  adminMenu: SideBarMenu[] = [
     {
       link: '/admin',
       icon: 'dashboard',

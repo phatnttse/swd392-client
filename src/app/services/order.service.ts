@@ -4,7 +4,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
-import { OrderByAccountResponse, OrderResponse } from '../models/order.model';
+import {
+  OrderByAccountResponse,
+  OrderResponse,
+  UpdateOrderStatusResponse,
+} from '../models/order.model';
 
 @Injectable({
   providedIn: 'root',
@@ -134,6 +138,38 @@ export class OrderService extends EndpointBase {
               startDate,
               endDate
             )
+          );
+        })
+      );
+  }
+
+  getOrderById(orderId: string): Observable<OrderResponse> {
+    return this.http
+      .get<OrderResponse>(`${this.API_URL}/orders/${orderId}`, {
+        headers: this.requestHeaders.headers,
+      })
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getOrderById(orderId));
+        })
+      );
+  }
+
+  updateOrderStatus(
+    orderDetailId: number,
+    reason: string,
+    status: string
+  ): Observable<UpdateOrderStatusResponse> {
+    return this.http
+      .patch<UpdateOrderStatusResponse>(
+        `${this.API_URL}/orders/update/${orderDetailId}`,
+        { reason, status },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.updateOrderStatus(orderDetailId, reason, status)
           );
         })
       );

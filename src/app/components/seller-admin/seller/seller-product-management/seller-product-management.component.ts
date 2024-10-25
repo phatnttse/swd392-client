@@ -19,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { Flower } from '../../../../models/flower.model';
 import { ProductService } from '../../../../services/product.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -33,6 +33,8 @@ import { ToastrService } from 'ngx-toastr';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { Subscription } from 'rxjs';
+import { MatBadgeModule } from '@angular/material/badge';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-seller-product-management',
@@ -50,6 +52,9 @@ import { Subscription } from 'rxjs';
     MatMenuModule,
     MatOptionModule,
     MatSelectModule,
+    MatBadgeModule,
+    TranslateModule,
+    MatSortModule,
   ],
   templateUrl: './seller-product-management.component.html',
   styleUrl: './seller-product-management.component.scss',
@@ -87,14 +92,16 @@ export class SellerProductManagementComponent
 
   // Tạo sản phẩm mới
   productForm: FormGroup; // Form tạo sản phẩm
-  uploadedImage: string = ''; // Ảnh đã tải lên
-  fileImage: File | null = null; // File ảnh
+  uploadedImages: string[] = []; // Ảnh đã tải lên
+  fileImages: File[] = []; // File ảnh
   isPictureError: boolean = false; // Lỗi không tải ảnh
   selectedCategories: SubCategory[] = []; // Danh sách  danh mục đã chọn
   isCategoryError: boolean = false; // Lỗi không chọn danh mục
   categories: ConvertedCategory[] = []; // Danh sách danh mục
   selectedCurrentCategory: ConvertedCategory | null = null; // Danh mục được chọn hiện tại
   selectedProduct: Flower | null = null; // Sản phẩm được chọn
+  draggedImage: any; // Ảnh kéo thả
+  productDetail: Flower | null = null; // Chi tiết sản phẩm
 
   constructor(
     private productService: ProductService,
@@ -107,7 +114,7 @@ export class SellerProductManagementComponent
       price: ['', [Validators.required, Validators.min(1000)]],
       description: ['', [Validators.required, Validators.minLength(100)]],
       stockQuantity: ['', [Validators.required, Validators.min(1)]],
-      address: ['', [Validators.required, Validators.minLength(5)]],
+      address: ['', [Validators.required, Validators.minLength(10)]],
     });
   }
 
@@ -156,10 +163,10 @@ export class SellerProductManagementComponent
   btnCreateNewProduct() {
     if (
       this.productForm.invalid ||
-      !this.uploadedImage ||
+      this.selectedCategories.length === 0 ||
       !this.selectedCategories.length
     ) {
-      this.isPictureError = !this.uploadedImage;
+      this.isPictureError = this.uploadedImages.length === 0;
       this.isCategoryError = !this.selectedCategories.length;
       this.productForm.markAllAsTouched();
       return;
@@ -171,14 +178,15 @@ export class SellerProductManagementComponent
       next: (response: Flower) => {
         this.productForm.reset();
         this.selectedCategories = [];
-        this.uploadedImage = '';
-        this.toastr.success('Tạo hoa mới thành công', 'Success', {
-          progressBar: true,
-        });
+        this.uploadedImages = [];
         this.listFlower.push(response);
         this.productService.flowerByUserDataSource.next(this.listFlower);
         this.dataSource = new MatTableDataSource(this.listFlower);
         this.dataSource.sort = this.sort;
+        this.toastr.success('Tạo hoa mới thành công', 'Success', {
+          progressBar: true,
+        });
+        this.statusPage = 0;
       },
       error: (error: HttpErrorResponse) => {
         this.toastr.error('Tạo hoa mới thất bại', 'Error');
@@ -202,9 +210,10 @@ export class SellerProductManagementComponent
       formData.append('categories', category.id.toString());
     });
 
-    if (this.fileImage) {
-      formData.append('image', this.fileImage);
-    }
+    this.fileImages.forEach((fileImage) => {
+      formData.append('images', fileImage);
+    });
+
     return formData;
   }
 
@@ -229,12 +238,21 @@ export class SellerProductManagementComponent
   onImageUpload(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
 
+    if (this.uploadedImages.length >= 5) {
+      this.toastr.warning('Chỉ được tải lên tối đa 5 ảnh', 'Warning', {
+        progressBar: true,
+      });
+      return;
+    }
+
     if (fileInput.files && fileInput.files.length > 0) {
-      this.fileImage = fileInput.files[0];
-      this.uploadedImage = URL.createObjectURL(this.fileImage);
+      const fileImage = fileInput.files[0];
+      this.fileImages.push(fileImage);
+      const uploadedImage = URL.createObjectURL(fileImage);
+      this.uploadedImages.push(uploadedImage);
       this.isPictureError = false;
     } else {
-      this.uploadedImage = '';
+      this.uploadedImages = [];
     }
   }
 
@@ -250,8 +268,8 @@ export class SellerProductManagementComponent
           address: flower.address,
         });
         this.selectedProduct = flower;
-        this.uploadedImage = flower.imageUrl;
-        this.selectedCategories = flower.categories;
+        (this.uploadedImages = flower.images.map((image) => image.url)),
+          (this.selectedCategories = flower.categories);
         this.statusPage = 2;
       }
     });
@@ -261,11 +279,11 @@ export class SellerProductManagementComponent
   btnUpdateProduct() {
     if (
       this.productForm.invalid ||
-      !this.selectedCategories.length ||
-      !this.uploadedImage
+      this.selectedCategories.length === 0 ||
+      !this.uploadedImages
     ) {
       this.isCategoryError = !this.selectedCategories.length;
-      this.isPictureError = !this.uploadedImage;
+      this.isPictureError = this.uploadedImages.length === 0;
       this.productForm.markAllAsTouched();
       return;
     }
@@ -286,7 +304,6 @@ export class SellerProductManagementComponent
             stockQuantity: response.stockQuantity,
             address: response.address,
           });
-          this.uploadedImage = response.imageUrl;
           this.selectedCategories = response.categories;
           this.listFlower.forEach((flower, index) => {
             if (flower.id === response.id) {
@@ -303,5 +320,40 @@ export class SellerProductManagementComponent
           console.error('Error update product: ', error);
         },
       });
+  }
+
+  removeImage(image: any) {
+    this.uploadedImages = this.uploadedImages.filter((img) => img !== image);
+  }
+
+  onDragStart(event: DragEvent, image: any) {
+    this.draggedImage = image;
+    setTimeout(() => {
+      const element = event.target as HTMLElement;
+      element.classList.add('dragging');
+    }, 0);
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDrop(event: DragEvent, targetImage: any) {
+    event.preventDefault();
+    const draggedImageIndex = this.uploadedImages.indexOf(this.draggedImage);
+    const targetImageIndex = this.uploadedImages.indexOf(targetImage);
+
+    if (draggedImageIndex !== -1 && targetImageIndex !== -1) {
+      // Cập nhật vị trí ảnh trong uploadedImages
+      const [movedImage] = this.uploadedImages.splice(draggedImageIndex, 1);
+      this.uploadedImages.splice(targetImageIndex, 0, movedImage);
+
+      // Cập nhật vị trí ảnh tương ứng trong fileImages
+      const [movedFileImage] = this.fileImages.splice(draggedImageIndex, 1);
+      this.fileImages.splice(targetImageIndex, 0, movedFileImage);
+    }
+
+    const element = event.target as HTMLElement;
+    element.classList.remove('dragging');
   }
 }

@@ -46,7 +46,6 @@ export class EndpointBase {
     error: any,
     continuation: () => Observable<T>
   ): Observable<T> {
-    debugger;
     console.error('handleError', error);
     if (error.status === 0) {
       if (this.isRefreshingLogin) {
@@ -57,18 +56,15 @@ export class EndpointBase {
 
       return from(this.authService.refreshLogin()).pipe(
         mergeMap(() => {
-          debugger;
           this.isRefreshingLogin = false;
           this.resumeTasks(true);
 
           return continuation();
         }),
         catchError((refreshLoginError) => {
-          debugger;
           this.isRefreshingLogin = false;
           this.resumeTasks(false);
           if (refreshLoginError.status === 0) {
-            debugger;
             this.authService.reLogin();
             return throwError(() => new Error('session expired'));
           } else {

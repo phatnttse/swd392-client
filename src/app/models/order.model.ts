@@ -53,3 +53,5 @@ export interface PaginatedOrderByAccountResponse
   extends PaginatedPageableResponse<OrderByAccount> {}
 export interface OrderByAccountResponse
   extends BaseResponse<PaginatedOrderByAccountResponse> {}
+export interface UpdateOrderStatusResponse
+  extends BaseResponse<OrderByAccount> {}

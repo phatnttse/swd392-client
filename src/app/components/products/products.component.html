@@ -118,7 +118,7 @@
                       (click)="viewFlowerDetails(flower.id)"
                     >
                       <img
-                        [src]="flower.imageUrl"
+                        [src]="flower.images[0].url"
                         [alt]="flower.name"
                         class="tab-image w-100"
                       />
@@ -212,7 +212,7 @@
                     >{{ page }}</a
                   >
                 </li>
-                } @if (currentPage < totalPages) {
+                } @if (currentPage < totalPages - 1) {
                 <li class="page-item">
                   <a
                     class="page-link link-next-pre"

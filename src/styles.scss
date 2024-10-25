@@ -1,0 +1,12 @@
+@media (max-width: 1025px) {
+  .swiper-wrapper {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-right: -15px;
+    margin-left: -15px;
+    padding-left: 7.5px;
+    padding-right: 7.5px;
+    width: auto;
+  }
+}

@@ -112,11 +112,7 @@ export class AuthService {
   redirectForLogin() {
     this.loginRedirectUrl = this.router.url;
     this.router.navigate(['/signin']);
-    this.toastr.warning(
-      'Phiên đăng nhập đã hết hạn',
-      'Vui lòng đăng nhập lại!',
-      { progressBar: true }
-    );
+    this.toastr.warning('', 'Vui lòng đăng nhập!', { progressBar: true });
   }
 
   reLogin() {
