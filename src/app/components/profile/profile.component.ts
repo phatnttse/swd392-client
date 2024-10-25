@@ -213,6 +213,7 @@ export class ProfileComponent implements OnInit {
           );
           if (this.userAccount) {
             this.userAccount.avatar = response.data.avatar ?? '';
+            this.authService.userDataSource.next(this.userAccount);
           }
         }
       },

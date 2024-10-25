@@ -49,6 +49,7 @@ export class AuthService {
     this.API_URL = appConfig['API_URL'];
     this.initializeLoginStatus();
   }
+
   forgotPassword(email: string): Observable<any> {
     const payload = { email };
     return this.http.post<any>(`${this.API_URL}/auth/forgot-password`, payload);
@@ -129,7 +130,6 @@ export class AuthService {
   }
 
   refreshLogin() {
-    debugger;
     return this.http
       .post(
         `${this.API_URL}/auth/renew-access-token`,
@@ -192,7 +192,6 @@ export class AuthService {
   }
   private processRefreshTokenResponse(response: any) {
     const accessToken = response.data.accessToken;
-    this.localStorage.deleteData(DBkeys.ACCESS_TOKEN);
     this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
     return response;
   }

@@ -90,9 +90,8 @@ import {
     MatLabel
   ],
   templateUrl: './admin-product-management.component.html',
-  styleUrl: './admin-product-management.component.scss'
+  styleUrl: './admin-product-management.component.scss',
 })
-
 export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   // Biến từ AdminProductManagementComponent
   @ViewChild(MatSort) sort!: MatSort;
@@ -183,8 +182,6 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     pageSize: number,
     categoryIds: number[]
   ) {
-    this.currentPage =
-      Number(this.localStorage.getData(DBkeys.CURRENT_PRODUCTS_PAGE)) || 0;
     this.productService
       .getFlowers(
         searchString,
@@ -241,15 +238,11 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
 
   onPageChange(page: number) {
     this.currentPage = page < 0 ? 0 : page;
-    this.localStorage.savePermanentData(
-      String(page),
-      DBkeys.CURRENT_PRODUCTS_PAGE
-    );
     this.getFlowers(
       this.searchString,
       this.order,
       this.sortBy,
-      page,
+      this.currentPage,
       this.pageSize,
       this.categoryIds
     );
