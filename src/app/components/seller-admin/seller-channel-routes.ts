@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { UserGuard } from '../../guards/guards/user.guard';
+import { UserGuard } from '../../guards/user.guard';
 
 export const SellerChannelRoutes: Routes = [
   {

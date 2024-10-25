@@ -1,6 +1,6 @@
 import { AdminProductManagementComponent } from './admin/admin-product-management/admin-product-management.component';
 import { Routes } from '@angular/router';
-import { AdminGuard } from '../../guards/guards/admin.guard';
+import { AdminGuard } from '../../guards/admin.guard';
 
 export const AdminRoutes: Routes = [
   {
@@ -12,29 +12,29 @@ export const AdminRoutes: Routes = [
     },
     children: [
       {
-        path:'product-management',
-        loadComponent(){
-          return import('./../seller-admin/admin/admin-product-management/admin-product-management.component').then(
-            (m) => m.AdminProductManagementComponent
-          );
-        }
+        path: 'product-management',
+        loadComponent() {
+          return import(
+            './../seller-admin/admin/admin-product-management/admin-product-management.component'
+          ).then((m) => m.AdminProductManagementComponent);
+        },
       },
       {
-        path:'product-detail-management/:id',
-        loadComponent(){
-          return import('./../seller-admin/admin/admin-product-detail-management/admin-product-detail-management.component').then(
-            (m) => m.AdminProductDetailManagementComponent
-          );
-        }
+        path: 'product-detail-management/:id',
+        loadComponent() {
+          return import(
+            './../seller-admin/admin/admin-product-detail-management/admin-product-detail-management.component'
+          ).then((m) => m.AdminProductDetailManagementComponent);
+        },
       },
       {
-        path:'category-management',
-        loadComponent(){
-          return import('./../seller-admin/admin/admin-category-management/admin-category-management.component').then(
-            (m) => m.AdminCategoryManagementComponent
-          );
-        }
-      }
+        path: 'category-management',
+        loadComponent() {
+          return import(
+            './../seller-admin/admin/admin-category-management/admin-category-management.component'
+          ).then((m) => m.AdminCategoryManagementComponent);
+        },
+      },
     ],
     canActivate: [AdminGuard],
     canActivateChild: [AdminGuard],
