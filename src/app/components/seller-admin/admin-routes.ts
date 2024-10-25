@@ -20,14 +20,6 @@ export const AdminRoutes: Routes = [
         }
       },
       {
-        path:'product-detail-management/:id',
-        loadComponent(){
-          return import('./../seller-admin/admin/admin-product-detail-management/admin-product-detail-management.component').then(
-            (m) => m.AdminProductDetailManagementComponent
-          );
-        }
-      },
-      {
         path:'category-management',
         loadComponent(){
           return import('./../seller-admin/admin/admin-category-management/admin-category-management.component').then(
