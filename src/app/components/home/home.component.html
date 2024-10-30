@@ -1,5 +1,36 @@
 @defer () {
 <app-header></app-header>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Blossom&display=swap" rel="stylesheet">
+  <style>
+    .topic-title {
+      font-family: 'Blossom', cursive;
+      font-weight: bold;
+      color: #f199a1; /* Bootstrap's primary color */
+      margin-left: 20px;
+      text-shadow: 
+      -1px -1px 0 #ffffff,
+      1px -1px 0 #ffffff,
+      -1px 1px 0 #ffffff,
+      1px 1px 0 #ffffff;
+    }
+  </style>
+  <style>
+    .flower-title {
+      font-family: 'Blossom', cursive;
+      font-size: 42px;
+      color: #f199a1; /* Optional: Tomato color */
+      text-align: center;
+      margin: 30px 0;
+      text-shadow: 
+      -1px -1px 0 #e7e7e7,
+      1px -1px 0 #e7e7e7,
+      -1px 1px 0 #e7e7e7,
+      1px 1px 0 #e7e7e7;
+    }
+    </style>
+</head>
+
 <section
   style="
     background-image: url('assets/images/banner_home.jpg');
@@ -15,23 +46,25 @@
       <div class="row">
         <div class="col-lg-6 pt-5 mt-5">
           <h1 class="display-1 ls-1">
-            <span class="fw-bold text-primary" style="margin-left: 20px"
+            <span class="topic-title"
               >Blossom</span
             >
           </h1>
-          <p class="fs-4" style="margin-left: 20px; color: aliceblue">
+          <p class="flower-title">
             {{ "Home.Slogan" | translate }}
           </p>
 
           <div class="d-flex gap-3">
             <a
               routerLink="/products"
-              class="btn btn-primary text-uppercase fs-6 rounded-pill py-3 mt-3"
+              class="btn btn-primary fs-6 rounded-pill py-3 mt-3"
+              style="font-weight: bold;"
               >{{ "Home.BuyNow" | translate }}</a
             >
             <a
               routerLink="/signup"
-              class="btn btn-dark text-uppercase fs-6 rounded-pill py-3 mt-3"
+              class="btn btn-dark fs-6 rounded-pill py-3 mt-3"
+              style="font-weight: bold;"
               >{{ "Home.RegisterToSellFlower" | translate }}</a
             >
           </div>
@@ -52,9 +85,9 @@
             </div>
             <div class="col-md-9">
               <div class="card-body p-0">
-                <h5 class="text-light">Tiêu đề 1</h5>
+                <h5 class="text-light">Fresh Blooms</h5>
                 <h6 class="card-text fw-bold">
-                  Đây là đoạn văn nhằm thay cho nội dung của tiêu đề 1
+                  Mua sắm hoa tươi với giá tốt nhất đảm bảo chất lượng cho từng bông hoa.
                 </h6>
               </div>
             </div>
@@ -80,9 +113,9 @@
             </div>
             <div class="col-md-9">
               <div class="card-body p-0">
-                <h5 class="text-light">Tiêu đề 2</h5>
+                <h5 class="text-light">Sắc Hoa Cho Mọi Khoảnh Khắc</h5>
                 <h6 class="card-text">
-                  Đây là đoạn văn nhằm thay cho nội dung của tiêu đề 2.
+                  Tìm kiếm các bó hoa hoàn hảo cho mọi dịp và gửi lời chúc tốt nhất!.
                 </h6>
               </div>
             </div>
@@ -99,9 +132,9 @@
             </div>
             <div class="col-md-9">
               <div class="card-body p-0">
-                <h5 class="text-light">Tiêu đề 3</h5>
+                <h5 class="text-light">Giao Hoa Nhanh Chóng</h5>
                 <h6 class="card-text">
-                  Đây là đoạn văn nhằm thay cho nội dung của tiêu đề 3
+                  Với dịch vụ giao hoa nhanh đúng thời điểm và đáng tin cậy.  
                 </h6>
               </div>
             </div>
