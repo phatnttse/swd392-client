@@ -90,6 +90,8 @@
     "PaymentByWallet": "Pay by Wallet",
     "PaymentByPayOs": "Pay by PayOs",
     "Balance": "Balance",
+    "TotalCost": "Total Cost",
+    "PaymentByCOD": "Cash on Delivery",
     "CancelReason": {
       "FoundCheaperElsewhere": "Found a cheaper option elsewhere",
       "ChangeOfMind": "Change of mind",
@@ -195,7 +197,7 @@
   "ProductDescriptionRequired": "Description cannot be empty",
   "ProductDescriptionInvalid": "Product description must be at least 100 characters",
   "ClearFilter": "Clear Filter",
-  "EnterStartAndEndDate": "Select Start and End Date",
+  "EnterStartAndEndDate": "Start Date - End Date",
   "OrderPerson": "Orderer",
   "Phone": "Phone Number",
   "TotalAmount": "Total Amount",
@@ -208,5 +210,10 @@
   "OrderDate": "Order Date",
   "OrderCode": "Order Code",
   "OrderValue": "Order Value",
-  "ProductInfo": "Product Information"
+  "ProductInfo": "Product Information",
+  "AddressEnter": "Enter address",
+  "ConfirmPreparing": "Confirm preparing goods",
+  "ConfirmShipping": "Confirm shipping",
+  "ChangeEmail": "Change Email",
+  "OTPRequired": "Please enter OTP code"
 }

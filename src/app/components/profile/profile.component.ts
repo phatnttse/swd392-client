@@ -1,6 +1,6 @@
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -33,6 +33,7 @@ import { DBkeys } from '../../services/db-keys';
 import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-profile',
@@ -57,22 +58,30 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatToolbarModule,
     TranslateModule,
     MatProgressSpinnerModule,
+    MatStepperModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('stepper') stepper!: MatStepper;
+
   profileForm: FormGroup;
   changePasswordForm: FormGroup;
+  changeEmailForm: FormGroup;
+  verifyOTPForm: FormGroup;
   userAccount: UserAccount | null = null;
   genders = Object.values(Gender);
-  statusPage: number = 0; // Trạng thái trang 0: overview, 1: change password
+  statusPage: number = 0; // Trạng thái trang 0: overview, 1: change password, 2: change email
   hideCurrentPassword = signal(true);
   hideNewPassword = signal(true);
   hideRepeatPassword = signal(true);
   loadingSaveBtn = signal(false);
   loadingUploadBtn = signal(false);
+  loadingChangeEmailBtn = signal(false);
+  loadingVerifyOTPBtn = signal(false);
   selectedFile: File | null = null;
+  isLinear = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -94,6 +103,12 @@ export class ProfileComponent implements OnInit {
       currentPassword: ['', Validators.required],
       newPassword: ['', Validators.required],
       repeatPassword: ['', Validators.required],
+    });
+    this.changeEmailForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+    this.verifyOTPForm = this.formBuilder.group({
+      otp: ['', Validators.required],
     });
   }
 
@@ -192,6 +207,67 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+  // Đổi email
+  btnChangeEmail() {
+    if (this.changeEmailForm.invalid) {
+      this.changeEmailForm.markAllAsTouched();
+      return;
+    }
+    this.loadingChangeEmailBtn.set(true);
+    const email = this.changeEmailForm.get('email')?.value;
+    this.accountService.changeEmail(email).subscribe({
+      next: (response: UserAccountResponse) => {
+        this.toastr.success(response.message, 'Success', {
+          progressBar: true,
+        });
+        this.loadingChangeEmailBtn.set(false);
+        this.stepper.next();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.toastr.error(error.error.message, 'Error', {
+          progressBar: true,
+        });
+        this.loadingChangeEmailBtn.set(false);
+      },
+    });
+  }
+
+  // Xác nhận OTP
+  btnVerifyOTP() {
+    if (this.verifyOTPForm.invalid) {
+      this.verifyOTPForm.markAllAsTouched();
+      return;
+    }
+    const otp = this.verifyOTPForm.get('otp')?.value;
+    this.loadingVerifyOTPBtn.set(true);
+    this.accountService.confirmChangeEmail(otp).subscribe({
+      next: (response: UserAccountResponse) => {
+        if (response.success) {
+          this.authService.userDataSource.next(response.data);
+          this.loadingVerifyOTPBtn.set(false);
+          this.toastr.success(
+            'Change Email Successful, Please login again',
+            'Success',
+            {
+              progressBar: true,
+            }
+          );
+          this.stepper.next();
+          setTimeout(() => {
+            this.btnLogOut();
+          }, 2000);
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.toastr.warning(error.error.message, 'Error', {
+          progressBar: true,
+        });
+        this.loadingVerifyOTPBtn.set(false);
+      },
+    });
+  }
+
+  // Chọn file ảnh
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -201,6 +277,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  // Upload ảnh đại diện
   uploadAvatar() {
     this.accountService.uploadAvatar(this.selectedFile!).subscribe({
       next: (response: UserAccountResponse) => {
@@ -228,9 +305,11 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // Chuyển trang
   btnChangeStatusPage(status: number) {
     this.statusPage = status;
   }
+
   // Ẩn hiện mật khẩu
   togglePasswordVisibility(field: 'current' | 'new' | 'repeat') {
     if (field === 'current') {

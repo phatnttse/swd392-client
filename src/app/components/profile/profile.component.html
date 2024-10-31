@@ -1,3 +1,4 @@
+@defer () {
 <app-header></app-header>
 
 <mat-toolbar color="primary">
@@ -27,6 +28,15 @@
           >
             <mat-icon class="icon-size">key</mat-icon>
             <span class="ms-2">{{ "ChangePassword" | translate }}</span>
+          </a>
+          <a
+            mat-list-item
+            class="d-flex justify-content-start align-items-center"
+            (click)="btnChangeStatusPage(2)"
+            [ngClass]="{ active: statusPage === 2 }"
+          >
+            <mat-icon class="icon-size">mail_outline</mat-icon>
+            <span class="ms-2">{{ "ChangeEmail" | translate }}</span>
           </a>
         </mat-nav-list>
       </mat-card>
@@ -205,7 +215,7 @@
         <div class="col mb-3">
           <mat-card>
             <mat-card-content>
-              <div class="mb-4 d-flex align-items-center">
+              <div class="mb-4 d-flex align-items-center mt-3">
                 <h5 class="primary-color">
                   {{ "ChangePassword" | translate }}
                 </h5>
@@ -328,6 +338,119 @@
             </mat-card-content>
           </mat-card>
         </div>
+        }@else if (statusPage === 2) {
+        <div class="col mb-3">
+          <mat-card>
+            <mat-card-content>
+              <mat-stepper orientation="vertical" [linear]="true" #stepper>
+                <mat-step [stepControl]="changeEmailForm">
+                  <form [formGroup]="changeEmailForm">
+                    <ng-template matStepLabel
+                      >Enter your email to change</ng-template
+                    >
+                    <div class="row mt-3">
+                      <div class="col-12 col md-12">
+                        <mat-form-field appearance="outline" class="w-100">
+                          <mat-label>Email</mat-label>
+                          <mat-icon matPrefix class="mt-1"
+                            >mail_outline</mat-icon
+                          >
+                          <input
+                            matInput
+                            type="email"
+                            formControlName="email"
+                            required
+                          />
+                          @if
+                          (changeEmailForm.get('email')?.hasError('required')) {
+                          <mat-error class="mat-error" style="font-size: 12px">
+                            {{ "Sign.EmailRequired" | translate }}
+                          </mat-error>
+                          } @if
+                          (changeEmailForm.get('email')?.hasError('email')) {
+                          <mat-error class="mat-error" style="font-size: 12px">
+                            {{ "Sign.EmailInvalid" | translate }}
+                          </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <button
+                        mat-raised-button
+                        class="fs-16 p-24 text-white btn-success mb-2"
+                        type="button"
+                        extend
+                        color="primary"
+                        (click)="btnChangeEmail()"
+                        [disabled]="loadingChangeEmailBtn().valueOf()"
+                      >
+                        @if (loadingChangeEmailBtn()) {
+                        <mat-spinner diameter="24"></mat-spinner>
+                        }@else {
+                        {{ "SendEmailBtn" | translate }}
+                        }
+                        <mat-icon>send</mat-icon>
+                      </button>
+                    </div>
+                  </form>
+                </mat-step>
+                <!-- Step 2: OTP Verification -->
+                <mat-step [stepControl]="verifyOTPForm">
+                  <form [formGroup]="verifyOTPForm" class="my-2">
+                    <ng-template matStepLabel>Enter OTP</ng-template>
+                    <div class="row mt-3">
+                      <div class="col-12 col md-12">
+                        <mat-form-field appearance="outline" class="w-100">
+                          <mat-label>Enter OTP</mat-label>
+                          <mat-icon matPrefix>lock</mat-icon>
+                          <input
+                            matInput
+                            type="text"
+                            maxlength="6"
+                            class="otp-box"
+                            formControlName="otp"
+                            required
+                          />
+                          @if (verifyOTPForm.get('otp')?.hasError('required')) {
+                          <mat-error class="mat-error" style="font-size: 12px">
+                            {{ "OTPRequired" | translate }}
+                          </mat-error>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div
+                      class="d-flex align-items-center justify-content-end mt-3"
+                    >
+                      <button class="me-3" mat-button matStepperPrevious>
+                        Back
+                      </button>
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="btnVerifyOTP()"
+                        [disabled]="loadingVerifyOTPBtn().valueOf()"
+                      >
+                        @if (loadingVerifyOTPBtn()) {
+                        <mat-spinner diameter="24"></mat-spinner>
+                        }@else {
+                        {{ "Confirm" | translate }}
+                        }
+                      </button>
+                    </div>
+                  </form>
+                </mat-step>
+
+                <mat-step>
+                  <ng-template matStepLabel>Done</ng-template>
+                  <p>You are now done.</p>
+                </mat-step>
+              </mat-stepper>
+            </mat-card-content>
+          </mat-card>
+        </div>
         }
         <!-- Support Section -->
         <div class="col-12 col-md-3 mb-3">
@@ -364,3 +487,8 @@
 </div>
 
 <app-footer></app-footer>
+}@loading {
+<div class="preloader-wrapper">
+  <div class="preloader"></div>
+</div>
+}

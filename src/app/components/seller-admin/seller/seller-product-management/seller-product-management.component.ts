@@ -356,4 +356,10 @@ export class SellerProductManagementComponent
     const element = event.target as HTMLElement;
     element.classList.remove('dragging');
   }
+
+  get selectedCategoriesLabel(): string {
+    return this.selectedCategories.length > 0
+      ? this.selectedCategories.map((c) => c.name).join(', ')
+      : 'Select Category';
+  }
 }

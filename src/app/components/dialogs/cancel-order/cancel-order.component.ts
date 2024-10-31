@@ -70,7 +70,6 @@ export class CancelOrderComponent {
   }
 
   btnCancelOrder() {
-    debugger;
     if (this.formCancelOrder.invalid) {
       this.formCancelOrder.markAllAsTouched();
       return;
@@ -88,7 +87,6 @@ export class CancelOrderComponent {
       .updateOrderStatus(orderId, reason, OrderDetailStatus.BUYER_CANCELED)
       .subscribe({
         next: (response: UpdateOrderStatusResponse) => {
-          debugger;
           if (response.success) {
             this.dialogRef.close(true);
           }

@@ -1,10 +1,7 @@
 import { BaseResponse } from './base.model';
-import { OrderDetailStatus, OrderStatus } from './enums';
+import { OrderDetailStatus } from './enums';
 import { Flower } from './flower.model';
-import {
-  PaginatedPageableResponse,
-  PaginatedResponse,
-} from './paginated.model';
+import { PaginatedPageableResponse } from './paginated.model';
 
 export interface OrderDetail {
   id: number;
@@ -47,6 +44,18 @@ export interface OrderByAccount {
   status: OrderDetailStatus;
   createAt: Date;
 }
+export interface OrderReport {
+  addToCart: number;
+  totalPrice: number;
+  orders: number;
+  conversionRate: number;
+  views: number;
+}
+export interface OrderLineChart {
+  price: number;
+  orderCount: number;
+  time: string;
+}
 
 export interface OrderResponse extends BaseResponse<Order[]> {}
 export interface PaginatedOrderByAccountResponse
@@ -55,3 +64,5 @@ export interface OrderByAccountResponse
   extends BaseResponse<PaginatedOrderByAccountResponse> {}
 export interface UpdateOrderStatusResponse
   extends BaseResponse<OrderByAccount> {}
+
+export interface OrderReportResponse extends BaseResponse<OrderReport> {}

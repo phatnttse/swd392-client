@@ -5,7 +5,9 @@ import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import {
+  Order,
   OrderByAccountResponse,
+  OrderLineChart,
   OrderResponse,
   UpdateOrderStatusResponse,
 } from '../models/order.model';
@@ -37,9 +39,9 @@ export class OrderService extends EndpointBase {
     paymentMethod: string,
     note: string,
     orderDetails: any[]
-  ): Observable<any> {
+  ): Observable<Order> {
     return this.http
-      .post<any>(
+      .post<Order>(
         `${this.API_URL}/orders/by-wallet`,
         {
           buyerName,
@@ -55,6 +57,43 @@ export class OrderService extends EndpointBase {
         catchError((error) => {
           return this.handleError(error, () =>
             this.orderByWallet(
+              buyerName,
+              buyerAddress,
+              buyerPhone,
+              paymentMethod,
+              note,
+              orderDetails
+            )
+          );
+        })
+      );
+  }
+
+  orderByCOD(
+    buyerName: string,
+    buyerAddress: string,
+    buyerPhone: string,
+    paymentMethod: string,
+    note: string,
+    orderDetails: any[]
+  ): Observable<Order> {
+    return this.http
+      .post<Order>(
+        `${this.API_URL}/orders/by-cod`,
+        {
+          buyerName,
+          buyerAddress,
+          buyerPhone,
+          paymentMethod,
+          note,
+          orderDetails,
+        },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.orderByCOD(
               buyerName,
               buyerAddress,
               buyerPhone,
@@ -170,6 +209,47 @@ export class OrderService extends EndpointBase {
         catchError((error) => {
           return this.handleError(error, () =>
             this.updateOrderStatus(orderDetailId, reason, status)
+          );
+        })
+      );
+  }
+
+  getOrderReport(startDate: string, endDate: string): Observable<any> {
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+
+    return this.http
+      .get<any>(`${this.API_URL}/orders/dashboard/report`, {
+        params: params,
+        headers: this.requestHeaders.headers,
+      })
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getOrderReport(startDate, endDate)
+          );
+        })
+      );
+  }
+
+  getOrderLineChart(
+    startDate: string,
+    endDate: string
+  ): Observable<OrderLineChart[]> {
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+
+    return this.http
+      .get<OrderLineChart[]>(`${this.API_URL}/orders/dashboard/line-chart`, {
+        params: params,
+        headers: this.requestHeaders.headers,
+      })
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getOrderLineChart(startDate, endDate)
           );
         })
       );

@@ -4,18 +4,19 @@
   <div class="container">
     @if (statusOrder === 0) {
     <div class="row">
-      <div class="col-md-6 mb-5 mb-md-0">
+      <div class="col-md-5 mb-5 mb-md-0">
         <h4 class="mb-4 primary-color fw-bold">
           {{ "Order.RecipientInfo" | translate }}
         </h4>
         <div class="p-3 p-lg-5 border bg-white">
           <label for="c_fname" class="text-black"
             >{{ "Sign.FullName" | translate
-            }}<span class="text-danger">*</span></label
+            }}<span class="text-danger ms-1">*</span></label
           >
           <form class="form-group" [formGroup]="orderForm">
-            <mat-form-field class="w-100 fs-14 my-2" appearance="outline">
+            <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
               <mat-label>{{ "Sign.FullName" | translate }}</mat-label>
+              <mat-icon matPrefix>person</mat-icon>
               <input
                 matInput
                 type="text"
@@ -32,73 +33,70 @@
               </mat-error>
               }
             </mat-form-field>
-            <div class="form-group row">
-              <div class="col-md-6">
-                <label for="c_fname" class="text-black">
-                  {{ "Order.Phone" | translate
-                  }}<span class="text-danger">*</span></label
-                >
-                <mat-form-field class="w-100 fs-14 my-2" appearance="outline">
-                  <mat-label>{{ "Order.Phone" | translate }}</mat-label>
-                  <input
-                    matInput
-                    type="phone"
-                    required
-                    formControlName="phone"
-                    [class.is-invalid]="
-                      orderForm.get('phone')?.invalid &&
-                      orderForm.get('phone')?.touched
-                    "
-                  />
-                  @if(orderForm.get('phone')!.hasError('required')) {
-                  <mat-error class="fs-14">
-                    {{ "Order.PhoneRequired" | translate }}
-                  </mat-error>
-                  } @if(orderForm.get('phone')!.hasError('pattern')) {
-                  <mat-error class="fs-14">
-                    {{ "Order.PhoneInvalid" | translate }}
-                  </mat-error>
-                  }
-                </mat-form-field>
-              </div>
-              <div class="col-md-6">
-                <label for="c_lname" class="text-black">
-                  {{ "Order.Address" | translate
-                  }}<span class="text-danger">*</span></label
-                >
-                <mat-form-field class="w-100 fs-14 my-2" appearance="outline">
-                  <mat-label>{{ "Order.Address" | translate }}</mat-label>
-                  <input
-                    matInput
-                    type="text"
-                    required
-                    formControlName="deliveryAddress"
-                    [class.is-invalid]="
-                      orderForm.get('deliveryAddress')?.invalid &&
-                      orderForm.get('deliveryAddress')?.touched
-                    "
-                  />
-                  @if(orderForm.get('deliveryAddress')!.hasError('required')) {
-                  <mat-error class="fs-14">
-                    {{ "Order.AddressRequired" | translate }}
-                  </mat-error>
-                  } @if(orderForm.get('deliveryAddress')!.hasError('minlength'))
-                  {
-                  <mat-error class="fs-14">
-                    {{ "Order.AddressInvalid" | translate }}
-                  </mat-error>
-                  }
-                </mat-form-field>
-              </div>
-            </div>
+
+            <label for="c_fname" class="text-black">
+              {{ "Order.Phone" | translate
+              }}<span class="text-danger ms-1">*</span></label
+            >
+            <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
+              <mat-label>{{ "Order.Phone" | translate }}</mat-label>
+              <mat-icon matPrefix>phone</mat-icon>
+              <input
+                matInput
+                type="phone"
+                required
+                formControlName="phone"
+                [class.is-invalid]="
+                  orderForm.get('phone')?.invalid &&
+                  orderForm.get('phone')?.touched
+                "
+              />
+              @if(orderForm.get('phone')!.hasError('required')) {
+              <mat-error class="fs-14">
+                {{ "Order.PhoneRequired" | translate }}
+              </mat-error>
+              } @if(orderForm.get('phone')!.hasError('pattern')) {
+              <mat-error class="fs-14">
+                {{ "Order.PhoneInvalid" | translate }}
+              </mat-error>
+              }
+            </mat-form-field>
+            <label for="c_lname" class="text-black">
+              {{ "Order.Address" | translate
+              }}<span class="text-danger ms-1">*</span></label
+            >
+            <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
+              <mat-label>{{ "Order.Address" | translate }}</mat-label>
+              <mat-icon matPrefix>home</mat-icon>
+              <input
+                matInput
+                type="text"
+                required
+                formControlName="deliveryAddress"
+                [class.is-invalid]="
+                  orderForm.get('deliveryAddress')?.invalid &&
+                  orderForm.get('deliveryAddress')?.touched
+                "
+              />
+              @if(orderForm.get('deliveryAddress')!.hasError('required')) {
+              <mat-error class="fs-14">
+                {{ "Order.AddressRequired" | translate }}
+              </mat-error>
+              } @if(orderForm.get('deliveryAddress')!.hasError('minlength')) {
+              <mat-error class="fs-14">
+                {{ "Order.AddressInvalid" | translate }}
+              </mat-error>
+              }
+            </mat-form-field>
 
             <div class="form-group row">
               <div class="col-md-12">
                 <label for="c_companyname" class="text-black">
                   {{ "Order.Note" | translate }}</label
                 >
-                <mat-form-field class="w-100 fs-14 mt-2" appearance="outline">
+                <mat-form-field class="w-100 fs-14" appearance="outline">
                   <mat-label>{{ "Order.Note" | translate }}</mat-label>
+                  <mat-icon matPrefix>edit_note</mat-icon>
                   <textarea
                     matInput
                     rows="4"
@@ -119,7 +117,7 @@
           </form>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-7">
         <!-- <div class="row mb-5">
           <div class="col-md-12">
             <h2 class="h3 mb-3 text-black">Coupon Code</h2>
@@ -158,35 +156,45 @@
             <form [formGroup]="orderForm" class="p-3 p-lg-5 border bg-white">
               <table class="table site-block-order-table mb-5">
                 <thead>
-                  <th class="text-black th-title">
-                    {{ "Cart.Image" | translate }}
-                  </th>
-                  <th class="text-black th-title">
-                    {{ "Cart.Name" | translate }}
-                  </th>
-                  <th class="text-black th-title">
-                    {{ "Cart.Total" | translate }}
-                  </th>
+                  <tr>
+                    <th class="text-black th-title">
+                      {{ "Cart.Image" | translate }}
+                    </th>
+                    <th class="text-black th-title">
+                      {{ "Cart.Name" | translate }}
+                    </th>
+                    <th class="text-black th-title">
+                      {{ "Cart.Price" | translate }}
+                    </th>
+                    <th class="text-black th-title">
+                      {{ "Order.TotalCost" | translate }}
+                    </th>
+                  </tr>
                 </thead>
                 <tbody>
                   @for (item of listCartItem; track $index) {
                   <tr>
                     <td>
-                      <img
-                        width="50"
-                        [src]="item.flowerImageUrl"
-                        alt="Image"
-                        class="img-fluid"
-                      />
+                      <div class="image-container">
+                        <img
+                          style="width: 80px"
+                          [src]="item.flowerImageUrl"
+                          alt="Image"
+                          class="img-fluid"
+                        />
+                        <span class="badge">{{ item.quantity }}</span>
+                      </div>
                     </td>
                     <td>
                       <span class="primary-color fw-bold">{{
                         item.flowerName
-                      }}</span
-                      ><strong class="mx-2 fw-bold">x</strong>
-                      <span class="fw-bold text-black">{{
-                        item.quantity
                       }}</span>
+                    </td>
+                    <td>
+                      <span class="text-black fw-bold"
+                        >{{ item.flowerPrice | number : "1.0" }}₫</span
+                      >
+                      <!-- Hiển thị giá sản phẩm -->
                     </td>
                     <td>
                       <span class="text-black fw-bold"
@@ -202,7 +210,8 @@
                       <strong>{{ "Cart.SubTotal" | translate }}</strong>
                     </td>
                     <td></td>
-
+                    <td></td>
+                    <!-- Thêm ô trống cho cột giá -->
                     <td class="text-danger">
                       {{ totalAmount | number : "1.0" }}₫
                     </td>
@@ -212,7 +221,8 @@
                       <strong>{{ "Cart.Total" | translate }}</strong>
                     </td>
                     <td></td>
-
+                    <td></td>
+                    <!-- Thêm ô trống cho cột giá -->
                     <td class="text-black font-weight-bold">
                       <strong class="text-danger"
                         >{{ totalAmount | number }}₫</strong
@@ -228,7 +238,7 @@
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
                     <mat-radio-button
-                      value="WALLET"
+                      [value]="paymentMethods.WALLET"
                       [disabled]="isBalanceInsufficient"
                     >
                       {{ "Order.PaymentByWallet" | translate }}
@@ -251,6 +261,23 @@
                       width="60"
                       src="./../../../assets/images/wallet-payment-svg.svg"
                       alt=""
+                    />
+                  </div>
+                  <hr />
+                  <div
+                    class="d-flex align-items-center justify-content-between flex-wrap"
+                  >
+                    <mat-radio-button
+                      [value]="paymentMethods.COD"
+                      [disabled]="isBalanceInsufficient"
+                    >
+                      {{ "Order.PaymentByCOD" | translate }}
+                    </mat-radio-button>
+                    <div class="fw-bold d-flex align-items-center"></div>
+                    <img
+                      width="60"
+                      src="./../../../assets/images/cash-on-delivery.svg"
+                      alt="COD"
                     />
                   </div>
                 </mat-radio-group>

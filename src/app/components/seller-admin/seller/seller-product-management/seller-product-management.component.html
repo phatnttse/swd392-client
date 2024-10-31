@@ -332,7 +332,7 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-12 col-sm-8 mb-3">
+        <div class="col-12 col-md-6 mb-3">
           <h6 class="mb-3">{{ "ProductName" | translate }}</h6>
           <mat-form-field class="w-100 fs-16" appearance="outline">
             <mat-label>{{ "ProductNameEnter" | translate }}</mat-label>
@@ -357,10 +357,10 @@
             }
           </mat-form-field>
         </div>
-        <div class="col-12 col-sm-4 mb-3">
+        <div class="col-12 col-md-6 mb-3">
           <h6 class="mb-3">{{ "ProductCategory" | translate }}</h6>
           <div>
-            <button
+            <!-- <button
               mat-raised-button
               color="primary"
               type="button"
@@ -373,7 +373,21 @@
               {{ category.name }}. } }@else {
               {{ "SelectCategory" | translate }} }
               <mat-icon>chevron_right</mat-icon>
-            </button>
+            </button> -->
+            <mat-form-field class="w-100 select-category" appearance="outline">
+              <mat-label>{{ "ProductCategory" | translate }}</mat-label>
+              <input
+                matInput
+                [value]="selectedCategoriesLabel"
+                readonly
+                (click)="$event.stopPropagation()"
+                [matMenuTriggerFor]="categoryMenu"
+              />
+              <mat-icon [matMenuTriggerFor]="categoryMenu" matSuffix
+                >edit</mat-icon
+              >
+            </mat-form-field>
+
             @if (isCategoryError) {
             <mat-error class="fs-12 mb-2 ms-4" style="visibility: visible">
               {{ "ProductCategoryRequired" | translate }}
@@ -442,7 +456,7 @@
           <td>
             <h6 class="mb-3">{{ "Order.Address" | translate }}</h6>
             <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Nhập địa chỉ</mat-label>
+              <mat-label>{{ "AddressEnter" | translate }}</mat-label>
               <input
                 matInput
                 type="text"

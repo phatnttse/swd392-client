@@ -293,11 +293,11 @@ export class SellerOrderManagementComponent
   getStatusButtonText(currentStatus: OrderDetailStatus): string {
     switch (currentStatus) {
       case OrderDetailStatus.PENDING:
-        return 'Xác nhận chuẩn bị hàng';
+        return 'ConfirmPreparing';
       case OrderDetailStatus.PREPARING:
-        return 'Xác nhận đang vận chuyển';
+        return 'ConfirmShipping';
       default:
-        return 'Xác nhận chuẩn bị hàng';
+        return 'ConfirmPreparing';
     }
   }
 
@@ -308,7 +308,9 @@ export class SellerOrderManagementComponent
   clearFilters() {
     // Reset các giá trị của bộ lọc
     this.selectedStatus = '';
-    this.range.reset(); // Reset bộ chọn ngày
+    this.range.reset();
+    this.startDate = '';
+    this.endDate = '';
     this.dataSource = new MatTableDataSource(this.listOrderDefault);
     this.dataSource.sort = this.sort;
   }

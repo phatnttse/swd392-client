@@ -88,6 +88,8 @@
     "PaymentByWallet": "Thanh toán bằng ví",
     "PaymentByPayOs": "Thanh toán bằng PayOs",
     "Balance": "Số dư",
+    "TotalCost": "Thành tiền",
+    "PaymentByCOD": "Thanh toán khi nhận hàng",
     "CancelReason": {
       "FoundCheaperElsewhere": "Tìm thấy giá rẻ hơn ở nơi khác",
       "ChangeOfMind": "Thay đổi quyết định",
@@ -189,7 +191,7 @@
   "ProductDescriptionRequired": "Mô tả không được để trống",
   "ProductDescriptionInvalid": "Mô tả sản phẩm ít nhất 100 ký tự",
   "ClearFilter": "Xóa bộ lọc",
-  "EnterStartAndEndDate": "Chọn ngày bắt đầu và kết thúc",
+  "EnterStartAndEndDate": "Ngày bắt đầu - kết thúc",
   "OrderPerson": "Người đặt",
   "Phone": "SĐT",
   "TotalAmount": "Tổng tiền",
@@ -202,5 +204,10 @@
   "OrderDate": "Ngày đặt hàng",
   "OrderCode": "Mã đơn hàng",
   "OrderValue": "Giá trị đơn hàng",
-  "ProductInfo": "Thông tin sản phẩm"
+  "ProductInfo": "Thông tin sản phẩm",
+  "AddressEnter": "Nhập địa chỉ",
+  "ConfirmPreparing": "Xác nhận chuẩn bị hàng",
+  "ConfirmShipping": "Xác nhận giao hàng",
+  "ChangeEmail": "Đổi email",
+  "OTPRequired": "Vui lòng nhập mã OTP"
 }

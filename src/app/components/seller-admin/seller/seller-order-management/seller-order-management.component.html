@@ -309,7 +309,7 @@
         extend
         style="background-color: var(--bs-success)"
       >
-        {{ getStatusButtonText(selectedOrder.status) }}
+        {{ getStatusButtonText(selectedOrder.status) | translate }}
         <mat-icon>task_alt</mat-icon>
       </button>
       }
@@ -417,7 +417,7 @@
               <p class="fs-16">
                 <mat-icon class="icon-text">attach_money</mat-icon>
                 <strong>{{ "Cart.Price" | translate }}:</strong>
-                {{ selectedOrder.flowerListing.price }}
+                {{ selectedOrder.flowerListing.price | number : "1.0" }}₫
               </p>
             </div>
           </div>

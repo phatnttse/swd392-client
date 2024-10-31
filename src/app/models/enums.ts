@@ -29,6 +29,7 @@ export enum PaymentMethod {
   BANKING = 'BANKING',
   WALLET = 'WALLET',
   PAYOS = 'PAYOS',
+  COD = 'COD',
 }
 
 export enum OrderStatus {
