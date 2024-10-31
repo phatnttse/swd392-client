@@ -11,15 +11,12 @@ import { DBkeys } from './db-keys';
 export class AppConfigurationService {
   private config: any;
   private API_URL: string = '';
+  private NOTIFICATION_URL: string = '';
   private Config_Language: any = []; // Cấu hình ngôn ngữ
   public static readonly Default_Language: string = 'vi'; // Ngôn ngữ mặc định
   private firebaseConfig: any; // Cấu hình firebase
 
-  constructor(
-    private http: HttpClient,
-    private translate: TranslateService,
-    private localStorage: LocalStoreManager
-  ) {}
+  constructor(private http: HttpClient, private translate: TranslateService) {}
 
   // Hàm tải cấu hình từ file config.json
   loadConfig(): Promise<void> {
@@ -29,6 +26,7 @@ export class AppConfigurationService {
       .then((config) => {
         this.config = config;
         this.API_URL = this.config.API_URL;
+        this.NOTIFICATION_URL = this.config.NOTIFICATION_URL;
         this.Config_Language = this.config.Config_Language;
         this.firebaseConfig = this.config.firebaseConfig;
       })
@@ -65,8 +63,6 @@ export class AppConfigurationService {
         (translations: any) => {
           this.translate.setTranslation(config?.value || 'vi', translations);
           this.translate.use(config?.value || 'vi');
-
-          this.localStorage.savePermanentData(langID, DBkeys.LANG_ID);
           this.valueLangSource.next(config);
         },
         (error: any) => {

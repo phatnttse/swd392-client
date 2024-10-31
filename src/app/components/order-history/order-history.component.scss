@@ -110,15 +110,10 @@ p {
   border-radius: 1px;
 }
 .custom-track {
-  @media (max-width: 1024px) {
-    margin-bottom: 120px;
-  }
   @media (max-width: 768px) {
-    margin-bottom: 120px;
     font-size: 13px;
   }
   @media (max-width: 391px) {
-    margin-bottom: 130px;
     font-size: 11px;
   }
 }

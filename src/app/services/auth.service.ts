@@ -49,6 +49,7 @@ export class AuthService {
     this.API_URL = appConfig['API_URL'];
     this.initializeLoginStatus();
   }
+
   forgotPassword(email: string): Observable<any> {
     const payload = { email };
     return this.http.post<any>(`${this.API_URL}/auth/forgot-password`, payload);
@@ -111,11 +112,7 @@ export class AuthService {
   redirectForLogin() {
     this.loginRedirectUrl = this.router.url;
     this.router.navigate(['/signin']);
-    this.toastr.warning(
-      'Phiên đăng nhập đã hết hạn',
-      'Vui lòng đăng nhập lại!',
-      { progressBar: true }
-    );
+    this.toastr.warning('', 'Vui lòng đăng nhập!', { progressBar: true });
   }
 
   reLogin() {
@@ -129,7 +126,6 @@ export class AuthService {
   }
 
   refreshLogin() {
-    debugger;
     return this.http
       .post(
         `${this.API_URL}/auth/renew-access-token`,
@@ -192,7 +188,6 @@ export class AuthService {
   }
   private processRefreshTokenResponse(response: any) {
     const accessToken = response.data.accessToken;
-    this.localStorage.deleteData(DBkeys.ACCESS_TOKEN);
     this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
     return response;
   }

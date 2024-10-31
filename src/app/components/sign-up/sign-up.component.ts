@@ -21,7 +21,6 @@ import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BaseResponse } from '../../models/base.model';
-import { repeat } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',

@@ -1,22 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { OrderService } from '../../services/order.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  Order,
   OrderByAccount,
   OrderByAccountResponse,
-  OrderResponse,
+  UpdateOrderStatusResponse,
 } from '../../models/order.model';
 import { CommonModule } from '@angular/common';
-import { OrderDetailStatus, OrderStatus } from '../../models/enums';
+import { OrderDetailStatus } from '../../models/enums';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { CancelOrderComponent } from '../dialogs/cancel-order/cancel-order.component';
+import { ToastrService } from 'ngx-toastr';
+import { Utilities } from '../../services/utilities';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [MatTabsModule, CommonModule, HeaderComponent, FooterComponent],
+  imports: [
+    MatTabsModule,
+    CommonModule,
+    HeaderComponent,
+    FooterComponent,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss',
 })
@@ -31,8 +57,15 @@ export class OrderHistoryComponent implements OnInit {
   currentPage: number = 0; // Trang hiện tại
   visiblePages: number[] = []; // Các trang hiển thị
   selectedStatus: string = OrderDetailStatus.PENDING; // Trạng thái đã chọn
+  reasonCancelOrder: string = ''; // Lý do hủy đơn hàng
+  loadingBtn = signal(false);
+  orderDetailStatus = OrderDetailStatus;
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private dialog: MatDialog,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.getOrderByBuyer(
@@ -60,7 +93,7 @@ export class OrderHistoryComponent implements OnInit {
             this.listOrder = response.data.content;
             this.totalPages = response.data.totalPages;
             this.totalElements = response.data.totalElements;
-            this.visiblePages = this.generateVisiblePageArray(
+            this.visiblePages = Utilities.generateVisiblePageArray(
               this.currentPage,
               this.totalPages
             );
@@ -70,6 +103,25 @@ export class OrderHistoryComponent implements OnInit {
           console.log(error);
         },
       });
+  }
+
+  btnOpenCancelOrderDialog(id: number) {
+    const dialogRef = this.dialog.open(CancelOrderComponent, {
+      data: id,
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      debugger;
+      if (result) {
+        this.getOrderByBuyer(
+          this.order,
+          this.sortBy,
+          this.pageNumber,
+          this.pageSize,
+          this.selectedStatus
+        );
+        this.toastr.success('Hủy đơn hàng thành công');
+      }
+    });
   }
 
   isActiveStep(orderStatus: string, stepStatus: string): boolean {
@@ -180,26 +232,9 @@ export class OrderHistoryComponent implements OnInit {
       this.pageSize,
       this.selectedStatus
     );
-    this.visiblePages = this.generateVisiblePageArray(
+    this.visiblePages = Utilities.generateVisiblePageArray(
       this.currentPage,
       this.totalPages
     );
-  }
-
-  // Tạo mảng các trang hiển thị
-  generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
-    const maxVisiblePages = 5;
-    const halfVisiblePages = Math.floor(maxVisiblePages / 2);
-
-    let startPage = Math.max(currentPage - halfVisiblePages + 1, 1);
-    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(endPage - maxVisiblePages + 1, 1);
-    }
-
-    return new Array(endPage - startPage + 1)
-      .fill(0)
-      .map((_, index) => startPage + index);
   }
 }

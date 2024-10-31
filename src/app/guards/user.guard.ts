@@ -6,13 +6,13 @@ import {
   RouterStateSnapshot,
   Router,
 } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AdminGuard implements CanActivate, CanActivateChild {
+export class UserGuard implements CanActivate, CanActivateChild {
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -24,7 +24,7 @@ export class AdminGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (this.authService.isAdmin && this.authService.isLoggedIn) {
+    if (this.authService.isLoggedIn) {
       return true;
     } else {
       this.authService.loginRedirectUrl = state.url;
@@ -39,7 +39,7 @@ export class AdminGuard implements CanActivate, CanActivateChild {
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (this.authService.isAdmin && this.authService.isLoggedIn) {
+    if (this.authService.isLoggedIn) {
       return true;
     } else {
       this.authService.loginRedirectUrl = state.url;

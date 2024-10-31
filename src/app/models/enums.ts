@@ -29,6 +29,7 @@ export enum PaymentMethod {
   BANKING = 'BANKING',
   WALLET = 'WALLET',
   PAYOS = 'PAYOS',
+  COD = 'COD',
 }
 
 export enum OrderStatus {
@@ -66,9 +67,24 @@ export enum OrderDetailStatus {
   SELLER_CANCELED = 'SELLER_CANCELED',
   REFUNDED = 'REFUNDED',
 }
+export enum ParentCategory {
+  COLOR = 'COLOR',
+  TYPE = 'TYPE',
+  EVENT_TYPE = 'EVENT_TYPE',
+  SUBJECT = 'SUBJECT',
+}
 
 export enum NonProcessOrderStatus {
   BUYER_CANCELED = 'BUYER_CANCELED',
   SELLER_CANCELED = 'SELLER_CANCELED',
   REFUNDED = 'REFUNDED',
+}
+
+export enum CancelOrderReason {
+  FoundCheaperElsewhere = 'Order.CancelReason.FoundCheaperElsewhere',
+  ChangeOfMind = 'Order.CancelReason.ChangeOfMind',
+  OrderByMistake = 'Order.CancelReason.OrderByMistake',
+  ShippingCostTooHigh = 'Order.CancelReason.ShippingCostTooHigh',
+  LongShippingTime = 'Order.CancelReason.LongShippingTime',
+  Other = 'Order.CancelReason.Other',
 }

@@ -2,6 +2,12 @@
 @if (statusPage === 0) { @if (listOrder.length > 0) {
 <mat-card>
   <mat-card-content>
+    <div class="d-flex align-items-center justify-content-end">
+      <button mat-raised-button color="warn" extend (click)="clearFilters()">
+        <mat-icon>filter_alt_off</mat-icon>
+        {{ "ClearFilter" | translate }}
+      </button>
+    </div>
     <div class="row justify-content-between mt-3">
       <!-- Ô tìm kiếm -->
       <div class="col-lg-4">
@@ -9,7 +15,7 @@
           <input
             matInput
             type="text"
-            placeholder="Tìm kiếm"
+            placeholder="{{ 'Header.Search' | translate }}"
             (keyup)="applyFilter($event)"
             #input
           />
@@ -20,7 +26,7 @@
       <!-- Ô chọn khoảng thời gian (Date Range Picker) -->
       <div class="col-lg-4">
         <mat-form-field appearance="outline">
-          <mat-label>Enter a date range</mat-label>
+          <mat-label>{{ "EnterStartAndEndDate" | translate }}</mat-label>
           <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
             <input
               matStartDate
@@ -52,7 +58,9 @@
       <!-- Ô chọn trạng thái -->
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
         <mat-form-field appearance="outline">
-          <mat-label style="font-size: 14px">Trạng thái</mat-label>
+          <mat-label style="font-size: 14px">{{
+            "Status" | translate
+          }}</mat-label>
           <mat-select
             [(ngModel)]="selectedStatus"
             (selectionChange)="onFilterChange()"
@@ -69,7 +77,7 @@
 
 <mat-card class="w-100">
   <mat-card-content>
-    <h4>Quản lý đơn hàng</h4>
+    <h4>{{ "OrderManagement" | translate }}</h4>
 
     <div
       class="col-12 d-flex align-items-center justify-content-center mb-5 mt-3"
@@ -88,7 +96,7 @@
             *matHeaderCellDef
             mat-sort-header="buyerName"
           >
-            Người đặt
+            {{ "OrderPerson" | translate }}
           </th>
           <td mat-cell *matCellDef="let order">
             <p class="fw-bold mb-0">{{ order.orderSummary.buyerName }}</p>
@@ -102,30 +110,17 @@
             *matHeaderCellDef
             mat-sort-header="buyerPhone"
           >
-            SĐT
+            {{ "Phone" | translate }}
           </th>
           <td mat-cell *matCellDef="let order">
-            <p class="fw-bold mb-0">{{ order.orderSummary.buyerPhone }}</p>
+            <a
+              target="_blank"
+              [href]="'tel:' + order.orderSummary.buyerPhone"
+              class="fw-bold mb-0 phone-link"
+              >{{ order.orderSummary.buyerPhone }}</a
+            >
           </td>
         </ng-container>
-
-        <ng-container matColumnDef="productImage">
-          <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
-            Hình ảnh
-          </th>
-          <td mat-cell *matCellDef="let order">
-            <a [href]="order.flowerListing.imageUrl">
-              <img
-                class="rounded"
-                width="50px"
-                height="50px"
-                [src]="order.flowerListing.imageUrl"
-                [alt]="order.flowerListing.name"
-              />
-            </a>
-          </td>
-        </ng-container>
-
         <ng-container matColumnDef="productName">
           <th
             class="fw-bold primary-color"
@@ -133,7 +128,7 @@
             *matHeaderCellDef
             mat-sort-header="productName"
           >
-            Sản phẩm
+            {{ "Header.Product" | translate }}
           </th>
           <td mat-cell *matCellDef="let order">
             <p class="fw-bold mb-0">{{ order.flowerListing.name }}</p>
@@ -147,10 +142,21 @@
             *matHeaderCellDef
             mat-sort-header="amount"
           >
-            Tổng tiền
+            {{ "TotalAmount" | translate }}
           </th>
           <td mat-cell *matCellDef="let order">
             <p class="fw-bold mb-0">{{ order.price | number : "1.0" }}₫</p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="orderDate">
+          <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
+            {{ "OrderDate" | translate }}
+          </th>
+          <td mat-cell *matCellDef="let order">
+            <p class="fw-bold mb-0">
+              {{ order.createAt | date : "dd-MM-yyyy HH:ss" }}
+            </p>
           </td>
         </ng-container>
 
@@ -161,14 +167,19 @@
             *matHeaderCellDef
             mat-sort-header="status"
           >
-            Trạng thái
+            {{ "Status" | translate }}
           </th>
           <td mat-cell *matCellDef="let order">
             <p
               class="badge fw-bold mb-0"
               [ngClass]="{
-                'badge-success': order.status === 'APPROVED',
-                'badge-warning': order.status === 'PENDING'
+                'badge-success': order.status === orderDetailStatus.DELIVERED,
+                'badge-warning': order.status === orderDetailStatus.PENDING,
+                'badge-accent': order.status === orderDetailStatus.SHIPPED,
+                'badge-info': order.status === orderDetailStatus.PREPARING,
+                'badge-danger':
+                  order.status === orderDetailStatus.BUYER_CANCELED ||
+                  order.status === orderDetailStatus.SELLER_CANCELED
               }"
             >
               {{ order.status }}
@@ -179,11 +190,16 @@
 
         <ng-container matColumnDef="action">
           <th class="fw-bold primary-color" mat-header-cell *matHeaderCellDef>
-            Các thao tác
+            {{ "Actions" | translate }}
           </th>
-          <td mat-cell *matCellDef="let product">
-            <button mat-icon-button color="primary">
-              <mat-icon aria-label="Edit">visibility</mat-icon>
+          <td mat-cell *matCellDef="let order">
+            <button
+              type="button"
+              mat-icon-button
+              color="primary"
+              (click)="btnViewOrderDetail(order)"
+            >
+              <mat-icon aria-label="View">visibility</mat-icon>
             </button>
           </td>
         </ng-container>
@@ -192,13 +208,223 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
+    @if (totalPages > 1) {
+    <div class="section pagenav clearfix d-flex justify-content-center mt-5">
+      <nav class="collection-paginate clearfix nav_pagi w_100 relative">
+        <ul class="pagination clearfix">
+          @if (currentPage > 0) {
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="javascript:;"
+              (click)="onPageChange(currentPage - 1)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="20"
+                viewBox="0 0 12 20"
+                fill="none"
+              >
+                <path
+                  d="M0.827131 10.5488L10.0777 19.7738C10.3808 20.0759 10.8715 20.0754 11.1741 19.7723C11.4764 19.4692 11.4756 18.9782 11.1725 18.6759L2.47255 9.99996L11.1728 1.32406C11.4759 1.02172 11.4767 0.531057 11.1744 0.227934C11.0227 0.0759811 10.824 3.76429e-06 10.6253 3.74691e-06C10.4271 3.72959e-06 10.2292 0.0754737 10.0778 0.226372L0.827131 9.45114C0.681155 9.59637 0.599241 9.79403 0.599241 9.99996C0.599241 10.2059 0.68139 10.4033 0.827131 10.5488Z"
+                  fill="#9D9D9D"
+                ></path>
+              </svg>
+            </a>
+          </li>
+          } @for (page of visiblePages; track $index) {
+          <li
+            class="page-item"
+            [ngClass]="{ active: page === currentPage + 1 }"
+          >
+            <a
+              class="page-link"
+              href="javascript:;"
+              [style]="{
+                'pointer-events: none': page === currentPage + 1
+              }"
+              (click)="onPageChange(page - 1)"
+              >{{ page }}</a
+            >
+          </li>
+          } @if (currentPage < totalPages - 1) {
+          <li class="page-item">
+            <a
+              class="page-link link-next-pre"
+              onclick="doSearch(2)"
+              href="javascript:;"
+              (click)="onPageChange(currentPage + 1)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="20"
+                viewBox="0 0 12 20"
+                fill="none"
+              >
+                <path
+                  d="M11.1729 9.45117L1.92228 0.226167C1.6192 -0.0759023 1.12849 -0.0753945 0.825918 0.227729C0.523575 0.530814 0.524357 1.02179 0.827481 1.32409L9.52745 10L0.827168 18.6759C0.524083 18.9783 0.523302 19.4689 0.825605 19.7721C0.977285 19.924 1.17599 20 1.37471 20C1.57291 20 1.77084 19.9245 1.92224 19.7736L11.1729 10.5489C11.3188 10.4036 11.4008 10.206 11.4008 10C11.4008 9.7941 11.3186 9.59668 11.1729 9.45117Z"
+                  fill="#9D9D9D"
+                ></path>
+              </svg>
+            </a>
+          </li>
+          }
+        </ul>
+      </nav>
+    </div>
+    }
   </mat-card-content>
 </mat-card>
 }@else {
 <mat-card class="w-100 text-center mt-5">
   <mat-card-content>
-    <h4>Không có đơn hàng nào!</h4>
-    <p>Hiện tại chưa có đơn hàng nào trong danh sách.</p>
+    <h4>{{ "NoOrders" | translate }}</h4>
+    <p>{{ "NoOrdersInList" | translate }}</p>
   </mat-card-content>
 </mat-card>
-} }
+} }@else if (statusPage === 1 && selectedOrder !== null) {
+<mat-card-content class="mat-mdc-card-content p-y-24 b-t-1">
+  <div class="d-flex align-items-center justify-content-end flex-wrap mb-3">
+    <div>
+      <button
+        mat-raised-button
+        color="warn"
+        extend
+        class="btn me-2 fs-16 p-24 mb-2"
+        style="padding: 20px"
+        (click)="btnChangeStatusPage(0)"
+      >
+        {{ "Back" | translate }}
+        <mat-icon>reply</mat-icon>
+      </button>
+      @if (selectedOrder.status === orderDetailStatus.PENDING ||
+      selectedOrder.status === orderDetailStatus.PREPARING) {
+      <button
+        (click)="btnUpdateOrderStatus(selectedOrder.id)"
+        mat-raised-button
+        class="fs-16 p-24 text-white btn-success mb-2"
+        type="button"
+        extend
+        style="background-color: var(--bs-success)"
+      >
+        {{ getStatusButtonText(selectedOrder.status) | translate }}
+        <mat-icon>task_alt</mat-icon>
+      </button>
+      }
+    </div>
+  </div>
+  <div class="row">
+    <!-- Customer Information -->
+    <div class="col-sm-6">
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title class="primary-color fs-24 fw-bold mb-5">
+            <mat-icon class="icon-title">person</mat-icon>
+            {{ "ReceivingInfo" | translate }}
+          </mat-card-title>
+          <div class="mt-3">
+            <p class="fs-16">
+              <mat-icon class="icon-text">person</mat-icon>
+              <strong> {{ "RecipientName" | translate }}:</strong>
+              {{ selectedOrder.orderSummary.buyerName }}
+            </p>
+            <p class="fs-16">
+              <mat-icon class="icon-text">email</mat-icon>
+              <strong>Email:</strong>
+              {{ selectedOrder.orderSummary.buyerEmail }}
+            </p>
+            <p class="fs-16">
+              <mat-icon class="icon-text">phone</mat-icon>
+              <strong> {{ "Order.Phone" | translate }}:</strong>
+              {{ selectedOrder.orderSummary.buyerPhone }}
+            </p>
+            <p class="fs-16">
+              <mat-icon class="icon-text">home</mat-icon>
+              <strong> {{ "DeliveryAddress" | translate }}:</strong>
+              {{ selectedOrder.orderSummary.buyerAddress }}
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Order Details -->
+    <div class="col-sm-6">
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title class="primary-color fs-24 fw-bold mb-3">
+            <mat-icon class="icon-title">shopping_cart</mat-icon>
+            {{ "OrderInfo" | translate }}
+          </mat-card-title>
+          <div class="mt-3">
+            <p class="fs-16">
+              <mat-icon class="icon-text">receipt</mat-icon>
+              <strong> {{ "OrderCode" | translate }}:</strong> #{{
+                selectedOrder.id
+              }}
+            </p>
+            <p class="fs-16">
+              <mat-icon class="icon-text">date_range</mat-icon>
+              <strong>{{ "OrderDate" | translate }}:</strong>
+              {{ selectedOrder.createAt | date : "dd-MM-yyyy HH:ss" }}
+            </p>
+            <p class="fs-16">
+              <mat-icon class="icon-text">attach_money</mat-icon>
+              <strong>{{ "OrderValue" | translate }}:</strong>
+              {{ selectedOrder.price | number : "1.0" }}₫
+            </p>
+            <p class="fs-16">
+              <mat-icon class="icon-text">assignment_turned_in</mat-icon>
+              <strong>{{ "Status" | translate }}:</strong>
+              {{ selectedOrder.status }}
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Order Items -->
+    <div class="col-12">
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title class="primary-color fs-24 fw-bold mb-5">
+            <mat-icon class="icon-title">local_florist</mat-icon>
+            {{ "ProductInfo" | translate }}
+          </mat-card-title>
+          <div class="d-flex flex-row align-items-center mt-3">
+            <img
+              [alt]="selectedOrder.flowerListing.name"
+              style="
+                width: 120px;
+                height: 120px;
+                object-fit: cover;
+                margin-right: 24px;
+              "
+            />
+            <div class="d-flex flex-column">
+              <p class="fs-16">
+                <mat-icon class="icon-text">shopping_bag</mat-icon>
+                <strong> {{ "ProductName" | translate }}</strong>
+                {{ selectedOrder.flowerListing.name }}
+              </p>
+              <p class="fs-16">
+                <mat-icon class="icon-text">description</mat-icon>
+                <strong>{{ "ProductDescription" | translate }}:</strong>
+                {{ selectedOrder.flowerListing.description }}
+              </p>
+              <p class="fs-16">
+                <mat-icon class="icon-text">attach_money</mat-icon>
+                <strong>{{ "Cart.Price" | translate }}:</strong>
+                {{ selectedOrder.flowerListing.price | number : "1.0" }}₫
+              </p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</mat-card-content>
+
+}

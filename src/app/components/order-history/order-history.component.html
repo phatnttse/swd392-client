@@ -22,10 +22,7 @@
             <span class="fw-bold text-black">Thông tin sản phẩm</span>
             <figure class="itemside mb-3">
               <div class="aside">
-                <img
-                  [src]="order.flowerListing.imageUrl"
-                  class="img-sm border"
-                />
+                <img class="img-sm border" />
               </div>
               <figcaption class="info align-self-center">
                 <p class="title">
@@ -56,7 +53,7 @@
           <div class="col">
             <strong class="fw-bold text-black">Ngày đặt hàng</strong> <br />
             <span class="text-black">
-              {{ order.createAt | date : "dd-MM-yyyy" }}</span
+              {{ order.createAt | date : "dd-MM-yyyy HH:ss" }}</span
             >
           </div>
         </div>
@@ -85,6 +82,31 @@
         </div>
         } }
       </div>
+      @if (order.status === orderDetailStatus.PENDING || order.status ===
+      orderDetailStatus.PREPARING) {
+      <div class="d-flex justify-content-center align-items-center">
+        <button
+          mat-raised-button
+          color="warn"
+          class="btn btn-danger mt-4 text-white"
+          (click)="btnOpenCancelOrderDialog(order.id)"
+        >
+          Huỷ đơn hàng
+        </button>
+      </div>
+      }@else if (order.status === orderDetailStatus.DELIVERED) {
+      <div class="d-flex justify-content-center align-items-center">
+        <button
+          mat-raised-button
+          style="background-color: var(--bs-success)"
+          class="btn t-4 text-white"
+          extend
+        >
+          <mat-icon>task_alt</mat-icon>
+          Xác nhận đã nhận hàng
+        </button>
+      </div>
+      }
     </div>
   </article>
   } @if (totalPages > 1) {
@@ -124,7 +146,7 @@
             >{{ page }}</a
           >
         </li>
-        } @if (currentPage < totalPages) {
+        } @if (currentPage < totalPages - 1) {
         <li class="page-item">
           <a
             class="page-link link-next-pre"

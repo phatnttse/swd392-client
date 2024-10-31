@@ -291,8 +291,11 @@
               @for (lang of listLanguage; track $index) { @if (lang !=
               defaultLang) {
               <li>
-                <div class="dropdown-item d-flex align-items-center">
-                  <a href="javascript:;" (click)="btnChangeLang(lang)">
+                <div
+                  (click)="btnChangeLang(lang)"
+                  class="dropdown-item d-flex align-items-center"
+                >
+                  <a href="javascript:;">
                     <img
                       width="32px"
                       [src]="'./../../../assets/images' + lang.icon"
@@ -333,55 +336,68 @@
             >
               @if(account) {
               <li>
-                <div class="dropdown-item d-flex align-items-center">
+                <div
+                  routerLink="/profile"
+                  class="dropdown-item d-flex align-items-center header-menu-item"
+                >
                   <mat-icon class="me-2">account_circle</mat-icon
-                  ><a class="text-decoration-none" routerLink="/profile">{{
+                  ><a class="text-decoration-none">{{
                     "Header.MyAccount" | translate
                   }}</a>
                 </div>
               </li>
               <li>
-                <div class="dropdown-item d-flex align-items-center">
+                <div
+                  routerLink="/wallet"
+                  class="dropdown-item d-flex align-items-center header-menu-item"
+                >
                   <mat-icon class="me-2">wallet</mat-icon
-                  ><a class="text-decoration-none" routerLink="/wallet">{{
+                  ><a class="text-decoration-none">{{
                     "Header.ViewWallet" | translate
                   }}</a>
                 </div>
               </li>
               <li>
-                <div class="dropdown-item d-flex align-items-center">
+                <div
+                  routerLink="/order-history"
+                  class="dropdown-item d-flex align-items-center header-menu-item"
+                >
                   <mat-icon class="me-2">local_shipping</mat-icon
-                  ><a
-                    class="text-decoration-none"
-                    routerLink="/order-history"
-                    >{{ "Header.OrderHistory" | translate }}</a
-                  >
+                  ><a class="text-decoration-none">{{
+                    "Header.OrderHistory" | translate
+                  }}</a>
                 </div>
               </li>
               <li>
-                <div class="dropdown-item d-flex align-items-center">
+                <div
+                  (click)="btnLogOut()"
+                  class="dropdown-item d-flex align-items-center header-menu-item"
+                >
                   <mat-icon class="me-2">logout</mat-icon
-                  ><a
-                    class="text-decoration-none"
-                    href="javascript:;"
-                    (click)="btnLogOut()"
-                    >{{ "Header.LogOut" | translate }}</a
-                  >
+                  ><a class="text-decoration-none" href="javascript:;">{{
+                    "Header.LogOut" | translate
+                  }}</a>
                 </div>
               </li>
               }@else {
               <li>
-                <div class="dropdown-item d-flex align-items-center">
+                <div
+                  routerLink="/signin"
+                  class="dropdown-item d-flex align-items-center header-menu-item"
+                >
                   <mat-icon class="me-2">login</mat-icon
-                  ><a class="text-decoration-none" routerLink="/signin">{{
+                  ><a class="text-decoration-none">{{
                     "Header.SignIn" | translate
                   }}</a>
                 </div>
               </li>
               <li>
-                <div class="dropdown-item d-flex align-items-center">
+                <div
+                  routerLink="/signup"
+                  class="dropdown-item d-flex align-items-center header-menu-item"
+                >
                   <mat-icon class="me-2">app_registration</mat-icon
-                  ><a class="text-decoration-none" routerLink="/signup">{{
+                  ><a class="text-decoration-none">{{
                     "Header.SignUp" | translate
                   }}</a>
                 </div>

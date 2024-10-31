@@ -127,7 +127,7 @@ export class ProductsComponent implements OnInit {
           this.pageSize = flowerData.pageSize;
           this.totalPages = flowerData.totalPages;
           this.totalElements = flowerData.totalElements;
-          this.visiblePages = this.generateVisiblePageArray(
+          this.visiblePages = Utilities.generateVisiblePageArray(
             this.currentPage,
             this.totalPages
           );
@@ -170,7 +170,7 @@ export class ProductsComponent implements OnInit {
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
           this.totalElements = response.totalElements;
-          this.visiblePages = this.generateVisiblePageArray(
+          this.visiblePages = Utilities.generateVisiblePageArray(
             this.currentPage,
             this.totalPages
           );
@@ -192,7 +192,7 @@ export class ProductsComponent implements OnInit {
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
           this.totalElements = response.totalElements;
-          this.visiblePages = this.generateVisiblePageArray(
+          this.visiblePages = Utilities.generateVisiblePageArray(
             this.currentPage,
             this.totalPages
           );
@@ -220,7 +220,7 @@ export class ProductsComponent implements OnInit {
       this.pageSize,
       this.categoryIds
     );
-    this.visiblePages = this.generateVisiblePageArray(
+    this.visiblePages = Utilities.generateVisiblePageArray(
       this.currentPage,
       this.totalPages
     );
@@ -267,23 +267,6 @@ export class ProductsComponent implements OnInit {
         this.toastr.error(error.error.message);
       },
     });
-  }
-
-  // Tạo mảng các trang hiển thị
-  generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
-    const maxVisiblePages = 5;
-    const halfVisiblePages = Math.floor(maxVisiblePages / 2);
-
-    let startPage = Math.max(currentPage - halfVisiblePages + 1, 1);
-    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(endPage - maxVisiblePages + 1, 1);
-    }
-
-    return new Array(endPage - startPage + 1)
-      .fill(0)
-      .map((_, index) => startPage + index);
   }
 
   // Xử lý khi thay đổi sắp xếp

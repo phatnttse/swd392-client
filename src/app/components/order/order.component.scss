@@ -1,6 +1,7 @@
 .order-section {
   padding-top: 10rem;
   padding-bottom: 4rem;
+  overflow: auto;
 }
 
 @media screen and (max-width: 768px) {
@@ -12,8 +13,85 @@
 .fs-14 {
   font-size: 14px;
 }
+
 @media screen and (max-width: 932px) {
   .th-title {
     font-size: 14px;
+  }
+}
+card {
+  overflow: hidden;
+  max-width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 8px;
+}
+
+.table th {
+  background-color: #f8f8f8;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 375px) {
+  .order-section .row {
+    flex-direction: column;
+
+    align-items: center;
+  }
+
+  .col-md-5,
+  .col-md-7 {
+    width: 100%;
+  }
+
+  .table {
+    font-size: 12px;
+  }
+}
+.image-container {
+  position: relative;
+  display: inline-block;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background-color: var(--bs-danger);
+    color: white;
+    border-radius: 50%;
+    padding: 4px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 375px) {
+    .badge {
+      top: -3px;
+      right: -5px;
+      padding: 2px 4px;
+    }
   }
 }

@@ -3,10 +3,9 @@ import { EndpointBase } from './endpoint-base.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import {
   AddBalanceResponse,
-  UserAccount,
   UserAccountResponse,
   UserBalanceResponse,
 } from '../models/account.model';
@@ -107,6 +106,35 @@ export class AccountService extends EndpointBase {
           return this.handleError(error, () =>
             this.changePassword(oldPassword, newPassword, repeatPassword)
           );
+        })
+      );
+  }
+
+  changeEmail(email: string): Observable<UserAccountResponse> {
+    return this.http
+      .post<UserAccountResponse>(
+        `${this.API_URL}/auth/change-email`,
+        { email },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.changeEmail(email));
+        })
+      );
+  }
+
+  confirmChangeEmail(otp: string): Observable<UserAccountResponse> {
+    return this.http
+      .post<UserAccountResponse>(
+        `${this.API_URL}/auth/confirm-change-email/${otp}`,
+        {},
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          debugger;
+          return this.handleError(error, () => this.confirmChangeEmail(otp));
         })
       );
   }

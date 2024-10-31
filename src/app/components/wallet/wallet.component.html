@@ -124,7 +124,7 @@
                   >{{ page }}</a
                 >
               </li>
-              } @if (currentPage < totalPages) {
+              } @if (currentPage < totalPages - 1) {
               <li class="page-item">
                 <a
                   class="page-link link-next-pre"
@@ -183,7 +183,7 @@
             <mat-label>{{ "Wallet.Amount" | translate }} (₫)</mat-label>
             <input
               matInput
-              type="text"
+              type="number"
               id="amount"
               formControlName="amount"
               [class.is-invalid]="

@@ -1,10 +1,22 @@
 import { Injectable } from '@angular/core';
 import { EndpointBase } from './endpoint-base.service';
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
-import { BehaviorSubject, catchError, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatestWith,
+  map,
+  Observable,
+  throwError,
+} from 'rxjs';
 import { ConvertedCategory, FlowerCategory } from '../models/category.model';
+import { BaseResponse } from '../models/base.model';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +51,40 @@ export class CategoryService extends EndpointBase {
           return this.handleError(error, () => this.getAllCategories());
         })
       );
+  }
+
+  getCategoryById(id: string): Observable<FlowerCategory> {
+    return this.http
+      .get<FlowerCategory>(`${this.API_URL}/flower-categories/${id}`)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getCategoryById(id));
+        })
+      );
+  }
+
+  addnewCategory(formdata: FormData): Observable<FlowerCategory> {
+    return this.http
+      .post<FlowerCategory>(
+        `${this.API_URL}/flower-categories`,
+        formdata,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.addnewCategory(formdata));
+        })
+      );
+  }
+
+  updateCategory(id: number, updatedCategory: FlowerCategory): Observable<any> {
+    return this.http.put(
+      `${this.API_URL}/flower-categories/${id}`,
+      updatedCategory
+    );
+  }
+
+  deleteCategory(id: number): Observable<any> {
+    return this.http.delete(`${this.API_URL}/flower-categories/${id}`);
   }
 }
