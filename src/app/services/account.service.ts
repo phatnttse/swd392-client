@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { EndpointBase } from './endpoint-base.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { catchError, Observable } from 'rxjs';
 import {
   AddBalanceResponse,
+  UserAccount,
+  UserAccountPaginatedResponse,
   UserAccountResponse,
   UserBalanceResponse,
 } from '../models/account.model';
@@ -135,6 +137,42 @@ export class AccountService extends EndpointBase {
         catchError((error) => {
           debugger;
           return this.handleError(error, () => this.confirmChangeEmail(otp));
+        })
+      );
+  }
+  
+  getUsers(
+    searchString: string,
+    order: string,
+    sortBy: string,
+    pageNumber: number,
+    pageSize: number,
+    roleName: string[]
+  ): Observable < UserAccountPaginatedResponse > {
+    const params = new HttpParams()
+      .set('searchString', searchString)
+      .set('order', order)
+      .set('sortBy', sortBy)
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString())
+      .set('roleName', roleName.join(',') ?? []);
+
+    return this.http
+      .get < UserAccountPaginatedResponse > (`${this.API_URL}/account/profile/all`, {
+        params
+      })
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getUsers(
+              searchString,
+              order,
+              sortBy,
+              pageNumber,
+              pageSize,
+              roleName
+            )
+          );
         })
       );
   }

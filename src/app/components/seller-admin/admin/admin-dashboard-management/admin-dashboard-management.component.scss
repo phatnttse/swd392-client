@@ -1,0 +1,46 @@
+.cardWithShadow .col-lg-3 {
+    position: relative; /* Đảm bảo rằng đường kẻ dọc được định vị chính xác */
+  }
+  
+  .cardWithShadow .col-lg-3:not(:last-child):after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -1px; /* Đặt đường kẻ dọc bên phải mỗi ô */
+    width: 1px; /* Độ rộng của đường kẻ */
+    height: 100%; /* Chiều cao của đường kẻ */
+    background-color: #e0e0e0; /* Màu sắc của đường kẻ */
+  }
+  .bg-light-warning {
+    background-color: #fff8ec !important;
+  }
+  .text-warning {
+    color: #fec90f !important;
+  }
+  .bg-light-accent {
+    background-color: #e5fafb !important;
+  }
+  .text-accent {
+    color: #03c9d7 !important;
+  }
+  .bg-light-error {
+    background-color: #f9e7eb !important;
+  }
+  .text-error {
+    color: #fc4b6c !important;
+  }
+  .bg-light-success {
+    background-color: #ebfaf2 !important;
+  }
+  .text-success {
+    color: #00c292 !important;
+  }
+  .my-fab {
+    box-shadow: none !important;
+    border: none !important;
+    transition: background-color 0.3s ease;
+  }
+  
+  .my-fab:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important; /* Hiệu ứng nền khi hover */
+  }

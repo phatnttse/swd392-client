@@ -1,0 +1,149 @@
+@if(this.statusPage == 0){
+  <mat-card>
+    <mat-card-content>
+      <div class="row justify-content-between">
+        <div class="col-lg-4 negative-margin">
+          <mat-form-field appearance="outline">
+            <input matInput type="text" placeholder="Tìm kiếm" #input />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4 d-flex align-items-center justify-content-end">
+          <button mat-raised-button color="primary" routerLink="/admin/products/new" style="padding: 20px 10px">
+            Thêm sản phẩm mới
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card class="w-100">
+    <mat-card-content>
+      <h4>Quản lý sản phẩm</h4>
+      <div class="table-responsive mt-20">
+        <table [dataSource]="dataSource" mat-table matSort class="w-100 text-nowrap">
+            <!-- Cột ID -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell  *matHeaderCellDef mat-sort-header="id">ID</th>
+            <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+          </ng-container>
+  
+          <!-- Cột Tên -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Tên</th>
+            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+          </ng-container>
+  
+          <!-- Cột Địa chỉ -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="email">Email</th>
+            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="gender">
+            <th mat-header-cell mat *matHeaderCellDef mat-sort-header="gender">Giới tính</th>
+            <td mat-cell *matCellDef="let user">{{ user.gender }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="role">
+            <th mat-header-cell  *matHeaderCellDef mat-sort-header="role">Vai trò</th>
+            <td mat-cell *matCellDef="let user">{{ user.role }}</td>
+          </ng-container>
+  
+          <!-- Cột Các thao tác -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Các thao tác</th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-icon-button color="warn">
+                <mat-icon>do_not_disturb_on</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="btnChangeStatusPage(1, user)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+  
+        <!-- Điều hướng trang (bình luận ra) -->
+        <div *ngIf="totalPages > 1" class="section pagenav clearfix a-center mt-5">
+          <nav class="collection-paginate clearfix nav_pagi w_100 relative">
+            <ul class="pagination clearfix">
+              <li class="page-item" *ngIf="currentPage > 0">
+                <a class="page-link" href="javascript:;" (click)="onPageChange(currentPage - 1)">
+                  <mat-icon>chevron_left</mat-icon>
+                </a>
+              </li>
+              <li class="page-item" *ngFor="let page of visiblePages; trackBy: trackByIndex" [ngClass]="{ active: page === currentPage + 1 }">
+                <a class="page-link" href="javascript:;" (click)="onPageChange(page - 1)">{{ page }}</a>
+              </li>
+              <li class="page-item" *ngIf="currentPage < totalPages - 1">
+                <a class="page-link" href="javascript:;" (click)="onPageChange(currentPage + 1)">
+                  <mat-icon>chevron_right</mat-icon>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>  
+} @else if (this.statusPage == 1) {
+  <div class="container-fluid">
+    <div class="row">  
+      <!-- Thông tin người đăng -->
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="text-primary d-flex align-items-center mb-4 ">
+              <h4>
+                <a 
+                class="material-symbols-outlined"
+                (click)="btnBack()">Quay lại - </a>
+              </h4>
+              <h4>Thông tin chi tiết</h4>
+            </div>
+            <div class="d-flex flex-column align-items-center">
+              <!-- Avatar của người dùng -->
+              <img alt="User Avatar" [src]="userAccount?.avatar"
+                class="rounded-circle mb-3" style="width: 170px; height: 170px; object-fit: cover; border: 1px solid;" />
+              <!-- Tên người dùng -->
+              <h4 class="font-weight-bold text-dark"></h4>
+              <p class="text-muted mb-2">Vai trò: <span class="text-primary">{{userAccount?.role}}</span></p>
+            </div>
+  
+            <!-- Thông tin chi tiết người dùng -->
+            <ul class="list-group mt-4">
+              <li class="list-group-item">
+                <strong>Email: </strong>
+                <span class="text-dark">{{userAccount?.email}}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Họ và tên: </strong>
+                <span class="text-dark">{{userAccount?.name}}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Số điện thoại: </strong>
+                <span class="text-dark">{{userAccount?.phone}}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Giới tính: </strong>
+                <span class="text-dark">{{userAccount?.gender}}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Số dư ví: </strong>
+                <span class="text-success">{{userAccount?.balance}}VNĐ</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Ngày đăng ký: </strong>
+                <span class="text-success">{{userAccount?.createAt}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

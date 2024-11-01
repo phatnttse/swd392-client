@@ -8,4 +8,5 @@ export class DBkeys {
   public static readonly TOKEN_EXPIRES_IN = 'expires_in';
   public static readonly LANG_ID = 'lang_id';
   public static readonly DEFAULT_LANG = 'default_lang';
+  public static readonly CURRENT_PRODUCTS_PAGE = 'product_page';
 }

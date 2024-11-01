@@ -99,6 +99,18 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
       this.flowerCategories.find((category) => category.id === id) ?? null;
   }
 
+  ngOnInit() {
+    this.categoryService.categoryData$.subscribe(
+      (categoryData: FlowerCategory[]) => {
+        this.flowerCategories = categoryData;
+        this.dataSource = new MatTableDataSource(this.flowerCategories);
+        this.dataSource.sort = this.sort;
+        console.log(categoryData)
+      }
+    );
+
+  }
+
   // Thay đổi trạng thái của trang
   btnChangeStatusPage(status: number, category?: FlowerCategory) {
     this.statusPage = status;
@@ -132,27 +144,30 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
       this.categoryForm.markAllAsTouched();
       return;
     }
+      
+      //Form 
+      const formData = this.createFormData();
+      // Gọi service để lưu danh mục mới vào database
+      this.categoryService.addNewCategory(formData).subscribe(
+        {
+          next: (response: FlowerCategory) => {
+            this.categoryForm.reset();
+            this.uploadedImage = '';
+            this.toastr.success('Tạo danh mục mới thành công', 'Success', {
+              progressBar: true,
+            });
+            this.flowerCategories.push(response);
+            this.dataSource = new MatTableDataSource(this.flowerCategories);
+            this.dataSource.sort = this.sort;
+            this.categoryService.categoryDataSource.next(this.flowerCategories);
+          },
+          error: (error: HttpErrorResponse) => {
+            this.toastr.error('Tạo hoa mới thất bại', 'Error');
+            console.error('Error creating product: ', error);
+          },
+        }
+       );
 
-    //Form
-    const formData = this.createFormData();
-    // Gọi service để lưu danh mục mới vào database
-    this.categoryService.addnewCategory(formData).subscribe({
-      next: (response: FlowerCategory) => {
-        this.categoryForm.reset();
-        this.uploadedImage = '';
-        this.toastr.success('Tạo danh mục mới thành công', 'Success', {
-          progressBar: true,
-        });
-        this.flowerCategories.push(response);
-        this.dataSource = new MatTableDataSource(this.flowerCategories);
-        this.dataSource.sort = this.sort;
-        this.categoryService.categoryDataSource.next(this.flowerCategories);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.toastr.error('Tạo hoa mới thất bại', 'Error');
-        console.error('Error creating product: ', error);
-      },
-    });
   }
 
   createFormData(): FormData {
@@ -170,9 +185,14 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
 
     return formData;
   }
+    
 
-  btnUpdateCategory() {
-    if (this.categoryForm.valid && this.selectedCategory?.id !== undefined) {
+  btnUpdateCategory(){
+    if(this.categoryForm.invalid){
+      this.categoryForm.markAllAsTouched();
+      return;
+    }
+    if (this.selectedCategory?.id !== undefined) {
       const updatedCategory: FlowerCategory = {
         id: this.selectedCategory.id, // Lấy id của danh mục hiện tại
         name: this.categoryForm.get('name')?.value, // Cập nhật tên danh mục từ form
@@ -183,65 +203,44 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
       };
 
       // Gọi dịch vụ để cập nhật danh mục
-      this.categoryService
-        .updateCategory(this.selectedCategory.id, updatedCategory)
-        .subscribe(
-          (response) => {
-            this.toastr.success('Cập nhật danh mục thành công', 'Update', {
-              progressBar: true,
-            });
+      this.categoryService.updateCategory(this.selectedCategory.id,updatedCategory)
+        .subscribe({
+          next: (response : FlowerCategory) => {
+            this.toastr.success(`Cập nhật ${response.name} thành công`,'SUCCESS',{
+              progressBar: true
+            })
+            this.flowerCategories.map((flowerCategory) => {
+              if(flowerCategory.id === response.id){
+                flowerCategory = response;
+              }
+            })
             this.dataSource = new MatTableDataSource(this.flowerCategories);
             this.dataSource.sort = this.sort;
-
-            console.log('Danh mục đã được cập nhật:', response);
           },
-          (error) => {
+          error: (error: HttpErrorResponse) => {
             console.error('Lỗi khi cập nhật danh mục:', error);
           }
-        );
+        });
     } else {
-      console.error('Form không hợp lệ hoặc không tìm thấy id của danh mục');
+      this.toastr.warning(`Vui lòng chọn danh mục`,`WARNING`);
     }
   }
+  
 
-  ngOnInit() {
-    this.categoryService.categoryData$.subscribe(
-      (categoryData: FlowerCategory[]) => {
-        this.flowerCategories = categoryData;
-        this.dataSource = new MatTableDataSource(this.flowerCategories);
-        this.dataSource.sort = this.sort;
-        console.log(categoryData);
-      }
-    );
-  }
+ 
 
-  // Hàm cập nhật danh sách danh mục (nếu cần)
-  updateCategoryList(id: number) {
-    this.categoryService.getAllCategories().subscribe(
-      (categories) => {
-        this.flowerCategories = categories;
-        this.dataSource.data = this.flowerCategories; // Cập nhật dataSource cho bảng
-      },
-      (error) => {
-        console.error('Lỗi khi lấy danh sách danh mục:', error);
-      }
-    );
-  }
-
-  adminDeleteCategory(id: number) {
+  btnDeleteCategory(id: number){
     this.categoryService.deleteCategory(id).subscribe({
-      next: (response) => {
-        this.flowerCategories = this.flowerCategories.filter(
-          (category) => category.id !== id
-        );
+      next: (response : FlowerCategory) => {
+        this.flowerCategories = this.flowerCategories.filter(category => category.id !== id);
         this.dataSource = new MatTableDataSource(this.flowerCategories);
         this.dataSource.sort = this.sort;
         this.categoryService.categoryDataSource.next(this.flowerCategories);
-        this.toastr.success('Xóa thành công!');
+        this.toastr.success(`Xóa danh mục: ${response.name}  thành công!`);
       },
-      error: (err) => {
-        this.toastr.error('Xóa không thành công!');
-        console.log(err);
+      error: (err : HttpErrorResponse) => {
+        this.toastr.error(`${err.error.error}`, 'ERROR');
+        console.log(err)
       },
     });
   }

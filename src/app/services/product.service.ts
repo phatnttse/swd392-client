@@ -59,7 +59,9 @@ export class ProductService extends EndpointBase {
       .set('categoryIds', categoryIds.join(',') ?? []);
 
     return this.http
-      .get<FlowerPaginated>(`${this.API_URL}/flowers`, { params })
+      .get<FlowerPaginated>(`${this.API_URL}/flowers`, {
+        params,
+      })
       .pipe(
         catchError((error) => {
           return this.handleError(error, () =>
@@ -124,17 +126,11 @@ export class ProductService extends EndpointBase {
   }
 
   approveFlowerListing(id: number | undefined): Observable<Flower> {
-    return this.http
-      .put<Flower>(
-        `${this.API_URL}/admin/flower-listings/approve/${id}`,
-        {},
-        this.requestHeaders
-      )
-      .pipe(
-        catchError((error) => {
-          return this.handleError(error, () => this.approveFlowerListing(id));
-        })
-      );
+    return this.http.put<Flower>(
+      `${this.API_URL}/admin/flower-listings/approve/${id}`,
+      {},
+      this.requestHeaders
+    );
   }
 
   getFlowerCategory() {
@@ -151,6 +147,25 @@ export class ProductService extends EndpointBase {
         catchError((error) => {
           return this.handleError(error, () =>
             this.getFeedbacksByFlowerId(flowerId)
+          );
+        })
+      );
+  }
+
+  rejectFlowerListing(
+    id: number | undefined,
+    reason: string
+  ): Observable<Flower> {
+    return this.http
+      .put<Flower>(
+        `${this.API_URL}/admin/flower-listings/reject/${id}`,
+        { reason },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.rejectFlowerListing(id, reason)
           );
         })
       );
