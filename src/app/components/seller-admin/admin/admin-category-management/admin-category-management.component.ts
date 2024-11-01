@@ -23,21 +23,17 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CategoryService } from '../../../../services/category.service';
-import { DBkeys } from '../../../../services/db-keys';
 import { FlowerCategory } from '../../../../models/category.model';
-import { Category } from '../../../../models/flower.model';
 import { MatSort } from '@angular/material/sort';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator } from '@angular/material/paginator';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
 import { ParentCategory } from '../../../../models/enums';
 
-declare var window: any;
 @Component({
   selector: 'app-admin-category-management',
   standalone: true,

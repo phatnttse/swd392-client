@@ -18,6 +18,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/swd392-client",
+            "allowedCommonJsDependencies": ["apexcharts"],
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -35,7 +36,7 @@
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/styles/user.style.scss"
             ],
-            "scripts": []
+            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"]
           },
           "configurations": {
             "production": {
@@ -51,7 +52,8 @@
                   "maximumError": "500kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "sourceMap": false
             },
             "development": {
               "optimization": false,

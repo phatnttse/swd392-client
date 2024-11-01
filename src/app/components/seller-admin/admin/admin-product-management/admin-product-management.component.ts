@@ -97,8 +97,8 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource: MatTableDataSource < Flower > = new MatTableDataSource < Flower > ();
-  listFlower ? : Flower[] = []; // Danh sách hoa
-  flower ? : Flower;
+  listFlower ?: Flower[] = []; // Danh sách hoa
+  flower ?: Flower;
   searchString: string = ''; // Chuỗi tìm kiếm
   order: string = 'desc'; // Sắp xếp tăng dần hoặc giảm dần
   sortBy: string = 'createdAt'; // Sắp xếp theo trường nào
@@ -213,7 +213,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   }
 
   //Chuyển hướng sang admin-product-detail với id
-  btnChangeStatusPage(status: number, flower ? : Flower) {
+  btnChangeStatusPage(status: number, flower? : Flower) {
     this.currentPage = status;
     if (flower) {
       this.flower = flower;
@@ -246,20 +246,6 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       this.pageSize,
       this.categoryIds
     );
-  }
-
-  //xử lý product details
-
-  getProductDetails(id: number) {
-    this.productService.getFlowerById(id).subscribe({
-      next: (response: Flower) => {
-        this.flower = response;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error("Thông báo lỗi:", error?.error?.message ?? "Không có thông báo lỗi cụ thể.");
-        console.error("Trạng thái HTTP:", error?.status);
-      },
-    });
   }
 
   toggleRejectForm() {

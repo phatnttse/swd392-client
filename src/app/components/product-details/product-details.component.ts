@@ -117,6 +117,22 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
+  btnBuyNow(flowerId: number, quantity: number) {
+    this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
+      next: (response: InsertUpdateCartResponse) => {
+        if (response.data && response.success && response.code === 200) {
+          this.router.navigate(['/cart']);
+        } else {
+          this.toastr.warning(response.message);
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+        this.toastr.error(error.error.error);
+      },
+    });
+  }
+
   // Cuộn lên đầu trang
   scrollToTop() {
     if (this.topElement) {

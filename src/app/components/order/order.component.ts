@@ -23,6 +23,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
+import { MatBadgeModule } from '@angular/material/badge';
+import { PaymentMethod } from '../../models/enums';
 
 @Component({
   selector: 'app-order',
@@ -40,6 +42,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
     TranslateModule,
     HeaderComponent,
     FooterComponent,
+    MatBadgeModule,
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss',
@@ -53,6 +56,7 @@ export class OrderComponent implements OnInit {
   statusOrder: number = 0; // 0: Chưa đặt hàng, 1: Đặt hàng thành công, 2: Đặt hàng thất bại
   isBalanceInsufficient: boolean = false; // Kiểm tra số dư ví có đủ để thanh toán không
   isDisabledBtn: boolean = false; // Kiểm tra xem nút đặt hàng có bị disable không
+  paymentMethods = PaymentMethod;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -130,29 +134,55 @@ export class OrderComponent implements OnInit {
       };
     });
 
-    this.orderService
-      .orderByWallet(
-        buyerName,
-        buyerAddress,
-        buyerPhone,
-        paymentMethod,
-        note,
-        orderDetails
-      )
-      .subscribe({
-        next: (response: any) => {
-          this.cartService.clearCart();
-          this.cartService.totalAmountSubject.next(0);
-          this.cartService.cartDataSource.next([]);
-          this.cartService.totalQuantitySubject.next(0);
-          this.orderForm.reset();
-          this.statusOrder = 1;
-        },
-        error: (error: HttpErrorResponse) => {
-          console.log(error);
-          this.statusOrder = 2;
-        },
-      });
+    if (paymentMethod === PaymentMethod.WALLET) {
+      this.orderService
+        .orderByWallet(
+          buyerName,
+          buyerAddress,
+          buyerPhone,
+          paymentMethod,
+          note,
+          orderDetails
+        )
+        .subscribe({
+          next: (response: any) => {
+            this.cartService.clearCart();
+            this.cartService.totalAmountSubject.next(0);
+            this.cartService.cartDataSource.next([]);
+            this.cartService.totalQuantitySubject.next(0);
+            this.orderForm.reset();
+            this.statusOrder = 1;
+          },
+          error: (error: HttpErrorResponse) => {
+            console.log(error);
+            this.statusOrder = 2;
+          },
+        });
+    } else if (paymentMethod === PaymentMethod.COD) {
+      this.orderService
+        .orderByCOD(
+          buyerName,
+          buyerAddress,
+          buyerPhone,
+          paymentMethod,
+          note,
+          orderDetails
+        )
+        .subscribe({
+          next: (response: any) => {
+            this.cartService.clearCart();
+            this.cartService.totalAmountSubject.next(0);
+            this.cartService.cartDataSource.next([]);
+            this.cartService.totalQuantitySubject.next(0);
+            this.orderForm.reset();
+            this.statusOrder = 1;
+          },
+          error: (error: HttpErrorResponse) => {
+            console.log(error);
+            this.statusOrder = 2;
+          },
+        });
+    }
   }
   checkBalance(): void {
     if (this.userAccount && this.totalAmount) {

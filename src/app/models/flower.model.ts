@@ -1,14 +1,13 @@
 import { UserAccount } from './account.model';
+import { FlowerCategory } from './category.model';
 import { FlowerListingStatus } from './enums';
 import { PaginatedResponse } from './paginated.model';
 
-export interface Category {
+export interface Image {
   id: number;
-  name: string;
-  categoryParent: string;
-  createdAt: string;
-  updatedAt: string;
+  url: string;
 }
+
 export interface Flower {
   id: number;
   user: UserAccount;
@@ -17,8 +16,8 @@ export interface Flower {
   address: string;
   price: number;
   stockQuantity: number;
-  categories: Category[];
-  imageUrl: string;
+  categories: FlowerCategory[];
+  images: Image[];
   status: FlowerListingStatus;
   views: number;
   rejectReason: string;

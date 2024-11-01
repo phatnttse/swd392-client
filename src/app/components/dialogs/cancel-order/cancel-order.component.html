@@ -1,0 +1,40 @@
+<mat-card class="d-flex align-items-center justify-content-center p-5">
+  <mat-card-header>
+    <mat-card-title class="h6 fw-bold text-black mb-5">
+      {{ "Order.CancelOrder.Title" | translate }}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="formCancelOrder">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{
+          "Order.CancelOrder.SelectReason" | translate
+        }}</mat-label>
+        <mat-select required formControlName="reason">
+          <mat-option
+            *ngFor="let reason of cancelOrderReasons"
+            [value]="reason | translate"
+          >
+            {{ reason | translate }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formCancelOrder.get('reason')?.hasError('required')">
+          {{ "Order.CancelOrder.RequiredReasonError" | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{
+          "Order.CancelOrder.OtherReasonPlaceholder" | translate
+        }}</mat-label>
+        <textarea matInput formControlName="otherReason"></textarea>
+      </mat-form-field>
+
+      <div class="actions d-flex align-items-center justify-content-center">
+        <button (click)="btnCancelOrder()" mat-raised-button color="warn">
+          {{ "Order.CancelOrder.ConfirmCancel" | translate }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { UserGuard } from '../../guards/guards/user.guard';
+import { UserGuard } from '../../guards/user.guard';
 
 export const SellerChannelRoutes: Routes = [
   {
@@ -35,7 +35,7 @@ export const SellerChannelRoutes: Routes = [
             './../seller-admin/seller/seller-order-management/seller-order-management.component'
           ).then((m) => m.SellerOrderManagementComponent);
         },
-      },
+      }
     ],
   },
 ];

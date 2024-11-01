@@ -1,3 +1,33 @@
 .badge-warning {
   background-color: #f0ad4e;
 }
+.badge-info {
+  background-color: #5bc0de;
+}
+.badge-success {
+  background-color: #5cb85c;
+}
+.badge-danger {
+  background-color: #d9534f;
+}
+.badge-accent {
+  background-color: #fb9678;
+}
+.icon-text {
+  vertical-align: middle;
+  margin-right: 8px; /* Thêm khoảng cách giữa icon và text */
+  font-size: 20px; /* Đặt kích thước icon bằng với văn bản */
+}
+
+.icon-title {
+  vertical-align: middle;
+  margin-right: 12px;
+  font-size: 24px;
+}
+
+.phone-link {
+  &:hover {
+    text-decoration: underline !important;
+    color: #5bc0de;
+  }
+}

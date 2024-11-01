@@ -4,3 +4,9 @@ export interface BaseResponse<T> {
   success: boolean;
   data: T;
 }
+
+export interface SideBarMenu {
+  link: string;
+  icon: string;
+  menu: string;
+}
