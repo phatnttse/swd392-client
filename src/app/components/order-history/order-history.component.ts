@@ -24,6 +24,7 @@ import { CancelOrderComponent } from '../dialogs/cancel-order/cancel-order.compo
 import { ToastrService } from 'ngx-toastr';
 import { Utilities } from '../../services/utilities';
 import { MatIconModule } from '@angular/material/icon';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-order-history',
@@ -42,6 +43,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss',

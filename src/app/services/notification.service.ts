@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { Client } from '@stomp/stompjs';
 import { AppConfigurationService } from './configuration.service';
+import { Notification } from '../models/notification.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
   private NOTIFICATION_URL: string;
-  private wsSubject!: WebSocketSubject<any>;
-  private notificationSubject = new Subject<any>();
+  private client!: Client;
+  private notificationSubject = new Subject<Notification>();
 
   constructor(
     private appConfig: AppConfigurationService,
@@ -19,40 +20,47 @@ export class NotificationService {
     this.NOTIFICATION_URL = appConfig['NOTIFICATION_URL'];
   }
 
-  // Thiết lập WebSocket để kết nối và nhận thông báo
+  // Thiết lập STOMP để kết nối và nhận thông báo
   connectWebSocket(userId: number): void {
-    // Tạo WebSocket với URL dựa trên userId
-    this.wsSubject = webSocket(
-      `${this.NOTIFICATION_URL}/notifications/users/${userId}`
-    );
+    this.client = new Client({
+      brokerURL: `${this.NOTIFICATION_URL}/ws`, // Đường dẫn WebSocket của server
+      onConnect: () => {
+        console.log('Connected to STOMP');
 
-    // Đăng ký lắng nghe các thông báo từ WebSocket
-    this.wsSubject.subscribe({
-      next: (notification: any) => {
-        this.notificationSubject.next(notification);
+        // Đăng ký lắng nghe các thông báo từ STOMP
+        this.client.subscribe(
+          `/notifications/users/${userId}`,
+          (response: Notification) => {
+            this.notificationSubject.next(response);
+          }
+        );
       },
-      error: (error: any) => {
-        console.error('Connect notification service error:', error);
+      onStompError: (frame: any) => {
+        console.error('Broker reported error: ' + frame.headers['message']);
+        console.error('Additional details: ' + frame.body);
       },
     });
+
+    // Khởi động kết nối
+    this.client.activate();
   }
 
   // Lấy tất cả thông báo qua API cho lần tải đầu tiên
-  getAllNotifications(userId: number): Observable<any> {
-    return this.http.get(
-      `${this.NOTIFICATION_URL}/notifications/users/${userId}`
+  getAllNotifications(userId: number): Observable<Notification[]> {
+    return this.http.get<Notification[]>(
+      `${this.NOTIFICATION_URL}/notifications/users/6`
     );
   }
 
   // Observable để các component đăng ký nhận thông báo mới
-  onNotification(): Observable<any> {
+  onNotification(): Observable<Notification> {
     return this.notificationSubject.asObservable();
   }
 
   // Đóng kết nối WebSocket khi không còn sử dụng nữa
   disconnectWebSocket(): void {
-    if (this.wsSubject) {
-      this.wsSubject.complete();
+    if (this.client) {
+      this.client.deactivate();
     }
   }
 }

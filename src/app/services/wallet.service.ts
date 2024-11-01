@@ -27,7 +27,9 @@ export class WalletService extends EndpointBase {
     pageNumber: number,
     pageSize: number,
     status: string[],
-    type: string
+    type: string,
+    startDate?: string,
+    endDate?: string
   ): Observable<WalletLogResponse> {
     let params = new HttpParams()
       .set('order', order)
@@ -36,6 +38,14 @@ export class WalletService extends EndpointBase {
       .set('pageSize', pageSize.toString())
       .set('status', status.join(',') ?? [])
       .set('type', type);
+
+    if (startDate) {
+      params = params.set('startDate', startDate);
+    }
+
+    if (endDate) {
+      params = params.set('endDate', endDate);
+    }
 
     return this.http
       .get<WalletLogResponse>(`${this.API_URL}/wallet-logs/by-account`, {

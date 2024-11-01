@@ -1,41 +1,135 @@
 @defer () {
 <app-header></app-header>
+<app-breadcrumb></app-breadcrumb>
 <section class="container section-wallet">
   <div class="wallet rounded shadow-sm">
     <div class="header text-white">
-      <div class="d-flex align-items-center justify-content-between p-5">
-        <div>
-          <h5 class="text-white mb-3">{{ "Wallet.MyBalance" | translate }}</h5>
-          <h2 class="text-white">
+      <div class="row p-5">
+        <div class="col-lg-4 col-md-12">
+          <h5 class="text-white mb-3 text-center">
+            {{ "Wallet.MyBalance" | translate }}
+          </h5>
+          <h2 class="text-white text-center">
             {{ this.authService.currentUser?.balance | number : "1.0" }}₫
           </h2>
         </div>
-        <div>
-          <img
-            width="50"
-            src="./../../../assets/images/wallet-payment-svg.svg"
-            alt="User Profile"
-            class="rounded-circle"
-          />
+        <div class="col-lg-4 col-md-6 text-center">
+          <div class="d-flex flex-column align-items-center">
+            <img
+              data-bs-toggle="modal"
+              data-bs-target="#topupModal"
+              width="50"
+              style="color: white; cursor: pointer"
+              src="./../../../assets/images/wallet-plus.svg"
+              alt="Wallet Plus"
+            />
+            <div class="text-white fw-bold">
+              {{ "Wallet.TopUpToWallet" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="d-flex justify-content-center">
+            <img
+              width="50"
+              src="./../../../assets/images/wallet-payment-svg.svg"
+              alt="User Profile"
+              class="rounded-circle"
+            />
+          </div>
         </div>
       </div>
     </div>
 
     <div class="content p-4">
       <div class="card mb-5">
-        <div class="card-body">
-          <div class="d-flex justify-content-around">
-            <div class="icon-item text-center">
-              <button
-                data-bs-toggle="modal"
-                data-bs-target="#topupModal"
-                mat-icon-button
-                class="btn"
-              >
-                <mat-icon style="color: var(--bs-primary)">add_card</mat-icon>
-              </button>
+        <div class="card-body mt-3">
+          <div class="row">
+            <div
+              class="col-lg-2 col-md-12 col-sm-12 d-flex align-items-center justify-content-center mb-3"
+            >
               <div class="text-black fw-bold">
-                {{ "Wallet.TopUpToWallet" | translate }}
+                <span>{{ "FilterBy" | translate }}</span>
+              </div>
+            </div>
+            <div class="col-lg-10 col-md-12 col-sm-12">
+              <div
+                class="d-flex align-items-center justify-content-between flex-wrap"
+              >
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ "Status" | translate }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'SelectStatus' | translate }}"
+                    [(ngModel)]="status"
+                  >
+                    <mat-option value="">None</mat-option>
+                    @for (status of walletLogStatuses; track $index) {
+                    <mat-option [value]="status">
+                      {{ status }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ "Type" | translate }}</mat-label>
+                  <mat-select
+                    placeholder="{{ 'SelectType' | translate }}"
+                    [(ngModel)]="type"
+                  >
+                    <mat-option value="">None</mat-option>
+                    @for (type of walletLogTypes; track $index) {
+                    <mat-option [value]="type">
+                      {{ getWalletLogTypeLabel(type) | translate }}
+                    </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>{{
+                    "EnterStartAndEndDate" | translate
+                  }}</mat-label>
+                  <mat-date-range-input
+                    [formGroup]="range"
+                    [rangePicker]="picker"
+                  >
+                    <input
+                      matStartDate
+                      formControlName="start"
+                      placeholder="Start date"
+                      (dateChange)="onStartDateChange($event)"
+                    />
+                    <input
+                      matEndDate
+                      (dateChange)="onEndDateChange($event)"
+                      formControlName="end"
+                      placeholder="End date"
+                    />
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+
+                  @if (range.controls.start.hasError('matStartDateInvalid')) {
+                  <mat-error>Invalid start date</mat-error>
+                  } @if (range.controls.end.hasError('matEndDateInvalid')) {
+                  <mat-error>Invalid end date</mat-error>
+                  }
+                </mat-form-field>
+
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="btn mb-4"
+                  style="padding: 20px"
+                  type="button"
+                  (click)="btnApplyFilter()"
+                >
+                  {{ "Products.Apply" | translate }}
+                </button>
               </div>
             </div>
           </div>
@@ -48,38 +142,37 @@
         <div
           class="transaction d-flex justify-content-between align-items-center p-3 mb-2 bg-light rounded shadow-sm"
         >
-          <div class="t-icon-container">
-            <img
-              width="80"
-              src="./../../../assets/images/wallet-payment-svg.svg"
-              alt="Transaction Icon"
-              class="img-fluid"
-            />
-          </div>
           <div class="t-details flex-grow-1 ms-3">
             <div class="t-title text-black">
               {{ getWalletLogTypeLabel(log.type) | translate }}
             </div>
             <div class="t-time text-black">
-              {{ log.createdAt | date : "dd-mm-yyy HH:mm:ss" }}
+              {{ log.createdAt | date : "yyyy-MM-dd HH:mm:ss" }}
             </div>
           </div>
-          <div
-            class="t-amount fw-bold"
-            [ngClass]="{
-              'text-success':
-                log.type === walletLogType.ADD ||
-                log.type === walletLogType.DEPOSIT,
-              'text-danger':
-                log.type === walletLogType.SUBTRACT ||
-                log.type === walletLogType.WITHDRAW
-            }"
-          >
-            @if (log.type === walletLogType.ADD || log.type ===
-            walletLogType.DEPOSIT) { + }@else if (log.type ===
-            walletLogType.SUBTRACT || log.type === walletLogType.WITHDRAW) { - }
+          <div class="d-flex flex-column align-items-center">
+            <div
+              class="t-amount fw-bold"
+              [ngClass]="{
+                'text-success':
+                  log.type === walletLogType.ADD ||
+                  log.type === walletLogType.DEPOSIT,
+                'text-danger':
+                  log.type === walletLogType.SUBTRACT ||
+                  log.type === walletLogType.WITHDRAW,
+                'text-warning': log.status === walletLogStatus.PENDING
+              }"
+            >
+              @if (log.type === walletLogType.ADD || (log.type ===
+              walletLogType.DEPOSIT && log.status == walletLogStatus.SUCCESS)) {
+              + }@else if (log.type === walletLogType.SUBTRACT || log.type ===
+              walletLogType.WITHDRAW) { - }
 
-            {{ log.amount | number : "1.0" }}₫
+              {{ log.amount | number : "1.0" }}₫
+            </div>
+            <div class="t-current-balance text-black fw-bold">
+              SD: {{ log.balance | number : "1.0" }}₫
+            </div>
           </div>
         </div>
         } @if (totalPages > 1) {
@@ -180,8 +273,9 @@
       <div class="modal-body">
         <form id="topupForm" [formGroup]="formTopUp" (ngSubmit)="btnTopUp()">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ "Wallet.Amount" | translate }} (₫)</mat-label>
+            <mat-label>{{ "Wallet.Amount" | translate }} (VNĐ)</mat-label>
             <input
+              min="0"
               matInput
               type="number"
               id="amount"

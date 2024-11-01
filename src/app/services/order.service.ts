@@ -8,6 +8,7 @@ import {
   Order,
   OrderByAccountResponse,
   OrderLineChart,
+  OrderReport,
   OrderResponse,
   UpdateOrderStatusResponse,
 } from '../models/order.model';

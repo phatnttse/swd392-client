@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -31,6 +31,8 @@ import { StatusService } from '../../services/status.service';
 import { SideBarMenu } from '../../models/base.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
+import { Notification } from '../../models/notification.model';
+import { NotificationType } from '../../models/enums';
 
 @Component({
   selector: 'app-seller-admin',
@@ -54,6 +56,7 @@ import { NotificationService } from '../../services/notification.service';
     MatSlideToggleModule,
     MatToolbarModule,
     TranslateModule,
+    MatBadgeModule,
   ],
   templateUrl: './seller-admin.component.html',
   styleUrls: [
@@ -62,7 +65,7 @@ import { NotificationService } from '../../services/notification.service';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class SellerAdminComponent implements OnInit {
+export class SellerAdminComponent implements OnInit, OnDestroy {
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -73,8 +76,10 @@ export class SellerAdminComponent implements OnInit {
   userAccount: UserAccount | null = null;
   listLanguage: any = null; // Danh sách ngôn ngữ lấy từ config
   defaultLang: any = null; // Ngôn ngữ được chọn
-  notifications: any[] = []; // Danh sách thông báo
-  private notificationSubscription!: Subscription;
+  notifications: Notification[] = []; // Danh sách thông báo
+  notificationSubscription!: Subscription;
+  newNotificationNumber: number = 0; // Số thông báo mới
+  notificationType = NotificationType;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -102,8 +107,8 @@ export class SellerAdminComponent implements OnInit {
       // Đăng ký nhận thông báo mới từ WebSocket
       this.notificationSubscription = this.notificationService
         .onNotification()
-        .subscribe((notification) => {
-          this.notifications.push(notification); // Thêm thông báo mới vào danh sách
+        .subscribe((notification: Notification) => {
+          this.notifications.push(notification);
         });
     }
 
@@ -113,6 +118,14 @@ export class SellerAdminComponent implements OnInit {
     this.statusService.statusLanguage$.subscribe((lang) => {
       this.defaultLang = lang ? lang : this.listLanguage[0];
     });
+  }
+
+  ngOnDestroy(): void {
+    // Ngắt kết nối WebSocket và hủy đăng ký các thông báo
+    this.notificationService.disconnectWebSocket();
+    if (this.notificationSubscription) {
+      this.notificationSubscription.unsubscribe();
+    }
   }
 
   btnLogOut() {
@@ -157,18 +170,26 @@ export class SellerAdminComponent implements OnInit {
     this.statusService.statusLanguageSource.next(lang);
   }
 
+  // Lấy tất cả thông báo
   getAllNotifications() {
-    // Lấy tất cả thông báo qua API khi component được khởi tạo
     this.notificationService
       .getAllNotifications(this.userAccount?.id!)
       .subscribe({
         next: (response: any) => {
           this.notifications = response;
+          this.getNewNotifications();
         },
         error: (error: HttpErrorResponse) => {
           console.error(error);
         },
       });
+  }
+
+  // Lấy số thông báo mới
+  getNewNotifications() {
+    this.newNotificationNumber = this.notifications.filter(
+      (notification) => !notification.isRead
+    ).length;
   }
 
   routerLinkActive = 'activelink';

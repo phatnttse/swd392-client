@@ -25,6 +25,7 @@ import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { PaymentMethod } from '../../models/enums';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-order',
@@ -43,6 +44,7 @@ import { PaymentMethod } from '../../models/enums';
     HeaderComponent,
     FooterComponent,
     MatBadgeModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss',

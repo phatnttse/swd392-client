@@ -72,6 +72,7 @@ export enum ParentCategory {
   TYPE = 'TYPE',
   EVENT_TYPE = 'EVENT_TYPE',
   SUBJECT = 'SUBJECT',
+  DISPLAY = 'DISPLAY',
 }
 
 export enum NonProcessOrderStatus {
@@ -87,4 +88,11 @@ export enum CancelOrderReason {
   ShippingCostTooHigh = 'Order.CancelReason.ShippingCostTooHigh',
   LongShippingTime = 'Order.CancelReason.LongShippingTime',
   Other = 'Order.CancelReason.Other',
+}
+
+export enum NotificationType {
+  WELCOME = 'WELCOME',
+  FLOWER_LISTING_STATUS = 'FLOWER_LISTING_STATUS',
+  ORDER_STATUS = 'ORDER_STATUS',
+  MARKETING = 'WALLET_LOG',
 }

@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { StatusService } from '../../services/status.service';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +26,7 @@ import { StatusService } from '../../services/status.service';
     MatButtonModule,
     FormsModule,
     CommonModule,
+    MatBadgeModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',

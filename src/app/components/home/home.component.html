@@ -30,12 +30,22 @@
               style="font-weight: bold"
               >{{ "Home.BuyNow" | translate }}</a
             >
+            @if (this.authService.isLoggedIn) {
+            <a
+              routerLink="/seller-channel"
+              class="btn btn-dark fs-6 rounded-pill py-3 mt-3"
+              style="font-weight: bold"
+              >{{ "Home.SellFlowerNow" | translate }}</a
+            >
+
+            }@else {
             <a
               routerLink="/signup"
               class="btn btn-dark fs-6 rounded-pill py-3 mt-3"
               style="font-weight: bold"
               >{{ "Home.RegisterToSellFlower" | translate }}</a
             >
+            }
           </div>
         </div>
       </div>

@@ -45,7 +45,8 @@
     "RegisterToSellFlower": "Đăng ký bán hoa",
     "ProductCategory": "Danh mục sản phẩm",
     "NewestProduct": "Sản phẩm mới nhất",
-    "ViewAll": "Xem tất cả"
+    "ViewAll": "Xem tất cả",
+    "SellFlowerNow": "Bán hoa bây giờ"
   },
   "Products": {
     "Category": "Danh mục",
@@ -128,6 +129,19 @@
     "Withdraw": "Rút tiền",
     "Unknown": "Không xác định"
   },
+  "BreadCrumb": {
+    "Cart": "Giỏ hàng",
+    "Contact": "Liên hệ",
+    "AboutUs": "Về chúng tôi",
+    "Blog": "Blog",
+    "Product": "Sản phẩm",
+    "ProductDetail": "Chi tiết sản phẩm",
+    "Order": "Đặt hàng",
+    "Wallet": "Ví của tôi",
+    "OrderHistory": "Lịch sử đặt hàng",
+    "Profile": "Hồ sơ",
+    "SellerProfile": "Hồ sơ người bán"
+  },
   "AddToCart": "Thêm vào giỏ",
   "Support": "Hỗ trợ",
   "SupportContent": "Nhận sự giúp đỡ nhanh chóng, miễn phí từ các trợ lý thân thiện",
@@ -209,5 +223,9 @@
   "ConfirmPreparing": "Xác nhận chuẩn bị hàng",
   "ConfirmShipping": "Xác nhận giao hàng",
   "ChangeEmail": "Đổi email",
-  "OTPRequired": "Vui lòng nhập mã OTP"
+  "OTPRequired": "Vui lòng nhập mã OTP",
+  "FilterBy": "Lọc theo",
+  "SelectStatus": "Chọn trạng thái",
+  "Type": "Loại",
+  "SelectType": "Chọn loại"
 }

@@ -1,10 +1,12 @@
 {
   "API_URL": "https://services.isolutions.top/api/v1",
-  "NOTIFICATION_URL": "https://notifications.isolutions.top/api/v1",
+  "NOTIFICATION_URL": "https://notifications.isolutions.top",
+  "INTEGRATION_URL": "https://intergration.isolutions.top",
   "Config_Language": [
     {
       "id": 1,
       "idRefer": 1,
+      "name": "Tiếng Việt",
       "value": "vi",
       "icon": "/flag-vi.svg",
       "isActive": 1
@@ -12,6 +14,7 @@
     {
       "id": 2,
       "idRefer": 2,
+      "name": "English",
       "value": "en",
       "icon": "/flag-en.svg",
       "isActive": 1

@@ -14,6 +14,7 @@ import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { FlowerCategory } from '../../models/category.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -47,7 +48,8 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private cartService: CartService,
     private toastr: ToastrService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

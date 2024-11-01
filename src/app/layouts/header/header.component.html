@@ -266,6 +266,21 @@
         <ul
           class="d-flex justify-content-end list-unstyled m-0 align-items-center"
         >
+          <li class="position-relative d-flex align-items-center me-3">
+            <a href="#" class="nav-link pe-3">
+              <img
+                width="24px"
+                src="./../../../assets/images/notification-bell.svg"
+                alt=""
+              />
+              <span
+                class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger"
+                id="cartItemCount"
+              >
+                0
+              </span>
+            </a>
+          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle pe-3"
@@ -300,7 +315,9 @@
                       width="32px"
                       [src]="'./../../../assets/images' + lang.icon"
                       [alt]="lang.value"
+                      class="me-2"
                     />
+                    <span>{{ lang.name }}</span>
                   </a>
                 </div>
               </li>
@@ -319,7 +336,7 @@
                 @if(account) {
                 <img
                   class="rounded"
-                  width="32px"
+                  width="24px"
                   [src]="account.avatar"
                   alt="Avatar"
                 />

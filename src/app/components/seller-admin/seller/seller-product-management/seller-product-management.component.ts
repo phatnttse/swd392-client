@@ -35,6 +35,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule } from '@ngx-translate/core';
+import { IntegrationService } from '../../../../services/integration.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ParseAddressResponse } from '../../../../models/integration.model';
 
 @Component({
   selector: 'app-seller-product-management',
@@ -55,6 +58,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatBadgeModule,
     TranslateModule,
     MatSortModule,
+    MatAutocompleteModule,
   ],
   templateUrl: './seller-product-management.component.html',
   styleUrl: './seller-product-management.component.scss',
@@ -102,12 +106,14 @@ export class SellerProductManagementComponent
   selectedProduct: Flower | null = null; // Sản phẩm được chọn
   draggedImage: any; // Ảnh kéo thả
   productDetail: Flower | null = null; // Chi tiết sản phẩm
+  parseAddress: string = ''; // Địa chỉ đã parse
 
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
     private categoryService: CategoryService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private integrationService: IntegrationService
   ) {
     this.productForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -361,5 +367,22 @@ export class SellerProductManagementComponent
     return this.selectedCategories.length > 0
       ? this.selectedCategories.map((c) => c.name).join(', ')
       : 'Select Category';
+  }
+
+  onAddressChange(address: string) {
+    if (address.length >= 10) {
+      this.integrationService.parseAddress(address).subscribe({
+        next: (response: ParseAddressResponse) => {
+          if (response.success) {
+            const { ward, district, province } = response.data;
+            this.parseAddress = `${ward.name}, ${district.name}, ${province.name}`;
+          }
+        },
+        error: (error) => {
+          this.toastr.error('Error parsing address', 'Error');
+          console.error('Address parsing error:', error);
+        },
+      });
+    }
   }
 }

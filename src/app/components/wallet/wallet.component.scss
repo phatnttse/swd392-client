@@ -1,41 +1,12 @@
 .section-wallet {
-  padding-top: 7rem;
-}
-@media screen and (max-width: 768px) {
-  .section-wallet {
-    padding-top: 9rem;
-  }
-}
-.wallet {
-  background-color: #f7f7f7;
-  margin: 10px auto;
-  height: 100%;
-  width: 100%;
-  transform: scale(0.95);
-  margin-top: 40px;
+  padding: 4rem 0px;
 }
 
 .header {
-  background-color: var(--bs-primary);
+  background-color: var(--bs-accent);
   border-bottom-right-radius: 40px;
   border-bottom-left-radius: 40px;
   position: relative;
-}
-
-.icon-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.icon {
-  color: #ffc168;
-  margin-bottom: 5px;
-}
-
-.icon-text {
-  font-size: 1rem;
-  color: #939393;
 }
 
 .transactions {
@@ -64,5 +35,21 @@
 @media screen and (max-width: 768px) {
   .t-amount {
     font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .t-amount {
+    font-size: 0.8rem;
+  }
+  .t-current-balance {
+    font-size: 0.8rem;
+  }
+  .t-title {
+    font-size: 1rem;
+  }
+
+  .t-time {
+    font-size: 0.8rem;
   }
 }

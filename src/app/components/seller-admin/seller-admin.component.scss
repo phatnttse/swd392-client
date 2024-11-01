@@ -1,0 +1,26 @@
+.notification-menu div {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-menu strong {
+  font-weight: bold;
+}
+
+.mark-all-read-btn {
+  border-color: #fb9678 !important;
+  border-width: 2px;
+}
+
+mark-all-read-btn:hover {
+  border-color: darkorange;
+}
+
+.badge-accent {
+  background-color: #fb9678;
+  color: #ffffff;
+}
+.icon-48 {
+  height: 48px !important;
+  width: 48px !important;
+}

@@ -34,6 +34,7 @@ import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-profile',
@@ -59,6 +60,7 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
     TranslateModule,
     MatProgressSpinnerModule,
     MatStepperModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',

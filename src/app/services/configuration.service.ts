@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { LocalStoreManager } from './local-storage.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { DBkeys } from './db-keys';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +10,7 @@ export class AppConfigurationService {
   private config: any;
   private API_URL: string = '';
   private NOTIFICATION_URL: string = '';
+  private INTEGRATION_URL: string = '';
   private Config_Language: any = []; // Cấu hình ngôn ngữ
   public static readonly Default_Language: string = 'vi'; // Ngôn ngữ mặc định
   private firebaseConfig: any; // Cấu hình firebase
@@ -27,6 +26,7 @@ export class AppConfigurationService {
         this.config = config;
         this.API_URL = this.config.API_URL;
         this.NOTIFICATION_URL = this.config.NOTIFICATION_URL;
+        this.INTEGRATION_URL = this.config.INTEGRATION_URL;
         this.Config_Language = this.config.Config_Language;
         this.firebaseConfig = this.config.firebaseConfig;
       })

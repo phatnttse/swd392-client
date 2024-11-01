@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { ConvertedCategory } from '../../models/category.model';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-seller-profile',
@@ -30,6 +31,7 @@ import { ConvertedCategory } from '../../models/category.model';
     CommonModule,
     TranslateModule,
     TruncatePipe,
+    BreadcrumbComponent,
   ],
   templateUrl: './seller-profile.component.html',
   styleUrl: './seller-profile.component.scss',

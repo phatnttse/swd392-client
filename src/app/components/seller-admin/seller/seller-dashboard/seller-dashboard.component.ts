@@ -17,6 +17,8 @@ import {
   OrderReportResponse,
 } from '../../../../models/order.model';
 import { ChartOptions } from '../../../../models/dashboard.model';
+import { CommonModule } from '@angular/common';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-seller-dashboard',
@@ -30,6 +32,8 @@ import { ChartOptions } from '../../../../models/dashboard.model';
     MatFormFieldModule,
     ReactiveFormsModule,
     TranslateModule,
+    CommonModule,
+    MatGridListModule,
   ],
   templateUrl: './seller-dashboard.component.html',
   styleUrl: './seller-dashboard.component.scss',
@@ -37,7 +41,8 @@ import { ChartOptions } from '../../../../models/dashboard.model';
 export class SellerDashboardComponent implements OnInit {
   @ViewChild('activeusercardchart') chart1: ChartComponent =
     Object.create(null);
-  public chartOptions!: Partial<ChartOptions> | any;
+  public revenueChartOptions!: Partial<ChartOptions> | any;
+  public orderChartOptions!: Partial<ChartOptions> | any;
 
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(
@@ -54,7 +59,8 @@ export class SellerDashboardComponent implements OnInit {
     private orderService: OrderService,
     private toastr: ToastrService
   ) {
-    this.chartOptions = {};
+    this.revenueChartOptions = {};
+    this.orderChartOptions = {};
   }
 
   ngOnInit(): void {
@@ -69,17 +75,12 @@ export class SellerDashboardComponent implements OnInit {
     this.orderService.getOrderLineChart(startDate, endDate).subscribe({
       next: (response: OrderLineChart[]) => {
         this.orderLineChart = response;
-        this.chartOptions = {
+        this.revenueChartOptions = {
           series: [
             {
               name: 'Doanh thu',
               data: response.map((item) => item.price),
               color: '#fb9678',
-            },
-            {
-              name: 'Số đơn hàng',
-              data: response.map((item) => item.orderCount),
-              color: '#03c9d7',
             },
           ],
           xaxis: {
@@ -102,6 +103,46 @@ export class SellerDashboardComponent implements OnInit {
                   formatter: () => 'Doanh thu',
                 },
               },
+            ],
+          },
+          chart: {
+            toolbar: {
+              show: false,
+            },
+            type: 'line',
+            height: 300,
+          },
+          legend: {
+            show: false,
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
+            show: true,
+            width: 5,
+            colors: ['none'],
+          },
+          plotOptions: {
+            bar: {
+              columnWidth: '45%',
+              borderRadius: 6,
+            },
+          },
+        };
+        this.orderChartOptions = {
+          series: [
+            {
+              name: 'Số đơn hàng',
+              data: response.map((item) => item.orderCount),
+              color: '#03c9d7',
+            },
+          ],
+          xaxis: {
+            categories: response.map((item) => item.time),
+          },
+          tooltip: {
+            y: [
               {
                 formatter: (val: number) => {
                   return val.toString(); // Chỉ đơn giản chuyển sang chuỗi
@@ -116,7 +157,7 @@ export class SellerDashboardComponent implements OnInit {
             toolbar: {
               show: false,
             },
-            type: 'line',
+            type: 'area',
             height: 300,
           },
           legend: {
@@ -185,6 +226,7 @@ export class SellerDashboardComponent implements OnInit {
       );
     } else {
       this.getOrderLineChart();
+      this.getReport();
     }
   }
 }

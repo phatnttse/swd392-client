@@ -29,6 +29,7 @@ import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { ConvertedCategory } from '../../models/category.model';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-products',
@@ -55,6 +56,7 @@ import { TruncatePipe } from '../../pipes/truncate.pipe';
     HeaderComponent,
     FooterComponent,
     TruncatePipe,
+    BreadcrumbComponent,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',

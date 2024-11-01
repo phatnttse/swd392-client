@@ -83,13 +83,14 @@ export class SignInComponent {
 
     this.authService.loginWithPassword(email, password).subscribe({
       next: (response) => {
-        this.toastr.success(response.message, 'Success', { progressBar: true });
-        this.getCartByUser();
-
         setTimeout(() => {
+          this.getCartByUser();
           this.authService.redirectLogin();
+          this.toastr.success(response.message, 'Success', {
+            progressBar: true,
+          });
           this.loadingBtn.set(false);
-        }, 400);
+        }, 700);
       },
 
       error: (error: HttpErrorResponse) => {

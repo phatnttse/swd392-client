@@ -47,7 +47,8 @@
     "RegisterToSellFlower": "Register to sell flowers",
     "ProductCategory": "Product Categories",
     "NewestProduct": "Newest Products",
-    "ViewAll": "View All"
+    "ViewAll": "View All",
+    "SellFlowerNow": "Sell flowers now"
   },
   "Products": {
     "Category": "Category",
@@ -129,6 +130,19 @@
     "Deposit": "Deposit",
     "Withdraw": "Withdrawal",
     "Unknown": "Unknown Transaction"
+  },
+  "BreadCrumb": {
+    "Cart": "Cart",
+    "Contact": "Contact",
+    "AboutUs": "About Us",
+    "Blog": "Blog",
+    "Product": "Products",
+    "ProductDetail": "Product Detail",
+    "Order": "Order",
+    "Wallet": "My Wallet",
+    "OrderHistory": "Order History",
+    "Profile": "My Profile",
+    "SellerProfile": "Seller Profile"
   },
   "AddToCart": "Add to Cart",
   "Support": "Support",
@@ -215,5 +229,9 @@
   "ConfirmPreparing": "Confirm preparing goods",
   "ConfirmShipping": "Confirm shipping",
   "ChangeEmail": "Change Email",
-  "OTPRequired": "Please enter OTP code"
+  "OTPRequired": "Please enter OTP code",
+  "FilterBy": "Filter by",
+  "SelectStatus": "Select status",
+  "Type": "Type",
+  "SelectType": "Select type"
 }

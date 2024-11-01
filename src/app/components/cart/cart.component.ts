@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-cart',
@@ -25,6 +26,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
     CommonModule,
     HeaderComponent,
     FooterComponent,
+    BreadcrumbComponent,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',

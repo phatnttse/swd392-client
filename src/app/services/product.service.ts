@@ -6,6 +6,7 @@ import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { AppConfigurationService } from './configuration.service';
 import { Flower, FlowerPaginated } from '../models/flower.model';
 import { FlowerCategory } from '../models/category.model';
+import { Feedback } from '../models/feedback.model';
 
 @Injectable({
   providedIn: 'root',
@@ -122,19 +123,90 @@ export class ProductService extends EndpointBase {
       );
   }
 
-  approveFlowerListing(id: number | undefined): Observable<Flower>{
+  approveFlowerListing(id: number | undefined): Observable<Flower> {
     return this.http
-    .put<Flower>(`${this.API_URL}/admin/flower-listings/approve/${id}`, {}, this.requestHeaders)
-    .pipe(
-      catchError((error) => {
-        return this.handleError(error, () => this.approveFlowerListing(id));
-      })
+      .put<Flower>(
+        `${this.API_URL}/admin/flower-listings/approve/${id}`,
+        {},
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.approveFlowerListing(id));
+        })
+      );
+  }
+
+  getFlowerCategory() {
+    return this.http.get<FlowerCategory>(
+      `${this.API_URL}/flowers-categories`,
+      this.requestHeaders
     );
   }
 
-  getFlowerCategory(){
+  getFeedbacksByFlowerId(flowerId: number): Observable<Feedback[]> {
     return this.http
-    .get<FlowerCategory>(`${this.API_URL}/flowers-categories`, this.requestHeaders);
+      .get<Feedback[]>(`${this.API_URL}/feedbacks/flower/${flowerId}`)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getFeedbacksByFlowerId(flowerId)
+          );
+        })
+      );
   }
 
+  createFeedback(
+    flowerId: number,
+    description: string,
+    rating: number
+  ): Observable<Feedback> {
+    return this.http
+      .post<Feedback>(
+        `${this.API_URL}/feedbacks`,
+        { flowerId, description, rating },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.createFeedback(flowerId, description, rating)
+          );
+        })
+      );
+  }
+
+  getFeedbacksBySellerId(sellerId: number): Observable<Feedback[]> {
+    return this.http
+      .get<Feedback[]>(`${this.API_URL}/feedbacks/sellers/${sellerId}`)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getFeedbacksBySellerId(sellerId)
+          );
+        })
+      );
+  }
+
+  deleteFeedback(feedbackId: number): Observable<any> {
+    return this.http
+      .delete<any>(`${this.API_URL}/feedbacks/${feedbackId}`)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.deleteFeedback(feedbackId));
+        })
+      );
+  }
+
+  restoreFeedback(feedbackId: number): Observable<any> {
+    return this.http
+      .put<any>(`${this.API_URL}/feedbacks/${feedbackId}/restore`, {})
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.restoreFeedback(feedbackId)
+          );
+        })
+      );
+  }
 }

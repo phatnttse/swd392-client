@@ -81,10 +81,11 @@
       >
         <mat-icon>menu</mat-icon>
       </button>
-      <div>
+
+      <div class="ms-auto d-flex align-items-center">
         <button
           mat-icon-button
-          class="fs-16 text-light-muted d-flex align-items-center pb-4 pe-8 ps-8 pt-4"
+          class="fs-16 text-light-muted d-flex align-items-center"
           [matMenuTriggerFor]="languageMenu"
         >
           <div class="d-flex align-items-center">
@@ -113,9 +114,71 @@
             } }
           </div>
         </mat-menu>
-      </div>
 
-      <div class="ms-auto">
+        <button
+          style="font-size: 12px"
+          mat-icon-button
+          [matBadge]="newNotificationNumber"
+          matBadgeColor="warn"
+          [matMenuTriggerFor]="notificationMenu"
+          class="me-4"
+        >
+          <img src="./../../../assets/images/notification-bell.svg" alt="" />
+        </button>
+        <!-- Menu thông báo -->
+        <mat-menu #notificationMenu="matMenu" class="p-3">
+          <div
+            class="d-flex align-items-center justify-content-between mb-1 p-2"
+          >
+            <p class="fw-bold fs-16 text-black primary-color">Thông báo</p>
+            <a
+              href="javascript:;"
+              style="text-decoration: underline !important"
+              class="nav-link text-black ms-4"
+            >
+              Mask all as read
+            </a>
+          </div>
+          <div class="mb-2">
+            @for (notification of notifications; track $index) {
+            <button mat-menu-item class="fs-16 mb-5">
+              <div class="row">
+                <div class="col-2 d-flex align-items-center">
+                  @if (notification.type === notificationType.WELCOME) {
+                  <mat-icon color="accent" style="font-size: 26px"
+                    >info</mat-icon
+                  >
+                  }@else if (notification.type ===
+                  notificationType.FLOWER_LISTING_STATUS) {
+                  <mat-icon>local_shipping</mat-icon>
+                  }@else if (notification.type ===
+                  notificationType.ORDER_STATUS) {
+                  <mat-icon>payments</mat-icon>
+                  }@else if (notification.type === notificationType.MARKETING) {
+                  <mat-icon>rate_review</mat-icon>
+                  }
+                </div>
+                <div class="col-10">
+                  <div class="ms-1 d-flex flex-column">
+                    <strong>{{ notification.title }}</strong>
+                    <span>{{ notification.message }}</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+            }
+            <div class="d-flex align-items-center justify-content-center">
+              <a
+                href="javascript:void(0)"
+                class="nav-link text-black"
+                style="text-decoration: underline !important"
+              >
+                Read more
+              </a>
+            </div>
+          </div>
+        </mat-menu>
+
         <button
           mat-button
           class="fs-16 text-light-muted d-flex align-items-center pb-4 pe-8 ps-8 pt-4"
@@ -124,12 +187,11 @@
           <div class="d-flex align-items-center">
             <img
               [src]="userAccount?.avatar"
-              width="32"
+              width="20"
               class="rounded"
               alt=""
             />
-            <span class="fw-light ms-2"
-              >{{ "Hi" | translate }},
+            <span class="fw-light ms-2">
               <strong class="primary-color fw-bold">{{
                 userAccount?.name
               }}</strong></span
