@@ -1,3 +1,4 @@
+import { FlowerCategory } from './../../../../models/category.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +15,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { OrderLineChart, OrderReport, OrderReportResponse } from '../../../../models/order.model';
 import { ChartOptions } from '../../../../models/dashboard.model';
 import { CategoryService } from '../../../../services/category.service';
-import { FlowerCategory } from '../../../../models/category.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProductService } from '../../../../services/product.service';
 import { Flower, FlowerPaginated } from '../../../../models/flower.model';
@@ -60,10 +60,12 @@ export class AdminDashboardManagementComponent {
   categoryCount : number = 0;
   flowerCount: number = 0;
   userCount: number =0;
+  staffCount: number = 0;
   searchString: string = ''; 
   order: string = 'desc'; 
   sortBy: string = 'createdAt';
-  roleName: Role[] ; 
+  roleName: Role[];
+  categoryIds: number[] = [];
   
 
 
@@ -82,10 +84,10 @@ export class AdminDashboardManagementComponent {
     this.getOrderLineChart();
     this.getReport();
     this.countCategory();
-    this.countFlower();
-    this.countUsers('', '', '', this.roleName);
-    this.countStaffs('', '', '', this.roleName);
-  }
+    this.countFlowers(this.searchString, this.order, this.sortBy, this.categoryIds);
+    this.countUsers(this.searchString, this.order, this.sortBy, this.roleName); 
+    this.countStaffs(this.searchString, this.order, this.sortBy, this.roleName); 
+   }
 
   // Lấy dữ liệu cho biểu đồ
   getOrderLineChart() {
@@ -220,27 +222,33 @@ export class AdminDashboardManagementComponent {
         this.flowerCategories = categoryData;
         this.categoryCount = this.flowerCategories.length; // Count categories
         console.log('Category count:', this.categoryCount);
-        console.log(categoryData);
       }
     );
     
   }
 
   //Đếm số lượng hoa
-  countFlower() {
-    const largePageSize = 10000;
-  this.flowerService
-    .getFlowers('', 'asc', 'name', 1, largePageSize, [])
-    .subscribe({
-      next: (response: FlowerPaginated) => {
-        this.flowerCount = response.content.length;
-        console.log('Total flower count:', this.flowerCount);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error fetching all flower data:', error);
-      },
-    });
+  countFlowers(
+    searchString: string,
+    order: string,
+    sortBy: string,
+    categoryIds: number[]
+  ) {
+    const allItemsPageSize = 20; 
+    this.flowerService
+      .getFlowers(searchString, order, sortBy, 0, 20, categoryIds)
+      .subscribe({
+        next: (response: FlowerPaginated) => {
+          // Counting all flowers regardless of status
+          this.flowerCount = response.totalElements;
+          console.log('Total flower count:', this.flowerCount);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error fetching flower count:', error);
+        },
+      });
   }
+  
 
   //Đếm số lượng user
   countUsers(
@@ -249,52 +257,52 @@ export class AdminDashboardManagementComponent {
     sortBy: string,
     roleName: Role[]
   ) {
-    const largePageSize = 10000000; 
-    
     this.accountService.getUsers(
       searchString,
       order,
       sortBy,
-      0,            
-      largePageSize, 
+      0, 
+      20,
       roleName
     ).subscribe({
       next: (response: UserAccountPaginatedResponse) => {
-        this.listUser = response.data.content.filter(user => user.role == Role.USER);
-        this.userCount = this.listUser.length;
-        console.log('Total user count:', this.userCount);
+        console.log('Total users count:', response.data.totalElements);
+        this.listUser = response.data.content.filter(user => user.role === Role.USER)
+        this.userCount = this.listUser.length; // Gán tổng số lượng người dùng
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error fetching user count:', error);
+        console.error('Error fetching total users count:', error);
+      },
+    });
+  }
+  
+  countStaffs(
+    searchString: string,
+    order: string,
+    sortBy: string,
+    roleName: Role[]
+  ) {
+    this.accountService.getUsers(
+      searchString,
+      order,
+      sortBy,
+      0, 
+      20,
+      roleName
+    ).subscribe({
+      next: (response: UserAccountPaginatedResponse) => {
+        console.log('Total users count:', response.data.totalElements);
+        this.listStaff = response.data.content.filter(user => user.role === Role.ADMIN)
+        console.log(this.listStaff)
+        this.staffCount = this.listStaff.length; // Gán tổng số lượng người dùng
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error fetching total users count:', error);
       },
     });
   }
 
-    //Đếm số lượng nhân viên
-    countStaffs(
-      searchString: string,
-      order: string,
-      sortBy: string,
-      roleName: Role[]
-    ) {
-      const largePageSize = 10000000; 
-      
-      this.accountService.getUsers(
-        searchString,
-        order,
-        sortBy,
-        0,            
-        largePageSize, 
-        roleName
-      ).subscribe({
-        next: (response: UserAccountPaginatedResponse) => {
-          this.listStaff = response.data.content.filter(user => user.role == Role.MANAGER);
-          this.userCount = this.listStaff.length;
-          console.log('Total user count:', this.userCount);
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('Error fetching user count:', error);
-        },
-      });
-    }
+  
+  
+    
 }
