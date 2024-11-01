@@ -194,17 +194,22 @@ export class SellerAdminComponent implements OnInit {
     {
       link: '/admin',
       icon: 'dashboard',
-      menu: 'Dashboard',
+      menu: 'Trang chủ quản trị',
     },
     {
       link: '/admin/product-management',
       icon: 'inventory',
-      menu: 'Quản lý kho hàng',
+      menu: 'Quản lý sản phẩm',
     },
     {
       link: '/admin/category-management',
       icon: 'list',
       menu: 'Quản lý danh mục',
+    },
+    {
+      link: '/admin/user-management',
+      icon: 'person',
+      menu: 'Quản lý người dùng',
     },
   ];
 }

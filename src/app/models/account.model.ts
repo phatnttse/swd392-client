@@ -1,5 +1,6 @@
 import { BaseResponse } from './base.model';
 import { Gender, Role, WalletLogType } from './enums';
+import { PaginatedPageableResponse, PaginatedResponse } from './paginated.model';
 
 export interface UserAccount {
   id: number;
@@ -33,3 +34,7 @@ export interface AddBalanceResponse {
 }
 
 export interface UserAccountResponse extends BaseResponse<UserAccount> {}
+
+export interface AccountPaginate extends PaginatedResponse<UserAccount>{}
+
+export interface UserAccountPaginatedResponse extends BaseResponse<AccountPaginate>{}

@@ -58,7 +58,7 @@
             type="button" 
             mat-icon-button 
             color="warn"
-            (click)="adminDeleteCategory(category.id)"
+            (click)="btnDeleteCategory(category.id)"
             >
               <mat-icon aria-label="Delete">delete</mat-icon>
             </button>
@@ -77,10 +77,11 @@
     <h4 class="mb-32" style="color: #03c9d7">Chi tiết danh mục</h4>
     <form [formGroup]="categoryForm">
       <h6 class="mb-3 mt-5">Ảnh danh mục</h6>
-      <a *ngIf="selectedCategory?.imageUrl" [href]="selectedCategory?.imageUrl" target="_blank">
-        <img class="rounded" width="50px" height="50px" [src]="selectedCategory?.imageUrl" alt="Category Image" />
-      </a>
-
+      @if (selectedCategory?.imageUrl) {
+        <a [href]="selectedCategory?.imageUrl" target="_blank">
+          <img class="rounded" width="50px" height="50px" [src]="selectedCategory?.imageUrl" alt="Category Image" />
+        </a>
+      }
       <div class="upload-section">
         <div class="file-square">
           <label for="cover-image">

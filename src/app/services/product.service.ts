@@ -1,11 +1,31 @@
-import { Injectable } from '@angular/core';
-import { EndpointBase } from './endpoint-base.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { AuthService } from './auth.service';
-import { BehaviorSubject, catchError, Observable } from 'rxjs';
-import { AppConfigurationService } from './configuration.service';
-import { Flower, FlowerPaginated } from '../models/flower.model';
-import { FlowerCategory } from '../models/category.model';
+import {
+  Injectable
+} from '@angular/core';
+import {
+  EndpointBase
+} from './endpoint-base.service';
+import {
+  HttpClient,
+  HttpParams
+} from '@angular/common/http';
+import {
+  AuthService
+} from './auth.service';
+import {
+  BehaviorSubject,
+  catchError,
+  Observable
+} from 'rxjs';
+import {
+  AppConfigurationService
+} from './configuration.service';
+import {
+  Flower,
+  FlowerPaginated
+} from '../models/flower.model';
+import {
+  FlowerCategory
+} from '../models/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,18 +34,18 @@ export class ProductService extends EndpointBase {
   API_URL: string = '';
 
   // Trạng thái của danh sách hoa mới nhất
-  public flowerNewestDataSource = new BehaviorSubject<FlowerPaginated | null>(
+  public flowerNewestDataSource = new BehaviorSubject < FlowerPaginated | null > (
     null
   );
   flowerNewestData$ = this.flowerNewestDataSource.asObservable();
 
   // Trạng thái của danh sách hoa đã phân trang
   public flowerPaginatedDataSource =
-    new BehaviorSubject<FlowerPaginated | null>(null);
+  new BehaviorSubject < FlowerPaginated | null > (null);
   flowerPaginatedData$ = this.flowerPaginatedDataSource.asObservable();
 
   // Trạng thái của hoa theo user
-  public flowerByUserDataSource = new BehaviorSubject<Flower[]>([]);
+  public flowerByUserDataSource = new BehaviorSubject < Flower[] > ([]);
   flowerByUserData$ = this.flowerByUserDataSource.asObservable();
 
   constructor(
@@ -48,7 +68,7 @@ export class ProductService extends EndpointBase {
     pageNumber: number,
     pageSize: number,
     categoryIds: number[]
-  ): Observable<FlowerPaginated> {
+  ): Observable < FlowerPaginated > {
     const params = new HttpParams()
       .set('searchString', searchString)
       .set('order', order)
@@ -58,7 +78,9 @@ export class ProductService extends EndpointBase {
       .set('categoryIds', categoryIds.join(',') ?? []);
 
     return this.http
-      .get<FlowerPaginated>(`${this.API_URL}/flowers`, { params })
+      .get < FlowerPaginated > (`${this.API_URL}/flowers`, {
+        params
+      })
       .pipe(
         catchError((error) => {
           return this.handleError(error, () =>
@@ -75,17 +97,17 @@ export class ProductService extends EndpointBase {
       );
   }
 
-  getFlowerById(id: number): Observable<Flower> {
-    return this.http.get<Flower>(`${this.API_URL}/flowers/${id}`).pipe(
+  getFlowerById(id: number): Observable < Flower > {
+    return this.http.get < Flower > (`${this.API_URL}/flowers/${id}`).pipe(
       catchError((error) => {
         return this.handleError(error, () => this.getFlowerById(id));
       })
     );
   }
 
-  createFlower(formData: FormData): Observable<Flower> {
+  createFlower(formData: FormData): Observable < Flower > {
     return this.http
-      .post<Flower>(`${this.API_URL}/flowers`, formData, this.requestHeaders)
+      .post < Flower > (`${this.API_URL}/flowers`, formData, this.requestHeaders)
       .pipe(
         catchError((error) => {
           return this.handleError(error, () => this.createFlower(formData));
@@ -93,9 +115,9 @@ export class ProductService extends EndpointBase {
       );
   }
 
-  updateFlower(flowerId: number, formData: FormData): Observable<Flower> {
+  updateFlower(flowerId: number, formData: FormData): Observable < Flower > {
     return this.http
-      .put<Flower>(
+      .put < Flower > (
         `${this.API_URL}/flowers/${flowerId}`,
         formData,
         this.requestHeaders
@@ -109,9 +131,9 @@ export class ProductService extends EndpointBase {
       );
   }
 
-  getFlowersByUserId(userId: number): Observable<Flower[]> {
+  getFlowersByUserId(userId: number): Observable < Flower[] > {
     return this.http
-      .get<Flower[]>(
+      .get < Flower[] > (
         `${this.API_URL}/flowers/user/${userId}`,
         this.requestHeaders
       )
@@ -122,19 +144,29 @@ export class ProductService extends EndpointBase {
       );
   }
 
-  approveFlowerListing(id: number | undefined): Observable<Flower>{
+  approveFlowerListing(id: number | undefined): Observable < Flower > {
     return this.http
-    .put<Flower>(`${this.API_URL}/admin/flower-listings/approve/${id}`, {}, this.requestHeaders)
-    .pipe(
-      catchError((error) => {
-        return this.handleError(error, () => this.approveFlowerListing(id));
+      .put < Flower > (`${this.API_URL}/admin/flower-listings/approve/${id}`, {}, this.requestHeaders)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.approveFlowerListing(id));
+        })
+      );
+  }
+
+  rejectFlowerListing(id: number | undefined, reason: string): Observable < Flower > {
+    return this.http
+      .put < Flower > (`${this.API_URL}/admin/flower-listings/reject/${id}`, {reason}, this.requestHeaders)
+      .pipe(
+        catchError((error) => {
+        return this.handleError(error, () => this.rejectFlowerListing(id, reason));
       })
     );
   }
 
-  getFlowerCategory(){
+  getFlowerCategory() {
     return this.http
-    .get<FlowerCategory>(`${this.API_URL}/flowers-categories`, this.requestHeaders);
+      .get < FlowerCategory > (`${this.API_URL}/flowers-categories`, this.requestHeaders);
   }
 
 }
