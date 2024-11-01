@@ -55,12 +55,11 @@
             <p class="fw-medium mb-0">{{ product.stockQuantity }}</p>
           </td>
         </ng-container>
-        >
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Các thao tác</th>
           <td mat-cell *matCellDef="let product">
-            <button mat-icon-button color="primary" (click)="btnApproveFlower(flower?.id)">
+            <button mat-icon-button color="primary" (click)="btnApproveFlower(product?.id)">
               <mat-icon aria-label="check">check</mat-icon>
             </button>
             <button mat-icon-button color="warn">
