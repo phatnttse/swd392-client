@@ -10,6 +10,8 @@ export const AdminRoutes: Routes = [
         (m) => m.SellerAdminComponent
       );
     },
+    canActivate: [AdminGuard],
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: 'product-management',
@@ -42,9 +44,7 @@ export const AdminRoutes: Routes = [
             './../seller-admin/admin/admin-dashboard-management/admin-dashboard-management.component'
           ).then((m) => m.AdminDashboardManagementComponent);
         },
-      }
+      },
     ],
-    canActivate: [AdminGuard],
-    canActivateChild: [AdminGuard],
   },
 ];
