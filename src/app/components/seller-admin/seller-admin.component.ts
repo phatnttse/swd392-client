@@ -197,7 +197,7 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
     {
       link: '/seller-channel',
       icon: 'storefront',
-      menu: 'Dashboard',
+      menu: 'Statistical',
     },
     {
       link: '/seller-channel/product-management',

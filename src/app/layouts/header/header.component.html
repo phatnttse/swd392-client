@@ -267,7 +267,11 @@
           class="d-flex justify-content-end list-unstyled m-0 align-items-center"
         >
           <li class="position-relative d-flex align-items-center me-3">
-            <a href="#" class="nav-link pe-3">
+            <a
+              href="javascript:;"
+              class="nav-link pe-3"
+              [matMenuTriggerFor]="notificationMenu"
+            >
               <img
                 width="24px"
                 src="./../../../assets/images/notification-bell.svg"
@@ -280,6 +284,59 @@
                 0
               </span>
             </a>
+            <mat-menu #notificationMenu="matMenu" class="p-3">
+              <div
+                class="d-flex align-items-center justify-content-between mb-1 p-2"
+              >
+                <p class="fw-bold fs-16 text-black primary-color">Thông báo</p>
+                <a
+                  href="javascript:;"
+                  style="text-decoration: underline !important"
+                  class="nav-link text-black ms-4"
+                >
+                  Mark all as read
+                </a>
+              </div>
+              <div class="mb-2">
+                @for (notification of notifications; track $index) {
+                <button mat-menu-item class="fs-16 mb-5">
+                  <div class="row">
+                    <div class="col-2 d-flex align-items-center">
+                      @if (notification.type === notificationType.WELCOME) {
+                      <mat-icon color="accent" style="font-size: 26px"
+                        >info</mat-icon
+                      >
+                      }@else if (notification.type ===
+                      notificationType.FLOWER_LISTING_STATUS) {
+                      <mat-icon>local_shipping</mat-icon>
+                      }@else if (notification.type ===
+                      notificationType.ORDER_STATUS) {
+                      <mat-icon>payments</mat-icon>
+                      }@else if (notification.type ===
+                      notificationType.MARKETING) {
+                      <mat-icon>rate_review</mat-icon>
+                      }
+                    </div>
+                    <div class="col-10">
+                      <div class="ms-1 d-flex flex-column">
+                        <strong>{{ notification.title }}</strong>
+                        <span>{{ notification.message }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+                }
+                <div class="d-flex align-items-center justify-content-center">
+                  <a
+                    href="javascript:void(0)"
+                    class="nav-link text-black"
+                    style="text-decoration: underline !important"
+                  >
+                    Read more
+                  </a>
+                </div>
+              </div>
+            </mat-menu>
           </li>
           <li class="nav-item dropdown">
             <a
