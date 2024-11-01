@@ -193,7 +193,9 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       )
       .subscribe({
         next: (response: FlowerPaginated) => {
-          this.listFlower = response.content.filter(flower => flower.status === FlowerListingStatus.PENDING);
+          console.log(response);
+          this.listFlower = response.content;
+          console.log(this.listFlower);
           this.dataSource = new MatTableDataSource(this.listFlower);
           this.dataSource.sort = this.sort;
           this.pageNumber = response.pageNumber;

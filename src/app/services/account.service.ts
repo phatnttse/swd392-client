@@ -11,6 +11,7 @@ import {
   UserAccountResponse,
   UserBalanceResponse,
 } from '../models/account.model';
+import { Role } from '../models/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -147,7 +148,7 @@ export class AccountService extends EndpointBase {
     sortBy: string,
     pageNumber: number,
     pageSize: number,
-    roleName: string[]
+    roleName: Role[]
   ): Observable < UserAccountPaginatedResponse > {
     const params = new HttpParams()
       .set('searchString', searchString)
@@ -159,7 +160,8 @@ export class AccountService extends EndpointBase {
 
     return this.http
       .get < UserAccountPaginatedResponse > (`${this.API_URL}/account/profile/all`, {
-        params
+        params:params,
+        headers:this.requestHeaders.headers 
       })
       .pipe(
         catchError((error) => {

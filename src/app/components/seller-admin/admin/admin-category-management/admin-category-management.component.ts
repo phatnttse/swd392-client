@@ -194,12 +194,12 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
     }
     if (this.selectedCategory?.id !== undefined) {
       const updatedCategory: FlowerCategory = {
-        id: this.selectedCategory.id, // Lấy id của danh mục hiện tại
-        name: this.categoryForm.get('name')?.value, // Cập nhật tên danh mục từ form
-        categoryParent: this.categoryForm.get('parentCategory')?.value, // Cập nhật categoryParent từ form
-        imageUrl: this.selectedCategory.imageUrl, // Giữ lại imageUrl hiện tại hoặc thay đổi nếu có
-        createdAt: this.selectedCategory.createdAt, // Giữ lại thời gian tạo
-        updatedAt: new Date().toISOString(), // Cập nhật thời gian hiện tại
+        id: this.selectedCategory.id, 
+        name: this.categoryForm.get('name')?.value, 
+        categoryParent: this.categoryForm.get('parentCategory')?.value, 
+        imageUrl: this.selectedCategory.imageUrl, 
+        createdAt: this.selectedCategory.createdAt, 
+        updatedAt: new Date().toISOString(), 
       };
 
       // Gọi dịch vụ để cập nhật danh mục
