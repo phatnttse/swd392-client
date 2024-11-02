@@ -354,18 +354,16 @@
         }
       </mat-form-field>
       <h6 class="mb-3">{{ "ProductCategory" | translate }}</h6>
-      <div>
-        <mat-form-field class="w-100 select-category" appearance="outline">
-          <mat-label>{{ "ProductCategory" | translate }}</mat-label>
-          <input
-            matInput
-            [value]="selectedCategoriesLabel"
-            readonly
-            (click)="$event.stopPropagation()"
-            [matMenuTriggerFor]="categoryMenu"
-          />
-          <mat-icon [matMenuTriggerFor]="categoryMenu" matSuffix>edit</mat-icon>
-        </mat-form-field>
+      <mat-form-field class="w-100 select-category" appearance="outline">
+        <mat-label>{{ "ProductCategory" | translate }}</mat-label>
+        <input
+          matInput
+          [value]="selectedCategoriesLabel"
+          readonly
+          (click)="$event.stopPropagation()"
+          [matMenuTriggerFor]="categoryMenu"
+        />
+        <mat-icon [matMenuTriggerFor]="categoryMenu" matSuffix>edit</mat-icon>
 
         @if (isCategoryError) {
         <mat-error class="fs-12 mb-2 ms-4" style="visibility: visible">
@@ -376,7 +374,42 @@
           {{ "ProductCategoryRequired" | translate }}
         </mat-error>
         }
-      </div>
+      </mat-form-field>
+
+      <h6 class="mb-3">{{ "Order.Address" | translate }}</h6>
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>{{ "AddressEnter" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          min="0"
+          formControlName="address"
+          [class.is-invalid]="
+            productForm.get('address')?.invalid &&
+            productForm.get('address')?.touched
+          "
+          [matAutocomplete]="autoSuggestAddress"
+        />
+        <mat-autocomplete
+          autoActiveFirstOption
+          #autoSuggestAddress="matAutocomplete"
+        >
+          @for (address of suggestAddresses; track $index) {
+          <mat-option [value]="address.FullName">{{
+            address.FullName
+          }}</mat-option>
+          }
+        </mat-autocomplete>
+        @if (productForm.get('address')?.hasError('required') ) {
+        <mat-error class="fs-12">{{
+          "Order.AddressRequired" | translate
+        }}</mat-error>
+        } @if (productForm.get('address')?.hasError('minlength') ) {
+        <mat-error class="fs-12">{{
+          "Order.AddressInvalid" | translate
+        }}</mat-error>
+        }
+      </mat-form-field>
 
       <table class="example-full-width" cellspacing="0">
         <tr>
@@ -426,40 +459,6 @@
               }@else if (productForm.get('stockQuantity')?.hasError('min')) {
               <mat-error class="fs-12">{{
                 "ProductQuantityInvalid" | translate
-              }}</mat-error>
-              }
-            </mat-form-field>
-          </td>
-          <td>
-            <h6 class="mb-3">{{ "Order.Address" | translate }}</h6>
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>{{ "AddressEnter" | translate }}</mat-label>
-              <input
-                matInput
-                type="text"
-                min="0"
-                formControlName="address"
-                [class.is-invalid]="
-                  productForm.get('address')?.invalid &&
-                  productForm.get('address')?.touched
-                "
-                [matAutocomplete]="autoParseAddress"
-              />
-              <mat-autocomplete
-                autoActiveFirstOption
-                #autoParseAddress="matAutocomplete"
-              >
-                <mat-option [value]="parseAddress">{{
-                  parseAddress
-                }}</mat-option>
-              </mat-autocomplete>
-              @if (productForm.get('address')?.hasError('required') ) {
-              <mat-error class="fs-12">{{
-                "Order.AddressRequired" | translate
-              }}</mat-error>
-              } @if (productForm.get('address')?.hasError('minlength') ) {
-              <mat-error class="fs-12">{{
-                "Order.AddressInvalid" | translate
               }}</mat-error>
               }
             </mat-form-field>

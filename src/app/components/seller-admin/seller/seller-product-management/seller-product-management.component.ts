@@ -32,12 +32,15 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { Subscription } from 'rxjs';
+import { debounceTime, filter, Subscription } from 'rxjs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule } from '@ngx-translate/core';
 import { IntegrationService } from '../../../../services/integration.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { ParseAddressResponse } from '../../../../models/integration.model';
+import {
+  SuggestAddress,
+  SuggestAddressResponse,
+} from '../../../../models/integration.model';
 
 @Component({
   selector: 'app-seller-product-management',
@@ -106,7 +109,7 @@ export class SellerProductManagementComponent
   selectedProduct: Flower | null = null; // Sản phẩm được chọn
   draggedImage: any; // Ảnh kéo thả
   productDetail: Flower | null = null; // Chi tiết sản phẩm
-  parseAddress: string = ''; // Địa chỉ đã parse
+  suggestAddresses: SuggestAddress[] = []; // Địa chỉ gợi ý
 
   constructor(
     private productService: ProductService,
@@ -139,6 +142,16 @@ export class SellerProductManagementComponent
         this.categories = categoryData;
       }
     );
+
+    this.productForm
+      .get('address')
+      ?.valueChanges.pipe(
+        debounceTime(500), // Đợi 500ms sau khi người dùng ngừng gõ
+        filter((value) => value && value.length >= 20) // Chỉ tiếp tục nếu độ dài chuỗi >= 20
+      )
+      .subscribe(() => {
+        this.onAddressChange();
+      });
   }
 
   ngAfterViewInit() {
@@ -173,7 +186,7 @@ export class SellerProductManagementComponent
       !this.selectedCategories.length
     ) {
       this.isPictureError = this.uploadedImages.length === 0;
-      this.isCategoryError = !this.selectedCategories.length;
+      this.isCategoryError = this.selectedCategories.length === 0;
       this.productForm.markAllAsTouched();
       return;
     }
@@ -369,16 +382,16 @@ export class SellerProductManagementComponent
       : 'Select Category';
   }
 
-  onAddressChange(address: string) {
+  onAddressChange() {
+    const address = this.productForm.get('address')?.value;
     if (address.length >= 10) {
-      this.integrationService.parseAddress(address).subscribe({
-        next: (response: ParseAddressResponse) => {
+      this.integrationService.getSuggestAddress(address).subscribe({
+        next: (response: SuggestAddressResponse) => {
           if (response.success) {
-            const { ward, district, province } = response.data;
-            this.parseAddress = `${ward.name}, ${district.name}, ${province.name}`;
+            this.suggestAddresses = response.data;
           }
         },
-        error: (error) => {
+        error: (error: HttpErrorResponse) => {
           this.toastr.error('Error parsing address', 'Error');
           console.error('Address parsing error:', error);
         },

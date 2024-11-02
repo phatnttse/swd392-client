@@ -227,5 +227,6 @@
   "FilterBy": "Lọc theo",
   "SelectStatus": "Chọn trạng thái",
   "Type": "Loại",
-  "SelectType": "Chọn loại"
+  "SelectType": "Chọn loại",
+  "Statistical": "Thống kê"
 }

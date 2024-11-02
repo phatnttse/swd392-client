@@ -233,5 +233,6 @@
   "FilterBy": "Filter by",
   "SelectStatus": "Select status",
   "Type": "Type",
-  "SelectType": "Select type"
+  "SelectType": "Select type",
+  "Statistical": "Statistical"
 }

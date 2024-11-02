@@ -23,7 +23,7 @@ export class NotificationService {
   // Thiết lập STOMP để kết nối và nhận thông báo
   connectWebSocket(userId: number): void {
     this.client = new Client({
-      brokerURL: `${this.NOTIFICATION_URL}/ws`, // Đường dẫn WebSocket của server
+      brokerURL: `${this.NOTIFICATION_URL}/notifications/users/${userId}`, // Đường dẫn WebSocket của server
       onConnect: () => {
         console.log('Connected to STOMP');
 
@@ -48,7 +48,7 @@ export class NotificationService {
   // Lấy tất cả thông báo qua API cho lần tải đầu tiên
   getAllNotifications(userId: number): Observable<Notification[]> {
     return this.http.get<Notification[]>(
-      `${this.NOTIFICATION_URL}/notifications/users/6`
+      `${this.NOTIFICATION_URL}/notifications/users/${userId}`
     );
   }
 

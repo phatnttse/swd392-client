@@ -1,36 +1,28 @@
 import { BaseResponse } from './base.model';
 
-export interface ParseAddress {
-  ward: Ward;
-  district: District;
-  province: Province;
-  other: Other;
-  corner: Corner;
-  customer_coordinate_id: number;
-}
-
-export interface Ward {
-  id: number;
-  name: string;
-  type: number;
-}
-
-export interface District {
-  id: number;
-  name: string;
-  type: number;
-}
-
-export interface Province {
-  id: number;
-  name: string;
-  type: number;
-}
-
-export interface Other {
-  id: number;
-  name: string;
-  type: number;
+export interface SuggestAddress {
+  AddressId: number;
+  FullName: string;
+  Name: string;
+  Level: number;
+  Type: number;
+  Delivered: number;
+  Picked: number;
+  StreetId: number;
+  WardId: number;
+  DistrictId: number;
+  ProvinceId: number;
+  Lat: number | null;
+  Lng: number | null;
+  HamletNodeId: number | null;
+  HamletNodeName: string | null;
+  Score: number;
+  PkgNumber: number | null;
+  LcsRatio: number;
+  Street: string;
+  Ward: string;
+  District: string;
+  Province: string;
 }
 
 export interface Corner {
@@ -94,7 +86,8 @@ export interface FeeOptions {
   discount: string;
 }
 
-export interface ParseAddressResponse extends BaseResponse<ParseAddress> {}
+export interface SuggestAddressResponse
+  extends BaseResponse<SuggestAddress[]> {}
 export interface FeeShipResponse {
   success: boolean;
   fee: FeeDetails;

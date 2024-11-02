@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import {
   FeeShipRequest,
   FeeShipResponse,
-  ParseAddressResponse,
+  SuggestAddressResponse,
 } from '../models/integration.model';
 
 @Injectable({
@@ -24,10 +24,11 @@ export class IntegrationService extends EndpointBase {
     this.INTEGRATION_URL = appConfig['INTEGRATION_URL'];
   }
 
-  parseAddress(address: string): Observable<ParseAddressResponse> {
-    return this.http.post<ParseAddressResponse>(
-      `${this.INTEGRATION_URL}/integration/ghtk/parse-address`,
-      { address }
+  getSuggestAddress(search: string): Observable<SuggestAddressResponse> {
+    return this.http.post<SuggestAddressResponse>(
+      `${this.INTEGRATION_URL}/integration/ghtk/suggest-address`,
+      { search },
+      this.requestHeaders
     );
   }
 
