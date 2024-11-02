@@ -1,3 +1,4 @@
+import { Utilities } from './../../../../services/utilities';
 import {
   routes
 } from './../../../../app.routes';
@@ -134,12 +135,8 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   reason = '';
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute,
     private productService: ProductService,
-    private categoryService: CategoryService,
-    private localStorage: LocalStoreManager
   ) {
     this.productForm = this.formBuilder.group({
         name: ['', [Validators.required, Validators.minLength(5)]],
@@ -238,6 +235,10 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       .map((_, index) => startPage + index);
   }
 
+  btnBack(){
+    this.currentPage = 0;
+  }
+
   onPageChange(page: number) {
     this.currentPage = page < 0 ? 0 : page;
     this.getFlowers(
@@ -294,8 +295,6 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
           console.log(error);
         }
       });
-    } else {
-      this.toastr.warning('Hoa không xác định hoặc đã được duyệt rồi');
-    }
+    } 
   }
 }
