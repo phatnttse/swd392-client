@@ -185,6 +185,10 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
 
     return formData;
   }
+
+  btnBack(){
+    this.statusPage = 0;
+  }
     
 
   btnUpdateCategory(){
