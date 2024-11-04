@@ -1,5 +1,6 @@
 <mat-card>
   <mat-card-content>
+    <h4 class="fw-bold primary-color">Trang quản trị viên</h4>
     <div class="col-lg-4">
       <mat-form-field appearance="outline">
         <mat-label>{{ "EnterStartAndEndDate" | translate }}</mat-label>
@@ -39,10 +40,10 @@
         <button mat-fab class="my-fab my-3 bg-light-accent">
           <mat-icon class="text-accent">people</mat-icon>
         </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
+        <mat-card-title class="mb-0 mt-30 fs-24 fw-500 fw-bold">
           {{userCount}}&nbsp;
         </mat-card-title>
-        <small class="text-black">Khách hàng</small>
+        <small class="text-black fw-bold">Khách hàng</small>
       </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-6">
@@ -50,10 +51,10 @@
         <button mat-fab class="my-fab my-3 bg-light-warning">
           <mat-icon class="text-warning">inventory</mat-icon>
         </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
+        <mat-card-title class="mb-0 mt-30 fs-24 fw-500 fw-bold">
           {{flowerCount}}&nbsp;
         </mat-card-title>
-        <small class="text-black">Hoa</small>
+        <small class="text-black fw-bold">Hoa</small>
       </div>
     </div>
 
@@ -62,10 +63,10 @@
         <button mat-fab class="my-fab my-3 bg-light-error">
           <mat-icon class="text-error">list</mat-icon>
         </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
+        <mat-card-title class="mb-0 mt-30 fs-24 fw-500 fw-bold">
           {{categoryCount}}&nbsp;
         </mat-card-title>
-        <small class="text-black">Danh mục</small>
+        <small class="text-black fw-bold">Danh mục</small>
       </div>
     </div>
     <div class="col-lg-3 col-sm-6 col-6">
@@ -73,17 +74,18 @@
         <button mat-fab class="my-fab my-3 bg-light-success">
           <mat-icon class="text-success">people</mat-icon>
         </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
+        <mat-card-title class="mb-0 mt-30 fs-24 fw-500 fw-bold">
           {{staffCount}}&nbsp;
         </mat-card-title>
-        <small class="text-black">Nhân viên</small>
+        <small class="text-black fw-bold">Nhân viên</small>
       </div>
     </div>
   </div>
 </mat-card>
 <mat-card>
   <mat-card-content>
-    <h4 class="mb-32">Sales Overview</h4>
+    <h4 class="mb-32 primary-color">Tổng quan hàng bán
+    </h4>
 
     <div class="max-width">
       <apx-chart

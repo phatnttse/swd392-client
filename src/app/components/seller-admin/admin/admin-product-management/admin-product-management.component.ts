@@ -1,4 +1,3 @@
-import { routes } from './../../../../app.routes';
 import { MatCardModule } from '@angular/material/card';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
@@ -16,14 +15,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { MatSort } from '@angular/material/sort';
 import { Flower, FlowerPaginated } from '../../../../models/flower.model';
-import { LocalStoreManager } from '../../../../services/local-storage.service';
 import { ProductService } from '../../../../services/product.service';
-import { DBkeys } from '../../../../services/db-keys';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { CategoryService } from '../../../../services/category.service';
-import { FlowerListingStatus } from '../../../../models/enums';
 
 @Component({
   selector: 'app-admin-product-management',
@@ -86,12 +81,8 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   reason = '';
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute,
-    private productService: ProductService,
-    private categoryService: CategoryService,
-    private localStorage: LocalStoreManager
+    private productService: ProductService
   ) {
     (this.productForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -190,6 +181,10 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       .map((_, index) => startPage + index);
   }
 
+  btnBack() {
+    this.currentPage = 0;
+  }
+
   onPageChange(page: number) {
     this.currentPage = page < 0 ? 0 : page;
     this.getFlowers(
@@ -254,8 +249,6 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
           console.log(error);
         },
       });
-    } else {
-      this.toastr.warning('Hoa không xác định hoặc đã được duyệt rồi');
     }
   }
 }

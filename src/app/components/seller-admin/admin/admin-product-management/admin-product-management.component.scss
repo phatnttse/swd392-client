@@ -30,6 +30,15 @@
     border-color: #66afe9;
     background-color: #e3f2fd;
   }
+
+  .fw-bold {
+    font-weight: bold;
+  }
+
+  .font-size{
+    font-size: 18px;
+    align-items: center;
+  }
   
   .file-square:focus-within {
     border-color: #66afe9;
@@ -38,9 +47,42 @@
   .example-full-width {
     width: 100%;
   }
+
+  .page-link {
+    display: flex;
+    align-items: center;
+  }
+  
+  .me-2 {
+    margin-right: 8px; /* Khoảng cách giữa nút quay lại và tiêu đề */
+  }
+    
+  .flower-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    margin-left: 10px;
+    padding-bottom: 20px;
+  }
+  
   
   td {
     padding-right: 8px;
+  }
+
+  .table-title {
+    font-size: 1.5em; 
+    font-weight: bold;
+  }
+  .header-cell {
+    font-size: 1.2em; 
+    font-weight: bold;
+  }
+  .content-text {
+    font-size: 1.1em; 
+    font-weight: 500;
   }
   
   .error-msg {

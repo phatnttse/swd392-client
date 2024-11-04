@@ -8,53 +8,43 @@
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
         </div>
-        <div class="col-lg-4 d-flex align-items-center justify-content-end">
-          <button mat-raised-button color="primary" routerLink="/admin/products/new" style="padding: 20px 10px">
-            Thêm sản phẩm mới
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
       </div>
     </mat-card-content>
   </mat-card>
   
   <mat-card class="w-100">
     <mat-card-content>
-      <h4>Quản lý sản phẩm</h4>
+      <h4 class="primary-color">Quản lý sản phẩm</h4>
       <div class="table-responsive mt-20">
         <table [dataSource]="dataSource" mat-table matSort class="w-100 text-nowrap">
-            <!-- Cột ID -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell  *matHeaderCellDef mat-sort-header="id">ID</th>
-            <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+            <th mat-header-cell  *matHeaderCellDef mat-sort-header="id" class="primary-color fw-bold font-size">ID</th>
+            <td mat-cell *matCellDef="let user" class="fw-bold">{{ user.id }}</td>
           </ng-container>
   
-          <!-- Cột Tên -->
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Tên</th>
-            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name" class="primary-color fw-bold font-size">Tên</th>
+            <td mat-cell *matCellDef="let user" class="fw-bold">{{ user.name }}</td>
           </ng-container>
   
-          <!-- Cột Địa chỉ -->
           <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="email">Email</th>
-            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="email" class="primary-color fw-bold font-size">Email</th>
+            <td mat-cell *matCellDef="let user" class="fw-bold">{{ user.email }}</td>
           </ng-container>
   
           <ng-container matColumnDef="gender">
-            <th mat-header-cell mat *matHeaderCellDef mat-sort-header="gender">Giới tính</th>
-            <td mat-cell *matCellDef="let user">{{ user.gender }}</td>
+            <th mat-header-cell mat *matHeaderCellDef mat-sort-header="gender" class="primary-color fw-bold font-size">Giới tính</th>
+            <td mat-cell *matCellDef="let user" class="fw-bold">{{ user.gender }}</td>
           </ng-container>
   
           <ng-container matColumnDef="role">
-            <th mat-header-cell  *matHeaderCellDef mat-sort-header="role">Vai trò</th>
-            <td mat-cell *matCellDef="let user">{{ user.role }}</td>
+            <th mat-header-cell  *matHeaderCellDef mat-sort-header="role" class="primary-color fw-bold font-size">Vai trò</th>
+            <td mat-cell *matCellDef="let user" class="fw-bold">{{ user.role }}</td>
           </ng-container>
   
-          <!-- Cột Các thao tác -->
           <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>Các thao tác</th>
-            <td mat-cell *matCellDef="let user">
+            <th mat-header-cell *matHeaderCellDef class="primary-color fw-bold font-size">Các thao tác</th>
+            <td mat-cell *matCellDef="let user" class="fw-bold">
               <button mat-icon-button color="warn">
                 <mat-icon>do_not_disturb_on</mat-icon>
               </button>
@@ -97,13 +87,11 @@
       <div class="col-12">
         <div class="card shadow-sm">
           <div class="card-body">
-            <div class="text-primary d-flex align-items-center mb-4 ">
-              <h4>
-                <a 
-                class="material-symbols-outlined"
-                (click)="btnBack()">Quay lại - </a>
-              </h4>
-              <h4>Thông tin chi tiết</h4>
+            <div class="d-flex align-items-center mb-4">
+              <a class="page-link primary-color me-2" href="javascript:;" (click)="btnBack()">
+                <mat-icon>arrow_back</mat-icon>
+              </a>
+              <h3 class="primary-color m-0">Thông tin bài đăng</h3>
             </div>
             <div class="d-flex flex-column align-items-center">
               <!-- Avatar của người dùng -->
@@ -111,34 +99,51 @@
                 class="rounded-circle mb-3" style="width: 170px; height: 170px; object-fit: cover; border: 1px solid;" />
               <!-- Tên người dùng -->
               <h4 class="font-weight-bold text-dark"></h4>
-              <p class="text-muted mb-2">Vai trò: <span class="text-primary">{{userAccount?.role}}</span></p>
+              <p class="text-muted mb-2 fw-bold">Vai trò: <span class="primary-color">{{userAccount?.role}}</span></p>
             </div>
   
             <!-- Thông tin chi tiết người dùng -->
             <ul class="list-group mt-4">
-              <li class="list-group-item">
-                <strong>Email: </strong>
-                <span class="text-dark">{{userAccount?.email}}</span>
-              </li>
+              @if(userAccount?.email !== null){
+                <li class="list-group-item">
+                  <strong>Email: </strong>
+                  <span class="text-dark fw-bold">{{userAccount?.email}}</span>
+                </li>
+              } @else {
+                <li class="list-group-item">
+                  <strong>Email: </strong>
+                  <span class="text-dark fw-bold">Chưa cập nhật</span>
+                </li>
+              }
               <li class="list-group-item">
                 <strong>Họ và tên: </strong>
-                <span class="text-dark">{{userAccount?.name}}</span>
+                <span class="text-dark fw-bold">{{userAccount?.name}}</span>
               </li>
               <li class="list-group-item">
                 <strong>Số điện thoại: </strong>
-                <span class="text-dark">{{userAccount?.phone}}</span>
+                <span class="text-dark fw-bold" *ngIf="userAccount?.phone; else noPhone">
+                  {{ userAccount?.phone }}
+                </span>
+                <ng-template #noPhone>
+                  <span class="text-dark fw-bold">Chưa cập nhật</span>
+                </ng-template>
               </li>
               <li class="list-group-item">
                 <strong>Giới tính: </strong>
-                <span class="text-dark">{{userAccount?.gender}}</span>
-              </li>
+                <span class="text-dark fw-bold" *ngIf="userAccount?.gender; else noGender">
+                  {{ userAccount?.gender }}
+                </span>
+                <ng-template #noGender>
+                  <span class="text-dark fw-bold">Chưa cập nhật</span>
+                </ng-template>
+              </li>              
               <li class="list-group-item">
                 <strong>Số dư ví: </strong>
-                <span class="text-success">{{userAccount?.balance}}VNĐ</span>
+                <span class="text-success fw-bold">{{userAccount?.balance}}VNĐ</span>
               </li>
               <li class="list-group-item">
                 <strong>Ngày đăng ký: </strong>
-                <span class="text-success">{{userAccount?.createAt}}</span>
+                <span class="text-success fw-bold">{{userAccount?.createAt | date:'dd/MM/yyyy'}}</span>
               </li>
             </ul>
           </div>
