@@ -134,3 +134,20 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.loading-text {
+  font-size: 18px;
+  color: #989191;
+  font-weight: bold;
+  animation: fadeIn 1.5s infinite;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 112;
+  margin-top: 50px;
+}

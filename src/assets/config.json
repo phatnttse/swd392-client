@@ -2,6 +2,7 @@
   "API_URL": "https://services.isolutions.top/api/v1",
   "NOTIFICATION_URL": "https://notifications.isolutions.top/api/v1",
   "INTEGRATION_URL": "http://54.179.191.32:8081/api/v1",
+  "WEBSOCKET_URL": "https://notifications.isolutions.top",
   "Config_Language": [
     {
       "id": 1,

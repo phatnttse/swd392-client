@@ -86,6 +86,29 @@ export interface FeeOptions {
   discount: string;
 }
 
+export interface ParseAddress {
+  special: LocationDetail;
+  district: LocationDetail;
+  province: LocationDetail;
+  ward: LocationDetail;
+  corner: CornerDetail;
+  customer_coordinate_id: number | null;
+}
+
+export interface LocationDetail {
+  id: number;
+  name: string;
+  type: number;
+}
+
+export interface CornerDetail extends LocationDetail {
+  lat: string;
+  lng: string;
+  coordinate_id: number | null;
+  hnd_type_id: number | null;
+  hnd_type_name: string | null;
+}
+
 export interface SuggestAddressResponse
   extends BaseResponse<SuggestAddress[]> {}
 export interface FeeShipResponse {
@@ -93,3 +116,5 @@ export interface FeeShipResponse {
   fee: FeeDetails;
   message: string;
 }
+
+export interface ParseAddressResponse extends BaseResponse<ParseAddress> {}

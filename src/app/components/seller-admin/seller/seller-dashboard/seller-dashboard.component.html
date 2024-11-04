@@ -48,8 +48,12 @@
           </div>
         </div>
         <h4 class="mb-2 mt-3 fw-bold display-6">
+          @if (report?.totalPrice! > 0) {
           {{ report?.totalPrice | number : "1.0"
-          }}<span class="fs-20 ms-1">đ</span>
+          }}<span class="fs-20 ms-1">đ</span> }@else { 0<span class="fs-20 ms-1"
+            >đ</span
+          >
+          }
         </h4>
         <h6 class="text-muted mt-2 mb-0">
           {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}

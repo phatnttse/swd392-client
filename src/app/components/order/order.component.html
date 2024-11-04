@@ -1,124 +1,188 @@
 @defer () {
 <app-header></app-header>
 <app-breadcrumb></app-breadcrumb>
-<div class="untree_co-section order-section">
-  <div class="container">
+<div class="order-section">
+  <div class="container-fluid">
     @if (statusOrder === 0) {
     <div class="row">
-      <div class="col-md-5 mb-5 mb-md-0">
-        <h4 class="mb-4 primary-color fw-bold">
-          {{ "Order.RecipientInfo" | translate }}
-        </h4>
-        <div class="p-3 p-lg-5 border bg-white">
-          <label for="c_fname" class="text-black"
-            >{{ "Sign.FullName" | translate
-            }}<span class="text-danger ms-1">*</span></label
-          >
-          <form class="form-group" [formGroup]="orderForm">
-            <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
-              <mat-label>{{ "Sign.FullName" | translate }}</mat-label>
-              <mat-icon matPrefix>person</mat-icon>
-              <input
-                matInput
-                type="text"
-                required
-                formControlName="name"
-                [class.is-invalid]="
-                  orderForm.get('name')?.invalid &&
-                  orderForm.get('name')?.touched
-                "
-              />
-              @if(orderForm.get('name')!.hasError('required')) {
-              <mat-error class="fs-14">
-                {{ "Sign.NameRequired" | translate }}
-              </mat-error>
-              }
-            </mat-form-field>
-
-            <label for="c_fname" class="text-black">
-              {{ "Order.Phone" | translate
-              }}<span class="text-danger ms-1">*</span></label
-            >
-            <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
-              <mat-label>{{ "Order.Phone" | translate }}</mat-label>
-              <mat-icon matPrefix>phone</mat-icon>
-              <input
-                matInput
-                type="phone"
-                required
-                formControlName="phone"
-                [class.is-invalid]="
-                  orderForm.get('phone')?.invalid &&
-                  orderForm.get('phone')?.touched
-                "
-              />
-              @if(orderForm.get('phone')!.hasError('required')) {
-              <mat-error class="fs-14">
-                {{ "Order.PhoneRequired" | translate }}
-              </mat-error>
-              } @if(orderForm.get('phone')!.hasError('pattern')) {
-              <mat-error class="fs-14">
-                {{ "Order.PhoneInvalid" | translate }}
-              </mat-error>
-              }
-            </mat-form-field>
-            <label for="c_lname" class="text-black">
-              {{ "Order.Address" | translate
-              }}<span class="text-danger ms-1">*</span></label
-            >
-            <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
-              <mat-label>{{ "Order.Address" | translate }}</mat-label>
-              <mat-icon matPrefix>home</mat-icon>
-              <input
-                matInput
-                type="text"
-                required
-                formControlName="deliveryAddress"
-                [class.is-invalid]="
-                  orderForm.get('deliveryAddress')?.invalid &&
-                  orderForm.get('deliveryAddress')?.touched
-                "
-              />
-              @if(orderForm.get('deliveryAddress')!.hasError('required')) {
-              <mat-error class="fs-14">
-                {{ "Order.AddressRequired" | translate }}
-              </mat-error>
-              } @if(orderForm.get('deliveryAddress')!.hasError('minlength')) {
-              <mat-error class="fs-14">
-                {{ "Order.AddressInvalid" | translate }}
-              </mat-error>
-              }
-            </mat-form-field>
-
-            <div class="form-group row">
-              <div class="col-md-12">
-                <label for="c_companyname" class="text-black">
-                  {{ "Order.Note" | translate }}</label
-                >
-                <mat-form-field class="w-100 fs-14" appearance="outline">
-                  <mat-label>{{ "Order.Note" | translate }}</mat-label>
-                  <mat-icon matPrefix>edit_note</mat-icon>
-                  <textarea
-                    matInput
-                    rows="4"
-                    formControlName="note"
-                    [class.is-invalid]="
-                      orderForm.get('note')?.invalid &&
-                      orderForm.get('note')?.touched
-                    "
-                  ></textarea>
-                  @if(orderForm.get('note')!.hasError('maxlength')) {
-                  <mat-error class="fs-14">
-                    {{ "Order.NoteInvalid" | translate }}
-                  </mat-error>
-                  }
-                </mat-form-field>
+      <div class="col-md-6 mb-5 mb-md-0">
+        <mat-card class="p-2">
+          <h5 class="my-4 ms-2 fw-bold">
+            {{ "Order.RecipientInfo" | translate }}
+          </h5>
+          <mat-card-content>
+            <form class="form-group" [formGroup]="orderForm">
+              <div class="row">
+                <div class="col-lg-6 col-md-12">
+                  <label for="c_fname" class="text-black"
+                    >{{ "Sign.FullName" | translate
+                    }}<span class="text-danger ms-1">*</span></label
+                  >
+                  <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
+                    <mat-label>{{ "Sign.FullName" | translate }}</mat-label>
+                    <mat-icon matPrefix>person</mat-icon>
+                    <input
+                      matInput
+                      type="text"
+                      required
+                      formControlName="name"
+                      [class.is-invalid]="
+                        orderForm.get('name')?.invalid &&
+                        orderForm.get('name')?.touched
+                      "
+                    />
+                    @if(orderForm.get('name')!.hasError('required')) {
+                    <mat-error class="fs-14">
+                      {{ "Sign.NameRequired" | translate }}
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                  <label for="c_fname" class="text-black">
+                    {{ "Order.Phone" | translate
+                    }}<span class="text-danger ms-1">*</span></label
+                  >
+                  <mat-form-field class="w-100 fs-14 my-1" appearance="outline">
+                    <mat-label>{{ "Order.Phone" | translate }}</mat-label>
+                    <mat-icon matPrefix>phone</mat-icon>
+                    <input
+                      matInput
+                      type="phone"
+                      required
+                      formControlName="phone"
+                      [class.is-invalid]="
+                        orderForm.get('phone')?.invalid &&
+                        orderForm.get('phone')?.touched
+                      "
+                    />
+                    @if(orderForm.get('phone')!.hasError('required')) {
+                    <mat-error class="fs-14">
+                      {{ "Order.PhoneRequired" | translate }}
+                    </mat-error>
+                    } @if(orderForm.get('phone')!.hasError('pattern')) {
+                    <mat-error class="fs-14">
+                      {{ "Order.PhoneInvalid" | translate }}
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
               </div>
+
+              <label for="c_lname" class="text-black">
+                {{ "Order.Address" | translate
+                }}<span class="text-danger ms-1">*</span></label
+              >
+              <mat-form-field class="w-100 fs-16" appearance="outline">
+                <mat-label>{{ "AddressEnter" | translate }}</mat-label>
+                <mat-icon matPrefix>location_on</mat-icon>
+                <input
+                  matInput
+                  type="text"
+                  min="0"
+                  formControlName="deliveryAddress"
+                  [class.is-invalid]="
+                    orderForm.get('deliveryAddress')?.invalid &&
+                    orderForm.get('deliveryAddress')?.touched
+                  "
+                  [matAutocomplete]="autoSuggestAddress"
+                />
+                <mat-autocomplete
+                  autoActiveFirstOption
+                  #autoSuggestAddress="matAutocomplete"
+                  (optionSelected)="onSelectSuggestAddress($event.option.value)"
+                >
+                  @for (address of suggestAddresses; track $index) {
+                  <mat-option [value]="address.FullName">{{
+                    address.FullName
+                  }}</mat-option>
+                  }
+                </mat-autocomplete>
+                @if (orderForm.get('deliveryAddress')?.hasError('required') ) {
+                <mat-error class="fs-12">{{
+                  "Order.AddressRequired" | translate
+                }}</mat-error>
+                } @if (orderForm.get('deliveryAddress')?.hasError('minlength') )
+                {
+                <mat-error class="fs-12">{{
+                  "Order.AddressInvalid" | translate
+                }}</mat-error>
+                }
+              </mat-form-field>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="c_companyname" class="text-black">
+                    {{ "Order.Note" | translate }}</label
+                  >
+                  <mat-form-field class="w-100 fs-14" appearance="outline">
+                    <mat-label>{{ "Order.Note" | translate }}</mat-label>
+                    <textarea
+                      matInput
+                      rows="4"
+                      formControlName="note"
+                      [class.is-invalid]="
+                        orderForm.get('note')?.invalid &&
+                        orderForm.get('note')?.touched
+                      "
+                    ></textarea>
+                    @if(orderForm.get('note')!.hasError('maxlength')) {
+                    <mat-error class="fs-14">
+                      {{ "Order.NoteInvalid" | translate }}
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+            <h5 class="my-5 ms-2 fw-bold">Phương thức thanh toán</h5>
+            <div class="payment-methods d-flex justify-content-center">
+              <!-- Wallet Payment Option -->
+              <button
+                type="button"
+                class="payment-option"
+                [ngClass]="{
+                  active: selectedPaymentMethod === paymentMethods.WALLET
+                }"
+                (click)="selectPayment(paymentMethods.WALLET)"
+                [disabled]="isBalanceInsufficient"
+              >
+                <mat-icon class="icon-size">wallet</mat-icon>
+                <span>{{ "Order.PaymentByWallet" | translate }}</span>
+                <div class="fw-bold balance-info">
+                  <span class="me-2">{{ "Order.Balance" | translate }}:</span>
+                  <span
+                    class="p-1"
+                    style="font-size: 18px"
+                    [ngStyle]="{
+                      color: isBalanceInsufficient ? '#ccc' : '#fb9678'
+                    }"
+                  >
+                    {{ accountBalance | number : "1.0" }}₫
+                  </span>
+                </div>
+              </button>
+
+              <!-- COD Payment Option -->
+              <button
+                class="payment-option"
+                [ngClass]="{
+                  active: selectedPaymentMethod === paymentMethods.COD
+                }"
+                (click)="selectPayment(paymentMethods.COD)"
+              >
+                <img
+                  src="https://www.coolmate.me/images/COD.svg"
+                  alt="COD"
+                  width="60"
+                />
+                <span>{{ "Order.PaymentByCOD" | translate }}</span>
+              </button>
             </div>
-          </form>
-        </div>
+          </mat-card-content>
+        </mat-card>
       </div>
-      <div class="col-md-7">
+      <div class="col-md-6">
         <!-- <div class="row mb-5">
           <div class="col-md-12">
             <h2 class="h3 mb-3 text-black">Coupon Code</h2>
@@ -151,238 +215,243 @@
 
         <div class="row mb-5">
           <div class="col-md-12">
-            <h4 class="mb-4 primary-color fw-bold">
-              {{ "Order.OrderDetails" | translate }}
-            </h4>
-            <form [formGroup]="orderForm" class="p-3 p-lg-5 border bg-white">
-              <table class="table site-block-order-table mb-5">
-                <thead>
-                  <tr>
-                    <th class="text-black th-title">
-                      {{ "Cart.Image" | translate }}
-                    </th>
-                    <th class="text-black th-title">
-                      {{ "Cart.Name" | translate }}
-                    </th>
-                    <th class="text-black th-title">
-                      {{ "Cart.Price" | translate }}
-                    </th>
-                    <th class="text-black th-title">
-                      {{ "Order.TotalCost" | translate }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (item of listCartItem; track $index) {
-                  <tr>
-                    <td>
-                      <div class="image-container">
-                        <img
-                          style="width: 80px"
-                          [src]="item.flowerImageUrl"
-                          alt="Image"
-                          class="img-fluid"
-                        />
-                        <span class="badge">{{ item.quantity }}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="primary-color fw-bold">{{
-                        item.flowerName
-                      }}</span>
-                    </td>
-                    <td>
-                      <span class="text-black fw-bold"
-                        >{{ item.flowerPrice | number : "1.0" }}₫</span
-                      >
-                      <!-- Hiển thị giá sản phẩm -->
-                    </td>
-                    <td>
-                      <span class="text-black fw-bold"
-                        >{{
-                          item.flowerPrice * item.quantity | number : "1.0"
-                        }}₫</span
-                      >
-                    </td>
-                  </tr>
-                  }
-                  <tr>
-                    <td class="text-black font-weight-bold">
-                      <strong>{{ "Cart.SubTotal" | translate }}</strong>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <!-- Thêm ô trống cho cột giá -->
-                    <td class="text-danger">
-                      {{ totalAmount | number : "1.0" }}₫
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-black font-weight-bold">
-                      <strong>{{ "Cart.Total" | translate }}</strong>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <!-- Thêm ô trống cho cột giá -->
-                    <td class="text-black font-weight-bold">
-                      <strong class="text-danger"
-                        >{{ totalAmount | number }}₫</strong
-                      >
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <div class="border p-3 mb-3">
-                <mat-radio-group formControlName="paymentMethod">
-                  <div
-                    class="d-flex align-items-center justify-content-between flex-wrap"
+            <mat-card class="p-2">
+              <h5 class="my-4 ms-2 fw-bold">
+                {{ "Order.OrderDetails" | translate }}
+              </h5>
+              <mat-card-content>
+                <form [formGroup]="orderForm" class="p-2">
+                  <table
+                    class="table site-block-order-table mb-5"
+                    style="border-style: none !important; border-color: #fff"
                   >
-                    <mat-radio-button
-                      [value]="paymentMethods.WALLET"
-                      [disabled]="isBalanceInsufficient"
-                    >
-                      {{ "Order.PaymentByWallet" | translate }}
-                    </mat-radio-button>
-                    <div class="fw-bold d-flex align-items-center">
-                      <span class="me-2"
-                        >{{ "Order.Balance" | translate }}:</span
-                      >
-                      <span
-                        class="border rounded p-1"
-                        style="font-size: 18px"
-                        [ngStyle]="{
-                          color: isBalanceInsufficient ? '#ccc' : '#fb9678'
-                        }"
-                      >
-                        {{ userAccount?.balance | number : "1.0" }}₫
-                      </span>
-                    </div>
-                    <img
-                      width="60"
-                      src="./../../../assets/images/wallet-payment-svg.svg"
-                      alt=""
-                    />
-                  </div>
-                  <hr />
-                  <div
-                    class="d-flex align-items-center justify-content-between flex-wrap"
-                  >
-                    <mat-radio-button
-                      [value]="paymentMethods.COD"
-                      [disabled]="isBalanceInsufficient"
-                    >
-                      {{ "Order.PaymentByCOD" | translate }}
-                    </mat-radio-button>
-                    <div class="fw-bold d-flex align-items-center"></div>
-                    <img
-                      width="60"
-                      src="./../../../assets/images/cash-on-delivery.svg"
-                      alt="COD"
-                    />
-                  </div>
-                </mat-radio-group>
-              </div>
+                    <thead>
+                      <tr>
+                        <th class="text-black th-title">
+                          {{ "Cart.Image" | translate }}
+                        </th>
+                        <th class="text-black th-title">
+                          {{ "Cart.Name" | translate }}
+                        </th>
+                        <th class="text-black th-title">
+                          {{ "Cart.Price" | translate }}
+                        </th>
+                        <th class="text-black th-title">
+                          {{ "Order.TotalCost" | translate }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (item of listCartItem; track $index) {
+                      <tr>
+                        <td>
+                          <div class="image-container">
+                            <img
+                              style="width: 80px"
+                              [src]="item.flowerImageUrl"
+                              alt="Image"
+                              class="img-fluid"
+                            />
+                            <span class="badge">{{ item.quantity }}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="primary-color fw-bold">{{
+                            item.flowerName
+                          }}</span>
+                        </td>
+                        <td>
+                          <span class="text-black fw-bold"
+                            >{{ item.flowerPrice | number : "1.0" }}₫</span
+                          >
+                        </td>
+                        <td>
+                          <span class="text-black fw-bold"
+                            >{{
+                              item.flowerPrice * item.quantity | number : "1.0"
+                            }}₫</span
+                          >
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-black" colspan="4">
+                          <strong>Địa chỉ: {{ item.address }}</strong>
+                        </td>
+                      </tr>
+                      <tr class="mb-2">
+                        <td
+                          colspan="4"
+                          style="border-bottom: 1px solid #ccc"
+                        ></td>
+                      </tr>
+                      }
+                      <tr>
+                        <td class="text-black font-weight-bold">
+                          <strong>{{ "Cart.SubTotal" | translate }}</strong>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-danger">
+                          {{ totalAmount | number : "1.0" }}₫
+                        </td>
+                      </tr>
+                      @for (fee of shippingFees; track $index) {
+                      <tr>
+                        <td class="text-black font-weight-bold">
+                          <strong
+                            >Phí vận chuyển cho {{ fee.flowerName }}</strong
+                          >
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-danger">
+                          {{ fee.shippingFee | number : "1.0" }}₫
+                        </td>
+                      </tr>
+                      }
+                      <tr>
+                        <td class="text-black font-weight-bold">
+                          <strong>{{ "ShippingFee" | translate }}</strong>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-danger">
+                          {{ shippingFee | number : "1.0" }}₫
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-black font-weight-bold">
+                          <strong>{{ "Cart.Total" | translate }}</strong>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-black font-weight-bold">
+                          <strong class="text-danger"
+                            >{{ totalAmount | number }}₫</strong
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
 
-              <div class="form-group d-flex justify-content-end mt-5">
-                <button
-                  (click)="placeOrder()"
-                  [disabled]="isDisabledBtn"
-                  color="accent"
-                  mat-raised-button
-                  style="font-size: 18px; padding: 20px"
-                  class="btn p-20"
-                >
-                  {{ "Order.Order" | translate }}
-                </button>
-              </div>
-            </form>
+                  <div class="form-group d-flex justify-content-end mt-5 me-5">
+                    <button
+                      (click)="placeOrder()"
+                      color="accent"
+                      mat-raised-button
+                      style="font-size: 18px; padding: 24px"
+                      class="btn p-20"
+                    >
+                      {{ "Order.Order" | translate }}
+                    </button>
+                  </div>
+                </form>
+              </mat-card-content>
+            </mat-card>
           </div>
         </div>
       </div>
       <!-- </form> -->
     </div>
     }@else if (statusOrder === 1) {
-    <div class="row">
-      <div class="col-md-12 text-center pt-5">
-        <span class="display-3 thankyou-icon text-primary">
-          <img
-            width="100"
-            src="./../../../assets/images/success-svg.svg"
-            alt=""
-            class="img-fluid mb-5"
-          />
-        </span>
-        <h2 class="display-3 text-black">Thank you!</h2>
-        <p class="lead mb-5">You order was successfully completed.</p>
-        <div class="d-flex align-items-center justify-content-center gap-5">
-          <button
-            mat-button
-            routerLink="/"
-            class="btn btn-sm btn-outline-black"
-            color="primary"
-            style="font-size: 20px"
-          >
-            <mat-icon style="font-size: 20px">arrow_back</mat-icon>
-            Back to home
-          </button>
-          <button
-            mat-button
-            routerLink="/order-history"
-            class="btn btn-sm btn-outline-black"
-            color="accent"
-            style="font-size: 20px"
-          >
-            <mat-icon style="font-size: 20px">local_shipping</mat-icon>
-            Order History
-          </button>
-        </div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <mat-card class="pb-5 pt-2">
+          <mat-card-content>
+            <div class="col-md-12 text-center pt-5">
+              <span class="display-3 thankyou-icon text-primary">
+                <img
+                  width="100"
+                  src="./../../../assets/images/success-svg.svg"
+                  alt=""
+                  class="img-fluid mb-5"
+                />
+              </span>
+              <h2 class="display-3 text-black">Thank you!</h2>
+              <p class="lead mb-5">Your order was successfully completed.</p>
+              <div
+                class="d-flex align-items-center justify-content-center gap-5"
+              >
+                <button
+                  mat-button
+                  routerLink="/"
+                  class="btn btn-sm btn-outline-black"
+                  color="primary"
+                  style="font-size: 20px"
+                >
+                  <mat-icon style="font-size: 20px">arrow_back</mat-icon>
+                  Back to home
+                </button>
+                <button
+                  mat-button
+                  routerLink="/order-history"
+                  class="btn btn-sm btn-outline-black"
+                  color="accent"
+                  style="font-size: 20px"
+                >
+                  <mat-icon style="font-size: 20px">local_shipping</mat-icon>
+                  Order History
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
       </div>
     </div>
+
     } @else if (statusOrder === 2) {
-    <!-- Giao diện đặt hàng thất bại -->
-    <div class="row">
-      <div class="col-md-12 text-center pt-5">
-        <span class="display-3 text-danger">
-          <img
-            style="color: red"
-            width="100"
-            src="./../../../assets/images/error-svg.svg"
-            alt="Failed Order"
-            class="img-fluid mb-5"
-          />
-        </span>
-        <h2 class="display-3 text-black">Order Failed!</h2>
-        <p class="lead mb-5 text-danger">
-          Your order could not be processed. Please try again.
-        </p>
-        <div class="d-flex align-items-center justify-content-center gap-5">
-          <button
-            mat-button
-            routerLink="/"
-            class="btn btn-sm btn-outline-black"
-            color="primary"
-            style="font-size: 20px"
-          >
-            <mat-icon style="font-size: 20px">arrow_back</mat-icon>
-            Back to home
-          </button>
-          <button
-            mat-button
-            class="btn btn-sm btn-outline-black"
-            color="accent"
-            style="font-size: 20px"
-            (click)="retryOrder()"
-          >
-            <mat-icon style="font-size: 20px">refresh</mat-icon>
-            Retry Order
-          </button>
-        </div>
+    <div class="container">
+      <div class="row">
+        <mat-card class="pb-5 pt-2"
+          ><mat-card-content>
+            <div class="col-md-12 text-center pt-5">
+              <span class="display-3 text-danger">
+                <img
+                  style="color: red"
+                  width="100"
+                  src="./../../../assets/images/error-svg.svg"
+                  alt="Failed Order"
+                  class="img-fluid mb-5"
+                />
+              </span>
+              <h2 class="display-3 text-black">Order Failed!</h2>
+              <p class="lead mb-5 text-danger">
+                Your order could not be processed. Please try again.
+              </p>
+              <div
+                class="d-flex align-items-center justify-content-center gap-5"
+              >
+                <button
+                  mat-button
+                  routerLink="/"
+                  class="btn btn-sm btn-outline-black"
+                  color="primary"
+                  style="font-size: 20px"
+                >
+                  <mat-icon style="font-size: 20px">arrow_back</mat-icon>
+                  Back to home
+                </button>
+                <button
+                  mat-button
+                  class="btn btn-sm btn-outline-black"
+                  color="accent"
+                  style="font-size: 20px"
+                  (click)="retryOrder()"
+                >
+                  <mat-icon style="font-size: 20px">refresh</mat-icon>
+                  Retry Order
+                </button>
+              </div>
+            </div>
+          </mat-card-content></mat-card
+        >
       </div>
     </div>
+
     }
   </div>
 </div>
+
 <app-footer></app-footer>
 }@loading {
 <div class="preloader-wrapper">

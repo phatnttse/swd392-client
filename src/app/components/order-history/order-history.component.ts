@@ -5,7 +5,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {
   OrderByAccount,
   OrderByAccountResponse,
-  UpdateOrderStatusResponse,
+  OrderCountStatus,
+  OrderCountStatusResponse,
 } from '../../models/order.model';
 import { CommonModule } from '@angular/common';
 import { OrderDetailStatus } from '../../models/enums';
@@ -62,6 +63,7 @@ export class OrderHistoryComponent implements OnInit {
   reasonCancelOrder: string = ''; // Lý do hủy đơn hàng
   loadingBtn = signal(false);
   orderDetailStatus = OrderDetailStatus;
+  orderStatusCount: OrderCountStatus | null = null;
 
   constructor(
     private orderService: OrderService,
@@ -77,6 +79,7 @@ export class OrderHistoryComponent implements OnInit {
       this.pageSize,
       this.selectedStatus
     );
+    this.getOrderStatusCount();
   }
 
   // Lấy danh sách đơn hàng theo người mua
@@ -107,12 +110,28 @@ export class OrderHistoryComponent implements OnInit {
       });
   }
 
+  getOrderStatusCount() {
+    this.orderService.getOrderStatusCount().subscribe({
+      next: (response: OrderCountStatusResponse) => {
+        if (response.success) {
+          this.orderStatusCount = response.data;
+          this.tabs[0].count = this.orderStatusCount.pendingCount;
+          this.tabs[1].count = this.orderStatusCount.preparingCount;
+          this.tabs[2].count = this.orderStatusCount.shippedCount;
+          this.tabs[3].count = this.orderStatusCount.deliveredCount;
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
+  }
+
   btnOpenCancelOrderDialog(id: number) {
     const dialogRef = this.dialog.open(CancelOrderComponent, {
       data: id,
     });
     dialogRef.afterClosed().subscribe((result: boolean) => {
-      debugger;
       if (result) {
         this.getOrderByBuyer(
           this.order,

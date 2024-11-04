@@ -10,6 +10,7 @@ import { Notification } from '../models/notification.model';
 })
 export class NotificationService {
   private NOTIFICATION_URL: string;
+  private WEBSOCKET_URL: string;
   private client!: Client;
   private notificationSubject = new Subject<Notification>();
 
@@ -18,18 +19,20 @@ export class NotificationService {
     private http: HttpClient
   ) {
     this.NOTIFICATION_URL = appConfig['NOTIFICATION_URL'];
+    this.WEBSOCKET_URL = appConfig['WEBSOCKET_URL'];
   }
 
   // Thiết lập STOMP để kết nối và nhận thông báo
   connectWebSocket(userId: number): void {
     this.client = new Client({
-      brokerURL: `${this.NOTIFICATION_URL}/notifications/users/${userId}`, // Đường dẫn WebSocket của server
+      brokerURL: `${this.WEBSOCKET_URL}/ws`, // Đường dẫn WebSocket của server
+      reconnectDelay: 5000,
       onConnect: () => {
         console.log('Connected to STOMP');
 
         // Đăng ký lắng nghe các thông báo từ STOMP
         this.client.subscribe(
-          `/notifications/users/${userId}`,
+          `${this.NOTIFICATION_URL}/ws`,
           (response: Notification) => {
             this.notificationSubject.next(response);
           }

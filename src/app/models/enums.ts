@@ -96,3 +96,8 @@ export enum NotificationType {
   ORDER_STATUS = 'ORDER_STATUS',
   MARKETING = 'WALLET_LOG',
 }
+
+export enum PaymentStatus {
+  CANCELLED = 'CANCELLED',
+  PAID = 'PAID',
+}

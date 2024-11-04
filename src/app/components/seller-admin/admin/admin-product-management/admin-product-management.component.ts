@@ -1,77 +1,29 @@
-import {
-  routes
-} from './../../../../app.routes';
-import {
-  MatCardModule
-} from '@angular/material/card';
-import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { routes } from './../../../../app.routes';
+import { MatCardModule } from '@angular/material/card';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
-import {
-  MatButtonModule
-} from '@angular/material/button';
-import {
-  MatFormFieldModule,
-  MatLabel
-} from '@angular/material/form-field';
-import {
-  MatIconModule
-} from '@angular/material/icon';
-import {
-  MatInputModule
-} from '@angular/material/input';
-import {
-  MatTableDataSource,
-  MatTableModule
-} from '@angular/material/table';
-import {
-  MatTabsModule
-} from '@angular/material/tabs';
-import {
-  CommonModule
-} from '@angular/common';
-import {
-  MatSort
-} from '@angular/material/sort';
-import {
-  Flower,
-  FlowerPaginated
-} from '../../../../models/flower.model';
-import {
-  LocalStoreManager
-} from '../../../../services/local-storage.service';
-import {
-  ProductService
-} from '../../../../services/product.service';
-import {
-  DBkeys
-} from '../../../../services/db-keys';
-import {
-  HttpErrorResponse
-} from '@angular/common/http';
-import {
-  ActivatedRoute,
-  Router,
-  RouterModule
-} from '@angular/router';
-import {
-  ToastrService
-} from 'ngx-toastr';
-import {
-  CategoryService
-} from '../../../../services/category.service';
-import {
-  FlowerListingStatus
-} from '../../../../models/enums';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CommonModule } from '@angular/common';
+import { MatSort } from '@angular/material/sort';
+import { Flower, FlowerPaginated } from '../../../../models/flower.model';
+import { LocalStoreManager } from '../../../../services/local-storage.service';
+import { ProductService } from '../../../../services/product.service';
+import { DBkeys } from '../../../../services/db-keys';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { CategoryService } from '../../../../services/category.service';
+import { FlowerListingStatus } from '../../../../models/enums';
 
 @Component({
   selector: 'app-admin-product-management',
@@ -87,7 +39,7 @@ import {
     MatTabsModule,
     CommonModule,
     RouterModule,
-    MatLabel
+    MatLabel,
   ],
   templateUrl: './admin-product-management.component.html',
   styleUrl: './admin-product-management.component.scss',
@@ -96,9 +48,9 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   // Biến từ AdminProductManagementComponent
   @ViewChild(MatSort) sort!: MatSort;
 
-  dataSource: MatTableDataSource < Flower > = new MatTableDataSource < Flower > ();
-  listFlower ?: Flower[] = []; // Danh sách hoa
-  flower ?: Flower;
+  dataSource: MatTableDataSource<Flower> = new MatTableDataSource<Flower>();
+  listFlower?: Flower[] = []; // Danh sách hoa
+  flower?: Flower;
   searchString: string = ''; // Chuỗi tìm kiếm
   order: string = 'desc'; // Sắp xếp tăng dần hoặc giảm dần
   sortBy: string = 'createdAt'; // Sắp xếp theo trường nào
@@ -141,16 +93,16 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     private categoryService: CategoryService,
     private localStorage: LocalStoreManager
   ) {
-    this.productForm = this.formBuilder.group({
-        name: ['', [Validators.required, Validators.minLength(5)]],
-        description: ['', [Validators.required, Validators.min(1000)]],
-        price: ['', [Validators.required, Validators.minLength(100)]],
-        stockBalance: ['', [Validators.required, Validators.min(1)]],
-        discount: ['', [Validators.min(0)]],
-      }),
-      this.rejectForm = this.formBuilder.group({
-        reason: ['', [Validators.required, Validators.minLength(100)]]
-      });
+    (this.productForm = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(5)]],
+      description: ['', [Validators.required, Validators.min(1000)]],
+      price: ['', [Validators.required, Validators.minLength(100)]],
+      stockBalance: ['', [Validators.required, Validators.min(1)]],
+      discount: ['', [Validators.min(0)]],
+    })),
+      (this.rejectForm = this.formBuilder.group({
+        reason: ['', [Validators.required, Validators.minLength(100)]],
+      }));
   }
 
   ngOnInit(): void {
@@ -215,7 +167,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   }
 
   //Chuyển hướng sang admin-product-detail với id
-  btnChangeStatusPage(status: number, flower? : Flower) {
+  btnChangeStatusPage(status: number, flower?: Flower) {
     this.currentPage = status;
     if (flower) {
       this.flower = flower;
@@ -259,17 +211,21 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       this.productService.approveFlowerListing(id).subscribe({
         next: (response: Flower) => {
           this.flower = response;
-          this.listFlower = this.listFlower?.filter(flower => flower.id !== id);
+          this.listFlower = this.listFlower?.filter(
+            (flower) => flower.id !== id
+          );
           this.dataSource = new MatTableDataSource(this.listFlower);
           this.dataSource.sort = this.sort;
           if (this.listFlower !== undefined) {
             this.productService.flowerByUserDataSource.next(this.listFlower);
           }
-          this.toastr.success(`Duyệt thành công đơn hàng ${response.name} của người dùng ${response.user.name}`);
+          this.toastr.success(
+            `Duyệt thành công đơn hàng ${response.name} của người dùng ${response.user.name}`
+          );
         },
         error: (error) => {
           this.toastr.error(`Duyệt hoa không thành công`, `ERROR`);
-        }
+        },
       });
     } else {
       this.toastr.warning('Hoa không xác định hoặc đã được duyệt rồi');
@@ -281,18 +237,22 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       this.productService.rejectFlowerListing(id, reason).subscribe({
         next: (response: Flower) => {
           this.flower = response;
-          this.listFlower = this.listFlower?.filter(flower => flower.id !== id);
+          this.listFlower = this.listFlower?.filter(
+            (flower) => flower.id !== id
+          );
           this.dataSource = new MatTableDataSource(this.listFlower);
           this.dataSource.sort = this.sort;
           if (this.listFlower !== undefined) {
             this.productService.flowerByUserDataSource.next(this.listFlower);
           }
-          this.toastr.success(`Duyệt thành công đơn hàng ${response.name} của người dùng ${response.user.name}`);
+          this.toastr.success(
+            `Duyệt thành công đơn hàng ${response.name} của người dùng ${response.user.name}`
+          );
         },
         error: (error: HttpErrorResponse) => {
           this.toastr.error(`Duyệt hoa không thành công`, `ERROR`);
           console.log(error);
-        }
+        },
       });
     } else {
       this.toastr.warning('Hoa không xác định hoặc đã được duyệt rồi');

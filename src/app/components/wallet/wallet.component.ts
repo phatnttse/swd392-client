@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -16,7 +16,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../services/account.service';
-import { AddBalanceResponse } from '../../models/account.model';
+import { AddBalanceResponse, UserAccount } from '../../models/account.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { HeaderComponent } from '../../layouts/header/header.component';
@@ -29,6 +29,9 @@ import { Utilities } from '../../services/utilities';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { LocalStoreManager } from '../../services/local-storage.service';
+import { DBkeys } from '../../services/db-keys';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-wallet',
@@ -53,7 +56,7 @@ import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.compone
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.scss',
 })
-export class WalletComponent implements OnInit {
+export class WalletComponent implements OnInit, OnDestroy {
   formTopUp: FormGroup; // Form nạp tiền
   listWalletLog: WalletLog[] = []; // Danh sách lịch sử giao dịch
   walletLogTypes = Object.values(WalletLogType); // Danh sách loại giao dịch
@@ -77,13 +80,16 @@ export class WalletComponent implements OnInit {
   walletLogStatuses = Object.values(WalletLogStatus); // Danh sách trạng thái giao dịch
   type: string = ''; // Loại giao dịch
   status: string = ''; // Trạng thái giao dịch
+  userAccount: UserAccount | null = null; // Thông tin tài khoản người dùng
+  userAccountSubscription: Subscription = new Subscription(); // Subscription của user account
 
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private accountService: AccountService,
     public authService: AuthService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private localStorage: LocalStoreManager
   ) {
     this.formTopUp = this.formBuilder.group({
       amount: ['', [Validators.required, Validators.min(20000)]],
@@ -91,7 +97,16 @@ export class WalletComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userAccountSubscription = this.authService.userDataSource.subscribe(
+      (userAccount: UserAccount) => {
+        this.userAccount = userAccount;
+      }
+    );
     this.getWalletLogsByUser();
+  }
+
+  ngOnDestroy(): void {
+    this.userAccountSubscription.unsubscribe();
   }
 
   // Nạp tiền vào ví

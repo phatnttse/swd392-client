@@ -1,6 +1,6 @@
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -35,6 +35,7 @@ import { ProductService } from '../../services/product.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -65,25 +66,26 @@ import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.compone
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   @ViewChild('stepper') stepper!: MatStepper;
 
-  profileForm: FormGroup;
-  changePasswordForm: FormGroup;
-  changeEmailForm: FormGroup;
-  verifyOTPForm: FormGroup;
-  userAccount: UserAccount | null = null;
-  genders = Object.values(Gender);
+  profileForm: FormGroup; // Form thông tin tài khoản
+  changePasswordForm: FormGroup; // Form đổi mật khẩu
+  changeEmailForm: FormGroup; // Form đổi email
+  verifyOTPForm: FormGroup; // Form xác nhận OTP
+  userAccount: UserAccount | null = null; // Thông tin tài khoản người dùng
+  genders = Object.values(Gender); // Danh sách giới tính
   statusPage: number = 0; // Trạng thái trang 0: overview, 1: change password, 2: change email
-  hideCurrentPassword = signal(true);
-  hideNewPassword = signal(true);
-  hideRepeatPassword = signal(true);
-  loadingSaveBtn = signal(false);
-  loadingUploadBtn = signal(false);
-  loadingChangeEmailBtn = signal(false);
-  loadingVerifyOTPBtn = signal(false);
-  selectedFile: File | null = null;
-  isLinear = false;
+  hideCurrentPassword = signal(true); // Ẩn hiện mật khẩu hiện tại
+  hideNewPassword = signal(true); // Ẩn hiện mật khẩu mới
+  hideRepeatPassword = signal(true); // Ẩn hiện mật khẩu lặp lại
+  loadingSaveBtn = signal(false); // Trạng thái nút lưu
+  loadingUploadBtn = signal(false); // Trạng thái nút upload
+  loadingChangeEmailBtn = signal(false); // Trạng thái nút đổi email
+  loadingVerifyOTPBtn = signal(false); // Trạng thái nút xác nhận OTP
+  selectedFile: File | null = null; // File ảnh đại diện
+  isLinear = false; // Bước xác nhận email
+  userAccountSubscription: Subscription = new Subscription(); // Subscription của user account
 
   constructor(
     private formBuilder: FormBuilder,
@@ -115,12 +117,22 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAccountProfile();
+    this.userAccountSubscription = this.authService.userDataSource.subscribe({
+      next: (user: UserAccount) => {
+        if (user) {
+          this.userAccount = user;
+          this.getAccountProfile();
+        }
+      },
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.userAccountSubscription.unsubscribe();
   }
 
   // Lấy thông tin tài khoản
   getAccountProfile() {
-    this.userAccount = this.authService.currentUser;
     if (this.userAccount) {
       this.profileForm.patchValue({
         name: this.userAccount.name,
@@ -150,6 +162,7 @@ export class ProfileComponent implements OnInit {
             response.data,
             DBkeys.CURRENT_USER
           );
+          this.authService.userDataSource.next(response.data);
           this.toastr.success(response.message, 'Success', {
             progressBar: true,
           });

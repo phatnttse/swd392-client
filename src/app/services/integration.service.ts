@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import {
   FeeShipRequest,
   FeeShipResponse,
+  ParseAddressResponse,
   SuggestAddressResponse,
 } from '../models/integration.model';
 
@@ -32,9 +33,19 @@ export class IntegrationService extends EndpointBase {
     );
   }
 
+  getParseAddress(address: string): Observable<ParseAddressResponse> {
+    return this.http.post<ParseAddressResponse>(
+      `${this.INTEGRATION_URL}/integration/ghtk/parse-address`,
+      { address },
+      this.requestHeaders
+    );
+  }
+
   getFeeShip(getFeeShipRequest: FeeShipRequest): Observable<FeeShipResponse> {
-    return this.http.get<FeeShipResponse>(
-      `${this.INTEGRATION_URL}/integration/ghtk/fee-ship`
+    return this.http.post<FeeShipResponse>(
+      `${this.INTEGRATION_URL}/integration/ghtk/fee-ship`,
+      { ...getFeeShipRequest },
+      this.requestHeaders
     );
   }
 }

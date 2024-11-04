@@ -124,7 +124,7 @@ export class SellerDashboardComponent implements OnInit {
             colors: ['none'],
           },
           plotOptions: {
-            bar: {
+            line: {
               columnWidth: '45%',
               borderRadius: 6,
             },

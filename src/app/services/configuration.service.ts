@@ -11,6 +11,7 @@ export class AppConfigurationService {
   private API_URL: string = '';
   private NOTIFICATION_URL: string = '';
   private INTEGRATION_URL: string = '';
+  private WEBSOCKET_URL: string = '';
   private Config_Language: any = []; // Cấu hình ngôn ngữ
   public static readonly Default_Language: string = 'vi'; // Ngôn ngữ mặc định
   private firebaseConfig: any; // Cấu hình firebase
@@ -27,6 +28,7 @@ export class AppConfigurationService {
         this.API_URL = this.config.API_URL;
         this.NOTIFICATION_URL = this.config.NOTIFICATION_URL;
         this.INTEGRATION_URL = this.config.INTEGRATION_URL;
+        this.WEBSOCKET_URL = this.config.WEBSOCKET_URL;
         this.Config_Language = this.config.Config_Language;
         this.firebaseConfig = this.config.firebaseConfig;
       })
