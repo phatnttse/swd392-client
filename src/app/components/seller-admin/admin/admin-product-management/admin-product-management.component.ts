@@ -1,5 +1,17 @@
-import { MatCardModule } from '@angular/material/card';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Utilities } from './../../../../services/utilities';
+import {
+  routes
+} from './../../../../app.routes';
+import { TranslateModule } from '@ngx-translate/core';
+import {
+  MatCardModule
+} from '@angular/material/card';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -34,7 +46,8 @@ import { ToastrService } from 'ngx-toastr';
     MatTabsModule,
     CommonModule,
     RouterModule,
-    MatLabel,
+    TranslateModule,
+    MatLabel
   ],
   templateUrl: './admin-product-management.component.html',
   styleUrl: './admin-product-management.component.scss',
@@ -63,6 +76,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     'name',
     'price',
     'stockBalance',
+    'status',
     'action',
   ];
 

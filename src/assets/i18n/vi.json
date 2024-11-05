@@ -142,6 +142,13 @@
     "Profile": "Hồ sơ",
     "SellerProfile": "Hồ sơ người bán"
   },
+  "Category":{
+    "Image":"Hình ảnh",
+    "Name": "Tên danh mục"
+  },
+  "User":{
+    "Role": "Vai trò"
+  },
   "AddToCart": "Thêm vào giỏ",
   "Support": "Hỗ trợ",
   "SupportContent": "Nhận sự giúp đỡ nhanh chóng, miễn phí từ các trợ lý thân thiện",
@@ -169,8 +176,10 @@
   "Dashboard": "Bảng điều khiển",
   "ProductManagement": "Quản lý sản phẩm",
   "OrderManagement": "Quản lý đơn hàng",
+  "CategoryManagement": "Quản lý danh mục",
   "Hi": "Xin chào",
   "AddNewProduct": "Thêm sản phẩm mới",
+  "AddNewCategory": "Thêm danh mục mới",
   "Status": "Trạng thái",
   "Actions": "Các thao tác",
   "NoProducts": "Không có sản phẩm nào",

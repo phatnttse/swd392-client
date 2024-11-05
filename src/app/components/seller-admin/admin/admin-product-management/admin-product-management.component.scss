@@ -54,8 +54,34 @@
   }
   
   .me-2 {
-    margin-right: 8px; /* Khoảng cách giữa nút quay lại và tiêu đề */
+    margin-right: 8px; 
   }
+
+  .blue-text{
+    color: #140a87; 
+    font-weight: bold;
+  }
+  .green-text {
+    color: #006400; 
+    font-weight: bold;
+  }
+
+  .status-pending {
+    color: #FFA500; 
+  }
+  
+  .status-approved {
+    color: #006400; 
+  }
+  
+  .status-rejected {
+    color: #FF0000; 
+  }
+  
+  .status-expired {
+    color: #808080; 
+  }
+  
     
   .flower-image {
     width: 120px;
