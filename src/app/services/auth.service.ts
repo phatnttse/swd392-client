@@ -8,6 +8,7 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
+  HttpParams,
 } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -194,6 +195,20 @@ export class AuthService {
 
   verifyEmail(token: string): Observable<any> {
     return this.http.post(`${this.API_URL}/auth/verify/${token}`, {});
+  }
+
+  resetPassword(
+    token: string,
+    newPassword: string,
+    repeatPassword: string
+  ): Observable<BaseResponse<any>> {
+    return this.http.post<BaseResponse<any>>(
+      `${this.API_URL}/auth/reset-password?token=${token}`,
+      {
+        newPassword,
+        repeatPassword,
+      }
+    );
   }
 
   private reevaluateLoginStatus(currentUser?: UserAccount | null) {

@@ -98,13 +98,8 @@
                 mat-raised-button
                 color="primary"
                 class="w-100 p-20"
-                [disabled]="loadingBtn().valueOf()"
               >
-                @if (loadingBtn()) {
-                <mat-spinner diameter="24"></mat-spinner>
-                }@else {
                 {{ "Sign.LoginButton" | translate }}
-                }
               </button>
 
               <span

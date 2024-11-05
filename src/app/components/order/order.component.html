@@ -292,14 +292,17 @@
                         <td></td>
                         <td></td>
                         <td class="text-danger">
-                          {{ totalAmount | number : "1.0" }}₫
+                          {{ subtotalAmount | number : "1.0" }}₫
                         </td>
                       </tr>
                       @for (fee of shippingFees; track $index) {
                       <tr>
                         <td class="text-black font-weight-bold">
                           <strong
-                            >Phí vận chuyển cho {{ fee.flowerName }}</strong
+                            >Phí vận chuyển cho
+                            <span class="primary-color">{{
+                              fee.flowerName
+                            }}</span></strong
                           >
                         </td>
                         <td></td>

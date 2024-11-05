@@ -32,10 +32,10 @@ import { LocalStoreManager } from '../../services/local-storage.service';
 import { DBkeys } from '../../services/db-keys';
 import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 import { Subscription } from 'rxjs';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-profile',
@@ -59,7 +59,6 @@ import { Subscription } from 'rxjs';
     MatListModule,
     MatToolbarModule,
     TranslateModule,
-    MatProgressSpinnerModule,
     MatStepperModule,
     BreadcrumbComponent,
   ],
@@ -79,10 +78,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   hideCurrentPassword = signal(true); // Ẩn hiện mật khẩu hiện tại
   hideNewPassword = signal(true); // Ẩn hiện mật khẩu mới
   hideRepeatPassword = signal(true); // Ẩn hiện mật khẩu lặp lại
-  loadingSaveBtn = signal(false); // Trạng thái nút lưu
-  loadingUploadBtn = signal(false); // Trạng thái nút upload
-  loadingChangeEmailBtn = signal(false); // Trạng thái nút đổi email
-  loadingVerifyOTPBtn = signal(false); // Trạng thái nút xác nhận OTP
   selectedFile: File | null = null; // File ảnh đại diện
   isLinear = false; // Bước xác nhận email
   userAccountSubscription: Subscription = new Subscription(); // Subscription của user account
@@ -95,7 +90,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private localStorage: LocalStoreManager,
     private router: Router,
     private cartService: CartService,
-    private productService: ProductService
+    private productService: ProductService,
+    private statusService: StatusService
   ) {
     this.profileForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -149,7 +145,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.profileForm.markAllAsTouched();
       return;
     }
-    this.loadingSaveBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const name = this.profileForm.get('name')?.value;
     const gender = this.profileForm.get('gender')?.value;
     const phone = this.profileForm.get('phone')?.value;
@@ -166,11 +162,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.toastr.success(response.message, 'Success', {
             progressBar: true,
           });
-          this.loadingSaveBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.loadingSaveBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.warning(error.error.message, 'Error', {
           progressBar: true,
         });
@@ -193,7 +189,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loadingSaveBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const oldPassword = this.changePasswordForm.get('currentPassword')?.value;
     const newPassword = this.changePasswordForm.get('newPassword')?.value;
     const repeatPassword = this.changePasswordForm.get('repeatPassword')?.value;
@@ -202,7 +198,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .changePassword(oldPassword, newPassword, repeatPassword)
       .subscribe({
         next: (response: any) => {
-          this.loadingSaveBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.success(
             'Password has been changed successfully. Please log in again',
             'Success',
@@ -214,7 +210,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.btnLogOut();
         },
         error: (error: HttpErrorResponse) => {
-          this.loadingSaveBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.warning(error.error.error, 'Error', {
             progressBar: true,
           });
@@ -228,21 +224,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.changeEmailForm.markAllAsTouched();
       return;
     }
-    this.loadingChangeEmailBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const email = this.changeEmailForm.get('email')?.value;
     this.accountService.changeEmail(email).subscribe({
       next: (response: UserAccountResponse) => {
         this.toastr.success(response.message, 'Success', {
           progressBar: true,
         });
-        this.loadingChangeEmailBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.stepper.next();
       },
       error: (error: HttpErrorResponse) => {
         this.toastr.error(error.error.message, 'Error', {
           progressBar: true,
         });
-        this.loadingChangeEmailBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
     });
   }
@@ -254,12 +250,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
     const otp = this.verifyOTPForm.get('otp')?.value;
-    this.loadingVerifyOTPBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     this.accountService.confirmChangeEmail(otp).subscribe({
       next: (response: UserAccountResponse) => {
         if (response.success) {
           this.authService.userDataSource.next(response.data);
-          this.loadingVerifyOTPBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.success(
             'Change Email Successful, Please login again',
             'Success',
@@ -277,7 +273,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.toastr.warning(error.error.message, 'Error', {
           progressBar: true,
         });
-        this.loadingVerifyOTPBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
     });
   }
@@ -288,7 +284,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (file) {
       this.selectedFile = file;
       this.uploadAvatar();
-      this.loadingUploadBtn.set(true);
+      this.statusService.statusLoadingSpinnerSource.next(true);
     }
   }
 
@@ -308,7 +304,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.toastr.success(response.message, 'Success', {
               progressBar: true,
             });
-            this.loadingUploadBtn.set(false);
+            this.statusService.statusLoadingSpinnerSource.next(false);
           }
         }
       },

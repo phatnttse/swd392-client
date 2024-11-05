@@ -309,18 +309,13 @@
         </button>
         <button
           (click)="btnTopUp()"
-          [disabled]="loadingBtn().valueOf()"
           mat-raised-button
           type="submit"
           class="btn btn-primary"
           id="confirmTopup"
           color="accent"
         >
-          @if (loadingBtn()) {
-          <mat-spinner diameter="24"></mat-spinner>
-          }@else {
           {{ "Wallet.TopUp" | translate }}
-          }
         </button>
       </div>
     </div>

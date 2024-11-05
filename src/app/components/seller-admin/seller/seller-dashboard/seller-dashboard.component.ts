@@ -19,6 +19,7 @@ import {
 import { ChartOptions } from '../../../../models/dashboard.model';
 import { CommonModule } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { StatusService } from '../../../../services/status.service';
 
 @Component({
   selector: 'app-seller-dashboard',
@@ -57,7 +58,8 @@ export class SellerDashboardComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private statusService: StatusService
   ) {
     this.revenueChartOptions = {};
     this.orderChartOptions = {};
@@ -70,6 +72,7 @@ export class SellerDashboardComponent implements OnInit {
 
   // Lấy dữ liệu cho biểu đồ
   getOrderLineChart() {
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const startDate = Utilities.formatDate(this.range.get('start')?.value!);
     const endDate = Utilities.formatDate(this.range.get('end')?.value!);
     this.orderService.getOrderLineChart(startDate, endDate).subscribe({
@@ -178,8 +181,10 @@ export class SellerDashboardComponent implements OnInit {
             },
           },
         };
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         console.log(error);
       },
     });

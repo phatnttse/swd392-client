@@ -37,6 +37,7 @@ import { Subscription } from 'rxjs';
 import { Utilities } from '../../../../services/utilities';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
+import { StatusService } from '../../../../services/status.service';
 
 @Component({
   selector: 'app-seller-order-management',
@@ -105,7 +106,8 @@ export class SellerOrderManagementComponent
 
   constructor(
     private orderService: OrderService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private statusService: StatusService
   ) {}
 
   ngOnInit(): void {
@@ -147,6 +149,7 @@ export class SellerOrderManagementComponent
     endDate?: string,
     isFilter: boolean = false
   ) {
+    this.statusService.statusLoadingSpinnerSource.next(true);
     this.orderService
       .getOrdersBySeller(
         searchString,
@@ -174,9 +177,11 @@ export class SellerOrderManagementComponent
               this.currentPage,
               this.totalPages
             );
+            this.statusService.statusLoadingSpinnerSource.next(false);
           }
         },
         error: (error: HttpErrorResponse) => {
+          this.statusService.statusLoadingSpinnerSource.next(false);
           console.log(error);
         },
       });
@@ -251,6 +256,7 @@ export class SellerOrderManagementComponent
 
   // Cập nhật trạng thái của đơn hàng
   btnUpdateOrderStatus(orderDetailId: number): void {
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const nextStatus = this.getNextOrderStatus(this.selectedOrder?.status!);
 
     this.orderService
@@ -261,12 +267,14 @@ export class SellerOrderManagementComponent
             this.toastr.success(response.message, 'Success', {
               progressBar: true,
             });
+            this.statusService.statusLoadingSpinnerSource.next(false);
             this.selectedOrder!.status = response.data.status;
           } else {
             this.toastr.error(response.message, 'Error', { progressBar: true });
           }
         },
         error: (error: HttpErrorResponse) => {
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.error(error.error, 'Error');
           console.log(error);
         },

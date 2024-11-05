@@ -24,14 +24,12 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 import { WalletService } from '../../services/wallet.service';
 import { WalletLog, WalletLogResponse } from '../../models/wallet.model';
 import { WalletLogStatus, WalletLogType } from '../../models/enums';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Utilities } from '../../services/utilities';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
-import { LocalStoreManager } from '../../services/local-storage.service';
-import { DBkeys } from '../../services/db-keys';
 import { Subscription } from 'rxjs';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-wallet',
@@ -47,7 +45,6 @@ import { Subscription } from 'rxjs';
     ReactiveFormsModule,
     HeaderComponent,
     FooterComponent,
-    MatProgressSpinnerModule,
     MatSelectModule,
     MatDatepickerModule,
     FormsModule,
@@ -71,7 +68,6 @@ export class WalletComponent implements OnInit, OnDestroy {
   totalElements: number = 0; // Tổng số lượng
   currentPage: number = 0; // Trang hiện tại
   visiblePages: number[] = []; // Các trang hiển thị
-  loadingBtn = signal(false); // Trạng thái nút đăng ký
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
@@ -89,7 +85,7 @@ export class WalletComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     public authService: AuthService,
     private walletService: WalletService,
-    private localStorage: LocalStoreManager
+    private statusService: StatusService
   ) {
     this.formTopUp = this.formBuilder.group({
       amount: ['', [Validators.required, Validators.min(20000)]],
@@ -115,16 +111,17 @@ export class WalletComponent implements OnInit, OnDestroy {
       this.formTopUp.markAllAsTouched();
       return;
     }
-    this.loadingBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const amount = this.formTopUp.get('amount')?.value;
 
     this.accountService.addBalance(amount).subscribe({
       next: (response: AddBalanceResponse) => {
         window.location.href = response.checkoutUrl;
-        this.loadingBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.formTopUp.reset();
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.error(error.error.message, 'Error');
       },
     });

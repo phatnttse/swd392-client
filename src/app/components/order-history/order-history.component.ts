@@ -26,6 +26,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Utilities } from '../../services/utilities';
 import { MatIconModule } from '@angular/material/icon';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-order-history',
@@ -68,7 +69,8 @@ export class OrderHistoryComponent implements OnInit {
   constructor(
     private orderService: OrderService,
     private dialog: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private statusService: StatusService
   ) {}
 
   ngOnInit(): void {
@@ -102,9 +104,11 @@ export class OrderHistoryComponent implements OnInit {
               this.currentPage,
               this.totalPages
             );
+            this.statusService.statusLoadingSpinnerSource.next(false);
           }
         },
         error: (error: HttpErrorResponse) => {
+          this.statusService.statusLoadingSpinnerSource.next(false);
           console.log(error);
         },
       });
@@ -233,7 +237,7 @@ export class OrderHistoryComponent implements OnInit {
         break;
     }
 
-    // Fetch orders based on the selected status
+    this.statusService.statusLoadingSpinnerSource.next(true);
     this.getOrderByBuyer(
       this.order,
       this.sortBy,

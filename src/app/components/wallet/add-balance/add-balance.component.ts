@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { PaymentDetails } from '../../../models/payment.model';
+import { StatusService } from '../../../services/status.service';
 
 @Component({
   selector: 'app-add-balance',
@@ -47,7 +48,8 @@ export class AddBalanceComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private localStorage: LocalStoreManager,
     private walletService: WalletService,
-    private authService: AuthService
+    private authService: AuthService,
+    private statusService: StatusService
   ) {}
 
   ngOnInit() {
@@ -58,6 +60,7 @@ export class AddBalanceComponent implements OnInit, OnDestroy {
         params['orderCode'] &&
         params['cancel']
       ) {
+        this.statusService.statusLoadingSpinnerSource.next(true);
         this.handlePaymentCallback();
       }
     });
@@ -109,11 +112,14 @@ export class AddBalanceComponent implements OnInit, OnDestroy {
           this.getPaymentDetails(orderCode);
           this.updateUserBalance();
           this.statusPage = 1;
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.startConfetti();
         } else if (status === PaymentStatus.CANCELLED || cancel) {
           this.statusPage = 2;
           this.getPaymentDetails(orderCode);
+          this.statusService.statusLoadingSpinnerSource.next(false);
         } else {
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.error(
             'Có lỗi xảy ra trong quá trình thanh toán.',
             'Error'

@@ -70,6 +70,7 @@ export class OrderComponent implements OnInit {
   orderForm: FormGroup; // Form đặt hàng
   listCartItem: CartItem[] = []; // Danh sách sản phẩm trong giỏ hàng
   totalAmount: number = 0; // Tổng tiền cần thanh toán
+  subtotalAmount = 0; // Tiền tạm tính
   selectedPaymentMethod: string = ''; // Phương thức thanh toán được chọn
   statusOrder: number = 0; // 0: Chưa đặt hàng, 1: Đặt hàng thành công, 2: Đặt hàng thất bại
   isBalanceInsufficient: boolean = false; // Kiểm tra số dư ví có đủ để thanh toán không
@@ -131,8 +132,9 @@ export class OrderComponent implements OnInit {
       }
     });
 
-    this.cartService.totalAmountSubject.subscribe((totalAmount: number) => {
-      this.totalAmount = totalAmount;
+    this.cartService.totalAmountSubject.subscribe((amount: number) => {
+      this.subtotalAmount = amount;
+      this.totalAmount = amount;
       this.checkBalance();
     });
 
@@ -291,12 +293,13 @@ export class OrderComponent implements OnInit {
     this.integrationService.getParseAddress(address).subscribe({
       next: (response: ParseAddressResponse) => {
         if (response.success) {
+          this.shippingFee = 0;
+          this.shippingFees = [];
           const parsed = response.data;
           this.province = parsed.province.name;
           this.district = parsed.district.name;
           this.ward = parsed.ward.name;
           this.street = parsed.special.name;
-          this.shippingFee = 0;
           this.calculateShippingFees();
         }
       },
@@ -357,12 +360,13 @@ export class OrderComponent implements OnInit {
 
     Promise.all(shippingFeePromises)
       .then(() => {
+        debugger;
         this.shippingFee = this.shippingFees.reduce(
           (acc, fee) => acc + fee.shippingFee,
           0
         );
-        this.checkBalance();
         this.totalAmount += this.shippingFee;
+        this.checkBalance();
         this.statusService.statusLoadingSpinnerSource.next(false);
       })
       .catch((error) => {

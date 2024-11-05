@@ -42,6 +42,7 @@ import {
   SuggestAddressResponse,
 } from '../../../../models/integration.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { StatusService } from '../../../../services/status.service';
 
 @Component({
   selector: 'app-seller-product-management',
@@ -118,7 +119,8 @@ export class SellerProductManagementComponent
     private formBuilder: FormBuilder,
     private categoryService: CategoryService,
     private toastr: ToastrService,
-    private integrationService: IntegrationService
+    private integrationService: IntegrationService,
+    private statusService: StatusService
   ) {
     this.productForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -197,6 +199,8 @@ export class SellerProductManagementComponent
       return;
     }
 
+    this.statusService.statusLoadingSpinnerSource.next(true);
+
     const formData = this.createFormData();
 
     this.productService.createFlower(formData).subscribe({
@@ -212,8 +216,10 @@ export class SellerProductManagementComponent
           progressBar: true,
         });
         this.statusPage = 0;
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.error('Tạo hoa mới thất bại', 'Error');
         console.error('Error creating product: ', error);
       },
@@ -318,6 +324,8 @@ export class SellerProductManagementComponent
       return;
     }
 
+    this.statusService.statusLoadingSpinnerSource.next(true);
+
     const formData = this.createFormData();
 
     this.productService
@@ -344,8 +352,11 @@ export class SellerProductManagementComponent
 
           this.dataSource = new MatTableDataSource(this.listFlower);
           this.dataSource.sort = this.sort;
+          this.statusPage = 0;
+          this.statusService.statusLoadingSpinnerSource.next(false);
         },
         error: (error: HttpErrorResponse) => {
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.error(error.error.message, 'Error');
           console.error('Error update product: ', error);
         },

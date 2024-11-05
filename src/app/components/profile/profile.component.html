@@ -72,7 +72,6 @@
                       mat-raised-button
                       color="primary"
                       (click)="fileInput.click()"
-                      [disabled]="loadingUploadBtn().valueOf()"
                     >
                       <input
                         type="file"
@@ -80,11 +79,7 @@
                         (change)="onFileSelected($event)"
                         hidden
                       />
-                      @if (loadingUploadBtn()) {
-                      <mat-spinner diameter="24"></mat-spinner>
-                      }@else {
                       {{ "UploadImage" | translate }}
-                      }
                       <mat-icon>camera_alt</mat-icon>
                     </button>
                   </div>
@@ -194,13 +189,8 @@
                     extend
                     color="primary"
                     (click)="btnUpdateProfile()"
-                    [disabled]="loadingSaveBtn().valueOf()"
                   >
-                    @if (loadingSaveBtn()) {
-                    <mat-spinner diameter="24"></mat-spinner>
-                    }@else {
                     {{ "SaveChanges" | translate }}
-                    }
                     <mat-icon>task_alt</mat-icon>
                   </button>
                 </div>
@@ -320,13 +310,8 @@
                     extend
                     color="primary"
                     (click)="btnChangePassword()"
-                    [disabled]="loadingSaveBtn().valueOf()"
                   >
-                    @if (loadingSaveBtn()) {
-                    <mat-spinner diameter="24"></mat-spinner>
-                    }@else {
                     {{ "SaveChanges" | translate }}
-                    }
 
                     <mat-icon>task_alt</mat-icon>
                   </button>
@@ -380,13 +365,9 @@
                         extend
                         color="primary"
                         (click)="btnChangeEmail()"
-                        [disabled]="loadingChangeEmailBtn().valueOf()"
                       >
-                        @if (loadingChangeEmailBtn()) {
-                        <mat-spinner diameter="24"></mat-spinner>
-                        }@else {
                         {{ "SendEmailBtn" | translate }}
-                        }
+
                         <mat-icon>send</mat-icon>
                       </button>
                     </div>
@@ -428,13 +409,8 @@
                         mat-raised-button
                         color="primary"
                         (click)="btnVerifyOTP()"
-                        [disabled]="loadingVerifyOTPBtn().valueOf()"
                       >
-                        @if (loadingVerifyOTPBtn()) {
-                        <mat-spinner diameter="24"></mat-spinner>
-                        }@else {
                         {{ "Confirm" | translate }}
-                        }
                       </button>
                     </div>
                   </form>

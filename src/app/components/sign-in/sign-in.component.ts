@@ -18,7 +18,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { GetCartByUserResponse } from '../../models/cart.model';
 import { CartService } from '../../services/cart.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { StatusService } from '../../services/status.service';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -32,7 +32,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     TranslateModule,
     FooterComponent,
     HeaderComponent,
-    MatProgressSpinnerModule,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
@@ -40,14 +39,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class SignInComponent {
   formLogin: FormGroup; // Form đăng nhập
   hide = signal(true); // Ẩn hiện mật khẩu
-  loadingBtn = signal(false); // Trạng thái nút đăng ký
 
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
     private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private statusService: StatusService
   ) {
     this.formLogin = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -76,7 +75,7 @@ export class SignInComponent {
       this.formLogin.markAllAsTouched();
       return;
     }
-    this.loadingBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
 
     const email = this.formLogin.get('email')?.value;
     const password = this.formLogin.get('password')?.value;
@@ -89,12 +88,12 @@ export class SignInComponent {
           this.toastr.success(response.message, 'Success', {
             progressBar: true,
           });
-          this.loadingBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
         }, 700);
       },
 
       error: (error: HttpErrorResponse) => {
-        this.loadingBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.warning(error.error.message, error.error.error, {
           progressBar: true,
         });
