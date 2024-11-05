@@ -57,6 +57,7 @@ import {
   Gender,
   Role
 } from '../../../../models/enums';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-user-management',
@@ -72,7 +73,8 @@ import {
     CommonModule,
     RouterModule,
     MatLabel,
-    MatSortModule
+    MatSortModule,
+    TranslateModule
   ],
   templateUrl: './admin-user-management.component.html',
   styleUrl: './admin-user-management.component.scss'
@@ -203,4 +205,10 @@ export class AdminUserManagementComponent {
       this.roleName
     );
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
 }

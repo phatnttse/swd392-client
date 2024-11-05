@@ -11,7 +11,7 @@
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
         <button mat-raised-button color="primary" routerLink="/admin/categories/new" style="padding: 20px 10px"
           (click)="btnChangeStatusPage(2)">
-          Thêm danh mục mới
+          {{"AddNewCategory" | translate}}
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -21,11 +21,11 @@
 
 <mat-card class="w-100">
   <mat-card-content>
-    <h4 class="fw-bold primary-color">Quản lý danh mục</h4>
+    <h4 class="fw-bold primary-color">{{"CategoryManagement"| translate}}</h4>
     <div class="table-responsive mt-20">
       <table [dataSource]="dataSource" mat-table matSort class="w-100 text-nowrap">
         <ng-container matColumnDef="image">
-          <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">Hình ảnh</th>
+          <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">{{"Category.Image" | translate}}</th>
           <td mat-cell *matCellDef="let category">
             <a [href]="category.imageUrl[0]" target="_blank">
               <img class="rounded" width="50px" height="50px" [src]="category.imageUrl" alt="Image" />
@@ -41,23 +41,27 @@
         </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="name" class="fw-bold primary-color font-size">Tên</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="name" class="fw-bold primary-color font-size">{{"Category.Name"| translate}}</th>
           <td mat-cell *matCellDef="let category">
             <p class="fw-medium mb-0 fw-bold">{{category.name}}</p>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">Các tác vụ</th>
+          <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">{{"Actions" | translate}}</th>
           <td mat-cell *matCellDef="let category">
-            <button type="button" mat-icon-button color="primary" data-bs-target="#viewDetailChildren"
+            <button 
+            type="button" 
+            mat-icon-button 
+            class="status-pending"
+            data-bs-target="#viewDetailChildren"
               (click)="btnChangeStatusPage(1,category)">
               <mat-icon aria-label="Edit">visibility</mat-icon>
             </button>
             <button 
             type="button" 
             mat-icon-button 
-            color="warn"
+            class="status-rejected"
             (click)="btnDeleteCategory(category.id)"
             >
               <mat-icon aria-label="Delete">delete</mat-icon>

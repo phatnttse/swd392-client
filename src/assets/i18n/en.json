@@ -144,6 +144,13 @@
     "Profile": "My Profile",
     "SellerProfile": "Seller Profile"
   },
+  "Category":{
+    "Image": "Image",
+    "Name": "Name"
+  },
+  "User":{
+    "Role": "Role"
+  },
   "AddToCart": "Add to Cart",
   "Support": "Support",
   "SupportContent": "Get fast, free help from our friendly assistants",
@@ -171,12 +178,14 @@
   "Dashboard": "Dashboard",
   "ProductManagement": "Product Management",
   "OrderManagement": "Order Management",
+  "CategoryManagement": "Category Management",
   "MyAccount": "My Account",
   "ViewWallet": "View Wallet",
   "OrderHistory": "Order History",
   "Logout": "Logout",
   "Hi": "Hi",
   "AddNewProduct": "Add New Product",
+  "AddNewCategory": "Add New Category",
   "Status": "Status",
   "Actions": "Actions",
   "NoProducts": "No products available",
@@ -235,4 +244,5 @@
   "Type": "Type",
   "SelectType": "Select type",
   "Statistical": "Statistical"
+
 }

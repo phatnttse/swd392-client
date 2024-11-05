@@ -2,6 +2,7 @@ import { Utilities } from './../../../../services/utilities';
 import {
   routes
 } from './../../../../app.routes';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   MatCardModule
 } from '@angular/material/card';
@@ -88,6 +89,7 @@ import {
     MatTabsModule,
     CommonModule,
     RouterModule,
+    TranslateModule,
     MatLabel
   ],
   templateUrl: './admin-product-management.component.html',
@@ -117,6 +119,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     'name',
     'price',
     'stockBalance',
+    'status',
     'action',
   ];
 

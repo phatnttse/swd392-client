@@ -33,6 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
 import { ParentCategory } from '../../../../models/enums';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-category-management',
@@ -53,6 +54,7 @@ import { ParentCategory } from '../../../../models/enums';
     MatDialogModule,
     MatSelectModule,
     MatOptionModule,
+    TranslateModule
   ],
   templateUrl: './admin-category-management.component.html',
   styleUrl: './admin-category-management.component.scss',
