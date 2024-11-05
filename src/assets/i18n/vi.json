@@ -142,11 +142,11 @@
     "Profile": "Hồ sơ",
     "SellerProfile": "Hồ sơ người bán"
   },
-  "Category":{
-    "Image":"Hình ảnh",
+  "Category": {
+    "Image": "Hình ảnh",
     "Name": "Tên danh mục"
   },
-  "User":{
+  "User": {
     "Role": "Vai trò"
   },
   "AddToCart": "Thêm vào giỏ",
@@ -240,5 +240,27 @@
   "Statistical": "Thống kê",
   "ExpireDate": "Ngày hết hạn",
   "ExpireDateRequired": "Vui lòng chọn ngày hết hạn",
-  "ShippingFee": "Phí vận chuyển"
+  "ShippingFee": "Phí vận chuyển",
+  "FreshFlowerBasket": "Giỏ hoa tươi",
+  "SpecialBouquet": "Bó hoa đặc biệt",
+  "FlowersForAllOccasions": "Hoa cho mọi dịp",
+  "SeasonalFlowers": "Hoa theo mùa",
+  "ShopNow": "Mua ngay",
+  "FreshFlowerTitle": "Hoa Tươi",
+  "FreshFlowerDescription": "Mua sắm hoa tươi với giá tốt nhất đảm bảo chất lượng cho từng bông hoa.",
+  "BeautifulFlowersTitle": "Hoa Đẹp",
+  "BeautifulFlowersDescription": "Tìm kiếm các bó hoa hoàn hảo cho mọi dịp và gửi lời chúc tốt nhất !",
+  "FastDeliveryTitle": "Giao Hoa Nhanh Chóng",
+  "FastDeliveryDescription": "Tự tin với dịch vụ giao hàng nhanh chóng, đúng thời điểm và đáng tin cậy.",
+  "Since": "Since",
+  "EstablishedYear": "2024",
+  "OurStory": "Câu Chuyện Của Chúng Tôi",
+  "BrandName": "Blossom",
+  "WelcomeMessage": "Chào mừng bạn đến với thế giới hoa của chúng tôi, nơi vẻ đẹp nở rộ và những câu chuyện được kể. Bộ sưu tập hoa tinh tế của chúng tôi gợi lên cảm xúc và tạo nên những kỷ niệm đẹp. Từ những bông hồng lãng mạn đến những đóa hoa ly thanh thoát, mỗi sản phẩm đều mang đến một thông điệp đặc biệt.",
+  "LearnMore": "Tìm Hiểu Thêm",
+  "ShopAltText": "Cửa hàng Blossom",
+  "FreshFlowerPromotion": "Khuyến Mãi Hoa Tươi",
+  "SpringDiscount": "Giảm Giá Mùa Xuân",
+  "Save30PercentNow": "Tiết Kiệm 30% Ngay Hôm Nay!",
+  "BuyNow": "Mua Ngay"
 }

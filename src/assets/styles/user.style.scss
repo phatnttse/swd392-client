@@ -151,3 +151,42 @@ input[type="number"] {
   z-index: 112;
   margin-top: 50px;
 }
+.bg-light-warning {
+  background-color: #fff8ec !important;
+}
+.text-warning {
+  color: #fec90f !important;
+}
+.bg-light-accent {
+  background-color: #e5fafb !important;
+}
+.text-accent {
+  color: #03c9d7 !important;
+}
+.bg-light-error {
+  background-color: #f9e7eb !important;
+}
+.text-error {
+  color: #fc4b6c !important;
+}
+.bg-light-success {
+  background-color: #ebfaf2 !important;
+}
+.text-success {
+  color: #00c292 !important;
+}
+.badge-warning {
+  background-color: #f0ad4e;
+}
+.badge-info {
+  background-color: #5bc0de;
+}
+.badge-success {
+  background-color: #5cb85c;
+}
+.badge-danger {
+  background-color: #d9534f;
+}
+.badge-accent {
+  background-color: #fb9678;
+}

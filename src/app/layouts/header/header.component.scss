@@ -35,3 +35,7 @@ header {
 .header-menu-item {
   cursor: pointer;
 }
+.mat-menu-panel {
+  min-width: 400px !important;
+  max-width: 400px !important;
+}

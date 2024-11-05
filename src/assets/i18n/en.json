@@ -144,11 +144,11 @@
     "Profile": "My Profile",
     "SellerProfile": "Seller Profile"
   },
-  "Category":{
+  "Category": {
     "Image": "Image",
     "Name": "Name"
   },
-  "User":{
+  "User": {
     "Role": "Role"
   },
   "AddToCart": "Add to Cart",
@@ -246,5 +246,27 @@
   "Statistical": "Statistical",
   "ExpireDate": "Expire Date",
   "ExpireDateRequired": "Please select an expiration date",
-  "ShippingFee": "Shipping Fee"
+  "ShippingFee": "Shipping Fee",
+  "FreshFlowerBasket": "Fresh Flower ",
+  "SpecialBouquet": "Special Bouquet",
+  "FlowersForAllOccasions": "All Occasions",
+  "SeasonalFlowers": "Seasonal Flowers",
+  "ShopNow": "Shop Now",
+  "FreshFlowerTitle": "Fresh Flowers",
+  "FreshFlowerDescription": "We provide fresh flowers of the best quality.",
+  "BeautifulFlowersTitle": "Beautiful Flowers",
+  "BeautifulFlowersDescription": "Bringing beauty to your living space.",
+  "FastDeliveryTitle": "Fast Flower Delivery",
+  "FastDeliveryDescription": "Confident with fast, timely, and reliable delivery service.",
+  "Since": "Since",
+  "EstablishedYear": "2024",
+  "OurStory": "Our Story",
+  "BrandName": "Blossom",
+  "WelcomeMessage": "Welcome to our world of flowers, where beauty blooms and stories are told. Our exquisite flower collection evokes emotions and creates beautiful memories. From romantic roses to elegant lilies, each product carries a special message.",
+  "LearnMore": "Learn More",
+  "ShopAltText": "Blossom App",
+  "FreshFlowerPromotion": "Fresh Flower Promotion",
+  "SpringDiscount": "Spring Discount",
+  "Save30PercentNow": "Save 30% Today!",
+  "BuyNow": "Buy Now"
 }

@@ -6,6 +6,7 @@ import { AppConfigurationService } from './configuration.service';
 import { catchError, Observable } from 'rxjs';
 import {
   AddBalanceResponse,
+  SellerProfileResponse,
   UserAccount,
   UserAccountPaginatedResponse,
   UserAccountResponse,
@@ -136,12 +137,11 @@ export class AccountService extends EndpointBase {
       )
       .pipe(
         catchError((error) => {
-          debugger;
           return this.handleError(error, () => this.confirmChangeEmail(otp));
         })
       );
   }
-  
+
   getUsers(
     searchString: string,
     order: string,
@@ -149,7 +149,7 @@ export class AccountService extends EndpointBase {
     pageNumber: number,
     pageSize: number,
     roleName: Role[]
-  ): Observable < UserAccountPaginatedResponse > {
+  ): Observable<UserAccountPaginatedResponse> {
     const params = new HttpParams()
       .set('searchString', searchString)
       .set('order', order)
@@ -159,10 +159,13 @@ export class AccountService extends EndpointBase {
       .set('roleName', roleName.join(',') ?? []);
 
     return this.http
-      .get < UserAccountPaginatedResponse > (`${this.API_URL}/account/profile/all`, {
-        params:params,
-        headers:this.requestHeaders.headers 
-      })
+      .get<UserAccountPaginatedResponse>(
+        `${this.API_URL}/account/profile/all`,
+        {
+          params: params,
+          headers: this.requestHeaders.headers,
+        }
+      )
       .pipe(
         catchError((error) => {
           return this.handleError(error, () =>
@@ -175,6 +178,19 @@ export class AccountService extends EndpointBase {
               roleName
             )
           );
+        })
+      );
+  }
+
+  getSellerProfile(id: number): Observable<SellerProfileResponse> {
+    return this.http
+      .get<SellerProfileResponse>(
+        `${this.API_URL}/account/profile/${id}`,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getSellerProfile(id));
         })
       );
   }

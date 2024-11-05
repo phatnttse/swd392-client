@@ -191,7 +191,7 @@ export class ProductDetailsComponent implements OnInit {
   btnVisitShop() {
     const name = Utilities.formatStringToSlug(this.flower?.user.name || '');
     this.router.navigate(['/seller-profile', `${name}`], {
-      queryParams: { shop: this.flower?.user.id },
+      queryParams: { sellerId: this.flower?.user.id },
     });
   }
 

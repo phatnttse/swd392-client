@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
@@ -39,6 +45,9 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild('notificationMenu', { static: false })
+  notificationMenu!: ElementRef;
+
   account?: UserAccount | null; // Thông tin người dùng
   listLanguage: any = null; // Danh sách ngôn ngữ lấy từ config
   defaultLang: any = null; // Ngôn ngữ được chọn
@@ -51,7 +60,9 @@ export class HeaderComponent implements OnInit {
   notifications: Notification[] = []; // Danh sách thông báo
   notificationSubscription!: Subscription;
   newNotificationNumber: number = 0; // Số thông báo mới
-  notificationType = NotificationType;
+  notificationType = NotificationType; // Enum loại thông báo
+  size: number = 5; // Số lượng thông báo hiển thị
+  cursor: string = ''; // Con trỏ phân trang
 
   constructor(
     private authService: AuthService,
@@ -98,7 +109,13 @@ export class HeaderComponent implements OnInit {
       // Khởi tạo WebSocket và kết nối
       this.notificationService.connectWebSocket(this.account?.id!);
 
-      this.getAllNotifications(); // Lấy tất cả thông báo
+      // Lấy tất cả thông báo
+      this.notificationService.notificationDataSource.subscribe({
+        next: (notifications: Notification[]) => {
+          this.notifications = notifications;
+          this.getNewNotifications();
+        },
+      });
 
       // Đăng ký nhận thông báo mới từ WebSocket
       this.notificationSubscription = this.notificationService
@@ -143,22 +160,58 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
     this.cartService.reset();
     this.productService.reset();
+    this.notificationService.reset();
     this.router.navigate(['/signin']);
   }
 
   // Lấy số thông báo mới
   getNewNotifications() {
     this.newNotificationNumber = this.notifications.filter(
-      (notification) => !notification.isRead
+      (notification) => !notification.isRead && !notification.isDeleted
     ).length;
   }
 
-  // Lấy tất cả thông báo
-  getAllNotifications() {
-    this.notificationService.getAllNotifications(this.account?.id!).subscribe({
-      next: (response: any) => {
-        this.notifications = response;
-        this.getNewNotifications();
+  onScroll(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // Kiểm tra xem người dùng đã cuộn đến đáy chưa
+    if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+      console.log('Đã cuộn đến đáy!');
+      this.loadMoreNotifications(); // Gọi hàm để tải thêm thông báo
+    }
+  }
+
+  loadMoreNotifications() {
+    this.cursor = this.notifications[this.notifications.length - 1]?.createdAt; // Lấy giá trị createdAt của thông báo cuối cùng
+    // Lấy tất cả thông báo
+    this.notificationService
+      .getAllNotifications(this.account?.id!, this.size, this.cursor)
+      .subscribe({
+        next: (response: Notification[]) => {
+          // Nếu không có thông báo mới, không cập nhật cursor
+          if (response.length) {
+            const olderNotifications = response.filter(
+              (notification) => !notification.isRead && !notification.isDeleted
+            );
+            this.notifications.push(...olderNotifications);
+            this.cursor =
+              this.notifications[this.notifications.length - 1]?.createdAt ||
+              ''; // Cập nhật cursor
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error(error);
+        },
+      });
+  }
+
+  btnMarkAllAsRead() {
+    this.notificationService.markAsReadAll(this.account?.id!).subscribe({
+      next: () => {
+        this.notifications.forEach(
+          (notification) => (notification.isRead = true)
+        );
+        this.newNotificationNumber = 0;
       },
       error: (error: HttpErrorResponse) => {
         console.error(error);

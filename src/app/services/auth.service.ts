@@ -117,8 +117,6 @@ export class AuthService {
   }
 
   reLogin() {
-    debugger;
-
     if (this.reLoginDelegate) {
       this.reLoginDelegate();
     } else {

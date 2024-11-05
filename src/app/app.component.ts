@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './layouts/header/header.component';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { AuthService } from './services/auth.service';
@@ -13,6 +13,8 @@ import { ConvertedCategory, FlowerCategory } from './models/category.model';
 import { FlowerPaginated } from './models/flower.model';
 import { ProductService } from './services/product.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NotificationService } from './services/notification.service';
+import { Notification } from './models/notification.model';
 
 @Component({
   selector: 'app-root',
@@ -27,15 +29,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  title = 'swd392-client';
+  title = 'Blossom App';
   isLoading: boolean = false; // Kiểm tra trạng thái loading
-  searchString: string = '';
-  order: string = 'desc';
-  sortBy: string = 'createdAt';
-  totalPages: number = 0;
-  pageNumber: number = 0;
-  pageSize: number = 16;
-  categoryIds: number[] = [];
+  searchString: string = ''; // Chuỗi tìm kiếm
+  order: string = 'desc'; // Sắp xếp giảm dần
+  sortBy: string = 'createdAt'; // Sắp xếp theo ngày tạo
+  totalPages: number = 0; // Tổng số trang
+  pageNumber: number = 0; // Trang hiện tại
+  pageSize: number = 16; // Số lượng sản phẩm mỗi trang
+  categoryIds: number[] = []; // Danh sách ID danh mục
+  size: number = 5; // Số lượng thông báo mỗi lần tải
+  cursor: string = ''; // Con trỏ phân trang
 
   constructor(
     private authService: AuthService,
@@ -43,13 +47,18 @@ export class AppComponent implements OnInit {
     private statusService: StatusService,
     private cartService: CartService,
     private categoryService: CategoryService,
-    private productService: ProductService
+    private productService: ProductService,
+    private notificationService: NotificationService
   ) {}
   ngOnInit(): void {
     if (this.authService.isLoggedIn) {
       this.authService.userDataSource.next(this.authService.currentUser);
       if (this.cartService.cartDataSource.value.length === 0) {
         this.getCartByUser();
+      }
+      const currentUser = this.authService.currentUser;
+      if (currentUser) {
+        this.getAllNotifications();
       }
     }
 
@@ -63,6 +72,14 @@ export class AppComponent implements OnInit {
 
     this.statusService.statusLoadingSpinner$.subscribe((status) => {
       this.isLoading = status;
+    });
+
+    this.statusService.statusLoadingDataApp$.subscribe((status) => {
+      if (status) {
+        this.getAllNotifications();
+        this.getCartByUser();
+        this.statusService.statusLoadingDataAppSource.next(false);
+      }
     });
   }
 
@@ -101,6 +118,29 @@ export class AppComponent implements OnInit {
         console.error(error);
       },
     });
+  }
+
+  // Lấy tất cả thông báo
+  getAllNotifications() {
+    this.notificationService
+      .getAllNotifications(
+        this.authService.currentUser?.id!,
+        this.size,
+        this.cursor
+      )
+      .subscribe({
+        next: (response: Notification[]) => {
+          if (response.length) {
+            const notifications = response.filter(
+              (notification) => !notification.isRead && !notification.isDeleted
+            );
+            this.notificationService.notificationDataSource.next(notifications);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error(error);
+        },
+      });
   }
 
   // Lấy tất cả danh mục ban đầu và phân phối dữ liệu

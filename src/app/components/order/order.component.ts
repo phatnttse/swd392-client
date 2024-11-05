@@ -252,8 +252,8 @@ export class OrderComponent implements OnInit {
             this.startConfetti();
           },
           error: (error: HttpErrorResponse) => {
-            this.toastr.error(error.error.error, 'Đặt hàng thất bại');
             this.statusService.statusLoadingSpinnerSource.next(false);
+            this.toastr.error(error.error.error, 'Đặt hàng thất bại');
             this.statusOrder = 2;
           },
         });
@@ -347,12 +347,15 @@ export class OrderComponent implements OnInit {
               shippingFee: feeResponse.fee.fee,
             });
           } else {
+            this.statusService.statusLoadingSpinnerSource.next(false);
             throw new Error('Failed to calculate shipping fee');
           }
         } else {
+          this.statusService.statusLoadingSpinnerSource.next(false);
           throw new Error('Failed to parse address');
         }
       } catch (error) {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         console.error('Error calculating shipping fees:', error);
         throw error;
       }
@@ -360,7 +363,6 @@ export class OrderComponent implements OnInit {
 
     Promise.all(shippingFeePromises)
       .then(() => {
-        debugger;
         this.shippingFee = this.shippingFees.reduce(
           (acc, fee) => acc + fee.shippingFee,
           0

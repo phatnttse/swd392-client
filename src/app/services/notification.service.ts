@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Client } from '@stomp/stompjs';
 import { AppConfigurationService } from './configuration.service';
 import { Notification } from '../models/notification.model';
@@ -14,12 +14,22 @@ export class NotificationService {
   private client!: Client;
   private notificationSubject = new Subject<Notification>();
 
+  // Trạng thái của thông báo
+  public notificationDataSource = new BehaviorSubject<Notification[]>([]);
+  notification$ = this.notificationDataSource.asObservable();
+
   constructor(
     private appConfig: AppConfigurationService,
     private http: HttpClient
   ) {
     this.NOTIFICATION_URL = appConfig['NOTIFICATION_URL'];
     this.WEBSOCKET_URL = appConfig['WEBSOCKET_URL'];
+  }
+
+  reset() {
+    this.disconnectWebSocket();
+    this.notificationSubject = new Subject<Notification>();
+    this.notificationDataSource = new BehaviorSubject<Notification[]>([]);
   }
 
   // Thiết lập STOMP để kết nối và nhận thông báo
@@ -49,9 +59,25 @@ export class NotificationService {
   }
 
   // Lấy tất cả thông báo qua API cho lần tải đầu tiên
-  getAllNotifications(userId: number): Observable<Notification[]> {
+  getAllNotifications(
+    userId: number,
+    size: number,
+    cursor: string
+  ): Observable<Notification[]> {
+    const params = new HttpParams()
+      .set('size', size.toString())
+      .set('cursor', cursor);
+
     return this.http.get<Notification[]>(
-      `${this.NOTIFICATION_URL}/notifications/users/${userId}`
+      `${this.NOTIFICATION_URL}/notifications/users/${userId}`,
+      { params }
+    );
+  }
+
+  markAsReadAll(userId: number): Observable<any> {
+    return this.http.post(
+      `${this.NOTIFICATION_URL}/notifications/users/${userId}/read-all`,
+      {}
     );
   }
 

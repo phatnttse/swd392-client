@@ -79,7 +79,9 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
   notifications: Notification[] = []; // Danh sách thông báo
   notificationSubscription!: Subscription;
   newNotificationNumber: number = 0; // Số thông báo mới
-  notificationType = NotificationType;
+  notificationType = NotificationType; // Enum loại thông báo
+  size: number = 5; // Số lượng thông báo hiển thị
+  cursor: string = ''; // Con trỏ phân trang
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -102,7 +104,13 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
       // Khởi tạo WebSocket và kết nối
       this.notificationService.connectWebSocket(this.userAccount?.id!);
 
-      this.getAllNotifications(); // Lấy tất cả thông báo
+      // Lấy tất cả thông báo
+      this.notificationService.notificationDataSource.subscribe({
+        next: (notifications: Notification[]) => {
+          this.notifications = notifications;
+          this.getNewNotifications();
+        },
+      });
 
       // Đăng ký nhận thông báo mới từ WebSocket
       this.notificationSubscription = this.notificationService
@@ -130,10 +138,9 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
 
   btnLogOut() {
     this.authService.logout();
-    this.authService.userDataSource.next(null);
-    this.cartService.cartDataSource.next([]);
-    this.cartService.totalAmountSubject.next(0);
-    this.cartService.totalQuantitySubject.next(0);
+    this.cartService.reset();
+    this.productService.reset();
+    this.notificationService.reset();
     this.router.navigate(['/signin']);
   }
 
@@ -170,14 +177,40 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
     this.statusService.statusLanguageSource.next(lang);
   }
 
-  // Lấy tất cả thông báo
-  getAllNotifications() {
+  // Lấy số thông báo mới
+  getNewNotifications() {
+    this.newNotificationNumber = this.notifications.filter(
+      (notification) => !notification.isRead && !notification.isDeleted
+    ).length;
+  }
+
+  onScroll(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // Kiểm tra xem người dùng đã cuộn đến đáy chưa
+    if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+      console.log('Đã cuộn đến đáy!');
+      this.loadMoreNotifications(); // Gọi hàm để tải thêm thông báo
+    }
+  }
+
+  loadMoreNotifications() {
+    this.cursor = this.notifications[this.notifications.length - 1]?.createdAt; // Lấy giá trị createdAt của thông báo cuối cùng
+    // Lấy tất cả thông báo
     this.notificationService
-      .getAllNotifications(this.userAccount?.id!)
+      .getAllNotifications(this.userAccount?.id!, this.size, this.cursor)
       .subscribe({
-        next: (response: any) => {
-          this.notifications = response;
-          this.getNewNotifications();
+        next: (response: Notification[]) => {
+          // Nếu không có thông báo mới, không cập nhật cursor
+          if (response.length) {
+            const olderNotifications = response.filter(
+              (notification) => !notification.isRead && !notification.isDeleted
+            );
+            this.notifications.push(...olderNotifications);
+            this.cursor =
+              this.notifications[this.notifications.length - 1]?.createdAt ||
+              ''; // Cập nhật cursor
+          }
         },
         error: (error: HttpErrorResponse) => {
           console.error(error);
@@ -185,11 +218,18 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
       });
   }
 
-  // Lấy số thông báo mới
-  getNewNotifications() {
-    this.newNotificationNumber = this.notifications.filter(
-      (notification) => !notification.isRead
-    ).length;
+  btnMarkAllAsRead() {
+    this.notificationService.markAsReadAll(this.userAccount?.id!).subscribe({
+      next: () => {
+        this.notifications.forEach(
+          (notification) => (notification.isRead = true)
+        );
+        this.newNotificationNumber = 0;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+      },
+    });
   }
 
   routerLinkActive = 'activelink';

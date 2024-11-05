@@ -36,6 +36,7 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 import { Subscription } from 'rxjs';
 import { StatusService } from '../../services/status.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-profile',
@@ -91,7 +92,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private router: Router,
     private cartService: CartService,
     private productService: ProductService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private notificationService: NotificationService
   ) {
     this.profileForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -176,7 +178,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   // Đổi mật khẩu
   btnChangePassword() {
-    debugger;
     if (this.changePasswordForm.invalid) {
       this.changePasswordForm.markAllAsTouched();
       return;
@@ -337,6 +338,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.authService.logout();
     this.cartService.reset();
     this.productService.reset();
+    this.notificationService.reset();
     this.router.navigate(['/signin']);
   }
 }

@@ -83,7 +83,7 @@ export class SignInComponent {
     this.authService.loginWithPassword(email, password).subscribe({
       next: (response) => {
         setTimeout(() => {
-          this.getCartByUser();
+          this.statusService.statusLoadingDataAppSource.next(true);
           this.authService.redirectLogin();
           this.toastr.success(response.message, 'Success', {
             progressBar: true,
