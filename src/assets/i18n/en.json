@@ -243,6 +243,8 @@
   "SelectStatus": "Select status",
   "Type": "Type",
   "SelectType": "Select type",
-  "Statistical": "Statistical"
-
+  "Statistical": "Statistical",
+  "ExpireDate": "Expire Date",
+  "ExpireDateRequired": "Please select an expiration date",
+  "ShippingFee": "Shipping Fee"
 }

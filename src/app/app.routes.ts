@@ -146,4 +146,21 @@ export const routes: Routes = [
     },
     data: { breadcrumb: 'BreadCrumb.SellerProfile' },
   },
+  {
+    path: 'verify-account',
+    loadComponent() {
+      return import(
+        './components/sign-up/verify-email/verify-email.component'
+      ).then((m) => m.VerifyEmailComponent);
+    },
+  },
+  {
+    path: 'wallet/add-balance',
+    loadComponent() {
+      return import(
+        './components/wallet/add-balance/add-balance.component'
+      ).then((m) => m.AddBalanceComponent);
+    },
+    canActivate: [UserGuard],
+  },
 ];

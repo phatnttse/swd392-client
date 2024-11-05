@@ -192,6 +192,10 @@ export class AuthService {
     return response;
   }
 
+  verifyEmail(token: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/auth/verify/${token}`, {});
+  }
+
   private reevaluateLoginStatus(currentUser?: UserAccount | null) {
     const user =
       currentUser ??

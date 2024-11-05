@@ -1,13 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterModule,
-} from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -19,7 +13,7 @@ import { filter } from 'rxjs';
 export class BreadcrumbComponent implements OnInit {
   breadcrumbs: Array<{ label: string; url: string }> = [];
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.createBreadcrumbs(this.activatedRoute.root);
@@ -52,8 +46,6 @@ export class BreadcrumbComponent implements OnInit {
       // Gọi đệ quy cho các route con mà không thoát khỏi vòng lặp
       this.createBreadcrumbs(child, url, breadcrumbs);
     }
-
-    console.log(this.breadcrumbs);
     return breadcrumbs;
   }
 }

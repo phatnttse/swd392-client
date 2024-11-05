@@ -12,11 +12,17 @@ import { CategoryService } from './services/category.service';
 import { ConvertedCategory, FlowerCategory } from './models/category.model';
 import { FlowerPaginated } from './models/flower.model';
 import { ProductService } from './services/product.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

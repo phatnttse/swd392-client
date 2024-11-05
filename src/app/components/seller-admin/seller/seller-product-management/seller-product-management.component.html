@@ -463,6 +463,31 @@
               }
             </mat-form-field>
           </td>
+          <td>
+            <h6 class="mb-3">{{ "ExpireDate" | translate }}</h6>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ "ExpireDate" | translate }}</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="expireDate"
+                [class.is-invalid]="
+                  productForm.get('expireDate')?.invalid &&
+                  productForm.get('expireDate')?.touched
+                "
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (productForm.get('expireDate')?.hasError('required')) {
+              <mat-error class="fs-12">{{
+                "ExpireDateRequired" | translate
+              }}</mat-error>
+              }
+            </mat-form-field>
+          </td>
         </tr>
       </table>
 

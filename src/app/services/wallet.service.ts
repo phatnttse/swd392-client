@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { catchError, Observable } from 'rxjs';
 import { WalletLogResponse } from '../models/wallet.model';
+import { PaymentDetails } from '../models/payment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +64,20 @@ export class WalletService extends EndpointBase {
               status,
               type
             )
+          );
+        })
+      );
+  }
+
+  getPaymentDetails(orderCode: string): Observable<PaymentDetails> {
+    return this.http
+      .get<PaymentDetails>(`${this.API_URL}/payments/${orderCode}`, {
+        headers: this.requestHeaders.headers,
+      })
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getPaymentDetails(orderCode)
           );
         })
       );

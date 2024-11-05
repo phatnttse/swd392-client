@@ -23,7 +23,10 @@
             <span class="fw-bold text-black">Thông tin sản phẩm</span>
             <figure class="itemside mb-3">
               <div class="aside">
-                <img class="img-sm border" />
+                <img
+                  [src]="order.flowerListing.images[0].url"
+                  class="img-sm border"
+                />
               </div>
               <figcaption class="info align-self-center">
                 <p class="title">
@@ -110,6 +113,31 @@
       }
     </div>
   </article>
+  }@empty {
+  <section>
+    <div class="empty-order" style="padding: 100px">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        class="empty-order-icon"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M4 4h16v2H4z" />
+        <path d="M4 6l2 10h12l2-10" />
+        <circle cx="9" cy="20" r="1" />
+        <circle cx="15" cy="20" r="1" />
+        <path d="M4 8h16v2H4z" />
+        <path d="M8 10c1.5 2 4 2 5 0" />
+        <path d="M12 10c1.5 2 4 2 5 0" />
+      </svg>
+
+      <p class="empty-order-message">Không có đơn hàng nào ở trạng thái này.</p>
+    </div>
+  </section>
   } @if (totalPages > 1) {
   <div class="section pagenav clearfix d-flex justify-content-center mt-5">
     <nav class="collection-paginate clearfix nav_pagi w_100 relative">

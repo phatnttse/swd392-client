@@ -51,14 +51,17 @@
 
       <div class="col-12 col-lg-9 order-1 order-lg-2">
         <div class="d-flex align-items-center justify-content-between mb-5">
-          <p class="text-dark" style="margin-top: 20px">
+          <p
+            class="text-dark fw-bold"
+            style="margin-top: 20px; font-size: 18px"
+          >
             {{ titleSearch | translate }}
             @if (searchString) {
             <strong class="primary-color">'{{ searchString }}'</strong>
             }
           </p>
-          <div class="align-items-center d-flex">
-            <p style="font-size: 14px; margin-left: 6px; margin-top: 20px">
+          <div class="align-items-center d-flex text-black">
+            <p style="font-size: 16px; margin-left: 6px; margin-top: 20px">
               {{ "Products.Arrange" | translate }}:
               {{ titleTypeArrange | translate }}
             </p>

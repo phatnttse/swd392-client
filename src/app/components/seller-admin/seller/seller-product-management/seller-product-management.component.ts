@@ -41,6 +41,7 @@ import {
   SuggestAddress,
   SuggestAddressResponse,
 } from '../../../../models/integration.model';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-seller-product-management',
@@ -62,6 +63,7 @@ import {
     TranslateModule,
     MatSortModule,
     MatAutocompleteModule,
+    MatDatepickerModule,
   ],
   templateUrl: './seller-product-management.component.html',
   styleUrl: './seller-product-management.component.scss',
@@ -124,6 +126,7 @@ export class SellerProductManagementComponent
       description: ['', [Validators.required, Validators.minLength(100)]],
       stockQuantity: ['', [Validators.required, Validators.min(1)]],
       address: ['', [Validators.required, Validators.minLength(10)]],
+      expireDate: ['', [Validators.required]],
     });
   }
 
@@ -174,6 +177,9 @@ export class SellerProductManagementComponent
   btnChangeStatusPage(status: number) {
     this.statusPage = status;
     this.productForm.reset();
+    this.selectedProduct = null;
+    this.selectedCategories = [];
+    this.uploadedImages = [];
   }
 
   // Tạo sản phẩm mới hoặc cập nhật --------------------------- statusPage = 1
@@ -232,6 +238,11 @@ export class SellerProductManagementComponent
     this.fileImages.forEach((fileImage) => {
       formData.append('images', fileImage);
     });
+
+    formData.append(
+      'expireDate',
+      this.productForm.get('expireDate')!.value.toISOString().split('.')[0]
+    );
 
     return formData;
   }

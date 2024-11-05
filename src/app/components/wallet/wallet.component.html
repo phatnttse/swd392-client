@@ -10,7 +10,7 @@
             {{ "Wallet.MyBalance" | translate }}
           </h5>
           <h2 class="text-white text-center">
-            {{ this.authService.currentUser?.balance | number : "1.0" }}₫
+            {{ userAccount?.balance | number : "1.0" }}₫
           </h2>
         </div>
         <div class="col-lg-4 col-md-6 text-center">
@@ -326,6 +326,7 @@
     </div>
   </div>
 </div>
+
 <app-footer></app-footer>
 }@loading {
 <div class="preloader-wrapper">

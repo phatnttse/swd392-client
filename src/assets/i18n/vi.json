@@ -237,5 +237,8 @@
   "SelectStatus": "Chọn trạng thái",
   "Type": "Loại",
   "SelectType": "Chọn loại",
-  "Statistical": "Thống kê"
+  "Statistical": "Thống kê",
+  "ExpireDate": "Ngày hết hạn",
+  "ExpireDateRequired": "Vui lòng chọn ngày hết hạn",
+  "ShippingFee": "Phí vận chuyển"
 }
