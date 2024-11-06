@@ -31,6 +31,7 @@ import { ProductService } from '../../../../services/product.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-product-management',
@@ -93,6 +94,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   isCategoryError: boolean = false; // Có lỗi liên quan đến danh mục không
   isPictureError: boolean = false; // Có lỗi liên quan đến hình ảnh không
   reason = '';
+  flowerSubscription: Subscription | null = null; // Biến lưu subscription
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -150,6 +152,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       )
       .subscribe({
         next: (response: FlowerPaginated) => {
+          console.log('This is response!')
           console.log(response);
           this.listFlower = response.content;
           console.log(this.listFlower);
@@ -160,7 +163,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
           this.totalPages = response.totalPages;
           this.numberOfElements = response.numberOfElements;
           this.totalElements = response.totalElements;
-          this.visiblePages = this.generateVisiblePageArray(
+          this.visiblePages = Utilities.generateVisiblePageArray(
             this.currentPage,
             this.totalPages
           );
@@ -179,20 +182,13 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     }
   }
 
-  generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
-    const maxVisiblePages = 5;
-    const halfVisiblePages = Math.floor(maxVisiblePages / 2);
-
-    let startPage = Math.max(currentPage - halfVisiblePages + 1, 1);
-    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(endPage - maxVisiblePages + 1, 1);
+  //Chuyển hướng sang trang từ chối
+  btnChangeStatusPageRejected(status: number, flower?: Flower) {
+    this.currentPage = status;
+    if (flower) {
+      this.flower = flower;
     }
-
-    return new Array(endPage - startPage + 1)
-      .fill(0)
-      .map((_, index) => startPage + index);
+    this.toggleRejectForm();
   }
 
   btnBack() {
