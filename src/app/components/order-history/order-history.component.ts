@@ -7,6 +7,7 @@ import {
   OrderByAccountResponse,
   OrderCountStatus,
   OrderCountStatusResponse,
+  UpdateOrderStatusResponse,
 } from '../../models/order.model';
 import { CommonModule } from '@angular/common';
 import { OrderDetailStatus } from '../../models/enums';
@@ -261,5 +262,31 @@ export class OrderHistoryComponent implements OnInit {
       this.currentPage,
       this.totalPages
     );
+  }
+
+  btnConfirmReceived(orderId: number) {
+    this.statusService.statusLoadingSpinnerSource.next(true);
+    this.orderService
+      .updateOrderStatus(orderId, '', OrderDetailStatus.DELIVERED)
+      .subscribe({
+        next: (response: UpdateOrderStatusResponse) => {
+          if (response.success) {
+            this.toastr.success('Xác nhận nhận hàng thành công');
+            this.getOrderByBuyer(
+              this.order,
+              this.sortBy,
+              this.pageNumber,
+              this.pageSize,
+              this.selectedStatus
+            );
+            this.getOrderStatusCount();
+            this.statusService.statusLoadingSpinnerSource.next(false);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.statusService.statusLoadingSpinnerSource.next(false);
+          this.toastr.error(error.error.error, 'Xác nhận nhận hàng thất bại');
+        },
+      });
   }
 }

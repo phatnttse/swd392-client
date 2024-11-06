@@ -145,7 +145,6 @@ export class ProductDetailsComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
         this.toastr.error(error.error.message);
       },
     });
@@ -161,8 +160,7 @@ export class ProductDetailsComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }

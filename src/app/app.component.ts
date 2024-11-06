@@ -56,10 +56,7 @@ export class AppComponent implements OnInit {
       if (this.cartService.cartDataSource.value.length === 0) {
         this.getCartByUser();
       }
-      const currentUser = this.authService.currentUser;
-      if (currentUser) {
-        this.getAllNotifications();
-      }
+      this.getAllNotifications();
     }
 
     if (this.categoryService.categoryDataSource.value.length === 0) {
@@ -72,14 +69,6 @@ export class AppComponent implements OnInit {
 
     this.statusService.statusLoadingSpinner$.subscribe((status) => {
       this.isLoading = status;
-    });
-
-    this.statusService.statusLoadingDataApp$.subscribe((status) => {
-      if (status) {
-        this.getAllNotifications();
-        this.getCartByUser();
-        this.statusService.statusLoadingDataAppSource.next(false);
-      }
     });
   }
 
@@ -120,29 +109,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  // Lấy tất cả thông báo
-  getAllNotifications() {
-    this.notificationService
-      .getAllNotifications(
-        this.authService.currentUser?.id!,
-        this.size,
-        this.cursor
-      )
-      .subscribe({
-        next: (response: Notification[]) => {
-          if (response.length) {
-            const notifications = response.filter(
-              (notification) => !notification.isRead && !notification.isDeleted
-            );
-            this.notificationService.notificationDataSource.next(notifications);
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error(error);
-        },
-      });
-  }
-
   // Lấy tất cả danh mục ban đầu và phân phối dữ liệu
   getAllCategories() {
     this.categoryService.getAllCategories().subscribe({
@@ -159,6 +125,25 @@ export class AppComponent implements OnInit {
         console.error(error);
       },
     });
+  }
+
+  // Lấy tất cả thông báo
+  getAllNotifications() {
+    this.notificationService
+      .getAllNotifications(this.authService.currentUser?.id!, 5, '')
+      .subscribe({
+        next: (response: Notification[]) => {
+          if (response.length) {
+            const notifications = response.filter(
+              (notification) => !notification.isRead && !notification.isDeleted
+            );
+            this.notificationService.notificationDataSource.next(notifications);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error(error);
+        },
+      });
   }
 
   // Hàm chuyển đổi danh mục

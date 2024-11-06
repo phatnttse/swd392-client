@@ -43,6 +43,8 @@ import {
 } from '../../../../models/integration.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { StatusService } from '../../../../services/status.service';
+import { DeleteFlowerComponent } from '../../../dialogs/delete-flower/delete-flower.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-seller-product-management',
@@ -120,7 +122,8 @@ export class SellerProductManagementComponent
     private categoryService: CategoryService,
     private toastr: ToastrService,
     private integrationService: IntegrationService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private dialog: MatDialog
   ) {
     this.productForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -419,5 +422,20 @@ export class SellerProductManagementComponent
         },
       });
     }
+  }
+
+  btnOpenDeleteFlowerDialog(id: number, flowerName: string) {
+    const dialogRef = this.dialog.open(DeleteFlowerComponent, {
+      data: id,
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.listFlower = this.listFlower.filter((flower) => flower.id !== id);
+        this.dataSource = new MatTableDataSource(this.listFlower);
+        this.dataSource.sort = this.sort;
+        this.productService.flowerByUserDataSource.next(this.listFlower);
+        this.toastr.success(`Xóa ${flowerName} thành công`);
+      }
+    });
   }
 }

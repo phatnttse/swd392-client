@@ -112,6 +112,16 @@ export class ProductService extends EndpointBase {
       );
   }
 
+  deleteFlower(flowerId: number): Observable<any> {
+    return this.http
+      .delete<any>(`${this.API_URL}/flowers/${flowerId}`, this.requestHeaders)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.deleteFlower(flowerId));
+        })
+      );
+  }
+
   getFlowersByUserId(userId: number): Observable<Flower[]> {
     return this.http
       .get<Flower[]>(
@@ -158,7 +168,11 @@ export class ProductService extends EndpointBase {
   ): Observable<Flower> {
     return this.http
       .put<Flower>(
-        `${this.API_URL}/admin/flower-listings/reject/${id}?reason=${encodeURIComponent(reason)}`,
+        `${
+          this.API_URL
+        }/admin/flower-listings/reject/${id}?reason=${encodeURIComponent(
+          reason
+        )}`,
         { reason },
         this.requestHeaders
       )

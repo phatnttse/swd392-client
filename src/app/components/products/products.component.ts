@@ -30,6 +30,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 import { ConvertedCategory } from '../../models/category.model';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { FlowerListingStatus } from '../../models/enums';
 
 @Component({
   selector: 'app-products',
@@ -124,7 +125,9 @@ export class ProductsComponent implements OnInit {
       next: (flowerData: FlowerPaginated | null) => {
         // Chỉ thực thi logic này nếu không có dữ liệu search
         if (flowerData != null && !this.searchString) {
-          this.listFlower = flowerData.content;
+          this.listFlower = flowerData.content.filter(
+            (flower) => flower.status === FlowerListingStatus.APPROVED
+          );
           this.pageNumber = flowerData.pageNumber;
           this.pageSize = flowerData.pageSize;
           this.totalPages = flowerData.totalPages;
@@ -167,7 +170,9 @@ export class ProductsComponent implements OnInit {
       )
       .subscribe({
         next: (response: FlowerPaginated) => {
-          this.listFlower = response.content;
+          this.listFlower = response.content.filter(
+            (flower) => flower.status === FlowerListingStatus.APPROVED
+          );
           this.pageNumber = response.pageNumber;
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
@@ -189,7 +194,9 @@ export class ProductsComponent implements OnInit {
       .getFlowers('', 'desc', 'createdAt', 0, 16, [])
       .subscribe({
         next: (response: FlowerPaginated) => {
-          this.listFlower = response.content;
+          this.listFlower = response.content.filter(
+            (flower) => flower.status === FlowerListingStatus.APPROVED
+          );
           this.pageNumber = response.pageNumber;
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;

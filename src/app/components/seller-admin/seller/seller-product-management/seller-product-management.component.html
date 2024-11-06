@@ -138,7 +138,9 @@
               class="badge fw-bold mb-0"
               [ngClass]="{
                 'badge-success': product.status === 'APPROVED',
-                'badge-warning': product.status === 'PENDING'
+                'badge-warning': product.status === 'PENDING',
+                'badge-danger': product.status === 'REJECTED',
+                'badge-info': product.status === 'EXPIRED'
               }"
             >
               {{ product.status }}
@@ -160,10 +162,10 @@
               <mat-icon aria-label="Edit">edit</mat-icon>
             </button>
             <button
-              data-bs-toggle="modal"
-              data-bs-target="#deleteProductModal"
+              type="button"
               mat-icon-button
               color="warn"
+              (click)="btnOpenDeleteFlowerDialog(product.id, product.name)"
             >
               <mat-icon aria-label="Delete">delete</mat-icon>
             </button>

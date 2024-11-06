@@ -1,17 +1,8 @@
 import { Utilities } from './../../../../services/utilities';
-import {
-  routes
-} from './../../../../app.routes';
+import { routes } from './../../../../app.routes';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-  MatCardModule
-} from '@angular/material/card';
-import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -48,7 +39,7 @@ import { Subscription } from 'rxjs';
     CommonModule,
     RouterModule,
     TranslateModule,
-    MatLabel
+    MatLabel,
   ],
   templateUrl: './admin-product-management.component.html',
   styleUrl: './admin-product-management.component.scss',
@@ -152,7 +143,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       )
       .subscribe({
         next: (response: FlowerPaginated) => {
-          console.log('This is response!')
+          console.log('This is response!');
           console.log(response);
           this.listFlower = response.content;
           console.log(this.listFlower);
@@ -212,29 +203,23 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   }
 
   btnApproveFlower(id: number | undefined) {
-    if (this.flower !== undefined) {
-      this.productService.approveFlowerListing(id).subscribe({
-        next: (response: Flower) => {
-          this.flower = response;
-          this.listFlower = this.listFlower?.filter(
-            (flower) => flower.id !== id
-          );
-          this.dataSource = new MatTableDataSource(this.listFlower);
-          this.dataSource.sort = this.sort;
-          if (this.listFlower !== undefined) {
-            this.productService.flowerByUserDataSource.next(this.listFlower);
-          }
-          this.toastr.success(
-            `Duyệt thành công đơn hàng ${response.name} của người dùng ${response.user.name}`
-          );
-        },
-        error: (error) => {
-          this.toastr.error(`Duyệt hoa không thành công`, `ERROR`);
-        },
-      });
-    } else {
-      this.toastr.warning('Hoa không xác định hoặc đã được duyệt rồi');
-    }
+    this.productService.approveFlowerListing(id).subscribe({
+      next: (response: Flower) => {
+        this.flower = response;
+        this.listFlower = this.listFlower?.filter((flower) => flower.id !== id);
+        this.dataSource = new MatTableDataSource(this.listFlower);
+        this.dataSource.sort = this.sort;
+        if (this.listFlower !== undefined) {
+          this.productService.flowerByUserDataSource.next(this.listFlower);
+        }
+        this.toastr.success(
+          `Duyệt thành công đơn hàng ${response.name} của người dùng ${response.user.name}`
+        );
+      },
+      error: (error) => {
+        this.toastr.error(`Duyệt hoa không thành công`, `ERROR`);
+      },
+    });
   }
 
   btnDeniedFlower(id: number | undefined, reason: string) {

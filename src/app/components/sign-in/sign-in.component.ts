@@ -17,8 +17,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { GetCartByUserResponse } from '../../models/cart.model';
+import { Notification } from '../../models/notification.model';
 import { CartService } from '../../services/cart.service';
 import { StatusService } from '../../services/status.service';
+import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -46,7 +48,8 @@ export class SignInComponent {
     private router: Router,
     private authService: AuthService,
     private cartService: CartService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private notificationService: NotificationService
   ) {
     this.formLogin = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -83,7 +86,8 @@ export class SignInComponent {
     this.authService.loginWithPassword(email, password).subscribe({
       next: (response) => {
         setTimeout(() => {
-          this.statusService.statusLoadingDataAppSource.next(true);
+          this.getCartByUser();
+          this.getAllNotifications();
           this.authService.redirectLogin();
           this.toastr.success(response.message, 'Success', {
             progressBar: true,
@@ -116,6 +120,25 @@ export class SignInComponent {
         console.error(error);
       },
     });
+  }
+
+  // Lấy tất cả thông báo
+  getAllNotifications() {
+    this.notificationService
+      .getAllNotifications(this.authService.currentUser?.id!, 5, '')
+      .subscribe({
+        next: (response: Notification[]) => {
+          if (response.length) {
+            const notifications = response.filter(
+              (notification) => !notification.isRead && !notification.isDeleted
+            );
+            this.notificationService.notificationDataSource.next(notifications);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error(error);
+        },
+      });
   }
 
   // Ẩn hiện mật khẩu

@@ -98,13 +98,14 @@
           Huỷ đơn hàng
         </button>
       </div>
-      }@else if (order.status === orderDetailStatus.DELIVERED) {
+      }@else if (order.status === orderDetailStatus.SHIPPED) {
       <div class="d-flex justify-content-center align-items-center">
         <button
           mat-raised-button
           style="background-color: var(--bs-success)"
           class="btn t-4 text-white"
           extend
+          (click)="btnConfirmReceived(order.id)"
         >
           <mat-icon>task_alt</mat-icon>
           Xác nhận đã nhận hàng

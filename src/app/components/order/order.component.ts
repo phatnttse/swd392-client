@@ -40,6 +40,8 @@ import { AccountService } from '../../services/account.service';
 import { MatCardModule } from '@angular/material/card';
 import { StatusService } from '../../services/status.service';
 import confetti from 'canvas-confetti';
+import { MatDialog } from '@angular/material/dialog';
+import { InsufficientBalanceComponent } from '../dialogs/insufficient-balance/insufficient-balance.component';
 
 @Component({
   selector: 'app-order',
@@ -106,7 +108,8 @@ export class OrderComponent implements OnInit {
     private toastr: ToastrService,
     private integrationService: IntegrationService,
     private accountService: AccountService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private dialog: MatDialog
   ) {
     this.orderForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -135,7 +138,7 @@ export class OrderComponent implements OnInit {
     this.cartService.totalAmountSubject.subscribe((amount: number) => {
       this.subtotalAmount = amount;
       this.totalAmount = amount;
-      this.checkBalance();
+      // this.checkBalance();
     });
 
     this.orderForm
@@ -181,9 +184,7 @@ export class OrderComponent implements OnInit {
     }
     if (this.selectedPaymentMethod === PaymentMethod.WALLET) {
       if (this.accountBalance! < this.totalAmount) {
-        this.toastr.warning('Số dư ví của bạn không đủ', 'Đặt hàng thất bại', {
-          progressBar: true,
-        });
+        this.dialog.open(InsufficientBalanceComponent);
         return;
       }
       return;
@@ -259,11 +260,11 @@ export class OrderComponent implements OnInit {
         });
     }
   }
-  checkBalance(): void {
-    if (this.accountBalance >= 0 && this.totalAmount) {
-      this.isBalanceInsufficient = this.accountBalance < this.totalAmount;
-    }
-  }
+  // checkBalance(): void {
+  //   if (this.accountBalance >= 0 && this.totalAmount) {
+  //     this.isBalanceInsufficient = this.accountBalance < this.totalAmount;
+  //   }
+  // }
 
   retryOrder() {
     this.statusOrder = 0;
@@ -368,7 +369,7 @@ export class OrderComponent implements OnInit {
           0
         );
         this.totalAmount += this.shippingFee;
-        this.checkBalance();
+        // this.checkBalance();
         this.statusService.statusLoadingSpinnerSource.next(false);
       })
       .catch((error) => {

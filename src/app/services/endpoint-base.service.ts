@@ -47,7 +47,7 @@ export class EndpointBase {
     continuation: () => Observable<T>
   ): Observable<T> {
     console.error('handleError', error);
-    if (error.status === 0 || error.status === 401) {
+    if (error.status === 401) {
       if (this.isRefreshingLogin) {
         return this.pauseTask(continuation);
       }
@@ -64,10 +64,7 @@ export class EndpointBase {
         catchError((refreshLoginError) => {
           this.isRefreshingLogin = false;
           this.resumeTasks(false);
-          if (
-            refreshLoginError.status === 0 ||
-            refreshLoginError.status === 401
-          ) {
+          if (refreshLoginError.status === 401) {
             this.authService.reset();
             this.authService.reLogin();
             return throwError(() => new Error('session expired'));
