@@ -66,6 +66,10 @@
     font-weight: bold;
   }
 
+  
+  .badge-manager {
+    background-color: #17a2b8; 
+  }
   .status-pending {
     color: #FFA500; 
   }
@@ -77,6 +81,11 @@
   .status-rejected {
     color: #FF0000; 
   }
+
+  .badge-rejected {
+    background-color: #FF0000; 
+  }
+  
   
   .status-expired {
     color: #808080; 

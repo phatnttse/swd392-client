@@ -158,7 +158,7 @@ export class ProductService extends EndpointBase {
   ): Observable<Flower> {
     return this.http
       .put<Flower>(
-        `${this.API_URL}/admin/flower-listings/reject/${id}`,
+        `${this.API_URL}/admin/flower-listings/reject/${id}?reason=${encodeURIComponent(reason)}`,
         { reason },
         this.requestHeaders
       )
