@@ -101,3 +101,15 @@ export enum PaymentStatus {
   CANCELLED = 'CANCELLED',
   PAID = 'PAID',
 }
+
+export enum UserStatus {
+  VERIFIED = 'VERIFIED',
+  UNVERIFIED = 'UNVERIFIED',
+  DELETED = 'DELETED',
+  BAN = 'BAN',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  BLOCKED = 'BLOCKED',
+  UNBLOCKED = 'UNBLOCKED'
+}
+

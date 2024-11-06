@@ -202,6 +202,10 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     this.isRejectFormVisible = !this.isRejectFormVisible;
   }
 
+  trackByIndex(index: number): number {
+    return index; // Trả về chỉ số của phần tử
+  }
+
   btnApproveFlower(id: number | undefined) {
     this.productService.approveFlowerListing(id).subscribe({
       next: (response: Flower) => {

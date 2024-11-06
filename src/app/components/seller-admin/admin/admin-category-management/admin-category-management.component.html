@@ -86,26 +86,47 @@
     </div>
     <form [formGroup]="categoryForm">
       <h6 class="mb-3 mt-5">Ảnh danh mục</h6>
-      @if (selectedCategory?.imageUrl) {
+      @if (!uploadedImage && selectedCategory?.imageUrl) {
         <a [href]="selectedCategory?.imageUrl" target="_blank">
-          <img class="rounded" width="50px" height="50px" [src]="selectedCategory?.imageUrl" alt="Category Image" />
+          <img
+              width="100px"
+              height="100px"
+              style="object-fit: cover"
+              [src]="selectedCategory?.imageUrl"
+              alt="Category Image"
+            />
         </a>
       }
+      @if (uploadedImage) {
+        <div class="uploaded-images">
+          <div class="uploaded-image ms-2">
+            <img
+              width="100px"
+              height="100px"
+              style="object-fit: cover"
+              [src]="uploadedImage"
+              alt="Product Image"
+            />
+          </div>
+        </div>
+        }
       <div class="upload-section">
-        <div class="file-square">
+        <div
+          class="file-square"
+          [ngClass]="{ 'file-square-error': isPictureError }"
+        >
+          <input
+            type="file"
+            id="cover-image"
+            (change)="onImageUpload($event)"
+            style="display: none"
+            accept="image/*"
+          />
           <label for="cover-image">
-            <button mat-button type="button">
-              <i class="material-icons">add_photo_alternate</i>
-            </button>
-            <span class="fs-12 mt-2">Thêm hình ảnh</span>
+            <i class="material-icons">add_photo_alternate</i>
+            <span class="fs-12 mt-2 upload-title">Thêm hình ảnh</span>
           </label>
         </div>
-        <div class="uploaded-images">
-
-        </div>
-      </div>
-
-
       <h6 class="mb-3">Tên danh mục</h6>
       <mat-form-field class="w-100 fs-16" appearance="outline">
         <mat-label>Nhập tên danh mục</mat-label>
@@ -133,6 +154,7 @@
           Cập nhật
           <mat-icon>task_alt</mat-icon>
         </button>
+      </div>
       </div>
     </form>
   </div>

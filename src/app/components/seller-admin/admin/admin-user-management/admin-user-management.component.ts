@@ -55,9 +55,11 @@ import {
 } from '@angular/common/http';
 import {
   Gender,
-  Role
+  Role,
+  UserStatus
 } from '../../../../models/enums';
 import { TranslateModule } from '@ngx-translate/core';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-user-management',
@@ -106,7 +108,8 @@ export class AdminUserManagementComponent {
   ];
 
   constructor(
-    private accountService: AccountService
+    private accountService: AccountService,
+    private toastr : ToastrService
   ) {
     this.roleName = [Role.ADMIN, Role.MANAGER, Role.USER]
   }
@@ -211,4 +214,17 @@ export class AdminUserManagementComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+
+  btnUpdateUserStatus(id: number): void {
+    this.accountService.updateStatusUser(id, UserStatus.BAN).subscribe({
+      next: (response) => {
+        this.toastr.success(`Cập nhật trạng thái thành công cho tài khoản ID: ${response.data.id}`);
+        console.log('Updated User:', response);
+      },
+      error: (error) => {
+        this.toastr.error('Cập nhật trạng thái không thành công', 'Lỗi');
+        console.error('Error updating user status:', error);
+      }
+    });
+  }
 }
