@@ -211,8 +211,15 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     this.isRejectFormVisible = !this.isRejectFormVisible;
   }
 
+  trackByIndex(index: number): number {
+    return index; // Trả về chỉ số của phần tử
+  }
+
   btnApproveFlower(id: number | undefined) {
-    if (this.flower !== undefined) {
+    if (id === undefined) {
+      this.toastr.warning('ID hoa không xác định');
+      return;
+    }
       this.productService.approveFlowerListing(id).subscribe({
         next: (response: Flower) => {
           this.flower = response;
@@ -232,9 +239,6 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
           this.toastr.error(`Duyệt hoa không thành công`, `ERROR`);
         },
       });
-    } else {
-      this.toastr.warning('Hoa không xác định hoặc đã được duyệt rồi');
-    }
   }
 
   btnDeniedFlower(id: number | undefined, reason: string) {
