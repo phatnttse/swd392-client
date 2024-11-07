@@ -143,13 +143,6 @@ export class AdminUserManagementComponent {
       roleName
     ).subscribe({
       next:(response: UserAccountPaginatedResponse) => {
-        console.log('API response:', response.data.content); 
-
-         // Ghi log trước khi gán giá trị
-         console.log('Number of users:', response.data.numberOfElements);
-         console.log('Total pages:', response.data.totalPages);
-         console.log('Current page:', this.currentPage);
-
         this.listUser = response.data.content;
         this.dataSource = new MatTableDataSource(this.listUser);
         this.dataSource.sort = this.sort;
@@ -215,14 +208,14 @@ export class AdminUserManagementComponent {
   }
 
 
-  btnUpdateUserStatus(id: number): void {
-    this.accountService.updateStatusUser(id, UserStatus.BAN).subscribe({
+  btnUpdateUserStatus(): void {
+    this.accountService.updateStatusUser(UserStatus.BAN).subscribe({
       next: (response) => {
         this.toastr.success(`Cập nhật trạng thái thành công cho tài khoản ID: ${response.data.id}`);
         console.log('Updated User:', response);
       },
       error: (error) => {
-        this.toastr.error('Cập nhật trạng thái không thành công', 'Lỗi');
+        this.toastr.error('Cập nhật trạng thái không thành công:', 'Lỗi');
         console.error('Error updating user status:', error);
       }
     });

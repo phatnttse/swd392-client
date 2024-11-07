@@ -81,7 +81,7 @@ export class CategoryService extends EndpointBase {
   }
 
   deleteCategory(id: number): Observable<FlowerCategory>{
-      return this.http.delete<FlowerCategory>(`${this.API_URL}/flower-categories/${id}`).pipe(
+      return this.http.delete<FlowerCategory>(`${this.API_URL}/flower-categories/${id}`, this.requestHeaders).pipe(
         catchError((error) => {
           return this.handleError(error, () => this.deleteCategory(id));
         })
