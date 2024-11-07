@@ -310,6 +310,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.warning(error.error.message, 'Error', {
           progressBar: true,
         });

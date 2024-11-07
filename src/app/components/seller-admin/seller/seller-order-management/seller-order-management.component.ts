@@ -38,6 +38,8 @@ import { Utilities } from '../../../../services/utilities';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { StatusService } from '../../../../services/status.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CancelOrderComponent } from '../../../dialogs/cancel-order/cancel-order.component';
 
 @Component({
   selector: 'app-seller-order-management',
@@ -107,7 +109,8 @@ export class SellerOrderManagementComponent
   constructor(
     private orderService: OrderService,
     private toastr: ToastrService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -275,12 +278,37 @@ export class SellerOrderManagementComponent
         },
         error: (error: HttpErrorResponse) => {
           this.statusService.statusLoadingSpinnerSource.next(false);
-          this.toastr.error(error.error, 'Error');
-          console.log(error);
+          this.toastr.error(error.error.message, 'Error');
         },
       });
   }
 
+  // Mở dialog hủy đơn hàng
+  btnOpenCancelOrderDialog(orderId: number): void {
+    const dialogRef = this.dialog.open(CancelOrderComponent, {
+      data: {
+        orderId: orderId,
+        orderStatus: OrderDetailStatus.SELLER_CANCELED,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        const updatedListOrder = this.listOrder.map((order) => {
+          if (order.id === orderId) {
+            order.status = OrderDetailStatus.SELLER_CANCELED;
+          }
+          return order;
+        });
+        this.listOrder = updatedListOrder;
+        this.listOrderDefault = updatedListOrder;
+        this.dataSource = new MatTableDataSource(this.listOrder);
+        this.dataSource.sort = this.sort;
+        this.toastr.success('Hủy đơn hàng thành công', 'Success', {
+          progressBar: true,
+        });
+      }
+    });
+  }
   // Lấy trạng thái tiếp theo của đơn hàng
   private getNextOrderStatus(
     currentStatus: OrderDetailStatus

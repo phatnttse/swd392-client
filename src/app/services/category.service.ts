@@ -1,22 +1,10 @@
 import { Injectable } from '@angular/core';
 import { EndpointBase } from './endpoint-base.service';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
-import {
-  BehaviorSubject,
-  catchError,
-  combineLatestWith,
-  map,
-  Observable,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { ConvertedCategory, FlowerCategory } from '../models/category.model';
-import { BaseResponse } from '../models/base.model';
 
 @Injectable({
   providedIn: 'root',
@@ -63,28 +51,49 @@ export class CategoryService extends EndpointBase {
       );
   }
 
-  addNewCategory(formdata: FormData): Observable<FlowerCategory>{
-    return this.http.post<FlowerCategory>(`${this.API_URL}/flower-categories`, formdata, this.requestHeaders).pipe(
-      catchError((error) => {
-        return this.handleError(error, () => this.addNewCategory(formdata));
-      })
-    );
+  addNewCategory(formdata: FormData): Observable<FlowerCategory> {
+    return this.http
+      .post<FlowerCategory>(
+        `${this.API_URL}/flower-categories`,
+        formdata,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.addNewCategory(formdata));
+        })
+      );
   }
 
-  updateCategory(id: number, updatedCategory: FlowerCategory): Observable<FlowerCategory>{
-      return this.http.put<FlowerCategory>( `${this.API_URL}/flower-categories/${id}`,
-        updatedCategory, this.requestHeaders).pipe(
-          catchError((error) => {
-            return this.handleError(error, () => this.updateCategory(id, updatedCategory));
-          })
-        );
+  updateCategory(
+    id: number,
+    updatedCategory: FlowerCategory
+  ): Observable<FlowerCategory> {
+    return this.http
+      .put<FlowerCategory>(
+        `${this.API_URL}/flower-categories/${id}`,
+        updatedCategory,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.updateCategory(id, updatedCategory)
+          );
+        })
+      );
   }
 
-  deleteCategory(id: number): Observable<FlowerCategory>{
-      return this.http.delete<FlowerCategory>(`${this.API_URL}/flower-categories/${id}`).pipe(
+  deleteCategory(id: number): Observable<FlowerCategory> {
+    return this.http
+      .delete<FlowerCategory>(
+        `${this.API_URL}/flower-categories/${id}`,
+        this.requestHeaders
+      )
+      .pipe(
         catchError((error) => {
           return this.handleError(error, () => this.deleteCategory(id));
         })
-      );;
+      );
   }
 }

@@ -11,16 +11,23 @@
           "Order.CancelOrder.SelectReason" | translate
         }}</mat-label>
         <mat-select required formControlName="reason">
-          <mat-option
-            *ngFor="let reason of cancelOrderReasons"
-            [value]="reason | translate"
-          >
+          @if (orderStatus === orderDetailStatus.BUYER_CANCELED) { @for (reason
+          of buyerCancelOrderReasons; track $index) {
+          <mat-option [value]="reason | translate">
             {{ reason | translate }}
           </mat-option>
+          } }@else if (orderStatus === orderDetailStatus.SELLER_CANCELED) { @for
+          (reason of sellerCancelOrderReasons; track $index) {
+          <mat-option [value]="reason | translate">
+            {{ reason | translate }}
+          </mat-option>
+          } }
         </mat-select>
-        <mat-error *ngIf="formCancelOrder.get('reason')?.hasError('required')">
+        @if (formCancelOrder.get('reason')?.hasError('required')) {
+        <mat-error>
           {{ "Order.CancelOrder.RequiredReasonError" | translate }}
         </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="w-100">

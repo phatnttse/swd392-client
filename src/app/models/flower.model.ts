@@ -21,6 +21,7 @@ export interface Flower {
   status: FlowerListingStatus;
   views: number;
   rejectReason: string;
+  expireDate: string;
   createdAt: string;
   updatedAt: string;
   deleted: boolean;

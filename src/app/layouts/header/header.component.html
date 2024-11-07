@@ -18,6 +18,7 @@
         <span class="text-dark">{{ "Header.Cart" | translate }}</span>
         <span class="badge bg-secondary rounded-pill">{{ totalCartItem }}</span>
       </h4>
+      @if (listCartItem.length > 0) {
       <ul class="list-group mb-5">
         @for (item of listCartItem; track $index) {
         <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -60,6 +61,31 @@
       >
         {{ "Header.ContinueToOrder" | translate }}
       </button>
+      }@else {
+      <div
+        class="d-flex flex-column align-items-center justify-content-center my-3"
+      >
+        <img
+          class="mb-5 mt-3"
+          width="80"
+          src="./../../../assets/images/empty-cart-svg.svg"
+          alt=""
+        />
+        <h6 class="text-black mb-5">Your cart is currently empty.</h6>
+        <button
+          mat-raised-button
+          routerLink="/products"
+          class="w-100 btn btn-primary btn-lg"
+          type="button"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+          color="accent"
+        >
+          {{ "AddToCartNow" | translate }}
+        </button>
+      </div>
+
+      }
     </div>
   </div>
 </div>
@@ -221,11 +247,7 @@
                   "Header.AboutUs" | translate
                 }}</a>
               </li>
-              <li>
-                <a routerLink="/blogs" class="dropdown-item text-black"
-                  >Blog
-                </a>
-              </li>
+
               <li>
                 <a routerLink="/contact" class="dropdown-item text-black"
                   >{{ "Header.Contact" | translate }}

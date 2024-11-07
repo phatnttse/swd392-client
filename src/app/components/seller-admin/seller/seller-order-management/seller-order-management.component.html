@@ -17,7 +17,6 @@
             type="text"
             placeholder="{{ 'Header.Search' | translate }}"
             (keyup)="applyFilter($event)"
-            #input
           />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
@@ -299,7 +298,19 @@
         {{ "Back" | translate }}
         <mat-icon>reply</mat-icon>
       </button>
-      @if (selectedOrder.status === orderDetailStatus.PENDING ||
+      @if (selectedOrder.status === orderDetailStatus.PENDING ) {
+      <button
+        (click)="btnOpenCancelOrderDialog(selectedOrder.id)"
+        mat-raised-button
+        class="fs-16 p-24 text-white btn-success mb-2 me-2"
+        type="button"
+        extend
+        color="accent"
+      >
+        Huỷ đơn hàng
+        <mat-icon>close</mat-icon>
+      </button>
+      } @if (selectedOrder.status === orderDetailStatus.PENDING ||
       selectedOrder.status === orderDetailStatus.PREPARING) {
       <button
         (click)="btnUpdateOrderStatus(selectedOrder.id)"
@@ -395,7 +406,23 @@
             <p class="fs-16">
               <mat-icon class="icon-text">assignment_turned_in</mat-icon>
               <strong>{{ "Status" | translate }}:</strong>
-              {{ selectedOrder.status }}
+              <span
+                [ngClass]="{
+                  'fw-bold': true,
+                  'ms-2': true,
+                  'text-warning':
+                    selectedOrder.status === orderDetailStatus.PENDING,
+                  'text-info':
+                    selectedOrder.status === orderDetailStatus.PREPARING,
+                  'text-success':
+                    selectedOrder.status === orderDetailStatus.SHIPPED,
+                  'text-danger':
+                    selectedOrder.status === orderDetailStatus.BUYER_CANCELED ||
+                    selectedOrder.status === orderDetailStatus.SELLER_CANCELED
+                }"
+              >
+                {{ selectedOrder.status }}
+              </span>
             </p>
           </div>
         </mat-card-content>

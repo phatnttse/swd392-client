@@ -55,15 +55,6 @@ export const routes: Routes = [
     data: { breadcrumb: 'BreadCrumb.AboutUs' },
   },
   {
-    path: 'blogs',
-    loadComponent() {
-      return import('./components/blog/blog.component').then(
-        (m) => m.BlogComponent
-      );
-    },
-    data: { breadcrumb: 'BreadCrumb.Blog' },
-  },
-  {
     path: 'products',
     loadComponent() {
       return import('./components/products/products.component').then(

@@ -81,12 +81,21 @@ export enum NonProcessOrderStatus {
   REFUNDED = 'REFUNDED',
 }
 
-export enum CancelOrderReason {
+export enum BuyerCancelOrderReason {
   FoundCheaperElsewhere = 'Order.CancelReason.FoundCheaperElsewhere',
   ChangeOfMind = 'Order.CancelReason.ChangeOfMind',
   OrderByMistake = 'Order.CancelReason.OrderByMistake',
   ShippingCostTooHigh = 'Order.CancelReason.ShippingCostTooHigh',
   LongShippingTime = 'Order.CancelReason.LongShippingTime',
+  Other = 'Order.CancelReason.Other',
+}
+
+export enum SellerCancelOrderReason {
+  OutOfStock = 'Order.CancelReason.OutOfStock',
+  PricingError = 'Order.CancelReason.PricingError',
+  ShippingDelay = 'Order.CancelReason.ShippingDelay',
+  CustomerRequest = 'Order.CancelReason.CustomerRequest',
+  FraudulentOrder = 'Order.CancelReason.FraudulentOrder',
   Other = 'Order.CancelReason.Other',
 }
 
@@ -110,6 +119,5 @@ export enum UserStatus {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
   BLOCKED = 'BLOCKED',
-  UNBLOCKED = 'UNBLOCKED'
+  UNBLOCKED = 'UNBLOCKED',
 }
-

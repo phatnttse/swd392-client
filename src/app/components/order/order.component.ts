@@ -42,6 +42,7 @@ import { StatusService } from '../../services/status.service';
 import confetti from 'canvas-confetti';
 import { MatDialog } from '@angular/material/dialog';
 import { InsufficientBalanceComponent } from '../dialogs/insufficient-balance/insufficient-balance.component';
+import { BaseResponse } from '../../models/base.model';
 
 @Component({
   selector: 'app-order',
@@ -187,7 +188,6 @@ export class OrderComponent implements OnInit {
         this.dialog.open(InsufficientBalanceComponent);
         return;
       }
-      return;
     }
 
     this.statusService.statusLoadingSpinnerSource.next(true);
@@ -216,18 +216,19 @@ export class OrderComponent implements OnInit {
         )
         .subscribe({
           next: (response: any) => {
-            this.cartService.clearCart();
-            this.cartService.totalAmountSubject.next(0);
-            this.cartService.cartDataSource.next([]);
-            this.cartService.totalQuantitySubject.next(0);
+            this.cartService.reset();
             this.orderForm.reset();
             this.statusOrder = 1;
             this.statusService.statusLoadingSpinnerSource.next(false);
             this.startConfetti();
           },
           error: (error: HttpErrorResponse) => {
-            this.toastr.error(error.error.error, 'Đặt hàng thất bại');
             this.statusService.statusLoadingSpinnerSource.next(false);
+            this.toastr.error(error.error.message, 'Đặt hàng thất bại', {
+              progressBar: true,
+              progressAnimation: 'increasing',
+              timeOut: 5000,
+            });
             this.statusOrder = 2;
           },
         });
@@ -243,10 +244,7 @@ export class OrderComponent implements OnInit {
         )
         .subscribe({
           next: (response: any) => {
-            this.cartService.clearCart();
-            this.cartService.totalAmountSubject.next(0);
-            this.cartService.cartDataSource.next([]);
-            this.cartService.totalQuantitySubject.next(0);
+            this.cartService.reset();
             this.orderForm.reset();
             this.statusOrder = 1;
             this.statusService.statusLoadingSpinnerSource.next(false);
@@ -254,7 +252,11 @@ export class OrderComponent implements OnInit {
           },
           error: (error: HttpErrorResponse) => {
             this.statusService.statusLoadingSpinnerSource.next(false);
-            this.toastr.error(error.error.error, 'Đặt hàng thất bại');
+            this.toastr.error(error.error.message, 'Đặt hàng thất bại', {
+              progressBar: true,
+              progressAnimation: 'increasing',
+              timeOut: 5000,
+            });
             this.statusOrder = 2;
           },
         });
@@ -265,6 +267,17 @@ export class OrderComponent implements OnInit {
   //     this.isBalanceInsufficient = this.accountBalance < this.totalAmount;
   //   }
   // }
+
+  ClearCart() {
+    this.cartService.clearCart().subscribe({
+      next: (response: BaseResponse<any>) => {
+        this.cartService.reset();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
+  }
 
   retryOrder() {
     this.statusOrder = 0;

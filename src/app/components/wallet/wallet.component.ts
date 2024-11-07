@@ -16,7 +16,11 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../services/account.service';
-import { AddBalanceResponse, UserAccount } from '../../models/account.model';
+import {
+  AddBalanceResponse,
+  UserAccount,
+  UserBalanceResponse,
+} from '../../models/account.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { HeaderComponent } from '../../layouts/header/header.component';
@@ -78,6 +82,7 @@ export class WalletComponent implements OnInit, OnDestroy {
   status: string = ''; // Trạng thái giao dịch
   userAccount: UserAccount | null = null; // Thông tin tài khoản người dùng
   userAccountSubscription: Subscription = new Subscription(); // Subscription của user account
+  accountBalance: number = 0; // Số dư tài khoản
 
   constructor(
     private formBuilder: FormBuilder,
@@ -98,11 +103,23 @@ export class WalletComponent implements OnInit, OnDestroy {
         this.userAccount = userAccount;
       }
     );
+    this.getBalance();
     this.getWalletLogsByUser();
   }
 
   ngOnDestroy(): void {
     this.userAccountSubscription.unsubscribe();
+  }
+
+  getBalance() {
+    this.accountService.getAccountBalance().subscribe({
+      next: (response: UserBalanceResponse) => {
+        this.accountBalance = response.balance;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error getting balance:', error);
+      },
+    });
   }
 
   // Nạp tiền vào ví
@@ -117,8 +134,8 @@ export class WalletComponent implements OnInit, OnDestroy {
     this.accountService.addBalance(amount).subscribe({
       next: (response: AddBalanceResponse) => {
         window.location.href = response.checkoutUrl;
-        this.statusService.statusLoadingSpinnerSource.next(false);
         this.formTopUp.reset();
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
       error: (error: HttpErrorResponse) => {
         this.statusService.statusLoadingSpinnerSource.next(false);

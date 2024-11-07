@@ -31,6 +31,7 @@ import { ConvertedCategory } from '../../models/category.model';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
 import { FlowerListingStatus } from '../../models/enums';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -85,7 +86,8 @@ export class ProductsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private cartService: CartService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -258,6 +260,11 @@ export class ProductsComponent implements OnInit {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {

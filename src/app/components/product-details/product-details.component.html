@@ -159,17 +159,28 @@
       <div class="col-md-3 text-center">
         <img
           class="rounded-circle"
-          [src]="flower.user.avatar"
-          [alt]="flower.user.name"
+          [src]="sellerInfo?.avatar"
+          [alt]="sellerInfo?.name"
           width="100"
           height="100"
         />
       </div>
       <div class="col-md-3 text-center">
-        <h5 class="shop-name">{{ flower.user.name }}</h5>
+        <h5 class="shop-name">{{ sellerInfo?.name }}</h5>
+        <div class="d-flex align-items-center justify-content-center">
+          <mat-icon class="fw-bold" style="color: #f6db30">star</mat-icon>
+          <span class="ms-1"
+            >Đánh giá: <strong>{{ sellerInfo?.ratingAverage }}</strong> ({{
+              sellerInfo?.ratingCount
+            }}
+            Đánh giá)</span
+          >
+        </div>
       </div>
       <div class="col-md-3 text-center">
-        <h6 class="text-muted">Đã bán 68 sản phẩm</h6>
+        <h6 class="text-muted">
+          Đã bán {{ sellerInfo?.productCount }} sản phẩm
+        </h6>
       </div>
       <div class="col-md-3 text-center">
         <button mat-raised-button extend class="info" (click)="btnVisitShop()">
@@ -184,7 +195,9 @@
 
 <!-- Product Feedback -->
 <div class="container my-5">
-  <h5 class="comments-title fw-bold">Đánh giá ({{ listFeedback.length }})</h5>
+  <h5 class="comments-title fw-bold mb-3">
+    Đánh giá ({{ listFeedback.length }})
+  </h5>
   @for (feedback of listFeedback; track $index) {
   <mat-card class="be-comment mb-3">
     <div class="row g-0 align-items-center">
@@ -205,11 +218,10 @@
                 <a href="#">{{ feedback.user.name }}</a>
               </span>
               <div class="d-flex align-items-center">
-                @for (star of [1, 2, 3, 4, 5]; track $index) {
-                <mat-icon class="star text-warning">
-                  {{ star <= feedback.rating ? "star" : "star_border" }}
-                </mat-icon>
-                }
+                @for (star of [1, 2, 3, 4, 5]; track $index) { @if ($index <
+                feedback.rating) {
+                <mat-icon class="star text-warning"> star </mat-icon>
+                } }
               </div>
             </div>
             <span class="be-comment-time text-muted d-flex align-items-center">
@@ -239,10 +251,10 @@
   </div>
   }
 
-  <div class="add-comment my-4">
+  <div class="add-comment my-5">
     <mat-card class="p-3">
       <div class="align-items-center d-flex my-2">
-        <p class="text-black fw-bold me-3">Your Rating:</p>
+        <p class="text-black fw-bold me-3">Đánh giá của bạn:</p>
         @for (star of [1, 2, 3, 4, 5]; track $index) {
         <mat-icon
           (click)="rate(star)"
@@ -255,7 +267,7 @@
       </div>
       <form [formGroup]="feedBackForm" class="form-group mb-3">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Your Feedback</mat-label>
+          <mat-label>Nội dung đánh giá</mat-label>
           <textarea
             matInput
             required="true"
@@ -265,7 +277,7 @@
           ></textarea>
           @if (feedBackForm.get('commentText')?.hasError('required')) {
           <mat-error class="mat-error" style="font-size: 12px">
-            Feedback is required
+            Nội dung không được trống
           </mat-error>
           }
         </mat-form-field>

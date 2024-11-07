@@ -184,10 +184,7 @@ export class AccountService extends EndpointBase {
 
   getSellerProfile(id: number): Observable<SellerProfileResponse> {
     return this.http
-      .get<SellerProfileResponse>(
-        `${this.API_URL}/account/profile/${id}`,
-        this.requestHeaders
-      )
+      .get<SellerProfileResponse>(`${this.API_URL}/account/profile/${id}`)
       .pipe(
         catchError((error) => {
           return this.handleError(error, () => this.getSellerProfile(id));
@@ -195,17 +192,25 @@ export class AccountService extends EndpointBase {
       );
   }
 
-  updateStatusUser(id: number, status: string): Observable<UserAccountResponse> { 
-    return this.http.patch<UserAccountResponse>(
-      `${this.API_URL}/account/update-profile`, 
-    { 
-      id,status
-    },
-      this.requestHeaders
-    ).pipe(
-      catchError((error) => {
-        return this.handleError(error, () => this.updateStatusUser(id, status));
-      })
-    );
+  updateStatusUser(
+    id: number,
+    status: string
+  ): Observable<UserAccountResponse> {
+    return this.http
+      .patch<UserAccountResponse>(
+        `${this.API_URL}/account/update-profile`,
+        {
+          id,
+          status,
+        },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.updateStatusUser(id, status)
+          );
+        })
+      );
   }
 }
