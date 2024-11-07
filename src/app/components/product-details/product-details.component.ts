@@ -28,6 +28,12 @@ import { Feedback } from '../../models/feedback.model';
 import { ParentCategory } from '../../models/enums';
 import { TypeTransformPipe } from '../../pipes/type-transform.pipe';
 import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { AccountService } from '../../services/account.service';
+import {
+  SellerProfile,
+  SellerProfileResponse,
+} from '../../models/account.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-product-details',
@@ -64,6 +70,7 @@ export class ProductDetailsComponent implements OnInit {
   parentCategory = ParentCategory; // Enum danh mục cha
   currentImageUrl: string | undefined; // Ảnh chính hiện tại
   selectedImageIndex: number = 0; // Index ảnh được chọn
+  sellerInfo: SellerProfile | null = null; // Thông tin người bán
 
   constructor(
     private productService: ProductService,
@@ -71,7 +78,9 @@ export class ProductDetailsComponent implements OnInit {
     private router: Router,
     private cartService: CartService,
     private toastr: ToastrService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private accountService: AccountService,
+    private authService: AuthService
   ) {
     this.feedBackForm = this.formBuilder.group({
       content: ['', Validators.required],
@@ -99,6 +108,7 @@ export class ProductDetailsComponent implements OnInit {
       },
       complete: () => {
         this.getFeedBacksByFlowerId();
+        this.getSellerProfile(this.flower?.user.id || 0);
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -131,6 +141,11 @@ export class ProductDetailsComponent implements OnInit {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {
@@ -151,6 +166,11 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   btnBuyNow(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {
@@ -239,9 +259,19 @@ export class ProductDetailsComponent implements OnInit {
           );
         },
         error: (error: HttpErrorResponse) => {
-          console.error(error);
           this.toastr.error(error.error.message);
         },
       });
+  }
+
+  getSellerProfile(userId: number): void {
+    this.accountService.getSellerProfile(userId).subscribe({
+      next: (response: SellerProfileResponse) => {
+        this.sellerInfo = response.data;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.toastr.error(error.error.message);
+      },
+    });
   }
 }

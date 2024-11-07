@@ -99,6 +99,11 @@
       "OrderByMistake": "Ordered by mistake",
       "ShippingCostTooHigh": "Shipping cost too high",
       "LongShippingTime": "Shipping time too long",
+      "OutOfStock": "Out of stock",
+      "PricingError": "Pricing error",
+      "ShippingDelay": "Shipping delay",
+      "CustomerRequest": "Customer requested cancellation",
+      "FraudulentOrder": "Fraudulent order",
       "Other": "Other"
     },
     "CancelOrder": {
@@ -268,5 +273,6 @@
   "FreshFlowerPromotion": "Fresh Flower Promotion",
   "SpringDiscount": "Spring Discount",
   "Save30PercentNow": "Save 30% Today!",
-  "BuyNow": "Buy Now"
+  "BuyNow": "Buy Now",
+  "AddToCartNow": "Add to Cart Now"
 }

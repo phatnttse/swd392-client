@@ -131,7 +131,7 @@ export class SellerProductManagementComponent
       description: ['', [Validators.required, Validators.minLength(100)]],
       stockQuantity: ['', [Validators.required, Validators.min(1)]],
       address: ['', [Validators.required, Validators.minLength(10)]],
-      expireDate: ['', [Validators.required]],
+      expireDate: [null, [Validators.required]],
     });
   }
 
@@ -160,6 +160,20 @@ export class SellerProductManagementComponent
       .subscribe(() => {
         this.onAddressChange();
       });
+
+    this.productForm.get('expireDate')?.valueChanges.subscribe((value) => {
+      if (value.getTime() < new Date().getTime()) {
+        this.productForm.get('expireDate')?.setValue(null);
+        this.toastr.warning(
+          'Ngày hết hạn không được nhỏ hơn ngày hiện tại',
+          'Warning',
+          {
+            progressBar: true,
+          }
+        );
+        return;
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -305,6 +319,7 @@ export class SellerProductManagementComponent
           description: flower.description,
           stockQuantity: flower.stockQuantity,
           address: flower.address,
+          expireDate: new Date(flower.expireDate),
         });
         this.selectedProduct = flower;
         (this.uploadedImages = flower.images.map((image) => image.url)),

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EndpointBase } from './endpoint-base.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
@@ -112,18 +112,13 @@ export class CartService extends EndpointBase {
       );
   }
 
-  clearCart(): Observable<BaseResponse<null>> {
+  clearCart(): Observable<BaseResponse<any>> {
     return this.http
-      .delete<any>(`${this.API_URL}/cart/clear`, this.requestHeaders)
+      .delete<BaseResponse<any>>(
+        `${this.API_URL}/cart/clear`,
+        this.requestHeaders
+      )
       .pipe(
-        map((response) => {
-          if (response.code === 200) {
-            this.cartDataSource.next([]);
-            this.totalAmountSubject.next(0);
-            this.totalAmountSubject.next(0);
-          }
-          return response;
-        }),
         catchError((error) => {
           return this.handleError(error, () => this.clearCart());
         })

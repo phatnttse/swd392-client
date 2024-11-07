@@ -23,6 +23,7 @@ import {
   SellerProfileResponse,
 } from '../../models/account.model';
 import { AccountService } from '../../services/account.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-seller-profile',
@@ -53,7 +54,8 @@ export class SellerProfileComponent {
     private cartService: CartService,
     private toastr: ToastrService,
     private categoryService: CategoryService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +102,11 @@ export class SellerProfileComponent {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {

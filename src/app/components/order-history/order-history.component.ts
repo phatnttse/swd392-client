@@ -134,7 +134,7 @@ export class OrderHistoryComponent implements OnInit {
 
   btnOpenCancelOrderDialog(id: number) {
     const dialogRef = this.dialog.open(CancelOrderComponent, {
-      data: id,
+      data: { orderId: id, orderStatus: OrderDetailStatus.BUYER_CANCELED },
     });
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {

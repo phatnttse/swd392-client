@@ -97,6 +97,11 @@
       "OrderByMistake": "Đặt hàng nhầm",
       "ShippingCostTooHigh": "Phí vận chuyển cao",
       "LongShippingTime": "Thời gian vận chuyển lâu",
+      "OutOfStock": "Hết hàng",
+      "PricingError": "Lỗi giá",
+      "ShippingDelay": "Giao hàng chậm trễ",
+      "CustomerRequest": "Khách hàng yêu cầu hủy",
+      "FraudulentOrder": "Đơn hàng gian lận",
       "Other": "Khác"
     },
     "CancelOrder": {
@@ -262,5 +267,6 @@
   "FreshFlowerPromotion": "Khuyến Mãi Hoa Tươi",
   "SpringDiscount": "Giảm Giá Mùa Xuân",
   "Save30PercentNow": "Tiết Kiệm 30% Ngay Hôm Nay!",
-  "BuyNow": "Mua Ngay"
+  "BuyNow": "Mua Ngay",
+  "AddToCartNow": "Thêm vào giỏ ngay"
 }

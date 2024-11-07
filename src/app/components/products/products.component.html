@@ -15,11 +15,11 @@
                   class="btn btn-toggle dropdown-toggle text-dark"
                   data-bs-toggle="collapse"
                   [attr.data-bs-target]="'#collapse' + category.id"
-                  aria-expanded="false"
+                  aria-expanded="true"
                 >
                   {{ category.name }}
                 </button>
-                <div class="collapse" [id]="'collapse' + category.id">
+                <div class="collapse show" [id]="'collapse' + category.id">
                   <ul class="nav flex-column ms-3">
                     @for (subcategory of category.children; track $index) {
                     <li class="nav-item">

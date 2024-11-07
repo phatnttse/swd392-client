@@ -184,10 +184,7 @@ export class AccountService extends EndpointBase {
 
   getSellerProfile(id: number): Observable<SellerProfileResponse> {
     return this.http
-      .get<SellerProfileResponse>(
-        `${this.API_URL}/account/profile/${id}`,
-        this.requestHeaders
-      )
+      .get<SellerProfileResponse>(`${this.API_URL}/account/profile/${id}`)
       .pipe(
         catchError((error) => {
           return this.handleError(error, () => this.getSellerProfile(id));
