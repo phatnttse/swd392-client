@@ -14,6 +14,8 @@ import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { FlowerCategory } from '../../models/category.model';
+import { AuthService } from '../../services/auth.service';
+import { FlowerListingStatus } from '../../models/enums';
 
 @Component({
   selector: 'app-home',
@@ -47,7 +49,8 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private cartService: CartService,
     private toastr: ToastrService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +59,9 @@ export class HomeComponent implements OnInit {
     this.productService.flowerNewestDataSource.subscribe(
       (flowerNewestData: FlowerPaginated | null) => {
         if (flowerNewestData !== null) {
-          this.listFlowerNewest = flowerNewestData.content;
+          this.listFlowerNewest = flowerNewestData.content.filter(
+            (flower) => flower.status === FlowerListingStatus.APPROVED
+          );
         }
       }
     );
@@ -83,6 +88,11 @@ export class HomeComponent implements OnInit {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {
@@ -98,7 +108,7 @@ export class HomeComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }

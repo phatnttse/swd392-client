@@ -1,7 +1,9 @@
+import { ParentCategory } from './enums';
+
 export interface FlowerCategory {
   id: number;
   name: string;
-  categoryParent: string;
+  categoryParent: ParentCategory;
   imageUrl: string;
   createdAt: string;
   updatedAt: string;

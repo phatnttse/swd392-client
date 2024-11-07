@@ -21,6 +21,7 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HttpErrorResponse } from '@angular/common/http';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -43,13 +44,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ForgotPasswordComponent {
   forgotPasswordForm: FormGroup;
-  loadingBtn = signal(false);
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private statusService: StatusService
   ) {
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -76,11 +77,12 @@ export class ForgotPasswordComponent {
       this.forgotPasswordForm.markAllAsTouched();
       return;
     }
-
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const email = this.forgotPasswordForm.value.email!;
 
     this.authService.forgotPassword(email).subscribe({
       next: (response) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.info(
           'Please check your email to reset password',
           'Notification',
@@ -88,6 +90,7 @@ export class ForgotPasswordComponent {
         );
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.error(error.error.error, 'Error');
         console.log(error);
       },

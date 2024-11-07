@@ -17,8 +17,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { GetCartByUserResponse } from '../../models/cart.model';
+import { Notification } from '../../models/notification.model';
 import { CartService } from '../../services/cart.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { StatusService } from '../../services/status.service';
+import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -32,7 +34,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     TranslateModule,
     FooterComponent,
     HeaderComponent,
-    MatProgressSpinnerModule,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
@@ -40,14 +41,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class SignInComponent {
   formLogin: FormGroup; // Form đăng nhập
   hide = signal(true); // Ẩn hiện mật khẩu
-  loadingBtn = signal(false); // Trạng thái nút đăng ký
 
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
     private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private statusService: StatusService,
+    private notificationService: NotificationService
   ) {
     this.formLogin = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -76,24 +78,26 @@ export class SignInComponent {
       this.formLogin.markAllAsTouched();
       return;
     }
-    this.loadingBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
 
     const email = this.formLogin.get('email')?.value;
     const password = this.formLogin.get('password')?.value;
 
     this.authService.loginWithPassword(email, password).subscribe({
       next: (response) => {
-        this.toastr.success(response.message, 'Success', { progressBar: true });
-        this.getCartByUser();
-
         setTimeout(() => {
+          this.getCartByUser();
+          this.getAllNotifications();
           this.authService.redirectLogin();
-          this.loadingBtn.set(false);
-        }, 400);
+          this.toastr.success(response.message, 'Success', {
+            progressBar: true,
+          });
+          this.statusService.statusLoadingSpinnerSource.next(false);
+        }, 700);
       },
 
       error: (error: HttpErrorResponse) => {
-        this.loadingBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.warning(error.error.message, error.error.error, {
           progressBar: true,
         });
@@ -116,6 +120,25 @@ export class SignInComponent {
         console.error(error);
       },
     });
+  }
+
+  // Lấy tất cả thông báo
+  getAllNotifications() {
+    this.notificationService
+      .getAllNotifications(this.authService.currentUser?.id!, 5, '')
+      .subscribe({
+        next: (response: Notification[]) => {
+          if (response.length) {
+            const notifications = response.filter(
+              (notification) => !notification.isRead && !notification.isDeleted
+            );
+            this.notificationService.notificationDataSource.next(notifications);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error(error);
+        },
+      });
   }
 
   // Ẩn hiện mật khẩu

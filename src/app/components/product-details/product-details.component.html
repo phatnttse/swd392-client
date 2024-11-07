@@ -1,8 +1,8 @@
 @defer () { @if (flower) {
 <app-header></app-header>
-
+<app-breadcrumb></app-breadcrumb>
 <div #topElement></div>
-<section class="py-5 section-products">
+<section class="section-products">
   <div class="container">
     <div class="row gx-5">
       <aside class="col-lg-6">
@@ -12,12 +12,12 @@
             class="rounded-4"
             target="_blank"
             data-type="image"
-            [href]="flower.images[0].url"
+            [href]="currentImageUrl"
           >
             <img
               style="max-width: 100%; max-height: 100vh; margin: auto"
               class="rounded-4 fit p-5"
-              [src]="flower.images[0].url"
+              [src]="currentImageUrl"
               [alt]="flower.name"
             />
           </a>
@@ -28,77 +28,74 @@
           <a
             data-fslightbox="mygalley"
             class="border mx-1 rounded-2"
-            target="_blank"
             data-type="image"
-            [href]="image.url"
-            class="item-thumb"
+            href="javascript:;"
+            class="p-2"
+            (click)="onThumbnailClick(image.url, $index)"
+            [ngClass]="{
+              'item-thumb': selectedImageIndex === $index,
+              'selected-thumbnail': selectedImageIndex === $index
+            }"
           >
-            <img width="60" height="60" class="rounded-2" [src]="image.url" />
+            <img width="80" height="80" class="rounded-2" [src]="image.url" />
           </a>
           }
         </div>
       </aside>
       <main class="col-lg-6">
         <div class="ps-lg-3">
-          <h4 class="title text-dark">
+          <h4 class="title primary-color">
             {{ flower.name }}
           </h4>
           <div class="d-flex flex-row my-3">
-            <div class="text-warning mb-1 me-2">
+            <div class="text-black mb-1 me-3">
               <span class="ms-1"> Lượt xem: {{ flower.views }} </span>
             </div>
-            <span class="text-muted"
-              ><i class="fas fa-shopping-basket fa-sm mx-1"></i
+            <span class="text-black me-3"
+              ><i class="fas fa-shopping-basket me-2"></i
               >{{ flower.stockQuantity }}
               {{ "ProductDetail.Available" | translate }}</span
             >
             @if (flower.stockQuantity > 0) {
-            <span class="text-success ms-2 fw-bold">{{
+            <span class="text-success me-3 fw-bold">{{
               "ProductDetail.InStock" | translate
             }}</span>
             }@else {
-            <span class="text-danger ms-2 fw-bold">{{
+            <span class="text-danger me-3 fw-bold">{{
               "ProductDetail.OutStock" | translate
             }}</span>
             }
           </div>
 
           <div class="mb-3">
-            <span class="h5">{{ flower.price | number : "1.0" }}₫</span>
-            <!-- <span class="text-muted">/per box</span> -->
+            <span class="h5 fw-bold text-danger"
+              >{{ flower.price | number : "1.0" }}₫</span
+            >
           </div>
 
-          <p>
+          <p class="text-black">
             {{ flower.description }}
           </p>
 
           <div class="row">
             @for (category of flower.categories; track $index) {
-            <dt class="col-3">{{ category.categoryParent }}</dt>
-            <dd class="col-9">{{ category.name }}</dd>
+            <span class="col-3 text-black fw-bold"
+              >{{
+                category.categoryParent | typeTransform : "ParentCategory"
+              }}:</span
+            >
+            <span class="col-9 text-black fw-bold">{{ category.name }}</span>
             }
           </div>
 
           <hr />
 
           <div class="row mb-4">
-            <!-- <div class="col-md-4 col-6">
-              <h6 class="mb-2 text-primary">Size</h6>
-              <select
-                class="form-select border border-secondary"
-                style="height: 35px"
-              >
-                <option>Small</option>
-                <option>Medium</option>
-                <option>Large</option>
-              </select>
-            </div> -->
-            <!-- col.// -->
             <div class="col-md-12 col-12 mb-3">
               <h6 class="mb-2 d-block text-secondary">Quantity</h6>
               <div class="input-group mb-4" style="width: 170px">
                 <button
-                  class="btn btn-white border border-secondary"
+                  class="btn btn-white border border-secondary text-black"
                   type="button"
                   id="button-addon1"
                   data-mdb-ripple-color="dark"
@@ -108,14 +105,14 @@
                 </button>
                 <input
                   type="text"
-                  class="form-control text-center border border-secondary"
+                  class="form-control text-center border border-secondary text-black"
                   aria-label="Example text with button addon"
                   aria-describedby="button-addon1"
                   readonly
                   [value]="quantityInput"
                 />
                 <button
-                  class="btn btn-white border border-secondary"
+                  class="btn btn-white border border-secondary text-black"
                   type="button"
                   id="button-addon2"
                   data-mdb-ripple-color="dark"
@@ -162,17 +159,28 @@
       <div class="col-md-3 text-center">
         <img
           class="rounded-circle"
-          [src]="flower.user.avatar"
-          [alt]="flower.user.name"
+          [src]="sellerInfo?.avatar"
+          [alt]="sellerInfo?.name"
           width="100"
           height="100"
         />
       </div>
       <div class="col-md-3 text-center">
-        <h5 class="shop-name">{{ flower.user.name }}</h5>
+        <h5 class="shop-name">{{ sellerInfo?.name }}</h5>
+        <div class="d-flex align-items-center justify-content-center">
+          <mat-icon class="fw-bold" style="color: #f6db30">star</mat-icon>
+          <span class="ms-1"
+            >Đánh giá: <strong>{{ sellerInfo?.ratingAverage }}</strong> ({{
+              sellerInfo?.ratingCount
+            }}
+            Đánh giá)</span
+          >
+        </div>
       </div>
       <div class="col-md-3 text-center">
-        <h6 class="text-muted">Đã bán 68 sản phẩm</h6>
+        <h6 class="text-muted">
+          Đã bán {{ sellerInfo?.productCount }} sản phẩm
+        </h6>
       </div>
       <div class="col-md-3 text-center">
         <button mat-raised-button extend class="info" (click)="btnVisitShop()">
@@ -183,15 +191,120 @@
     </div>
   </div>
 </section>
+<hr />
+
+<!-- Product Feedback -->
+<div class="container my-5">
+  <h5 class="comments-title fw-bold mb-3">
+    Đánh giá ({{ listFeedback.length }})
+  </h5>
+  @for (feedback of listFeedback; track $index) {
+  <mat-card class="be-comment mb-3">
+    <div class="row g-0 align-items-center">
+      <div class="col-auto">
+        <a>
+          <img
+            [src]="feedback.user.avatar"
+            alt="Avatar"
+            class="be-ava-comment rounded-circle"
+          />
+        </a>
+      </div>
+      <div class="col">
+        <div class="be-comment-content ms-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <span class="be-comment-name fw-bold me-3">
+                <a href="#">{{ feedback.user.name }}</a>
+              </span>
+              <div class="d-flex align-items-center">
+                @for (star of [1, 2, 3, 4, 5]; track $index) { @if ($index <
+                feedback.rating) {
+                <mat-icon class="star text-warning"> star </mat-icon>
+                } }
+              </div>
+            </div>
+            <span class="be-comment-time text-muted d-flex align-items-center">
+              <mat-icon class="me-1">access_time</mat-icon>
+              {{ feedback.createdAt | date : "dd/MM/yyyy HH:mm:ss" }}
+            </span>
+          </div>
+          <p class="be-comment-text mt-2">
+            {{ feedback.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  }@empty {
+  <div class="text-center my-5">
+    <img
+      src="assets/images/comment.svg"
+      alt="No feedback yet"
+      class="mb-3"
+      width="150"
+    />
+    <p class="text-muted fs-5">
+      Hiện tại chưa có đánh giá nào cho sản phẩm này.
+    </p>
+    <p class="text-muted">Hãy là người đầu tiên chia sẻ ý kiến của bạn!</p>
+  </div>
+  }
+
+  <div class="add-comment my-5">
+    <mat-card class="p-3">
+      <div class="align-items-center d-flex my-2">
+        <p class="text-black fw-bold me-3">Đánh giá của bạn:</p>
+        @for (star of [1, 2, 3, 4, 5]; track $index) {
+        <mat-icon
+          (click)="rate(star)"
+          class="star mb-3 text-black cursor-pointer"
+          [ngClass]="{ filled: star <= rating }"
+        >
+          {{ star <= rating ? "star" : "star_border" }}
+        </mat-icon>
+        }
+      </div>
+      <form [formGroup]="feedBackForm" class="form-group mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nội dung đánh giá</mat-label>
+          <textarea
+            matInput
+            required="true"
+            formControlName="content"
+            rows="4"
+            placeholder="Write your message here..."
+          ></textarea>
+          @if (feedBackForm.get('commentText')?.hasError('required')) {
+          <mat-error class="mat-error" style="font-size: 12px">
+            Nội dung không được trống
+          </mat-error>
+          }
+        </mat-form-field>
+      </form>
+      <div class="d-flex justify-content-end">
+        <button
+          class="btn"
+          style="padding: 24px 36px"
+          mat-raised-button
+          color="primary"
+          (click)="btnSubmitFeedback()"
+        >
+          Submit
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>
 
 <!-- Seller Info -->
 @if (listSimilarFlowers.length > 0) {
-<section class="bg-light border-top py-4">
+<section class="border-top py-4">
   <div class="container">
     <div class="row gx-4">
       <div class="col-lg-12">
         <div class="px-0 border rounded-2 shadow-0">
-          <div class="card p-5">
+          <mat-card class="p-5">
             <div class="card-body">
               <h5 class="card-title text-black fw-bold mb-5">
                 {{ "ProductDetail.SimilarProduct" | translate }}
@@ -277,7 +390,7 @@
                 <!-- / product-grid -->
               </div>
             </div>
-          </div>
+          </mat-card>
         </div>
       </div>
     </div>

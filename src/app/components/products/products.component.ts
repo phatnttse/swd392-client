@@ -29,6 +29,9 @@ import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { ConvertedCategory } from '../../models/category.model';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { FlowerListingStatus } from '../../models/enums';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -55,6 +58,7 @@ import { TruncatePipe } from '../../pipes/truncate.pipe';
     HeaderComponent,
     FooterComponent,
     TruncatePipe,
+    BreadcrumbComponent,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
@@ -82,7 +86,8 @@ export class ProductsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private cartService: CartService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -122,7 +127,9 @@ export class ProductsComponent implements OnInit {
       next: (flowerData: FlowerPaginated | null) => {
         // Chỉ thực thi logic này nếu không có dữ liệu search
         if (flowerData != null && !this.searchString) {
-          this.listFlower = flowerData.content;
+          this.listFlower = flowerData.content.filter(
+            (flower) => flower.status === FlowerListingStatus.APPROVED
+          );
           this.pageNumber = flowerData.pageNumber;
           this.pageSize = flowerData.pageSize;
           this.totalPages = flowerData.totalPages;
@@ -165,7 +172,9 @@ export class ProductsComponent implements OnInit {
       )
       .subscribe({
         next: (response: FlowerPaginated) => {
-          this.listFlower = response.content;
+          this.listFlower = response.content.filter(
+            (flower) => flower.status === FlowerListingStatus.APPROVED
+          );
           this.pageNumber = response.pageNumber;
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
@@ -187,7 +196,9 @@ export class ProductsComponent implements OnInit {
       .getFlowers('', 'desc', 'createdAt', 0, 16, [])
       .subscribe({
         next: (response: FlowerPaginated) => {
-          this.listFlower = response.content;
+          this.listFlower = response.content.filter(
+            (flower) => flower.status === FlowerListingStatus.APPROVED
+          );
           this.pageNumber = response.pageNumber;
           this.pageSize = response.pageSize;
           this.totalPages = response.totalPages;
@@ -249,6 +260,11 @@ export class ProductsComponent implements OnInit {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {

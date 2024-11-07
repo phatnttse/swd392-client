@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { EndpointBase } from './endpoint-base.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { catchError, Observable } from 'rxjs';
 import {
   AddBalanceResponse,
+  SellerProfileResponse,
+  UserAccount,
+  UserAccountPaginatedResponse,
   UserAccountResponse,
   UserBalanceResponse,
 } from '../models/account.model';
+import { Role } from '../models/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -133,8 +137,79 @@ export class AccountService extends EndpointBase {
       )
       .pipe(
         catchError((error) => {
-          debugger;
           return this.handleError(error, () => this.confirmChangeEmail(otp));
+        })
+      );
+  }
+
+  getUsers(
+    searchString: string,
+    order: string,
+    sortBy: string,
+    pageNumber: number,
+    pageSize: number,
+    roleName: Role[]
+  ): Observable<UserAccountPaginatedResponse> {
+    const params = new HttpParams()
+      .set('searchString', searchString)
+      .set('order', order)
+      .set('sortBy', sortBy)
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString())
+      .set('roleName', roleName.join(',') ?? []);
+
+    return this.http
+      .get<UserAccountPaginatedResponse>(
+        `${this.API_URL}/account/profile/all`,
+        {
+          params: params,
+          headers: this.requestHeaders.headers,
+        }
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getUsers(
+              searchString,
+              order,
+              sortBy,
+              pageNumber,
+              pageSize,
+              roleName
+            )
+          );
+        })
+      );
+  }
+
+  getSellerProfile(id: number): Observable<SellerProfileResponse> {
+    return this.http
+      .get<SellerProfileResponse>(`${this.API_URL}/account/profile/${id}`)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getSellerProfile(id));
+        })
+      );
+  }
+
+  updateStatusUser(
+    id: number,
+    status: string
+  ): Observable<UserAccountResponse> {
+    return this.http
+      .patch<UserAccountResponse>(
+        `${this.API_URL}/account/update-profile`,
+        {
+          id,
+          status,
+        },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.updateStatusUser(id, status)
+          );
         })
       );
   }

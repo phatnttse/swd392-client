@@ -17,7 +17,6 @@
             type="text"
             placeholder="{{ 'Header.Search' | translate }}"
             (keyup)="applyFilter($event)"
-            #input
           />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
@@ -299,7 +298,19 @@
         {{ "Back" | translate }}
         <mat-icon>reply</mat-icon>
       </button>
-      @if (selectedOrder.status === orderDetailStatus.PENDING ||
+      @if (selectedOrder.status === orderDetailStatus.PENDING ) {
+      <button
+        (click)="btnOpenCancelOrderDialog(selectedOrder.id)"
+        mat-raised-button
+        class="fs-16 p-24 text-white btn-success mb-2 me-2"
+        type="button"
+        extend
+        color="accent"
+      >
+        Huỷ đơn hàng
+        <mat-icon>close</mat-icon>
+      </button>
+      } @if (selectedOrder.status === orderDetailStatus.PENDING ||
       selectedOrder.status === orderDetailStatus.PREPARING) {
       <button
         (click)="btnUpdateOrderStatus(selectedOrder.id)"
@@ -325,22 +336,39 @@
             {{ "ReceivingInfo" | translate }}
           </mat-card-title>
           <div class="mt-3">
-            <p class="fs-16">
+            <p class="fs-16 w-100">
               <mat-icon class="icon-text">person</mat-icon>
               <strong> {{ "RecipientName" | translate }}:</strong>
               {{ selectedOrder.orderSummary.buyerName }}
             </p>
-            <p class="fs-16">
+            <a
+              class="fs-16 mt-3 w-100 nav-link"
+              [href]="'mailto:' + selectedOrder.orderSummary.buyerEmail"
+            >
               <mat-icon class="icon-text">email</mat-icon>
-              <strong>Email:</strong>
-              {{ selectedOrder.orderSummary.buyerEmail }}
-            </p>
-            <p class="fs-16">
+              <strong class="fs-16"> Email:</strong>
+              <span
+                class="primary-color ms-2"
+                style="text-decoration: underline !important"
+              >
+                {{ selectedOrder.orderSummary.buyerEmail }}</span
+              >
+            </a>
+            <a
+              class="fs-16 mt-3 w-100 nav-link"
+              [href]="'tel:' + selectedOrder.orderSummary.buyerPhone"
+            >
               <mat-icon class="icon-text">phone</mat-icon>
-              <strong> {{ "Order.Phone" | translate }}:</strong>
-              {{ selectedOrder.orderSummary.buyerPhone }}
-            </p>
-            <p class="fs-16">
+              <strong class="fs-16"> {{ "Order.Phone" | translate }}:</strong>
+              <span
+                class="primary-color ms-2"
+                style="text-decoration: underline !important"
+              >
+                {{ selectedOrder.orderSummary.buyerPhone }}</span
+              >
+            </a>
+
+            <p class="fs-16 mt-3 w-100">
               <mat-icon class="icon-text">home</mat-icon>
               <strong> {{ "DeliveryAddress" | translate }}:</strong>
               {{ selectedOrder.orderSummary.buyerAddress }}
@@ -371,14 +399,30 @@
               {{ selectedOrder.createAt | date : "dd-MM-yyyy HH:ss" }}
             </p>
             <p class="fs-16">
-              <mat-icon class="icon-text">attach_money</mat-icon>
+              <mat-icon class="icon-text">money</mat-icon>
               <strong>{{ "OrderValue" | translate }}:</strong>
               {{ selectedOrder.price | number : "1.0" }}₫
             </p>
             <p class="fs-16">
               <mat-icon class="icon-text">assignment_turned_in</mat-icon>
               <strong>{{ "Status" | translate }}:</strong>
-              {{ selectedOrder.status }}
+              <span
+                [ngClass]="{
+                  'fw-bold': true,
+                  'ms-2': true,
+                  'text-warning':
+                    selectedOrder.status === orderDetailStatus.PENDING,
+                  'text-info':
+                    selectedOrder.status === orderDetailStatus.PREPARING,
+                  'text-success':
+                    selectedOrder.status === orderDetailStatus.SHIPPED,
+                  'text-danger':
+                    selectedOrder.status === orderDetailStatus.BUYER_CANCELED ||
+                    selectedOrder.status === orderDetailStatus.SELLER_CANCELED
+                }"
+              >
+                {{ selectedOrder.status }}
+              </span>
             </p>
           </div>
         </mat-card-content>
@@ -395,10 +439,11 @@
           </mat-card-title>
           <div class="d-flex flex-row align-items-center mt-3">
             <img
+              [src]="selectedOrder.flowerListing.images[0].url"
               [alt]="selectedOrder.flowerListing.name"
               style="
-                width: 120px;
-                height: 120px;
+                width: 200px;
+                height: 200px;
                 object-fit: cover;
                 margin-right: 24px;
               "
@@ -415,7 +460,7 @@
                 {{ selectedOrder.flowerListing.description }}
               </p>
               <p class="fs-16">
-                <mat-icon class="icon-text">attach_money</mat-icon>
+                <mat-icon class="icon-text">money</mat-icon>
                 <strong>{{ "Cart.Price" | translate }}:</strong>
                 {{ selectedOrder.flowerListing.price | number : "1.0" }}₫
               </p>

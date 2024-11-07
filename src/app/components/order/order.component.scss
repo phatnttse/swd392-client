@@ -1,12 +1,23 @@
 .order-section {
-  padding-top: 10rem;
-  padding-bottom: 4rem;
+  padding: 4rem;
   overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 376px) {
   .order-section {
-    padding-top: 14rem;
+    padding: 0;
+  }
+
+  .col-md-5,
+  .col-md-7 {
+    width: 100%;
+  }
+
+  .table {
+    font-size: 12px;
   }
 }
 
@@ -19,49 +30,7 @@
     font-size: 14px;
   }
 }
-card {
-  overflow: hidden;
-  max-width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-.table th,
-.table td {
-  text-align: left;
-  padding: 8px;
-}
-
-.table th {
-  background-color: #f8f8f8;
-}
-
-.img-fluid {
-  max-width: 100%;
-  height: auto;
-}
-
-@media (max-width: 375px) {
-  .order-section .row {
-    flex-direction: column;
-
-    align-items: center;
-  }
-
-  .col-md-5,
-  .col-md-7 {
-    width: 100%;
-  }
-
-  .table {
-    font-size: 12px;
-  }
-}
 .image-container {
   position: relative;
   display: inline-block;
@@ -94,4 +63,48 @@ card {
       padding: 2px 4px;
     }
   }
+}
+
+.payment-methods {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.payment-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  cursor: pointer;
+  width: 300px;
+  text-align: center;
+  transition: border-color 0.3s ease;
+  max-width: 100%;
+}
+
+.payment-option.active {
+  border-color: #fb9678;
+}
+
+.payment-option img {
+  margin-bottom: 10px;
+}
+
+.payment-option span {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.balance-info {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.payment-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }

@@ -1,5 +1,6 @@
 @defer () {
 <app-header></app-header>
+<app-breadcrumb></app-breadcrumb>
 <section class="section-product">
   <div class="container">
     <div class="row">
@@ -14,11 +15,11 @@
                   class="btn btn-toggle dropdown-toggle text-dark"
                   data-bs-toggle="collapse"
                   [attr.data-bs-target]="'#collapse' + category.id"
-                  aria-expanded="false"
+                  aria-expanded="true"
                 >
                   {{ category.name }}
                 </button>
-                <div class="collapse" [id]="'collapse' + category.id">
+                <div class="collapse show" [id]="'collapse' + category.id">
                   <ul class="nav flex-column ms-3">
                     @for (subcategory of category.children; track $index) {
                     <li class="nav-item">
@@ -34,7 +35,7 @@
               }
             </ul>
           </div>
-          <div class="mb-5">
+          <!-- <div class="mb-5">
             <h5 class="mb-3">{{ "Products.FilterByPrice" | translate }}</h5>
             <mat-slider min="200" max="500">
               <input value="300" matSliderStartThumb />
@@ -44,20 +45,23 @@
             <button mat-button color="primary" class="fw-bold">
               {{ "Products.Apply" | translate }}
             </button>
-          </div>
+          </div> -->
         </aside>
       </div>
 
       <div class="col-12 col-lg-9 order-1 order-lg-2">
         <div class="d-flex align-items-center justify-content-between mb-5">
-          <p class="text-dark" style="margin-top: 20px">
+          <p
+            class="text-dark fw-bold"
+            style="margin-top: 20px; font-size: 18px"
+          >
             {{ titleSearch | translate }}
             @if (searchString) {
             <strong class="primary-color">'{{ searchString }}'</strong>
             }
           </p>
-          <div class="align-items-center d-flex">
-            <p style="font-size: 14px; margin-left: 6px; margin-top: 20px">
+          <div class="align-items-center d-flex text-black">
+            <p style="font-size: 16px; margin-left: 6px; margin-top: 20px">
               {{ "Products.Arrange" | translate }}:
               {{ titleTypeArrange | translate }}
             </p>

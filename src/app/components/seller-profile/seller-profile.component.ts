@@ -17,6 +17,13 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { ConvertedCategory } from '../../models/category.model';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import {
+  SellerProfile,
+  SellerProfileResponse,
+} from '../../models/account.model';
+import { AccountService } from '../../services/account.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-seller-profile',
@@ -30,13 +37,14 @@ import { ConvertedCategory } from '../../models/category.model';
     CommonModule,
     TranslateModule,
     TruncatePipe,
+    BreadcrumbComponent,
   ],
   templateUrl: './seller-profile.component.html',
   styleUrl: './seller-profile.component.scss',
 })
 export class SellerProfileComponent {
   listFlower: Flower[] | null = null; // Danh sách hoa
-  sellerInfo: any = null; // Thông tin người bán
+  sellerInfo: SellerProfile | null = null; // Thông tin người bán
   listCategory: ConvertedCategory[] = []; // Danh sách danh mục
 
   constructor(
@@ -45,14 +53,17 @@ export class SellerProfileComponent {
     private router: Router,
     private cartService: CartService,
     private toastr: ToastrService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private accountService: AccountService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((queryParams) => {
-      const userIdString = queryParams['shop'];
+      const userIdString = queryParams['sellerId'];
       if (userIdString) {
         const userId = +userIdString;
+        this.getSellerProfile(userId);
         this.getFlowersByUserId(userId);
       }
     });
@@ -67,15 +78,23 @@ export class SellerProfileComponent {
     this.productService.getFlowersByUserId(userId).subscribe({
       next: (response: Flower[]) => {
         this.listFlower = response;
-        this.sellerInfo = response[0]?.user;
       },
       error: (error: HttpErrorResponse) => {
         this.toastr.error(error.error);
-        console.error(error);
       },
     });
   }
 
+  getSellerProfile(userId: number): void {
+    this.accountService.getSellerProfile(userId).subscribe({
+      next: (response: SellerProfileResponse) => {
+        this.sellerInfo = response.data;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.toastr.error(error.error.error);
+      },
+    });
+  }
   // Xem chi tiết hoa
   viewFlowerDetails(id: number) {
     this.router.navigate(['/product-details', id]);
@@ -83,6 +102,11 @@ export class SellerProfileComponent {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {
@@ -97,7 +121,6 @@ export class SellerProfileComponent {
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
         this.toastr.error(error.error.error);
       },
     });

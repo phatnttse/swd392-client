@@ -8,6 +8,7 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
+  HttpParams,
 } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -116,8 +117,6 @@ export class AuthService {
   }
 
   reLogin() {
-    debugger;
-
     if (this.reLoginDelegate) {
       this.reLoginDelegate();
     } else {
@@ -190,6 +189,24 @@ export class AuthService {
     const accessToken = response.data.accessToken;
     this.localStorage.savePermanentData(accessToken, DBkeys.ACCESS_TOKEN);
     return response;
+  }
+
+  verifyEmail(token: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/auth/verify/${token}`, {});
+  }
+
+  resetPassword(
+    token: string,
+    newPassword: string,
+    repeatPassword: string
+  ): Observable<BaseResponse<any>> {
+    return this.http.post<BaseResponse<any>>(
+      `${this.API_URL}/auth/reset-password?token=${token}`,
+      {
+        newPassword,
+        repeatPassword,
+      }
+    );
   }
 
   private reevaluateLoginStatus(currentUser?: UserAccount | null) {

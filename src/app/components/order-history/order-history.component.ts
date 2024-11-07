@@ -5,6 +5,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {
   OrderByAccount,
   OrderByAccountResponse,
+  OrderCountStatus,
+  OrderCountStatusResponse,
   UpdateOrderStatusResponse,
 } from '../../models/order.model';
 import { CommonModule } from '@angular/common';
@@ -24,6 +26,8 @@ import { CancelOrderComponent } from '../dialogs/cancel-order/cancel-order.compo
 import { ToastrService } from 'ngx-toastr';
 import { Utilities } from '../../services/utilities';
 import { MatIconModule } from '@angular/material/icon';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-order-history',
@@ -42,6 +46,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.scss',
@@ -60,11 +65,13 @@ export class OrderHistoryComponent implements OnInit {
   reasonCancelOrder: string = ''; // Lý do hủy đơn hàng
   loadingBtn = signal(false);
   orderDetailStatus = OrderDetailStatus;
+  orderStatusCount: OrderCountStatus | null = null;
 
   constructor(
     private orderService: OrderService,
     private dialog: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private statusService: StatusService
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +82,7 @@ export class OrderHistoryComponent implements OnInit {
       this.pageSize,
       this.selectedStatus
     );
+    this.getOrderStatusCount();
   }
 
   // Lấy danh sách đơn hàng theo người mua
@@ -97,20 +105,38 @@ export class OrderHistoryComponent implements OnInit {
               this.currentPage,
               this.totalPages
             );
+            this.statusService.statusLoadingSpinnerSource.next(false);
           }
         },
         error: (error: HttpErrorResponse) => {
+          this.statusService.statusLoadingSpinnerSource.next(false);
           console.log(error);
         },
       });
   }
 
+  getOrderStatusCount() {
+    this.orderService.getOrderStatusCount().subscribe({
+      next: (response: OrderCountStatusResponse) => {
+        if (response.success) {
+          this.orderStatusCount = response.data;
+          this.tabs[0].count = this.orderStatusCount.pendingCount;
+          this.tabs[1].count = this.orderStatusCount.preparingCount;
+          this.tabs[2].count = this.orderStatusCount.shippedCount;
+          this.tabs[3].count = this.orderStatusCount.deliveredCount;
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
+  }
+
   btnOpenCancelOrderDialog(id: number) {
     const dialogRef = this.dialog.open(CancelOrderComponent, {
-      data: id,
+      data: { orderId: id, orderStatus: OrderDetailStatus.BUYER_CANCELED },
     });
     dialogRef.afterClosed().subscribe((result: boolean) => {
-      debugger;
       if (result) {
         this.getOrderByBuyer(
           this.order,
@@ -212,7 +238,7 @@ export class OrderHistoryComponent implements OnInit {
         break;
     }
 
-    // Fetch orders based on the selected status
+    this.statusService.statusLoadingSpinnerSource.next(true);
     this.getOrderByBuyer(
       this.order,
       this.sortBy,
@@ -236,5 +262,31 @@ export class OrderHistoryComponent implements OnInit {
       this.currentPage,
       this.totalPages
     );
+  }
+
+  btnConfirmReceived(orderId: number) {
+    this.statusService.statusLoadingSpinnerSource.next(true);
+    this.orderService
+      .updateOrderStatus(orderId, '', OrderDetailStatus.DELIVERED)
+      .subscribe({
+        next: (response: UpdateOrderStatusResponse) => {
+          if (response.success) {
+            this.toastr.success('Xác nhận nhận hàng thành công');
+            this.getOrderByBuyer(
+              this.order,
+              this.sortBy,
+              this.pageNumber,
+              this.pageSize,
+              this.selectedStatus
+            );
+            this.getOrderStatusCount();
+            this.statusService.statusLoadingSpinnerSource.next(false);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.statusService.statusLoadingSpinnerSource.next(false);
+          this.toastr.error(error.error.error, 'Xác nhận nhận hàng thất bại');
+        },
+      });
   }
 }

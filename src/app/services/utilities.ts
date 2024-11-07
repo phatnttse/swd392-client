@@ -70,13 +70,16 @@ export class Utilities {
   }
 
   public static formatDate(date: Date): string {
-    // Lấy các giá trị riêng biệt
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0, nên cần cộng 1
-    const day = date.getDate().toString().padStart(2, '0');
+    if (date instanceof Date && !isNaN(date.getTime())) {
+      // Lấy các giá trị riêng biệt
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0, nên cần cộng 1
+      const day = date.getDate().toString().padStart(2, '0');
 
-    // Trả về định dạng yyyy-mm-dd
-    return `${year}-${month}-${day}`;
+      // Trả về định dạng yyyy-mm-dd
+      return `${year}-${month}-${day}`;
+    }
+    return '';
   }
 
   // Tạo mảng các trang hiển thị

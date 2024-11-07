@@ -1,0 +1,116 @@
+.bread-crumb {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-height: 280px;
+  z-index: 7;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 160px;
+  padding-bottom: 60px;
+}
+
+@media screen and (max-width: 768px) {
+  .bread-crumb {
+    padding-top: 180px;
+    padding-bottom: 40px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .bread-crumb {
+    padding-top: 200px;
+    padding-bottom: 40px;
+  }
+}
+
+.bread-crumb .title-breadcrumb {
+  text-align: center;
+  font-size: 30px;
+  color: #fff;
+  font-weight: bold;
+  position: relative;
+  z-index: 8;
+}
+
+@media (max-width: 767px) {
+  .bread-crumb .title-breadcrumb {
+    font-size: 26px;
+  }
+}
+
+.bread-crumb .breadcrumb {
+  margin: 0;
+  font-size: 14px;
+  padding: 15px 10px;
+  border-radius: 0;
+  font-weight: bold;
+  line-height: 24px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 8;
+  display: flex;
+  justify-content: center;
+}
+
+.bread-crumb .breadcrumb li {
+  display: inline;
+}
+
+.bread-crumb .breadcrumb li > a {
+  color: #fff;
+}
+
+.bread-crumb .breadcrumb li > a > span {
+  color: #fff;
+}
+
+.bread-crumb .breadcrumb li span {
+  display: inline;
+  color: #fff;
+}
+
+.bread-crumb .breadcrumb li .mr_lr {
+  padding: 0px 3px;
+  color: #fff;
+}
+
+.bread-crumb .breadcrumb li .mr_lr svg {
+  width: 10px;
+  height: 10px;
+  margin-top: -2px;
+}
+
+.bread-crumb .breadcrumb li a:hover,
+.bread-crumb .breadcrumb li.active,
+.bread-crumb .breadcrumb li strong {
+  color: #fff;
+  font-weight: bold;
+}
+
+.bread-crumb .breadcrumb li a:hover span,
+.bread-crumb .breadcrumb li.active span,
+.bread-crumb .breadcrumb li strong span {
+  color: #fff;
+  font-weight: bold;
+}
+
+.bread-crumb:after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.home-link span {
+  &:hover {
+    color: var(--bs-primary) !important;
+  }
+}

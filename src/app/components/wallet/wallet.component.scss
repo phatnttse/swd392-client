@@ -1,41 +1,12 @@
 .section-wallet {
-  padding-top: 7rem;
-}
-@media screen and (max-width: 768px) {
-  .section-wallet {
-    padding-top: 9rem;
-  }
-}
-.wallet {
-  background-color: #f7f7f7;
-  margin: 10px auto;
-  height: 100%;
-  width: 100%;
-  transform: scale(0.95);
-  margin-top: 40px;
+  padding: 4rem 0px;
 }
 
 .header {
-  background-color: var(--bs-primary);
+  background-color: var(--bs-accent);
   border-bottom-right-radius: 40px;
   border-bottom-left-radius: 40px;
   position: relative;
-}
-
-.icon-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.icon {
-  color: #ffc168;
-  margin-bottom: 5px;
-}
-
-.icon-text {
-  font-size: 1rem;
-  color: #939393;
 }
 
 .transactions {
@@ -65,4 +36,49 @@
   .t-amount {
     font-size: 1rem;
   }
+}
+
+@media screen and (max-width: 576px) {
+  .t-amount {
+    font-size: 0.8rem;
+  }
+  .t-current-balance {
+    font-size: 0.8rem;
+  }
+  .t-title {
+    font-size: 1rem;
+  }
+
+  .t-time {
+    font-size: 0.8rem;
+  }
+}
+.payment-success-container {
+  text-align: center;
+  padding: 50px;
+  h1 {
+    color: #4caf50;
+    font-size: 2.5rem;
+  }
+  p {
+    font-size: 1.25rem;
+  }
+  #fireworks-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+.text-success {
+  color: #00c292 !important;
+}
+.text-warning {
+  color: #fec90f !important;
+}
+.badge-danger {
+  background-color: #d9534f;
 }

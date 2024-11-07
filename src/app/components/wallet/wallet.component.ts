@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -14,18 +16,24 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../services/account.service';
-import { AddBalanceResponse } from '../../models/account.model';
+import {
+  AddBalanceResponse,
+  UserAccount,
+  UserBalanceResponse,
+} from '../../models/account.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
 import { WalletService } from '../../services/wallet.service';
 import { WalletLog, WalletLogResponse } from '../../models/wallet.model';
-import { WalletLogType } from '../../models/enums';
-import { DBkeys } from '../../services/db-keys';
-import { LocalStoreManager } from '../../services/local-storage.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { WalletLogStatus, WalletLogType } from '../../models/enums';
 import { Utilities } from '../../services/utilities';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { Subscription } from 'rxjs';
+import { StatusService } from '../../services/status.service';
 
 @Component({
   selector: 'app-wallet',
@@ -41,29 +49,40 @@ import { Utilities } from '../../services/utilities';
     ReactiveFormsModule,
     HeaderComponent,
     FooterComponent,
-    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    FormsModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.scss',
 })
-export class WalletComponent implements OnInit {
+export class WalletComponent implements OnInit, OnDestroy {
   formTopUp: FormGroup; // Form nạp tiền
-  listWalletLog: WalletLog[] = [];
-  walletLogTypes = Object.values(WalletLogType);
-  walletLogType = WalletLogType;
+  listWalletLog: WalletLog[] = []; // Danh sách lịch sử giao dịch
+  walletLogTypes = Object.values(WalletLogType); // Danh sách loại giao dịch
+  walletLogType = WalletLogType; // Loại giao dịch
   order: string = 'desc'; // Sắp xếp tăng dần hoặc giảm dần
   sortBy: string = 'createdAt'; // Sắp xếp theo trường nào
-  status: string = ''; // Lọc theo trạng thái
-  type: string = ''; // Lọc theo loại
   startDate: Date = new Date(); // Lọc theo ngày bắt đầu
   endDate: Date = new Date(); // Lọc theo ngày kết thúc
   totalPages: number = 0; // Tổng số trang
   pageNumber: number = 0; // Số trang hiện tại
-  pageSize: number = 6; // Số lượng sản phẩm trên mỗi trang
-  totalElements: number = 0; // Tổng số lượng sản phẩm
+  pageSize: number = 10; // Số lượng trên mỗi trang
+  totalElements: number = 0; // Tổng số lượng
   currentPage: number = 0; // Trang hiện tại
   visiblePages: number[] = []; // Các trang hiển thị
-  loadingBtn = signal(false); // Trạng thái nút đăng ký
+  readonly range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  }); // Thời gian lọc
+  walletLogStatus = WalletLogStatus; // Trạng thái giao dịch
+  walletLogStatuses = Object.values(WalletLogStatus); // Danh sách trạng thái giao dịch
+  type: string = ''; // Loại giao dịch
+  status: string = ''; // Trạng thái giao dịch
+  userAccount: UserAccount | null = null; // Thông tin tài khoản người dùng
+  userAccountSubscription: Subscription = new Subscription(); // Subscription của user account
+  accountBalance: number = 0; // Số dư tài khoản
 
   constructor(
     private formBuilder: FormBuilder,
@@ -71,7 +90,7 @@ export class WalletComponent implements OnInit {
     private accountService: AccountService,
     public authService: AuthService,
     private walletService: WalletService,
-    private localStorage: LocalStoreManager
+    private statusService: StatusService
   ) {
     this.formTopUp = this.formBuilder.group({
       amount: ['', [Validators.required, Validators.min(20000)]],
@@ -79,7 +98,28 @@ export class WalletComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userAccountSubscription = this.authService.userDataSource.subscribe(
+      (userAccount: UserAccount) => {
+        this.userAccount = userAccount;
+      }
+    );
+    this.getBalance();
     this.getWalletLogsByUser();
+  }
+
+  ngOnDestroy(): void {
+    this.userAccountSubscription.unsubscribe();
+  }
+
+  getBalance() {
+    this.accountService.getAccountBalance().subscribe({
+      next: (response: UserBalanceResponse) => {
+        this.accountBalance = response.balance;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error getting balance:', error);
+      },
+    });
   }
 
   // Nạp tiền vào ví
@@ -88,16 +128,17 @@ export class WalletComponent implements OnInit {
       this.formTopUp.markAllAsTouched();
       return;
     }
-    this.loadingBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const amount = this.formTopUp.get('amount')?.value;
 
     this.accountService.addBalance(amount).subscribe({
       next: (response: AddBalanceResponse) => {
         window.location.href = response.checkoutUrl;
-        this.loadingBtn.set(false);
         this.formTopUp.reset();
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.error(error.error.message, 'Error');
       },
     });
@@ -110,7 +151,9 @@ export class WalletComponent implements OnInit {
     pageNumber: number = this.pageNumber,
     pageSize: number = this.pageSize,
     status: string = this.status,
-    type: string = this.type
+    type: string = this.type,
+    startDate?: string,
+    endDate?: string
   ) {
     this.walletService
       .getWalletLogsByAccount(
@@ -119,7 +162,9 @@ export class WalletComponent implements OnInit {
         pageNumber,
         pageSize,
         [status],
-        type
+        type,
+        startDate,
+        endDate
       )
       .subscribe({
         next: (response: WalletLogResponse) => {
@@ -169,6 +214,49 @@ export class WalletComponent implements OnInit {
     this.visiblePages = Utilities.generateVisiblePageArray(
       this.currentPage,
       this.totalPages
+    );
+  }
+
+  // Xử lý khi chọn ngày bắt đầu
+  onStartDateChange(event: any): void {
+    const startDate = event.value;
+    const currentDate = new Date();
+    if (startDate && startDate >= currentDate) {
+      this.range.get('start')?.setValue(null); // Reset the start date
+      this.toastr.warning(
+        'Ngày bắt đầu không được lớn hơn ngày hiện tại',
+        'Warning'
+      );
+    }
+  }
+
+  // Xử lý khi chọn ngày kết thúc
+  onEndDateChange(event: any): void {
+    const endDate = event.value;
+    const currentDate = new Date();
+    if (endDate && endDate >= currentDate) {
+      this.range.get('end')?.setValue(null); // Reset the end date
+      this.toastr.warning(
+        'Ngày kết thúc không được lớn hơn ngày hiện tại',
+        'Warning'
+      );
+    }
+  }
+
+  btnApplyFilter() {
+    const startDate = Utilities.formatDate(
+      this.range.get('start')?.value! ?? null
+    );
+    const endDate = Utilities.formatDate(this.range.get('end')?.value! ?? null);
+    this.getWalletLogsByUser(
+      this.order,
+      this.sortBy,
+      this.currentPage,
+      this.pageSize,
+      this.status,
+      this.type,
+      startDate,
+      endDate
     );
   }
 }

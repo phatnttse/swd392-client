@@ -10,7 +10,7 @@
   "
   class="banner"
 >
-  <div class="container-lg">
+  <div class="container">
     <div class="background-container">
       <div class="row">
         <div class="col-lg-6 pt-5 mt-5">
@@ -30,12 +30,22 @@
               style="font-weight: bold"
               >{{ "Home.BuyNow" | translate }}</a
             >
+            @if (this.authService.isLoggedIn) {
+            <a
+              routerLink="/seller-channel"
+              class="btn btn-dark fs-6 rounded-pill py-3 mt-3"
+              style="font-weight: bold"
+              >{{ "Home.SellFlowerNow" | translate }}</a
+            >
+
+            }@else {
             <a
               routerLink="/signup"
               class="btn btn-dark fs-6 rounded-pill py-3 mt-3"
               style="font-weight: bold"
               >{{ "Home.RegisterToSellFlower" | translate }}</a
             >
+            }
           </div>
         </div>
       </div>
@@ -54,10 +64,9 @@
             </div>
             <div class="col-md-9">
               <div class="card-body p-0">
-                <h5 class="text-light">Fresh Blooms</h5>
+                <h5 class="text-light">{{ "FreshFlowerTitle" | translate }}</h5>
                 <h6 class="card-text fw-bold">
-                  Mua sắm hoa tươi với giá tốt nhất đảm bảo chất lượng cho từng
-                  bông hoa.
+                  {{ "FreshFlowerDescription" | translate }}
                 </h6>
               </div>
             </div>
@@ -83,10 +92,11 @@
             </div>
             <div class="col-md-9">
               <div class="card-body p-0">
-                <h5 class="text-light">Sắc Hoa Cho Mọi Khoảnh Khắc</h5>
+                <h5 class="text-light">
+                  {{ "BeautifulFlowersTitle" | translate }}
+                </h5>
                 <h6 class="card-text">
-                  Tìm kiếm các bó hoa hoàn hảo cho mọi dịp và gửi lời chúc tốt
-                  nhất!.
+                  {{ "BeautifulFlowersDescription" | translate }}
                 </h6>
               </div>
             </div>
@@ -103,9 +113,11 @@
             </div>
             <div class="col-md-9">
               <div class="card-body p-0">
-                <h5 class="text-light">Giao Hoa Nhanh Chóng</h5>
+                <h5 class="text-light">
+                  {{ "FastDeliveryTitle" | translate }}
+                </h5>
                 <h6 class="card-text">
-                  Với dịch vụ giao hoa nhanh đúng thời điểm và đáng tin cậy.
+                  {{ "FastDeliveryDescription" | translate }}
                 </h6>
               </div>
             </div>
@@ -115,69 +127,101 @@
     </div>
   </div>
 </section>
-
-<section class="py-5 overflow-hidden">
-  <div class="container-lg">
-    <div class="row">
-      <div class="col-md-12">
-        <div
-          class="section-header d-flex flex-wrap justify-content-between mb-5"
-        >
-          <h4 class="section-title">
-            {{ "Home.ProductCategory" | translate }}
-          </h4>
-
-          <div class="d-flex align-items-center">
-            <a
-              href="javascript:;"
-              routerLink="/products"
-              class="btn btn-primary me-2"
-            >
-              {{ "Home.ViewAll" | translate }}</a
-            >
+<section class="categories" style="margin: 6rem 0px">
+  <div class="container">
+    <div class="row row-gap-4">
+      <div class="col-lg-4 col-sm-6">
+        <div class="category-card bg-gradient-2">
+          <div class="category-title">
+            <a routerLink="/products" class="h5 mb-24">{{
+              "FreshFlowerBasket" | translate
+            }}</a
+            ><br />
+            <a routerLink="/products" class="link-btn">
+              {{ "ShopNow" | translate }}
+              <span class="material-icons">chevron_right</span>
+            </a>
           </div>
+          <img src="assets/images/category-01.png" />
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <div class="category-card bg-gradient-3">
+          <div class="category-title">
+            <a routerLink="/products" class="h5 mb-24">{{
+              "SpecialBouquet" | translate
+            }}</a
+            ><br />
+            <a routerLink="/products" class="link-btn">
+              {{ "ShopNow" | translate }}
+              <span class="material-icons">chevron_right</span>
+            </a>
+          </div>
+          <img src="assets/images/category-02.png" />
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <div class="category-card bg-gradient-1">
+          <div class="category-title">
+            <a routerLink="/products" class="h5 mb-24">{{
+              "FlowersForAllOccasions" | translate
+            }}</a
+            ><br />
+            <a routerLink="/products" class="link-btn">
+              {{ "ShopNow" | translate }}
+              <span class="material-icons">chevron_right</span>
+            </a>
+          </div>
+          <img src="assets/images/category-04.png" />
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 d-lg-none">
+        <div class="category-card bg-gradient-2">
+          <div class="category-title">
+            <a routerLink="/products" class="h5 mb-24">{{
+              "SeasonalFlowers" | translate
+            }}</a
+            ><br />
+            <a routerLink="/products" class="link-btn">{{
+              "ShopNow" | translate
+            }}</a>
+          </div>
+          <img src="assets/images/category-03.png" />
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div
-          class="swiper_cates swiper-container control-top swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events"
-        >
-          <div
-            class="swiper-wrapper box_cate_index"
-            style="
-              transform: translate3d(0px, 0px, 0px);
-              transition-duration: 0ms;
-            "
-          >
-            @for (category of listCategory | slice:0:8 ; track $index) {
-            <div class="swiper-slide" style="width: 180px; margin-right: 20px">
-              <div
-                class="item-cate"
-                (click)="goToProductListPageByCategory(category.id)"
-              >
-                <a
-                  href="javascript:;"
-                  [title]="category.name"
-                  class="opaci_href"
-                ></a>
-                <div class="icon_cate">
-                  <img
-                    width="100"
-                    height="100"
-                    class="lazyload loaded"
-                    [src]="category.imageUrl"
-                    [alt]="category.name"
-                    data-was-processed="true"
-                  />
-                </div>
-                <h3>{{ category.name }}</h3>
-                <!-- <span> {{ category.children.length }} danh mục</span> -->
-              </div>
-            </div>
-            }
+  </div>
+</section>
+
+<section class="about-1 my-5" style="margin: 6rem 0px">
+  <div class="container-lg">
+    <div class="row align-items-center row-gap-4">
+      <div class="col-lg-6">
+        <div class="content">
+          <div class="since">
+            <p>{{ "Since" | translate }}</p>
+            <h6>{{ "EstablishedYear" | translate }}</h6>
           </div>
+          <div class="detail">
+            <h6>{{ "OurStory" | translate }}</h6>
+            <h2>{{ "BrandName" | translate }}</h2>
+            <p class="mb-4">
+              {{ "WelcomeMessage" | translate }}
+            </p>
+            <a routerLink="about-us" class="cus-btn bordered">{{
+              "ReadMore" | translate
+            }}</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="img-block">
+          <img
+            style="border-radius: 20px; object-fit: cover"
+            class="w-100"
+            src="assets/images/about-shop.jpg"
+            alt="{{ 'ShopAltText' | translate }}"
+          />
         </div>
       </div>
     </div>
@@ -267,118 +311,17 @@
     </div>
   </div>
 </section>
-
-<section class="py-3">
-  <div class="container-lg">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="banner-blocks">
-          <div
-            class="banner-ad d-flex align-items-center large bg-info block-1"
-            style="
-              background: url('assets/images/background-home-2.png') no-repeat;
-              background-size: cover;
-            "
-          >
-            <div class="banner-content p-5">
-              <div class="content-wrapper text-primary">
-                <h3 class="banner-title text-primary">
-                  Các mặt hàng đang GIẢM GIÁ
-                </h3>
-                <p>Giảm giá đến 30%</p>
-                <a href="#" class="btn-link text-white">Mua ngay</a>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="banner-ad bg-success-subtle block-2"
-            style="
-              background: url('assets/images/background-home-3.jpg') no-repeat;
-              background-size: cover;
-            "
-          >
-            <div class="banner-content align-items-center p-5">
-              <div class="content-wrapper text-primary">
-                <h3 class="banner-title text-primary">Combo ưu đãi</h3>
-                <p>Giảm giá đến 50%</p>
-                <a href="#" class="btn-link text-white">Mua ngay</a>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="banner-ad bg-danger block-3"
-            style="
-              background: url('assets/images/background-home-4.jpg') no-repeat;
-              background-size: cover;
-            "
-          >
-            <div class="banner-content align-items-center p-5">
-              <div class="content-wrapper text-primary">
-                <h3 class="banner-title text-primary">Phiếu giảm giá</h3>
-                <p>Giảm giá đến 40%</p>
-                <a href="#" class="btn-link text-white">Mua ngay</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- / Banner Blocks -->
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="container-lg">
-    <div
-      class="bg-secondary text-light py-5 my-5"
-      style="
-        background: url('assets/images/background-home-1.png') no-repeat;
-        background-size: cover;
-      "
-    >
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-5 p-3">
-            <div class="section-header">
-              <h2 class="section-title display-5 text-light">
-                Get 25% Discount on your first purchase
-              </h2>
-            </div>
-            <p>Just Sign Up & Register it now to become member.</p>
-          </div>
-          <div class="col-md-5 p-3">
-            <form>
-              <div class="mb-3">
-                <label for="name" class="form-label d-none">Name</label>
-                <input
-                  type="text"
-                  class="form-control form-control-md rounded-0"
-                  name="name"
-                  id="name"
-                  placeholder="Name"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label d-none">Email</label>
-                <input
-                  type="email"
-                  class="form-control form-control-md rounded-0"
-                  name="email"
-                  id="email"
-                  placeholder="Email Address"
-                />
-              </div>
-              <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-dark btn-md rounded-0">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+<section class="inner-banner my-5">
+  <img class="object object-1" src="assets/images/banner-object-2.png" alt="" />
+  <img class="object object-2" src="assets/images/banner-object-1.png" alt="" />
+  <div class="container">
+    <div class="content">
+      <h3>{{ "FreshFlowerPromotion" | translate }}</h3>
+      <h6>{{ "SpringDiscount" | translate }}</h6>
+      <h2>{{ "Save30PercentNow" | translate }}</h2>
+      <a routerLink="/products" class="cus-btn bordered">{{
+        "BuyNow" | translate
+      }}</a>
     </div>
   </div>
 </section>
@@ -390,7 +333,7 @@
         class="section-header d-flex align-items-center justify-content-between my-4"
       >
         <h2 class="section-title">Blog gần đây</h2>
-        <a href="#" class="btn btn-primary">View All</a>
+        <a href="#" class="btn btn-primary">{{ "Home.ViewAll" | translate }}</a>
       </div>
     </div>
     <div class="row">
@@ -510,8 +453,7 @@
               </h3>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipi elit. Aliquet
-                eleifend viverra enim tincidunt donec quam. A in arcu, hendrerit
-                neque dolor morbi...
+                eleifend viverra enim tincidunt donec quam.
               </p>
             </div>
           </div>
@@ -523,7 +465,7 @@
 
 <section class="pb-4 my-4">
   <div class="container-lg">
-    <div class="bg-warning pt-5 rounded-5">
+    <div class="pt-5 rounded-5" style="background-color: #f0f8ff">
       <div class="container">
         <div class="row justify-content-center align-items-center">
           <div class="col-md-4">
@@ -557,29 +499,22 @@
 
 <section class="py-4">
   <div class="container-lg">
-    <h2 class="my-4">Mọi người cũng đang tìm kiếm</h2>
-    <a href="#" class="btn btn-warning me-2 mb-2">Blue diamon almonds</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Angie’s Boomchickapop Corn</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Salty kettle Corn</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Chobani Greek Yogurt</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Sweet Vanilla Yogurt</a>
-    <a href="#" class="btn btn-warning me-2 mb-2"
-      >Foster Farms Takeout Crispy wings</a
-    >
-    <a href="#" class="btn btn-warning me-2 mb-2">Warrior Blend Organic</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Chao Cheese Creamy</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Chicken meatballs</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Blue diamon almonds</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Angie’s Boomchickapop Corn</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Salty kettle Corn</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Chobani Greek Yogurt</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Sweet Vanilla Yogurt</a>
-    <a href="#" class="btn btn-warning me-2 mb-2"
-      >Foster Farms Takeout Crispy wings</a
-    >
-    <a href="#" class="btn btn-warning me-2 mb-2">Warrior Blend Organic</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Chao Cheese Creamy</a>
-    <a href="#" class="btn btn-warning me-2 mb-2">Chicken meatballs</a>
+    <h2 class="my-4">Sản phẩm hoa mọi người cũng đang tìm kiếm</h2>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa hồng tươi</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa lan hồ điệp</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa cẩm chướng</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa hướng dương</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Bó hoa cưới</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Bình hoa sinh nhật</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa ly</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa tươi theo mùa</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa nhập khẩu</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa hồng Ecuador</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Cây xanh văn phòng</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Chậu hoa mini</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Cành hoa trang trí</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa khô nghệ thuật</a>
+    <a href="#" class="btn btn-warning me-2 mb-2">Hoa chúc mừng</a>
   </div>
 </section>
 

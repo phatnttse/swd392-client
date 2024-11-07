@@ -1,6 +1,9 @@
 <mat-card>
   <mat-card-content>
-    <div class="col-lg-4">
+    <mat-card-title class="fw-bold">{{
+      "FilterBy" | translate
+    }}</mat-card-title>
+    <div class="col-lg-4 mt-2">
       <mat-form-field appearance="outline">
         <mat-label>{{ "EnterStartAndEndDate" | translate }}</mat-label>
         <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -32,71 +35,165 @@
     </div>
   </mat-card-content>
 </mat-card>
-
-<mat-card class="cardWithShadow overflow-hidden">
-  <div class="row">
-    <div class="col-lg-3 col-sm-6 col-6">
-      <div class="p-3 text-center">
-        <button mat-fab class="my-fab my-3 bg-light-accent">
-          <mat-icon class="text-accent">people</mat-icon>
-        </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
-          {{ report?.addToCart }}&nbsp;
-        </mat-card-title>
-        <small class="text-black">Customers</small>
-      </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-6">
-      <div class="p-3 text-center">
-        <button mat-fab class="my-fab my-3 bg-light-warning">
-          <mat-icon class="text-warning">inventory</mat-icon>
-        </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
-          4,396&nbsp;
-        </mat-card-title>
-        <small class="text-black">Products</small>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-sm-6 col-6">
-      <div class="p-3 text-center">
-        <button mat-fab class="my-fab my-3 bg-light-error">
-          <mat-icon class="text-error">bar_chart</mat-icon>
-        </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
-          423,39&nbsp;
-        </mat-card-title>
-        <small class="text-black">Sales</small>
-      </div>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-6">
-      <div class="p-3 text-center">
-        <button mat-fab class="my-fab my-3 bg-light-success">
-          <mat-icon class="text-success">refresh</mat-icon>
-        </button>
-        <mat-card-title class="mb-0 mt-30 fs-24 fw-500">
-          835&nbsp;
-        </mat-card-title>
-        <small class="text-black">Refunds</small>
-      </div>
-    </div>
+<div class="row">
+  <div class="col-lg-4">
+    <mat-card class="mb-3 shadow-sm">
+      <mat-card-content class="p-3">
+        <div class="d-flex align-items-center">
+          <mat-card-title>Doanh thu</mat-card-title>
+          <div class="ms-auto">
+            <button mat-fab class="my-fab my-2 bg-light-warning">
+              <mat-icon class="text-warning">payments</mat-icon>
+            </button>
+          </div>
+        </div>
+        <h4 class="mb-2 mt-3 fw-bold display-6">
+          @if (report?.totalPrice! > 0) {
+          {{ report?.totalPrice | number : "1.0"
+          }}<span class="fs-20 ms-1">đ</span> }@else { 0<span class="fs-20 ms-1"
+            >đ</span
+          >
+          }
+        </h4>
+        <h6 class="text-muted mt-2 mb-0">
+          {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}
+          -
+          {{ this.range.get("end")?.value! | date : "yyyy-MM-dd" }}
+        </h6>
+      </mat-card-content>
+    </mat-card>
   </div>
-</mat-card>
+  <div class="col-lg-4">
+    <mat-card class="mb-3 shadow-sm">
+      <mat-card-content class="p-3">
+        <div class="d-flex align-items-center">
+          <mat-card-title>Lượt mua</mat-card-title>
+          <div class="ms-auto">
+            <button mat-fab class="my-fab my-2 bg-light-error">
+              <mat-icon class="text-error">local_mall</mat-icon>
+            </button>
+          </div>
+        </div>
+        <h4 class="mb-2 mt-3 fw-bold display-6">
+          {{ report?.orders }} <span class="fs-20 ms-1">đơn hàng</span>
+        </h4>
+        <h6 class="text-muted mt-2 mb-0">
+          {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}
+          -
+          {{ this.range.get("end")?.value! | date : "yyyy-MM-dd" }}
+        </h6>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-lg-4">
+    <mat-card class="mb-3 shadow-sm">
+      <mat-card-content class="p-3">
+        <div class="d-flex align-items-center">
+          <mat-card-title>Thêm vào giỏ</mat-card-title>
+          <div class="ms-auto">
+            <button mat-fab class="my-fab my-2 bg-light-accent">
+              <mat-icon class="text-accent">shopping_basket</mat-icon>
+            </button>
+          </div>
+        </div>
+        <h4 class="mb-2 mt-3 fw-bold display-6">
+          {{ report?.addToCart }} <span class="fs-20 ms-1">số lần thêm</span>
+        </h4>
+        <h6 class="text-muted mt-2 mb-0">
+          {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}
+          -
+          {{ this.range.get("end")?.value! | date : "yyyy-MM-dd" }}
+        </h6>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-lg-4">
+    <mat-card class="mb-3 shadow-sm">
+      <mat-card-content class="p-3">
+        <div class="d-flex align-items-center">
+          <mat-card-title>Lượt xem sản phẩm</mat-card-title>
+          <div class="ms-auto">
+            <button mat-fab class="my-fab my-2 bg-light-success">
+              <mat-icon class="text-success">visibility</mat-icon>
+            </button>
+          </div>
+        </div>
+        <h4 class="mb-2 mt-3 fw-bold display-6">
+          {{ report?.views }}<span class="fs-20 ms-1">lượt xem</span>
+        </h4>
+        <h6 class="text-muted mt-2 mb-0">
+          {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}
+          -
+          {{ this.range.get("end")?.value! | date : "yyyy-MM-dd" }}
+        </h6>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-lg-4">
+    <mat-card class="mb-3 shadow-sm">
+      <mat-card-content class="p-3">
+        <div class="d-flex align-items-center">
+          <mat-card-title>Tỉ lệ chuyển đổi</mat-card-title>
+          <div class="ms-auto">
+            <button mat-fab class="my-fab my-2 bg-light-success">
+              <mat-icon class="text-success">percent</mat-icon>
+            </button>
+          </div>
+        </div>
+        <h4 class="mb-2 mt-3 fw-bold display-6">
+          {{ report?.conversionRate | number : "1.0-2"
+          }}<span class="fs-20 ms-1">%</span>
+        </h4>
+        <h6 class="text-muted mt-2 mb-0">
+          {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}
+          -
+          {{ this.range.get("end")?.value! | date : "yyyy-MM-dd" }}
+        </h6>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
 <mat-card>
   <mat-card-content>
-    <h4 class="mb-32">Sales Overview</h4>
+    <h5 class="mb-32">
+      Doanh thu trong ngày từ
+      {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}
+      đến
+      {{ this.range.get("end")?.value! | date : "yyyy-MM-dd" }}
+    </h5>
+    <div class="max-width">
+      <apx-chart
+        [series]="revenueChartOptions.series"
+        [dataLabels]="revenueChartOptions.dataLabels"
+        [chart]="revenueChartOptions.chart"
+        [legend]="revenueChartOptions.legend"
+        [xaxis]="revenueChartOptions.xaxis"
+        [grid]="revenueChartOptions.grid"
+        [stroke]="revenueChartOptions.stroke"
+        [tooltip]="revenueChartOptions.tooltip"
+        [plotOptions]="revenueChartOptions.plotOptions"
+      >
+      </apx-chart>
+    </div>
+    <h5 class="mb-32 mt-5">
+      Mức đặt hàng trong ngày từ
+      {{ this.range.get("start")?.value! | date : "yyyy-MM-dd" }}
+      đến
+      {{ this.range.get("end")?.value! | date : "yyyy-MM-dd" }}
+    </h5>
 
     <div class="max-width">
       <apx-chart
-        [series]="chartOptions.series"
-        [dataLabels]="chartOptions.dataLabels"
-        [chart]="chartOptions.chart"
-        [legend]="chartOptions.legend"
-        [xaxis]="chartOptions.xaxis"
-        [grid]="chartOptions.grid"
-        [stroke]="chartOptions.stroke"
-        [tooltip]="chartOptions.tooltip"
-        [plotOptions]="chartOptions.plotOptions"
+        [series]="orderChartOptions.series"
+        [dataLabels]="orderChartOptions.dataLabels"
+        [chart]="orderChartOptions.chart"
+        [legend]="orderChartOptions.legend"
+        [xaxis]="orderChartOptions.xaxis"
+        [grid]="orderChartOptions.grid"
+        [stroke]="orderChartOptions.stroke"
+        [tooltip]="orderChartOptions.tooltip"
+        [plotOptions]="orderChartOptions.plotOptions"
       >
       </apx-chart>
     </div>

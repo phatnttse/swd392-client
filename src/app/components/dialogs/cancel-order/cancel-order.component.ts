@@ -19,7 +19,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OrderService } from '../../../services/order.service';
-import { CancelOrderReason, OrderDetailStatus } from '../../../models/enums';
+import {
+  BuyerCancelOrderReason,
+  OrderDetailStatus,
+  SellerCancelOrderReason,
+} from '../../../models/enums';
 import { UpdateOrderStatusResponse } from '../../../models/order.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -44,16 +48,21 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CancelOrderComponent {
   formCancelOrder: FormGroup; // Form hủy đơn hàng
-  cancelOrderReasons = Object.values(CancelOrderReason); // Danh sách lý do hủy đơn hàng
+  buyerCancelOrderReasons = Object.values(BuyerCancelOrderReason); // Danh sách lý do hủy đơn hàng
+  orderStatus: string = ''; // Trạng thái đơn hàng
+  orderDetailStatus = OrderDetailStatus; // Trạng thái chi tiết đơn hàng
+  sellerCancelOrderReasons = Object.values(SellerCancelOrderReason); // Danh sách lý do hủy đơn hàng của người bán
 
   constructor(
     private formBuilder: FormBuilder,
     private orderService: OrderService,
-    @Inject(MAT_DIALOG_DATA) public data: number,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { orderId: number; orderStatus: string },
     private toastr: ToastrService,
     private dialogRef: MatDialogRef<CancelOrderComponent>,
     private translate: TranslateService
   ) {
+    this.orderStatus = data.orderStatus;
     this.formCancelOrder = this.formBuilder.group({
       reason: ['', [Validators.required]],
       otherReason: [{ value: '', disabled: true }],
@@ -61,7 +70,7 @@ export class CancelOrderComponent {
 
     // Theo dõi thay đổi của lý do hủy đơn hàng
     this.formCancelOrder.get('reason')?.valueChanges.subscribe((value) => {
-      if (value === this.translate.instant(CancelOrderReason.Other)) {
+      if (value === this.translate.instant(BuyerCancelOrderReason.Other)) {
         this.formCancelOrder.get('otherReason')?.enable();
       } else {
         this.formCancelOrder.get('otherReason')?.disable();
@@ -77,14 +86,15 @@ export class CancelOrderComponent {
 
     let reason = this.formCancelOrder.get('reason')?.value;
 
-    if (reason === CancelOrderReason.Other) {
+    if (reason === BuyerCancelOrderReason.Other) {
       reason = this.formCancelOrder.get('otherReason')?.value;
     }
 
-    const orderId = this.data;
+    const orderId = this.data.orderId;
+    const orderStatus = this.data.orderStatus;
 
     this.orderService
-      .updateOrderStatus(orderId, reason, OrderDetailStatus.BUYER_CANCELED)
+      .updateOrderStatus(orderId, reason, orderStatus)
       .subscribe({
         next: (response: UpdateOrderStatusResponse) => {
           if (response.success) {
@@ -92,8 +102,7 @@ export class CancelOrderComponent {
           }
         },
         error: (error: HttpErrorResponse) => {
-          this.toastr.error(error.error, 'Error');
-          console.log(error);
+          this.toastr.error(error.error.error, 'Error');
         },
       });
   }

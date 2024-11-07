@@ -14,7 +14,7 @@ RUN npm install
 COPY . ./ 
 
 # Build ứng dụng Angular cho môi trường production
-RUN npm run build -- --configuration=production
+RUN npm run build -- --configuration=production --source-map=false
 
 # 2: Phục vụ ứng dụng với Nginx
 FROM nginx:alpine

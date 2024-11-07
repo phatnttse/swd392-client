@@ -10,6 +10,8 @@ export const AdminRoutes: Routes = [
         (m) => m.SellerAdminComponent
       );
     },
+    canActivate: [AdminGuard],
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: 'product-management',
@@ -20,14 +22,6 @@ export const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'product-detail-management/:id',
-        loadComponent() {
-          return import(
-            './../seller-admin/admin/admin-product-detail-management/admin-product-detail-management.component'
-          ).then((m) => m.AdminProductDetailManagementComponent);
-        },
-      },
-      {
         path: 'category-management',
         loadComponent() {
           return import(
@@ -35,8 +29,22 @@ export const AdminRoutes: Routes = [
           ).then((m) => m.AdminCategoryManagementComponent);
         },
       },
+      {
+        path: 'user-management',
+        loadComponent() {
+          return import(
+            './../seller-admin/admin/admin-user-management/admin-user-management.component'
+          ).then((m) => m.AdminUserManagementComponent);
+        },
+      },
+      {
+        path: '',
+        loadComponent() {
+          return import(
+            './../seller-admin/admin/admin-dashboard-management/admin-dashboard-management.component'
+          ).then((m) => m.AdminDashboardManagementComponent);
+        },
+      },
     ],
-    canActivate: [AdminGuard],
-    canActivateChild: [AdminGuard],
   },
 ];

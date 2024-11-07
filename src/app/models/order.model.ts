@@ -57,6 +57,16 @@ export interface OrderLineChart {
   time: string;
 }
 
+export interface OrderCountStatus {
+  pendingCount: number;
+  preparingCount: number;
+  shippedCount: number;
+  deliveredCount: number;
+  buyerCancelledCount: number;
+  sellerCancelledCount: number;
+  refundedCount: number;
+}
+
 export interface OrderResponse extends BaseResponse<Order[]> {}
 export interface PaginatedOrderByAccountResponse
   extends PaginatedPageableResponse<OrderByAccount> {}
@@ -64,5 +74,6 @@ export interface OrderByAccountResponse
   extends BaseResponse<PaginatedOrderByAccountResponse> {}
 export interface UpdateOrderStatusResponse
   extends BaseResponse<OrderByAccount> {}
-
 export interface OrderReportResponse extends BaseResponse<OrderReport> {}
+export interface OrderCountStatusResponse
+  extends BaseResponse<OrderCountStatus> {}

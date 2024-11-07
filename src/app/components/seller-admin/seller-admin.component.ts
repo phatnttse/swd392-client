@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -31,6 +31,8 @@ import { StatusService } from '../../services/status.service';
 import { SideBarMenu } from '../../models/base.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
+import { Notification } from '../../models/notification.model';
+import { NotificationType } from '../../models/enums';
 
 @Component({
   selector: 'app-seller-admin',
@@ -54,6 +56,7 @@ import { NotificationService } from '../../services/notification.service';
     MatSlideToggleModule,
     MatToolbarModule,
     TranslateModule,
+    MatBadgeModule,
   ],
   templateUrl: './seller-admin.component.html',
   styleUrls: [
@@ -62,7 +65,7 @@ import { NotificationService } from '../../services/notification.service';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class SellerAdminComponent implements OnInit {
+export class SellerAdminComponent implements OnInit, OnDestroy {
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
@@ -73,8 +76,12 @@ export class SellerAdminComponent implements OnInit {
   userAccount: UserAccount | null = null;
   listLanguage: any = null; // Danh sách ngôn ngữ lấy từ config
   defaultLang: any = null; // Ngôn ngữ được chọn
-  notifications: any[] = []; // Danh sách thông báo
-  private notificationSubscription!: Subscription;
+  notifications: Notification[] = []; // Danh sách thông báo
+  notificationSubscription!: Subscription;
+  newNotificationNumber: number = 0; // Số thông báo mới
+  notificationType = NotificationType; // Enum loại thông báo
+  size: number = 5; // Số lượng thông báo hiển thị
+  cursor: string = ''; // Con trỏ phân trang
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -97,13 +104,19 @@ export class SellerAdminComponent implements OnInit {
       // Khởi tạo WebSocket và kết nối
       this.notificationService.connectWebSocket(this.userAccount?.id!);
 
-      this.getAllNotifications(); // Lấy tất cả thông báo
+      // Lấy tất cả thông báo
+      this.notificationService.notificationDataSource.subscribe({
+        next: (notifications: Notification[]) => {
+          this.notifications = notifications;
+          this.getNewNotifications();
+        },
+      });
 
       // Đăng ký nhận thông báo mới từ WebSocket
       this.notificationSubscription = this.notificationService
         .onNotification()
-        .subscribe((notification) => {
-          this.notifications.push(notification); // Thêm thông báo mới vào danh sách
+        .subscribe((notification: Notification) => {
+          this.notifications.push(notification);
         });
     }
 
@@ -115,12 +128,19 @@ export class SellerAdminComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    // Ngắt kết nối WebSocket và hủy đăng ký các thông báo
+    this.notificationService.disconnectWebSocket();
+    if (this.notificationSubscription) {
+      this.notificationSubscription.unsubscribe();
+    }
+  }
+
   btnLogOut() {
     this.authService.logout();
-    this.authService.userDataSource.next(null);
-    this.cartService.cartDataSource.next([]);
-    this.cartService.totalAmountSubject.next(0);
-    this.cartService.totalQuantitySubject.next(0);
+    this.cartService.reset();
+    this.productService.reset();
+    this.notificationService.reset();
     this.router.navigate(['/signin']);
   }
 
@@ -157,13 +177,40 @@ export class SellerAdminComponent implements OnInit {
     this.statusService.statusLanguageSource.next(lang);
   }
 
-  getAllNotifications() {
-    // Lấy tất cả thông báo qua API khi component được khởi tạo
+  // Lấy số thông báo mới
+  getNewNotifications() {
+    this.newNotificationNumber = this.notifications.filter(
+      (notification) => !notification.isRead && !notification.isDeleted
+    ).length;
+  }
+
+  onScroll(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // Kiểm tra xem người dùng đã cuộn đến đáy chưa
+    if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+      console.log('Đã cuộn đến đáy!');
+      this.loadMoreNotifications(); // Gọi hàm để tải thêm thông báo
+    }
+  }
+
+  loadMoreNotifications() {
+    this.cursor = this.notifications[this.notifications.length - 1]?.createdAt; // Lấy giá trị createdAt của thông báo cuối cùng
+    // Lấy tất cả thông báo
     this.notificationService
-      .getAllNotifications(this.userAccount?.id!)
+      .getAllNotifications(this.userAccount?.id!, this.size, this.cursor)
       .subscribe({
-        next: (response: any) => {
-          this.notifications = response;
+        next: (response: Notification[]) => {
+          // Nếu không có thông báo mới, không cập nhật cursor
+          if (response.length) {
+            const olderNotifications = response.filter(
+              (notification) => !notification.isRead && !notification.isDeleted
+            );
+            this.notifications.push(...olderNotifications);
+            this.cursor =
+              this.notifications[this.notifications.length - 1]?.createdAt ||
+              ''; // Cập nhật cursor
+          }
         },
         error: (error: HttpErrorResponse) => {
           console.error(error);
@@ -171,12 +218,26 @@ export class SellerAdminComponent implements OnInit {
       });
   }
 
+  btnMarkAllAsRead() {
+    this.notificationService.markAsReadAll(this.userAccount?.id!).subscribe({
+      next: () => {
+        this.notifications.forEach(
+          (notification) => (notification.isRead = true)
+        );
+        this.newNotificationNumber = 0;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+      },
+    });
+  }
+
   routerLinkActive = 'activelink';
   sellerChannelMenu: SideBarMenu[] = [
     {
       link: '/seller-channel',
       icon: 'storefront',
-      menu: 'Dashboard',
+      menu: 'Statistical',
     },
     {
       link: '/seller-channel/product-management',
@@ -194,17 +255,22 @@ export class SellerAdminComponent implements OnInit {
     {
       link: '/admin',
       icon: 'dashboard',
-      menu: 'Dashboard',
+      menu: 'Trang chủ quản trị',
     },
     {
       link: '/admin/product-management',
       icon: 'inventory',
-      menu: 'Quản lý kho hàng',
+      menu: 'Quản lý sản phẩm',
     },
     {
       link: '/admin/category-management',
       icon: 'list',
       menu: 'Quản lý danh mục',
+    },
+    {
+      link: '/admin/user-management',
+      icon: 'person',
+      menu: 'Quản lý người dùng',
     },
   ];
 }

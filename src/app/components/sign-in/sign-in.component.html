@@ -16,7 +16,7 @@
             <div class="mb-4">
               <h3>
                 {{ "Sign.SignIn" | translate }}
-                <strong class="primary-color">SWD392</strong>
+                <strong class="primary-color">Blossom</strong>
               </h3>
               <p class="my-3">
                 {{ "Sign.DontHaveAccount" | translate }}
@@ -98,16 +98,11 @@
                 mat-raised-button
                 color="primary"
                 class="w-100 p-20"
-                [disabled]="loadingBtn().valueOf()"
               >
-                @if (loadingBtn()) {
-                <mat-spinner diameter="24"></mat-spinner>
-                }@else {
                 {{ "Sign.LoginButton" | translate }}
-                }
               </button>
 
-              <span
+              <!-- <span
                 class="d-flex text-left my-4 text-muted justify-content-center"
               >
                 {{ "Sign.OrSignInWith" | translate }}
@@ -151,7 +146,7 @@
                     }}</span>
                   </button>
                 </div>
-              </div>
+              </div> -->
             </form>
           </div>
         </div>

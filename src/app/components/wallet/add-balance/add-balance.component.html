@@ -1,0 +1,177 @@
+@if (statusPage === 1) {
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <mat-card class="p-5 shadow-lg" style="max-width: 600px; width: 100%">
+    <mat-card-content>
+      <div
+        class="icon-circle-check mx-auto d-flex align-items-center justify-content-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon"
+        >
+          <path d="M9 11l3 3L22 4"></path>
+          <path d="M22 4L12 14.01 9 11 4 16"></path>
+        </svg>
+      </div>
+      <h1 class="fw-bold text-dark mt-3 text-center">Nạp tiền thành công!</h1>
+      <p class="text-black fs-5 mt-3 text-center mb-5">
+        Bạn đã nạp thành công số tiền
+        <span class="fw-bold" style="color: #25ae88"
+          >{{ paymentDetails?.amountPaid | number : "1.0" }}đ</span
+        >
+        vào ví
+      </p>
+      <div class="detail-section">
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Số tiền nạp:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.amount | number : "1.0" }}đ
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Mã giao dịch:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.id }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Thời gian:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.createdAt | date : "dd/MM/yyyy HH:mm:ss" }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Trạng thái:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            <span style="color: #25ae88">
+              {{ paymentDetails?.status }}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Số tiền đã thanh toán:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.amountPaid | number : "1.0" }}đ
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-12 text-dark d-flex justify-content-start"
+            style="padding: 0"
+          >
+            {{ paymentDetails?.transactions?.[0]?.description || 'N/A' }}
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions class="d-flex justify-content-center mt-4">
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        routerLink="/wallet"
+        style="background-color: #25ae88"
+      >
+        <mat-icon>wallet</mat-icon>
+        Về ví của tôi
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+}@else if (statusPage === 2) {
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <mat-card class="p-5 shadow-lg" style="max-width: 600px; width: 100%">
+    <mat-card-content>
+      <div class="mx-auto d-flex align-items-center justify-content-center">
+        <img
+          width="56"
+          src="./../../../../assets/images/cancel.svg"
+          alt="Cancel"
+        />
+      </div>
+      <h1 class="fw-bold text-dark mt-3 text-center">Huỷ giao dịch</h1>
+      <p class="text-black fs-5 mt-3 text-center mb-5">
+        Nạp tiền không thành công. Vui lòng thử lại sau !
+      </p>
+      <div class="detail-section">
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Số tiền nạp:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.amount | number : "1.0" }}đ
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Mã giao dịch:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.id }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Thời gian:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.createdAt | date : "dd/MM/yyyy HH:mm:ss" }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Trạng thái:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            <span style="color: #f44336">
+              {{ paymentDetails?.status }}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-black d-flex justify-content-start">
+            Số tiền đã thanh toán:
+          </div>
+          <div class="col-6 fw-bold text-dark d-flex justify-content-end">
+            {{ paymentDetails?.amountPaid | number : "1.0" }}đ
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions class="d-flex justify-content-center mt-4">
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        routerLink="/wallet"
+        style="background-color: #f44336"
+      >
+        <mat-icon>wallet</mat-icon>
+        Về ví của tôi
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+}

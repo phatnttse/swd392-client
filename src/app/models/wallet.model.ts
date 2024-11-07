@@ -16,6 +16,7 @@ export interface WalletLog {
   amount: number;
   paymentMethod: PaymentMethod;
   status: WalletLogStatus;
+  balance: number;
   createdAt: string;
 }
 

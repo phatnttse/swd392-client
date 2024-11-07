@@ -72,6 +72,7 @@ export enum ParentCategory {
   TYPE = 'TYPE',
   EVENT_TYPE = 'EVENT_TYPE',
   SUBJECT = 'SUBJECT',
+  DISPLAY = 'DISPLAY',
 }
 
 export enum NonProcessOrderStatus {
@@ -80,11 +81,43 @@ export enum NonProcessOrderStatus {
   REFUNDED = 'REFUNDED',
 }
 
-export enum CancelOrderReason {
+export enum BuyerCancelOrderReason {
   FoundCheaperElsewhere = 'Order.CancelReason.FoundCheaperElsewhere',
   ChangeOfMind = 'Order.CancelReason.ChangeOfMind',
   OrderByMistake = 'Order.CancelReason.OrderByMistake',
   ShippingCostTooHigh = 'Order.CancelReason.ShippingCostTooHigh',
   LongShippingTime = 'Order.CancelReason.LongShippingTime',
   Other = 'Order.CancelReason.Other',
+}
+
+export enum SellerCancelOrderReason {
+  OutOfStock = 'Order.CancelReason.OutOfStock',
+  PricingError = 'Order.CancelReason.PricingError',
+  ShippingDelay = 'Order.CancelReason.ShippingDelay',
+  CustomerRequest = 'Order.CancelReason.CustomerRequest',
+  FraudulentOrder = 'Order.CancelReason.FraudulentOrder',
+  Other = 'Order.CancelReason.Other',
+}
+
+export enum NotificationType {
+  WELCOME = 'WELCOME',
+  FLOWER_LISTING_STATUS = 'FLOWER_LISTING_STATUS',
+  ORDER_STATUS = 'ORDER_STATUS',
+  MARKETING = 'WALLET_LOG',
+}
+
+export enum PaymentStatus {
+  CANCELLED = 'CANCELLED',
+  PAID = 'PAID',
+}
+
+export enum UserStatus {
+  VERIFIED = 'VERIFIED',
+  UNVERIFIED = 'UNVERIFIED',
+  DELETED = 'DELETED',
+  BAN = 'BAN',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  BLOCKED = 'BLOCKED',
+  UNBLOCKED = 'UNBLOCKED',
 }

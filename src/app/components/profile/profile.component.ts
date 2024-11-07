@@ -1,6 +1,6 @@
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -32,8 +32,11 @@ import { LocalStoreManager } from '../../services/local-storage.service';
 import { DBkeys } from '../../services/db-keys';
 import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { Subscription } from 'rxjs';
+import { StatusService } from '../../services/status.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-profile',
@@ -57,31 +60,28 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
     MatListModule,
     MatToolbarModule,
     TranslateModule,
-    MatProgressSpinnerModule,
     MatStepperModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   @ViewChild('stepper') stepper!: MatStepper;
 
-  profileForm: FormGroup;
-  changePasswordForm: FormGroup;
-  changeEmailForm: FormGroup;
-  verifyOTPForm: FormGroup;
-  userAccount: UserAccount | null = null;
-  genders = Object.values(Gender);
+  profileForm: FormGroup; // Form thông tin tài khoản
+  changePasswordForm: FormGroup; // Form đổi mật khẩu
+  changeEmailForm: FormGroup; // Form đổi email
+  verifyOTPForm: FormGroup; // Form xác nhận OTP
+  userAccount: UserAccount | null = null; // Thông tin tài khoản người dùng
+  genders = Object.values(Gender); // Danh sách giới tính
   statusPage: number = 0; // Trạng thái trang 0: overview, 1: change password, 2: change email
-  hideCurrentPassword = signal(true);
-  hideNewPassword = signal(true);
-  hideRepeatPassword = signal(true);
-  loadingSaveBtn = signal(false);
-  loadingUploadBtn = signal(false);
-  loadingChangeEmailBtn = signal(false);
-  loadingVerifyOTPBtn = signal(false);
-  selectedFile: File | null = null;
-  isLinear = false;
+  hideCurrentPassword = signal(true); // Ẩn hiện mật khẩu hiện tại
+  hideNewPassword = signal(true); // Ẩn hiện mật khẩu mới
+  hideRepeatPassword = signal(true); // Ẩn hiện mật khẩu lặp lại
+  selectedFile: File | null = null; // File ảnh đại diện
+  isLinear = false; // Bước xác nhận email
+  userAccountSubscription: Subscription = new Subscription(); // Subscription của user account
 
   constructor(
     private formBuilder: FormBuilder,
@@ -91,7 +91,9 @@ export class ProfileComponent implements OnInit {
     private localStorage: LocalStoreManager,
     private router: Router,
     private cartService: CartService,
-    private productService: ProductService
+    private productService: ProductService,
+    private statusService: StatusService,
+    private notificationService: NotificationService
   ) {
     this.profileForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -113,12 +115,22 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAccountProfile();
+    this.userAccountSubscription = this.authService.userDataSource.subscribe({
+      next: (user: UserAccount) => {
+        if (user) {
+          this.userAccount = user;
+          this.getAccountProfile();
+        }
+      },
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.userAccountSubscription.unsubscribe();
   }
 
   // Lấy thông tin tài khoản
   getAccountProfile() {
-    this.userAccount = this.authService.currentUser;
     if (this.userAccount) {
       this.profileForm.patchValue({
         name: this.userAccount.name,
@@ -135,7 +147,7 @@ export class ProfileComponent implements OnInit {
       this.profileForm.markAllAsTouched();
       return;
     }
-    this.loadingSaveBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const name = this.profileForm.get('name')?.value;
     const gender = this.profileForm.get('gender')?.value;
     const phone = this.profileForm.get('phone')?.value;
@@ -148,14 +160,15 @@ export class ProfileComponent implements OnInit {
             response.data,
             DBkeys.CURRENT_USER
           );
+          this.authService.userDataSource.next(response.data);
           this.toastr.success(response.message, 'Success', {
             progressBar: true,
           });
-          this.loadingSaveBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.loadingSaveBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.warning(error.error.message, 'Error', {
           progressBar: true,
         });
@@ -165,7 +178,6 @@ export class ProfileComponent implements OnInit {
 
   // Đổi mật khẩu
   btnChangePassword() {
-    debugger;
     if (this.changePasswordForm.invalid) {
       this.changePasswordForm.markAllAsTouched();
       return;
@@ -178,7 +190,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.loadingSaveBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const oldPassword = this.changePasswordForm.get('currentPassword')?.value;
     const newPassword = this.changePasswordForm.get('newPassword')?.value;
     const repeatPassword = this.changePasswordForm.get('repeatPassword')?.value;
@@ -187,7 +199,7 @@ export class ProfileComponent implements OnInit {
       .changePassword(oldPassword, newPassword, repeatPassword)
       .subscribe({
         next: (response: any) => {
-          this.loadingSaveBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.success(
             'Password has been changed successfully. Please log in again',
             'Success',
@@ -199,7 +211,7 @@ export class ProfileComponent implements OnInit {
           this.btnLogOut();
         },
         error: (error: HttpErrorResponse) => {
-          this.loadingSaveBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.warning(error.error.error, 'Error', {
             progressBar: true,
           });
@@ -213,21 +225,21 @@ export class ProfileComponent implements OnInit {
       this.changeEmailForm.markAllAsTouched();
       return;
     }
-    this.loadingChangeEmailBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const email = this.changeEmailForm.get('email')?.value;
     this.accountService.changeEmail(email).subscribe({
       next: (response: UserAccountResponse) => {
         this.toastr.success(response.message, 'Success', {
           progressBar: true,
         });
-        this.loadingChangeEmailBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.stepper.next();
       },
       error: (error: HttpErrorResponse) => {
         this.toastr.error(error.error.message, 'Error', {
           progressBar: true,
         });
-        this.loadingChangeEmailBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
     });
   }
@@ -239,12 +251,12 @@ export class ProfileComponent implements OnInit {
       return;
     }
     const otp = this.verifyOTPForm.get('otp')?.value;
-    this.loadingVerifyOTPBtn.set(true);
+    this.statusService.statusLoadingSpinnerSource.next(true);
     this.accountService.confirmChangeEmail(otp).subscribe({
       next: (response: UserAccountResponse) => {
         if (response.success) {
           this.authService.userDataSource.next(response.data);
-          this.loadingVerifyOTPBtn.set(false);
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.success(
             'Change Email Successful, Please login again',
             'Success',
@@ -262,7 +274,7 @@ export class ProfileComponent implements OnInit {
         this.toastr.warning(error.error.message, 'Error', {
           progressBar: true,
         });
-        this.loadingVerifyOTPBtn.set(false);
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
     });
   }
@@ -273,7 +285,7 @@ export class ProfileComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
       this.uploadAvatar();
-      this.loadingUploadBtn.set(true);
+      this.statusService.statusLoadingSpinnerSource.next(true);
     }
   }
 
@@ -293,11 +305,12 @@ export class ProfileComponent implements OnInit {
             this.toastr.success(response.message, 'Success', {
               progressBar: true,
             });
-            this.loadingUploadBtn.set(false);
+            this.statusService.statusLoadingSpinnerSource.next(false);
           }
         }
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         this.toastr.warning(error.error.message, 'Error', {
           progressBar: true,
         });
@@ -326,6 +339,7 @@ export class ProfileComponent implements OnInit {
     this.authService.logout();
     this.cartService.reset();
     this.productService.reset();
+    this.notificationService.reset();
     this.router.navigate(['/signin']);
   }
 }

@@ -47,7 +47,8 @@
     "RegisterToSellFlower": "Register to sell flowers",
     "ProductCategory": "Product Categories",
     "NewestProduct": "Newest Products",
-    "ViewAll": "View All"
+    "ViewAll": "View All",
+    "SellFlowerNow": "Sell flowers now"
   },
   "Products": {
     "Category": "Category",
@@ -98,6 +99,11 @@
       "OrderByMistake": "Ordered by mistake",
       "ShippingCostTooHigh": "Shipping cost too high",
       "LongShippingTime": "Shipping time too long",
+      "OutOfStock": "Out of stock",
+      "PricingError": "Pricing error",
+      "ShippingDelay": "Shipping delay",
+      "CustomerRequest": "Customer requested cancellation",
+      "FraudulentOrder": "Fraudulent order",
       "Other": "Other"
     },
     "CancelOrder": {
@@ -130,6 +136,26 @@
     "Withdraw": "Withdrawal",
     "Unknown": "Unknown Transaction"
   },
+  "BreadCrumb": {
+    "Cart": "Cart",
+    "Contact": "Contact",
+    "AboutUs": "About Us",
+    "Blog": "Blog",
+    "Product": "Products",
+    "ProductDetail": "Product Detail",
+    "Order": "Order",
+    "Wallet": "My Wallet",
+    "OrderHistory": "Order History",
+    "Profile": "My Profile",
+    "SellerProfile": "Seller Profile"
+  },
+  "Category": {
+    "Image": "Image",
+    "Name": "Name"
+  },
+  "User": {
+    "Role": "Role"
+  },
   "AddToCart": "Add to Cart",
   "Support": "Support",
   "SupportContent": "Get fast, free help from our friendly assistants",
@@ -157,12 +183,14 @@
   "Dashboard": "Dashboard",
   "ProductManagement": "Product Management",
   "OrderManagement": "Order Management",
+  "CategoryManagement": "Category Management",
   "MyAccount": "My Account",
   "ViewWallet": "View Wallet",
   "OrderHistory": "Order History",
   "Logout": "Logout",
   "Hi": "Hi",
   "AddNewProduct": "Add New Product",
+  "AddNewCategory": "Add New Category",
   "Status": "Status",
   "Actions": "Actions",
   "NoProducts": "No products available",
@@ -215,5 +243,36 @@
   "ConfirmPreparing": "Confirm preparing goods",
   "ConfirmShipping": "Confirm shipping",
   "ChangeEmail": "Change Email",
-  "OTPRequired": "Please enter OTP code"
+  "OTPRequired": "Please enter OTP code",
+  "FilterBy": "Filter by",
+  "SelectStatus": "Select status",
+  "Type": "Type",
+  "SelectType": "Select type",
+  "Statistical": "Statistical",
+  "ExpireDate": "Expire Date",
+  "ExpireDateRequired": "Please select an expiration date",
+  "ShippingFee": "Shipping Fee",
+  "FreshFlowerBasket": "Fresh Flower ",
+  "SpecialBouquet": "Special Bouquet",
+  "FlowersForAllOccasions": "All Occasions",
+  "SeasonalFlowers": "Seasonal Flowers",
+  "ShopNow": "Shop Now",
+  "FreshFlowerTitle": "Fresh Flowers",
+  "FreshFlowerDescription": "We provide fresh flowers of the best quality.",
+  "BeautifulFlowersTitle": "Beautiful Flowers",
+  "BeautifulFlowersDescription": "Bringing beauty to your living space.",
+  "FastDeliveryTitle": "Fast Flower Delivery",
+  "FastDeliveryDescription": "Confident with fast, timely, and reliable delivery service.",
+  "Since": "Since",
+  "EstablishedYear": "2024",
+  "OurStory": "Our Story",
+  "BrandName": "Blossom",
+  "WelcomeMessage": "Welcome to our world of flowers, where beauty blooms and stories are told. Our exquisite flower collection evokes emotions and creates beautiful memories. From romantic roses to elegant lilies, each product carries a special message.",
+  "ReadMore": "Read More",
+  "ShopAltText": "Blossom App",
+  "FreshFlowerPromotion": "Fresh Flower Promotion",
+  "SpringDiscount": "Spring Discount",
+  "Save30PercentNow": "Save 30% Today!",
+  "BuyNow": "Buy Now",
+  "AddToCartNow": "Add to Cart Now"
 }

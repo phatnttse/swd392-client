@@ -15,6 +15,25 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from '../../layouts/header/header.component';
 import { FooterComponent } from '../../layouts/footer/footer.component';
+import { MatCardModule } from '@angular/material/card';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { Feedback } from '../../models/feedback.model';
+import { ParentCategory } from '../../models/enums';
+import { TypeTransformPipe } from '../../pipes/type-transform.pipe';
+import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.component';
+import { AccountService } from '../../services/account.service';
+import {
+  SellerProfile,
+  SellerProfileResponse,
+} from '../../models/account.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-product-details',
@@ -28,6 +47,12 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
     TranslateModule,
     HeaderComponent,
     FooterComponent,
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    TypeTransformPipe,
+    BreadcrumbComponent,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',
@@ -35,18 +60,32 @@ import { FooterComponent } from '../../layouts/footer/footer.component';
 export class ProductDetailsComponent implements OnInit {
   @ViewChild('topElement') topElement!: ElementRef;
 
-  flowerId: number = 0;
-  flower: Flower | null = null;
-  quantityInput: number = 1;
-  listSimilarFlowers: Flower[] = [];
+  flowerId: number = 0; // Id hoa
+  flower: Flower | null = null; // Thông tin hoa
+  quantityInput: number = 1; // Số lượng sản phẩm
+  listSimilarFlowers: Flower[] = []; // Danh sách hoa tương tự
+  rating = 0; // Đánh giá sao
+  listFeedback: Feedback[] = []; // Danh sách bình luận
+  feedBackForm: FormGroup; // Form bình luận
+  parentCategory = ParentCategory; // Enum danh mục cha
+  currentImageUrl: string | undefined; // Ảnh chính hiện tại
+  selectedImageIndex: number = 0; // Index ảnh được chọn
+  sellerInfo: SellerProfile | null = null; // Thông tin người bán
 
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private router: Router,
     private cartService: CartService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private formBuilder: FormBuilder,
+    private accountService: AccountService,
+    private authService: AuthService
+  ) {
+    this.feedBackForm = this.formBuilder.group({
+      content: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
@@ -65,6 +104,11 @@ export class ProductDetailsComponent implements OnInit {
     this.productService.getFlowerById(this.flowerId).subscribe({
       next: (response: Flower) => {
         this.flower = response;
+        this.currentImageUrl = response.images[0].url;
+      },
+      complete: () => {
+        this.getFeedBacksByFlowerId();
+        this.getSellerProfile(this.flower?.user.id || 0);
       },
       error: (error: HttpErrorResponse) => {
         console.log(error);
@@ -97,6 +141,11 @@ export class ProductDetailsComponent implements OnInit {
 
   // Thêm hoặc cập nhật sản phẩm trong giỏ hàng
   btnInsertUpdateCart(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {
@@ -111,13 +160,17 @@ export class ProductDetailsComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }
 
   btnBuyNow(flowerId: number, quantity: number) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/signin']);
+      this.toastr.info('Vui lòng đăng nhập', '', { progressBar: true });
+      return;
+    }
     this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
       next: (response: InsertUpdateCartResponse) => {
         if (response.data && response.success && response.code === 200) {
@@ -127,8 +180,7 @@ export class ProductDetailsComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }
@@ -142,7 +194,9 @@ export class ProductDetailsComponent implements OnInit {
 
   // Tăng số lượng input
   btnIncreaseQuantity() {
-    this.quantityInput++;
+    if (this.flower && this.quantityInput < this.flower.stockQuantity) {
+      this.quantityInput++;
+    }
   }
 
   // Giảm số lượng input
@@ -155,7 +209,69 @@ export class ProductDetailsComponent implements OnInit {
   btnVisitShop() {
     const name = Utilities.formatStringToSlug(this.flower?.user.name || '');
     this.router.navigate(['/seller-profile', `${name}`], {
-      queryParams: { shop: this.flower?.user.id },
+      queryParams: { sellerId: this.flower?.user.id },
+    });
+  }
+
+  onThumbnailClick(imageUrl: string, index: number): void {
+    this.currentImageUrl = imageUrl;
+    this.selectedImageIndex = index;
+  }
+
+  rate(star: number) {
+    this.rating = star;
+  }
+
+  getFeedBacksByFlowerId() {
+    this.productService.getFeedbacksByFlowerId(this.flowerId).subscribe({
+      next: (response: Feedback[]) => {
+        this.listFeedback = response;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+      },
+    });
+  }
+
+  btnSubmitFeedback() {
+    if (this.feedBackForm.invalid) {
+      this.feedBackForm.markAllAsTouched();
+      return;
+    }
+    if (this.rating === 0) {
+      this.toastr.warning('Vui lòng chọn số sao');
+      return;
+    }
+
+    this.productService
+      .createFeedback(
+        this.flowerId,
+        this.feedBackForm.value.content,
+        this.rating
+      )
+      .subscribe({
+        next: (response: Feedback) => {
+          this.feedBackForm.reset();
+          this.rating = 0;
+          this.listFeedback.push(response);
+          this.toastr.success(
+            `Cảm ơn bạn đã đánh giá cho ${this.flower?.name}`
+          );
+        },
+        error: (error: HttpErrorResponse) => {
+          this.toastr.error(error.error.message);
+        },
+      });
+  }
+
+  getSellerProfile(userId: number): void {
+    this.accountService.getSellerProfile(userId).subscribe({
+      next: (response: SellerProfileResponse) => {
+        this.sellerInfo = response.data;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.toastr.error(error.error.message);
+      },
     });
   }
 }

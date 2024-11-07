@@ -33,6 +33,7 @@ export const routes: Routes = [
         (m) => m.CartComponent
       );
     },
+    data: { breadcrumb: 'BreadCrumb.Cart' },
     canActivate: [UserGuard],
   },
   {
@@ -42,6 +43,7 @@ export const routes: Routes = [
         (m) => m.ContactComponent
       );
     },
+    data: { breadcrumb: 'BreadCrumb.Contact' },
   },
   {
     path: 'about-us',
@@ -50,14 +52,7 @@ export const routes: Routes = [
         (m) => m.AboutUsComponent
       );
     },
-  },
-  {
-    path: 'blogs',
-    loadComponent() {
-      return import('./components/blog/blog.component').then(
-        (m) => m.BlogComponent
-      );
-    },
+    data: { breadcrumb: 'BreadCrumb.AboutUs' },
   },
   {
     path: 'products',
@@ -66,6 +61,7 @@ export const routes: Routes = [
         (m) => m.ProductsComponent
       );
     },
+    data: { breadcrumb: 'BreadCrumb.Product' },
   },
   {
     path: 'product-details/:id',
@@ -74,6 +70,7 @@ export const routes: Routes = [
         './components/product-details/product-details.component'
       ).then((m) => m.ProductDetailsComponent);
     },
+    data: { breadcrumb: 'BreadCrumb.ProductDetail' },
   },
   {
     path: 'order',
@@ -82,6 +79,7 @@ export const routes: Routes = [
         (m) => m.OrderComponent
       );
     },
+    data: { breadcrumb: 'BreadCrumb.Order' },
     canActivate: [UserGuard],
   },
   {
@@ -91,6 +89,7 @@ export const routes: Routes = [
         (m) => m.WalletComponent
       );
     },
+    data: { breadcrumb: 'BreadCrumb.Wallet' },
     canActivate: [UserGuard],
   },
   {
@@ -100,6 +99,7 @@ export const routes: Routes = [
         (m) => m.OrderHistoryComponent
       );
     },
+    data: { breadcrumb: 'BreadCrumb.OrderHistory' },
     canActivate: [UserGuard],
   },
   {
@@ -125,6 +125,7 @@ export const routes: Routes = [
         (m) => m.ProfileComponent
       );
     },
+    data: { breadcrumb: 'BreadCrumb.Profile' },
     canActivate: [UserGuard],
   },
   {
@@ -134,5 +135,23 @@ export const routes: Routes = [
         './components/seller-profile/seller-profile.component'
       ).then((m) => m.SellerProfileComponent);
     },
+    data: { breadcrumb: 'BreadCrumb.SellerProfile' },
+  },
+  {
+    path: 'verify-account',
+    loadComponent() {
+      return import(
+        './components/sign-up/verify-email/verify-email.component'
+      ).then((m) => m.VerifyEmailComponent);
+    },
+  },
+  {
+    path: 'wallet/add-balance',
+    loadComponent() {
+      return import(
+        './components/wallet/add-balance/add-balance.component'
+      ).then((m) => m.AddBalanceComponent);
+    },
+    canActivate: [UserGuard],
   },
 ];

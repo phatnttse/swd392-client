@@ -53,6 +53,37 @@
   td {
     padding-right: 8px;
   }
+
+  .font-size{
+    font-size: 18px;
+  }
+
+  
+  .blue-text{
+    color: #140a87; 
+    font-weight: bold;
+  }
+  .green-text {
+    color: #006400; 
+    font-weight: bold;
+  }
+
+  .status-pending {
+    color: #FFA500; 
+  }
+  
+  .status-approved {
+    color: #006400; 
+  }
+  
+  .status-rejected {
+    color: #FF0000; 
+  }
+  
+  .status-expired {
+    color: #808080; 
+  }
+  
   
   .error-msg {
     display: block;

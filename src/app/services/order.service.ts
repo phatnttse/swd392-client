@@ -7,6 +7,7 @@ import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import {
   Order,
   OrderByAccountResponse,
+  OrderCountStatusResponse,
   OrderLineChart,
   OrderResponse,
   UpdateOrderStatusResponse,
@@ -251,6 +252,18 @@ export class OrderService extends EndpointBase {
           return this.handleError(error, () =>
             this.getOrderLineChart(startDate, endDate)
           );
+        })
+      );
+  }
+
+  getOrderStatusCount(): Observable<OrderCountStatusResponse> {
+    return this.http
+      .get<OrderCountStatusResponse>(`${this.API_URL}/orders/count-status`, {
+        headers: this.requestHeaders.headers,
+      })
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getOrderStatusCount());
         })
       );
   }

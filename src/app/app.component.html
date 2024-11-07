@@ -1,10 +1,10 @@
 @defer{
-<router-outlet></router-outlet>
+<router-outlet>
+  @if (isLoading) {
+  <div class="loading"><mat-spinner></mat-spinner></div>
+  }
+</router-outlet>
 } @loading {
-<div class="preloader-wrapper">
-  <div class="preloader"></div>
-</div>
-} @if (isLoading) {
 <div class="preloader-wrapper">
   <div class="preloader"></div>
 </div>

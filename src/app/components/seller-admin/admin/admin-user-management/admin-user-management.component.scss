@@ -1,0 +1,59 @@
+.font-size{
+    font-size: 18px;
+}
+
+.blue-text{
+    color: #140a87; 
+    font-weight: bold;
+  }
+  .green-text {
+    color: #006400; 
+    font-weight: bold;
+  }
+
+  .status-pending {
+    color: #FFA500; 
+  }
+  
+  .status-approved {
+    color: #006400; 
+  }
+  
+  .status-rejected {
+    color: #FF0000; 
+  }
+  
+  .status-expired {
+    color: #808080; 
+  }
+
+  .badge {
+    --bs-badge-padding-x: 0.65em;
+    --bs-badge-padding-y: 0.35em;
+    --bs-badge-font-size: 0.75em;
+    --bs-badge-font-weight: 700;
+    --bs-badge-color: #fff;
+    --bs-badge-border-radius: var(--bs-border-radius);
+    display: inline-block;
+    padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+    font-size: var(--bs-badge-font-size);
+    font-weight: var(--bs-badge-font-weight);
+    line-height: 1;
+    color: var(--bs-badge-color);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--bs-badge-border-radius);
+
+    &.badge-success {
+        background-color: #e25109;
+    }
+
+    &.badge-warning {
+        background-color: #0d07a7; 
+    }
+
+    &.badge-manager {
+        background-color: #17a2b8; 
+    }
+}

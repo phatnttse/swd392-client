@@ -1,40 +1,62 @@
-.icon-hover:hover {
-  border-color: #3b71ca !important;
-  background-color: white !important;
-  color: #3b71ca !important;
-}
-
-.icon-hover:hover i {
-  color: #3b71ca !important;
-}
-.shop-info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-.shop-info img {
-  border-radius: 50%;
-}
-
-.shop-info div {
-  text-align: center;
-}
-
-.shop-name {
-  font-size: 1.25rem;
-  font-weight: bold;
-}
 .section-products {
-  margin-top: 150px;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
 }
 
 @media screen and (max-width: 376px) {
   .btn-buy-now {
     margin-bottom: 20px;
   }
+}
+
+.be-comment {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.be-ava-comment {
+  width: 50px;
+  height: 50px;
+}
+
+.be-comment-content {
+  font-size: 0.9rem;
+}
+
+.be-comment-name a {
+  color: #fb9678;
+  text-decoration: none;
+}
+
+.be-comment-name a:hover {
+  text-decoration: underline;
+}
+
+.be-comment-time {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.be-comment-text {
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.filled {
+  color: #f6db30 !important;
+}
+
+.item-thumb {
+  border: 1px solid transparent;
+  transition: border-color 0.3s;
+  border-color: #fb9678;
+}
+
+.item-thumb :hover {
+  border-color: #fb9678;
+}
+
+.selected-thumbnail {
+  border: 2px solid #fb9678;
 }

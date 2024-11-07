@@ -138,7 +138,9 @@
               class="badge fw-bold mb-0"
               [ngClass]="{
                 'badge-success': product.status === 'APPROVED',
-                'badge-warning': product.status === 'PENDING'
+                'badge-warning': product.status === 'PENDING',
+                'badge-danger': product.status === 'REJECTED',
+                'badge-info': product.status === 'EXPIRED'
               }"
             >
               {{ product.status }}
@@ -160,10 +162,10 @@
               <mat-icon aria-label="Edit">edit</mat-icon>
             </button>
             <button
-              data-bs-toggle="modal"
-              data-bs-target="#deleteProductModal"
+              type="button"
               mat-icon-button
               color="warn"
+              (click)="btnOpenDeleteFlowerDialog(product.id, product.name)"
             >
               <mat-icon aria-label="Delete">delete</mat-icon>
             </button>
@@ -331,75 +333,85 @@
         </ul>
       </div>
 
-      <div class="row mb-3">
-        <div class="col-12 col-md-6 mb-3">
-          <h6 class="mb-3">{{ "ProductName" | translate }}</h6>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>{{ "ProductNameEnter" | translate }}</mat-label>
-            <input
-              matInput
-              type="text"
-              required
-              formControlName="name"
-              [class.is-invalid]="
-                productForm.get('name')?.invalid &&
-                productForm.get('name')?.touched
-              "
-            />
-            @if (productForm.get('name')?.hasError('required')) {
-            <mat-error class="fs-12">{{
-              "ProductNameRequired" | translate
-            }}</mat-error>
-            }@else if (productForm.get('name')?.hasError('minlength')) {
-            <mat-error class="fs-12">{{
-              "ProductNameInvalid" | translate
-            }}</mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-12 col-md-6 mb-3">
-          <h6 class="mb-3">{{ "ProductCategory" | translate }}</h6>
-          <div>
-            <!-- <button
-              mat-raised-button
-              color="primary"
-              type="button"
-              class="btn w-100"
-              style="padding: 28px 0"
-              [matMenuTriggerFor]="categoryMenu"
-            >
-              @if (selectedCategories.length > 0) { @for (category of
-              selectedCategories; track $index) {
-              {{ category.name }}. } }@else {
-              {{ "SelectCategory" | translate }} }
-              <mat-icon>chevron_right</mat-icon>
-            </button> -->
-            <mat-form-field class="w-100 select-category" appearance="outline">
-              <mat-label>{{ "ProductCategory" | translate }}</mat-label>
-              <input
-                matInput
-                [value]="selectedCategoriesLabel"
-                readonly
-                (click)="$event.stopPropagation()"
-                [matMenuTriggerFor]="categoryMenu"
-              />
-              <mat-icon [matMenuTriggerFor]="categoryMenu" matSuffix
-                >edit</mat-icon
-              >
-            </mat-form-field>
+      <h6 class="mb-3">{{ "ProductName" | translate }}</h6>
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>{{ "ProductNameEnter" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          required
+          formControlName="name"
+          [class.is-invalid]="
+            productForm.get('name')?.invalid && productForm.get('name')?.touched
+          "
+        />
+        @if (productForm.get('name')?.hasError('required')) {
+        <mat-error class="fs-12">{{
+          "ProductNameRequired" | translate
+        }}</mat-error>
+        }@else if (productForm.get('name')?.hasError('minlength')) {
+        <mat-error class="fs-12">{{
+          "ProductNameInvalid" | translate
+        }}</mat-error>
+        }
+      </mat-form-field>
+      <h6 class="mb-3">{{ "ProductCategory" | translate }}</h6>
+      <mat-form-field class="w-100 select-category" appearance="outline">
+        <mat-label>{{ "ProductCategory" | translate }}</mat-label>
+        <input
+          matInput
+          [value]="selectedCategoriesLabel"
+          readonly
+          (click)="$event.stopPropagation()"
+          [matMenuTriggerFor]="categoryMenu"
+        />
+        <mat-icon [matMenuTriggerFor]="categoryMenu" matSuffix>edit</mat-icon>
 
-            @if (isCategoryError) {
-            <mat-error class="fs-12 mb-2 ms-4" style="visibility: visible">
-              {{ "ProductCategoryRequired" | translate }}
-            </mat-error>
-            }@else {
-            <mat-error style="visibility: hidden">
-              {{ "ProductCategoryRequired" | translate }}
-            </mat-error>
-            }
-          </div>
-        </div>
-      </div>
+        @if (isCategoryError) {
+        <mat-error class="fs-12 mb-2 ms-4" style="visibility: visible">
+          {{ "ProductCategoryRequired" | translate }}
+        </mat-error>
+        }@else {
+        <mat-error style="visibility: hidden">
+          {{ "ProductCategoryRequired" | translate }}
+        </mat-error>
+        }
+      </mat-form-field>
+
+      <h6 class="mb-3">{{ "Order.Address" | translate }}</h6>
+      <mat-form-field class="w-100 fs-16" appearance="outline">
+        <mat-label>{{ "AddressEnter" | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          min="0"
+          formControlName="address"
+          [class.is-invalid]="
+            productForm.get('address')?.invalid &&
+            productForm.get('address')?.touched
+          "
+          [matAutocomplete]="autoSuggestAddress"
+        />
+        <mat-autocomplete
+          autoActiveFirstOption
+          #autoSuggestAddress="matAutocomplete"
+        >
+          @for (address of suggestAddresses; track $index) {
+          <mat-option [value]="address.FullName">{{
+            address.FullName
+          }}</mat-option>
+          }
+        </mat-autocomplete>
+        @if (productForm.get('address')?.hasError('required') ) {
+        <mat-error class="fs-12">{{
+          "Order.AddressRequired" | translate
+        }}</mat-error>
+        } @if (productForm.get('address')?.hasError('minlength') ) {
+        <mat-error class="fs-12">{{
+          "Order.AddressInvalid" | translate
+        }}</mat-error>
+        }
+      </mat-form-field>
 
       <table class="example-full-width" cellspacing="0">
         <tr>
@@ -454,26 +466,26 @@
             </mat-form-field>
           </td>
           <td>
-            <h6 class="mb-3">{{ "Order.Address" | translate }}</h6>
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>{{ "AddressEnter" | translate }}</mat-label>
+            <h6 class="mb-3">{{ "ExpireDate" | translate }}</h6>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ "ExpireDate" | translate }}</mat-label>
               <input
                 matInput
-                type="text"
-                min="0"
-                formControlName="address"
+                [matDatepicker]="picker"
+                formControlName="expireDate"
                 [class.is-invalid]="
-                  productForm.get('address')?.invalid &&
-                  productForm.get('address')?.touched
+                  productForm.get('expireDate')?.invalid &&
+                  productForm.get('expireDate')?.touched
                 "
               />
-              @if (productForm.get('address')?.hasError('required') ) {
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (productForm.get('expireDate')?.hasError('required')) {
               <mat-error class="fs-12">{{
-                "Order.AddressRequired" | translate
-              }}</mat-error>
-              } @if (productForm.get('address')?.hasError('minlength') ) {
-              <mat-error class="fs-12">{{
-                "Order.AddressInvalid" | translate
+                "ExpireDateRequired" | translate
               }}</mat-error>
               }
             </mat-form-field>

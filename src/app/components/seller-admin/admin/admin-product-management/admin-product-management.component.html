@@ -1,176 +1,275 @@
-<mat-card
-  ><mat-card-content
-    ><div class="row justify-content-between">
-      <div class="col-lg-4 negative-margin">
-        <mat-form-field appearance="outline">
-          <input
-            matInput
-            type="text"
-            placeholder="Tìm kiếm"
-            (keyup)="applyFilter($event)"
-            #input
-          />
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+@if (this.currentPage === 0) {
+  <mat-card>
+    <mat-card-content>
+      <div class="row justify-content-between">
+        <div class="col-lg-4 negative-margin">
+          <mat-form-field appearance="outline">
+            <input matInput type="text" placeholder="Tìm kiếm" (keyup)="applyFilter($event)" #input />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button
-          mat-raised-button
-          color="primary"
-          routerLink="/admin/products/new"
-          extend
-          style="padding: 20px 10px"
-        >
-          Thêm sản phẩm mới
-          <mat-icon>add</mat-icon>
-        </button>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="w-100">
+    <mat-card-content>
+      <h4 class="fw-bold primary-color">{{"ProductManagement" | translate}}</h4>
+  
+      <div class="col-12 d-flex align-items-center justify-content-center mb-5 mt-3"></div>
+      <div class="table-responsive mt-20">
+        <table mat-table [dataSource]="dataSource" matSort class="w-100 text-nowrap">
+          <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">Hình ảnh</th>
+            <td mat-cell *matCellDef="let product">
+              <a [href]="product.images[0].url">
+                <img
+                  class="rounded"
+                  width="50px"
+                  height="50px"
+                  [src]="product.images[0].url"
+                  [alt]="product.name"
+                />
+              </a>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name" class="fw-bold primary-color font-size">{{"ProductName" | translate}}</th>
+            <td mat-cell *matCellDef="let product">
+              <p class="mb-0 fw-bold">{{ product.name }}</p>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="price" class="fw-bold primary-color font-size">{{"ProductPrice" | translate}}</th>
+            <td mat-cell *matCellDef="let product">
+              <p class="fw-medium mb-0 fw-bold">{{ product.price | number : "1.0" }}₫</p>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="stockBalance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="stockBalance" class="fw-bold primary-color font-size">{{"ProductQuantity" | translate}}</th>
+            <td mat-cell *matCellDef="let product">
+              <p class="fw-medium mb-0 fw-bold">{{ product.stockQuantity }}</p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th
+              class="fw-bold primary-color font-size"
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="status"
+            >
+            {{ "Status" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let product">
+              <p
+                class="badge fw-bold mb-0"
+                [ngClass]="{
+                  'badge-success': product.status === 'APPROVED',
+                  'badge-warning': product.status === 'PENDING',
+                  'badge-rejected': product.status === 'REJECTED'
+                }"
+              >
+                {{ product.status }}
+              </p>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">{{"Actions"| translate}}</th>
+            <td mat-cell *matCellDef="let product">
+              @if (product.status === 'PENDING' ) {
+                <button mat-icon-button class="status-approved" (click)="btnApproveFlower(product?.id)">
+                  <mat-icon aria-label="check" class="fw-bold">check</mat-icon>
+                </button> 
+                <button mat-icon-button class="status-rejected">
+                  <mat-icon aria-label="do_not_disturb_on" class="fw-bold" (click)="btnChangeStatusPageRejected(1, product)">do_not_disturb_on</mat-icon>
+                </button>
+              }
+              <button type="button" mat-icon-button class="status-pending" (click)="btnChangeStatusPage(1, product)">
+                <mat-icon aria-label="visibility" class="fw-bold">visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <div *ngIf="totalPages > 1" class="section pagenav clearfix a-center mt-5">
+          <nav class="collection-paginate clearfix nav_pagi w_100 relative">
+            <ul class="pagination clearfix">
+              <li class="page-item" *ngIf="currentPage > 0">
+                <a class="page-link" href="javascript:;" (click)="onPageChange(currentPage - 1)">
+                  <mat-icon>chevron_left</mat-icon>
+                </a>
+              </li>
+              <li class="page-item" *ngFor="let page of visiblePages; trackBy: trackByIndex" [ngClass]="{ active: page === currentPage + 1 }">
+                <a class="page-link" href="javascript:;" (click)="onPageChange(page - 1)">{{ page }}</a>
+              </li>
+              <li class="page-item" *ngIf="currentPage < totalPages - 1">
+                <a class="page-link" href="javascript:;" (click)="onPageChange(currentPage + 1)">
+                  <mat-icon>chevron_right</mat-icon>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  
+
+}@else if (this.currentPage === 1) {
+<div class="container">
+  <div class="row">
+    <!-- Thông tin bài đăng -->
+    <div class="col-md-6">
+      <div class="card shadow-sm p-4" style="border-radius: 15px;">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-4">
+            <a class="page-link primary-color me-2" href="javascript:;" (click)="btnBack()">
+              <mat-icon>arrow_back</mat-icon>
+            </a>
+            <h3 class="primary-color m-0">Thông tin bài đăng</h3>
+          </div>          
+          <!-- Avatar và tên sản phẩm -->
+          <div class="text-center mb-4 ">
+            <div *ngIf="flower?.images?.length">
+              <img
+                *ngFor="let image of flower?.images | slice:0:2"
+                class="rounded flower-image "
+                [src]="image.url"
+                [alt]="flower?.name"
+              />
+            </div>
+            <h4 class="font-weight-bold text-dark mt-2">{{flower?.name}}</h4>
+            <div class="d-flex justify-content-center align-items-center text-muted">
+              <mat-icon
+              [ngClass]="{
+                'status-pending': flower?.status === 'PENDING',
+                'status-approved': flower?.status === 'APPROVED',
+                'status-rejected': flower?.status === 'REJECTED',
+                'status-expired': flower?.status === 'EXPIRED'
+              }"  
+              aria-hidden="false" 
+              fontIcon="check_circle"></mat-icon>
+              <span class="ml-2 fw-bold"
+              >Trạng thái: <strong
+              [ngClass]="{
+                'status-pending': flower?.status === 'PENDING',
+                'status-approved': flower?.status === 'APPROVED',
+                'status-rejected': flower?.status === 'REJECTED',
+                'status-expired': flower?.status === 'EXPIRED'
+              }" 
+              class="green-text fw-bold ">{{flower?.status}}</strong></span>
+            </div>
+          </div>
+
+          <!-- Thông tin chi tiết sản phẩm bằng bảng -->
+          <table class="table table-bordered">
+            <tr>
+              <td><strong class="text-secondary">Giá sản phẩm (VNĐ)</strong></td>
+              <td class="fw-bold text-dark">{{flower?.price | number}} VNĐ</td>
+            </tr>
+            <tr>
+              <td><strong class="text-secondary">Số lượng sản phẩm (kg)</strong></td>
+              <td class="fw-bold text-dark">{{flower?.stockQuantity}}</td>
+            </tr>
+          </table>
+
+          <!-- Danh mục sản phẩm -->
+          <h6 class="text-secondary mt-3">Danh mục sản phẩm</h6>
+          <ul class="text-dark" style="list-style-type: disc; padding-left: 20px;">
+            <li *ngFor="let category of flower?.categories">{{category?.name}}</li>
+          </ul>
+
+          <!-- Mô tả sản phẩm -->
+          <h6 class="text-secondary mt-3">Mô tả sản phẩm</h6>
+          <p class="text-dark">{{flower?.description}}</p>
+
+          <!-- Nút hành động -->
+          @if (flower?.status === 'PENDING') {
+            <div class="d-flex justify-content-end mt-5">
+              <button mat-raised-button class="fs-20 px-4 mx-2" color="primary" style="flex: 1;"
+                (click)="btnApproveFlower(flower?.id)">
+                Đồng ý
+                <mat-icon>task_alt</mat-icon>
+              </button>
+              <button mat-raised-button class="fs-20 px-4 mx-2" color="warn" style="flex: 1;"
+                (click)="toggleRejectForm()">
+                Từ chối
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
       </div>
     </div>
-  </mat-card-content></mat-card
->
-<mat-card class="w-100">
-  <mat-card-content>
-    <h4>Quản lý sản phẩm</h4>
 
-    <div
-      class="col-12 d-flex align-items-center justify-content-center mb-5 mt-3"
-    ></div>
-    <div class="table-responsive mt-20">
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-        class="w-100 text-nowrap"
-      >
-        <ng-container matColumnDef="image">
-          <th mat-header-cell *matHeaderCellDef>Hình ảnh</th>
-          <td mat-cell *matCellDef="let product">
-            <a [href]="product.imageUrl">
-              <img
-                class="rounded"
-                width="50px"
-                height="50px"
-                [src]="product.imageUrl"
-                [alt]="product.name"
-              />
-            </a>
-          </td>
-        </ng-container>
+    <!-- Thông tin người đăng -->
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="primary-color mb-4">Thông tin người đăng</h3>
+          <div class="d-flex flex-column align-items-center">
+            <!-- Avatar của người dùng -->
+            <img [src]="flower?.user?.avatar || 'https://via.placeholder.com/170'" alt="User Avatar"
+              class="rounded-circle mb-3" style="width: 170px; height: 170px; object-fit: cover; border: 1px solid;" />
+            <!-- Tên người dùng -->
+            <h4 class="font-weight-bold text-dark">{{flower?.user?.name}}</h4>
+            <p class="text-muted mb-2 fw-bold">Vai trò: <span class="blue-text">{{flower?.user?.role}}</span></p>
+          </div>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Tên</th>
-          <td mat-cell *matCellDef="let product">
-            <p class="mb-0">{{ product.name }}</p>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef>Danh mục</th>
-          <td mat-cell *matCellDef="let product">
-            <span class="badge badge-success rounded-pill"></span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="price">Giá</th>
-          <td mat-cell *matCellDef="let product">
-            <p class="fw-medium mb-0">{{ product.price | number : "1.0" }}₫</p>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="stockBalance">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="stockBalance">
-            Số lượng
-          </th>
-          <td mat-cell *matCellDef="let product">
-            <p class="fw-medium mb-0">{{ product.stockBalance }}</p>
-          </td>
-        </ng-container>
-        >
-
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Các thao tác</th>
-          <td mat-cell *matCellDef="let product">
-            <button mat-icon-button color="primary">
-              <mat-icon aria-label="check">check</mat-icon>
-            </button>
-            <button mat-icon-button color="warn">
-              <mat-icon aria-label="do_not_disturb_on">do_not_disturb_on</mat-icon>
-            </button>
-            <button type="button" mat-icon-button color="warn" [routerLink]="['/admin/product-detail-management', product.id]">
-                <mat-icon aria-label="visibility">visibility</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-      @if (totalPages > 1) {
-      <div class="section pagenav clearfix a-center mt-5">
-        <nav class="collection-paginate clearfix nav_pagi w_100 relative">
-          <ul class="pagination clearfix">
-            @if (currentPage > 0) {
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="javascript:;"
-                (click)="onPageChange(currentPage - 1)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="20"
-                  viewBox="0 0 12 20"
-                  fill="none"
-                >
-                  <path
-                    d="M0.827131 10.5488L10.0777 19.7738C10.3808 20.0759 10.8715 20.0754 11.1741 19.7723C11.4764 19.4692 11.4756 18.9782 11.1725 18.6759L2.47255 9.99996L11.1728 1.32406C11.4759 1.02172 11.4767 0.531057 11.1744 0.227934C11.0227 0.0759811 10.824 3.76429e-06 10.6253 3.74691e-06C10.4271 3.72959e-06 10.2292 0.0754737 10.0778 0.226372L0.827131 9.45114C0.681155 9.59637 0.599241 9.79403 0.599241 9.99996C0.599241 10.2059 0.68139 10.4033 0.827131 10.5488Z"
-                    fill="#9D9D9D"
-                  ></path>
-                </svg>
-              </a>
+          <!-- Thông tin chi tiết người dùng -->
+          <ul class="list-group mt-4">
+            <li class="list-group-item">
+              <strong>Email: </strong>
+              <span class="text-dark fw-bold">{{flower?.user?.email}}</span>
             </li>
-            } @for (page of visiblePages; track $index) {
-            <li
-              class="page-item"
-              [ngClass]="{ active: page === currentPage + 1 }"
-            >
-              <a
-                class="page-link"
-                href="javascript:;"
-                [style]="{ 'pointer-events: none': page === currentPage + 1 }"
-                (click)="onPageChange(page - 1)"
-                >{{ page }}</a
-              >
-            </li>
-            } @if (currentPage < totalPages - 1) {
-            <li class="page-item">
-              <a
-                class="page-link link-next-pre"
-                onclick="doSearch(2)"
-                href="javascript:;"
-                (click)="onPageChange(currentPage + 1)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="20"
-                  viewBox="0 0 12 20"
-                  fill="none"
-                >
-                  <path
-                    d="M11.1729 9.45117L1.92228 0.226167C1.6192 -0.0759023 1.12849 -0.0753945 0.825918 0.227729C0.523575 0.530814 0.524357 1.02179 0.827481 1.32409L9.52745 10L0.827168 18.6759C0.524083 18.9783 0.523302 19.4689 0.825605 19.7721C0.977285 19.924 1.17599 20 1.37471 20C1.57291 20 1.77084 19.9245 1.92224 19.7736L11.1729 10.5489C11.3188 10.4036 11.4008 10.206 11.4008 10C11.4008 9.7941 11.3186 9.59668 11.1729 9.45117Z"
-                    fill="#9D9D9D"
-                  ></path>
-                </svg>
-              </a>
-            </li>
+            @if(flower?.user?.phone !== null){
+              <li class="list-group-item">
+                <strong>Số điện thoại: </strong>
+                <span class="text-dark fw-bold">{{flower?.user?.phone}}</span>
+              </li>
+            } @else{
+              <li class="list-group-item">
+                <strong>Số điện thoại: </strong>
+                <span class="text-dark fw-bold">Chưa cập nhật</span>
+              </li>
             }
+            <li class="list-group-item">
+              <strong>Giới tính: </strong>
+              <span class="text-dark fw-bold">{{flower?.user?.gender}}</span>
+            </li>
+            <li class="list-group-item">
+              <strong>Số dư ví: </strong>
+              <span class="text-success fw-bold">{{flower?.user?.balance | number}} VNĐ</span>
+            </li>
           </ul>
-        </nav>
+        </div>
+      </div>
+      <!-- Phần form từ chối -->
+      @if (isRejectFormVisible) {
+      <div class="card shadow-sm mt-4">
+        <div class="card-body">
+          <h4 class="primary-color mb-4">Từ Chối Đơn Hoa</h4>
+          <form [formGroup]="rejectForm" (ngSubmit)="btnDeniedFlower(flower?.id, reason)">
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Nhập lý do từ chối</mat-label>
+              <input matInput type="text" required formControlName="reason" />
+            </mat-form-field>
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-danger mr-2">Xác nhận từ chối</button>
+              <button type="button" class="btn btn-secondary" (click)="toggleRejectForm()">Hủy</button>
+            </div>
+          </form>
+        </div>
       </div>
       }
     </div>
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>
+
+}

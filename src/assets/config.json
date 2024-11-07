@@ -1,10 +1,14 @@
 {
   "API_URL": "https://services.isolutions.top/api/v1",
   "NOTIFICATION_URL": "https://notifications.isolutions.top/api/v1",
+  "INTEGRATION_SUGGEST_ADDRESS_URL": "https://integrations.isolutions.top/api/v1",
+  "INTEGRATION_FEE_SHIP_URL": "http://54.179.191.32:8081/api/v1",
+  "WEBSOCKET_URL": "https://notifications.isolutions.top",
   "Config_Language": [
     {
       "id": 1,
       "idRefer": 1,
+      "name": "Tiếng Việt",
       "value": "vi",
       "icon": "/flag-vi.svg",
       "isActive": 1
@@ -12,6 +16,7 @@
     {
       "id": 2,
       "idRefer": 2,
+      "name": "English",
       "value": "en",
       "icon": "/flag-en.svg",
       "isActive": 1
