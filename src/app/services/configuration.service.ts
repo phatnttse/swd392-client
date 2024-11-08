@@ -10,8 +10,7 @@ export class AppConfigurationService {
   private config: any;
   private API_URL: string = '';
   private NOTIFICATION_URL: string = '';
-  private INTEGRATION_SUGGEST_ADDRESS_URL: string = '';
-  private INTEGRATION_FEE_SHIP_URL: string = '';
+  private INTEGRATION_URL: string = '';
   private WEBSOCKET_URL: string = '';
   private Config_Language: any = []; // Cấu hình ngôn ngữ
   public static readonly Default_Language: string = 'vi'; // Ngôn ngữ mặc định
@@ -28,9 +27,7 @@ export class AppConfigurationService {
         this.config = config;
         this.API_URL = this.config.API_URL;
         this.NOTIFICATION_URL = this.config.NOTIFICATION_URL;
-        this.INTEGRATION_SUGGEST_ADDRESS_URL =
-          this.config.INTEGRATION_SUGGEST_ADDRESS_URL;
-        this.INTEGRATION_FEE_SHIP_URL = this.config.INTEGRATION_FEE_SHIP_URL;
+        this.INTEGRATION_URL = this.config.INTEGRATION_URL;
         this.WEBSOCKET_URL = this.config.WEBSOCKET_URL;
         this.Config_Language = this.config.Config_Language;
         this.firebaseConfig = this.config.firebaseConfig;

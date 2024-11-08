@@ -20,7 +20,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { Flower } from '../../../../models/flower.model';
+import { Flower, Image } from '../../../../models/flower.model';
 import { ProductService } from '../../../../services/product.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
@@ -104,7 +104,7 @@ export class SellerProductManagementComponent
 
   // Tạo sản phẩm mới
   productForm: FormGroup; // Form tạo sản phẩm
-  uploadedImages: string[] = []; // Ảnh đã tải lên
+  uploadedImages: Image[] = []; // Ảnh đã tải lên
   fileImages: File[] = []; // File ảnh
   isPictureError: boolean = false; // Lỗi không tải ảnh
   selectedCategories: SubCategory[] = []; // Danh sách  danh mục đã chọn
@@ -115,6 +115,8 @@ export class SellerProductManagementComponent
   draggedImage: any; // Ảnh kéo thả
   productDetail: Flower | null = null; // Chi tiết sản phẩm
   suggestAddresses: SuggestAddress[] = []; // Địa chỉ gợi ý
+  deletedImages: number[] = []; // Ảnh đã xóa
+  newImages: File[] = []; // Ảnh mới
 
   constructor(
     private productService: ProductService,
@@ -132,6 +134,7 @@ export class SellerProductManagementComponent
       stockQuantity: ['', [Validators.required, Validators.min(1)]],
       address: ['', [Validators.required, Validators.minLength(10)]],
       expireDate: [null, [Validators.required]],
+      flowerExpireDate: [null, [Validators.required]],
     });
   }
 
@@ -174,6 +177,22 @@ export class SellerProductManagementComponent
         return;
       }
     });
+
+    this.productForm
+      .get('flowerExpireDate')
+      ?.valueChanges.subscribe((value) => {
+        if (value.getTime() < new Date().getTime()) {
+          this.productForm.get('flowerExpireDate')?.setValue(null);
+          this.toastr.warning(
+            'Ngày hết hạn của hoa không được nhỏ hơn ngày hiện tại',
+            'Warning',
+            {
+              progressBar: true,
+            }
+          );
+          return;
+        }
+      });
   }
 
   ngAfterViewInit() {
@@ -194,11 +213,14 @@ export class SellerProductManagementComponent
 
   // Thay đổi trạng thái của trang
   btnChangeStatusPage(status: number) {
-    this.statusPage = status;
     this.productForm.reset();
     this.selectedProduct = null;
     this.selectedCategories = [];
     this.uploadedImages = [];
+    this.fileImages = [];
+    this.newImages = [];
+    this.deletedImages = [];
+    this.statusPage = status;
   }
 
   // Tạo sản phẩm mới hoặc cập nhật --------------------------- statusPage = 1
@@ -218,13 +240,16 @@ export class SellerProductManagementComponent
 
     this.statusService.statusLoadingSpinnerSource.next(true);
 
-    const formData = this.createFormData();
+    const formData = this.createAddFlowerFormData();
 
     this.productService.createFlower(formData).subscribe({
       next: (response: Flower) => {
         this.productForm.reset();
+        this.fileImages = [];
         this.selectedCategories = [];
         this.uploadedImages = [];
+        this.newImages = [];
+        this.deletedImages = [];
         this.listFlower.push(response);
         this.productService.flowerByUserDataSource.next(this.listFlower);
         this.dataSource = new MatTableDataSource(this.listFlower);
@@ -237,13 +262,12 @@ export class SellerProductManagementComponent
       },
       error: (error: HttpErrorResponse) => {
         this.statusService.statusLoadingSpinnerSource.next(false);
-        this.toastr.error('Tạo hoa mới thất bại', 'Error');
-        console.error('Error creating product: ', error);
+        this.toastr.error(error.error.message, 'Error');
       },
     });
   }
 
-  createFormData(): FormData {
+  createAddFlowerFormData(): FormData {
     const formData = new FormData();
     formData.append('name', this.productForm.get('name')!.value);
     formData.append('description', this.productForm.get('description')!.value);
@@ -266,6 +290,50 @@ export class SellerProductManagementComponent
       'expireDate',
       this.productForm.get('expireDate')!.value.toISOString().split('.')[0]
     );
+    formData.append(
+      'flowerExpireDate',
+      this.productForm
+        .get('flowerExpireDate')!
+        .value.toISOString()
+        .split('.')[0]
+    );
+
+    return formData;
+  }
+  createUpdateFlowerFormData(): FormData {
+    const formData = new FormData();
+    formData.append('name', this.productForm.get('name')!.value);
+    formData.append('description', this.productForm.get('description')!.value);
+    formData.append('price', this.productForm.get('price')!.value);
+    formData.append(
+      'stockQuantity',
+      this.productForm.get('stockQuantity')!.value
+    );
+    formData.append('address', this.productForm.get('address')!.value);
+
+    this.selectedCategories.forEach((category) => {
+      formData.append('categories', category.id.toString());
+    });
+
+    this.newImages.forEach((fileImage) => {
+      formData.append('newImages', fileImage);
+    });
+
+    this.deletedImages.forEach((image) => {
+      formData.append('deletedImages', image.toString());
+    });
+
+    formData.append(
+      'expireDate',
+      this.productForm.get('expireDate')!.value.toISOString().split('.')[0]
+    );
+    formData.append(
+      'flowerExpireDate',
+      this.productForm
+        .get('flowerExpireDate')!
+        .value.toISOString()
+        .split('.')[0]
+    );
 
     return formData;
   }
@@ -277,10 +345,18 @@ export class SellerProductManagementComponent
 
   // Chọn danh mục
   btnSelectCategory(category: SubCategory) {
-    if (this.selectedCategories.includes(category)) {
-      this.selectedCategories = this.selectedCategories.filter(
-        (item) => item !== category
-      );
+    if (this.selectedCategories.length > 0) {
+      this.selectedCategories.map((item) => {
+        if (item.id === category.id) {
+          this.selectedCategories = this.selectedCategories.filter(
+            (item) => item.id !== category.id
+          );
+          return;
+        } else {
+          this.selectedCategories.push(category);
+          this.isCategoryError = false;
+        }
+      });
     } else {
       this.selectedCategories.push(category);
       this.isCategoryError = false;
@@ -301,8 +377,9 @@ export class SellerProductManagementComponent
     if (fileInput.files && fileInput.files.length > 0) {
       const fileImage = fileInput.files[0];
       this.fileImages.push(fileImage);
-      const uploadedImage = URL.createObjectURL(fileImage);
-      this.uploadedImages.push(uploadedImage);
+      const uploadedImageUrl = URL.createObjectURL(fileImage);
+      this.uploadedImages.push({ id: 0, url: uploadedImageUrl });
+      this.newImages.push(fileImage);
       this.isPictureError = false;
     } else {
       this.uploadedImages = [];
@@ -320,10 +397,11 @@ export class SellerProductManagementComponent
           stockQuantity: flower.stockQuantity,
           address: flower.address,
           expireDate: new Date(flower.expireDate),
+          flowerExpireDate: new Date(flower.flowerExpireDate),
         });
         this.selectedProduct = flower;
-        (this.uploadedImages = flower.images.map((image) => image.url)),
-          (this.selectedCategories = flower.categories);
+        this.uploadedImages = flower.images;
+        this.selectedCategories = flower.categories;
         this.statusPage = 2;
       }
     });
@@ -344,34 +422,31 @@ export class SellerProductManagementComponent
 
     this.statusService.statusLoadingSpinnerSource.next(true);
 
-    const formData = this.createFormData();
+    const formData = this.createUpdateFlowerFormData();
 
     this.productService
       .updateFlower(this.selectedProduct?.id!, formData)
       .subscribe({
         next: (response: Flower) => {
-          this.toastr.success('Cập nhật thành công', 'Success', {
-            progressBar: true,
-          });
-          this.productForm.patchValue({
-            name: response.name,
-            price: response.price,
-            description: response.description,
-            stockQuantity: response.stockQuantity,
-            address: response.address,
-          });
-          this.selectedCategories = response.categories;
           this.listFlower.forEach((flower, index) => {
             if (flower.id === response.id) {
               this.listFlower[index] = response;
             }
           });
           this.productService.flowerByUserDataSource.next(this.listFlower);
-
+          this.productForm.reset();
+          this.fileImages = [];
+          this.selectedCategories = [];
+          this.uploadedImages = [];
+          this.newImages = [];
+          this.deletedImages = [];
           this.dataSource = new MatTableDataSource(this.listFlower);
           this.dataSource.sort = this.sort;
           this.statusPage = 0;
           this.statusService.statusLoadingSpinnerSource.next(false);
+          this.toastr.success('Cập nhật thành công', 'Success', {
+            progressBar: true,
+          });
         },
         error: (error: HttpErrorResponse) => {
           this.statusService.statusLoadingSpinnerSource.next(false);
@@ -383,6 +458,9 @@ export class SellerProductManagementComponent
 
   removeImage(image: any) {
     this.uploadedImages = this.uploadedImages.filter((img) => img !== image);
+    if (image.id > 0) {
+      this.deletedImages.push(image.id);
+    }
   }
 
   onDragStart(event: DragEvent, image: any) {

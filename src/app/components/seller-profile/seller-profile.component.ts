@@ -80,7 +80,7 @@ export class SellerProfileComponent {
         this.listFlower = response;
       },
       error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }
@@ -91,7 +91,7 @@ export class SellerProfileComponent {
         this.sellerInfo = response.data;
       },
       error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }
@@ -113,7 +113,7 @@ export class SellerProfileComponent {
           this.toastr.success(
             `Bạn vừa thêm ${response.data.flowerName} vào giỏ hàng`,
             'Thành công',
-            { progressBar: true, positionClass: 'toast-bottom-right' }
+            { progressBar: true }
           );
           Utilities.openOffCanvas('offcanvasCart');
         } else {
@@ -121,7 +121,7 @@ export class SellerProfileComponent {
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }

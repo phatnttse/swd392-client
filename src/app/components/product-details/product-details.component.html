@@ -49,7 +49,9 @@
           </h4>
           <div class="d-flex flex-row my-3">
             <div class="text-black mb-1 me-3">
-              <span class="ms-1"> Lượt xem: {{ flower.views }} </span>
+              <span class="ms-1">
+                {{ "View" | translate }}: {{ flower.views }}
+              </span>
             </div>
             <span class="text-black me-3"
               ><i class="fas fa-shopping-basket me-2"></i
@@ -65,6 +67,13 @@
               "ProductDetail.OutStock" | translate
             }}</span>
             }
+          </div>
+
+          <div class="mb-3">
+            <span class="text-black fw-bold"
+              >{{ "FlowerExpireDate" | translate }}:
+              {{ flower.flowerExpireDate | date : "yyyy-MM-dd HH:mm" }}</span
+            >
           </div>
 
           <div class="mb-3">

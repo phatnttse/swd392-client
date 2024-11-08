@@ -5,7 +5,7 @@
   <div class="container-fluid">
     @if (statusOrder === 0) {
     <div class="row">
-      <div class="col-md-6 mb-5 mb-md-0">
+      <div class="col-12 col-lg-6 mb-5 mb-lg-0">
         <mat-card class="p-2">
           <h5 class="my-4 ms-2 fw-bold">
             {{ "Order.RecipientInfo" | translate }}
@@ -69,13 +69,20 @@
                 </div>
               </div>
 
-              <label for="c_lname" class="text-black">
-                {{ "Order.Address" | translate
-                }}<span class="text-danger ms-1">*</span></label
-              >
+              <div class="d-flex align-items-center mb-2">
+                <div class="d-flex align-items-center">
+                  <mat-icon matPrefix class="text-danger">location_on</mat-icon>
+                  <a
+                    href="javascript:;"
+                    class="text-danger fw-bold"
+                    (click)="btnOpenSelectAddress()"
+                    >Chọn địa chỉ của tôi</a
+                  >
+                </div>
+              </div>
+
               <mat-form-field class="w-100 fs-16" appearance="outline">
                 <mat-label>{{ "AddressEnter" | translate }}</mat-label>
-                <mat-icon matPrefix>location_on</mat-icon>
                 <input
                   matInput
                   type="text"
@@ -182,7 +189,7 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="col-md-6">
+      <div class="col-12 col-lg-6">
         <!-- <div class="row mb-5">
           <div class="col-md-12">
             <h2 class="h3 mb-3 text-black">Coupon Code</h2>

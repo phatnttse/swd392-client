@@ -17,7 +17,10 @@ import { OrderService } from '../../services/order.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { UserBalanceResponse } from '../../models/account.model';
+import {
+  AccountAddress,
+  UserBalanceResponse,
+} from '../../models/account.model';
 import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -43,6 +46,7 @@ import confetti from 'canvas-confetti';
 import { MatDialog } from '@angular/material/dialog';
 import { InsufficientBalanceComponent } from '../dialogs/insufficient-balance/insufficient-balance.component';
 import { BaseResponse } from '../../models/base.model';
+import { SelectAddressComponent } from '../dialogs/select-address/select-address.component';
 
 @Component({
   selector: 'app-order',
@@ -224,12 +228,11 @@ export class OrderComponent implements OnInit {
           },
           error: (error: HttpErrorResponse) => {
             this.statusService.statusLoadingSpinnerSource.next(false);
-            this.toastr.error(error.error.message, 'Đặt hàng thất bại', {
+            this.toastr.error(error.error.message, 'Order failed', {
               progressBar: true,
               progressAnimation: 'increasing',
               timeOut: 5000,
             });
-            this.statusOrder = 2;
           },
         });
     } else if (paymentMethod === PaymentMethod.COD) {
@@ -252,12 +255,11 @@ export class OrderComponent implements OnInit {
           },
           error: (error: HttpErrorResponse) => {
             this.statusService.statusLoadingSpinnerSource.next(false);
-            this.toastr.error(error.error.message, 'Đặt hàng thất bại', {
+            this.toastr.error(error.error.message, 'Order failed', {
               progressBar: true,
               progressAnimation: 'increasing',
               timeOut: 5000,
             });
-            this.statusOrder = 2;
           },
         });
     }
@@ -351,14 +353,14 @@ export class OrderComponent implements OnInit {
             transport: this.transport,
           };
 
-          const feeResponse = await firstValueFrom(
+          const getFeeShipResponse = await firstValueFrom(
             this.integrationService.getFeeShip(getFeeShipRequest)
           );
-          if (feeResponse.success) {
+          if (getFeeShipResponse.body.success) {
             this.shippingFees.push({
               flowerId: item.flowerId,
               flowerName: item.flowerName,
-              shippingFee: feeResponse.fee.fee,
+              shippingFee: getFeeShipResponse.body.fee.fee,
             });
           } else {
             this.statusService.statusLoadingSpinnerSource.next(false);
@@ -416,5 +418,20 @@ export class OrderComponent implements OnInit {
   }
   selectPayment(method: string) {
     this.selectedPaymentMethod = method;
+  }
+
+  btnOpenSelectAddress() {
+    const dialogRef = this.dialog.open(SelectAddressComponent);
+    dialogRef.afterClosed().subscribe((address: AccountAddress) => {
+      if (address) {
+        const addressString = `${address.streetAddress}, ${address.ward}, ${address.district}, ${address.province}`;
+        this.orderForm.get('deliveryAddress')?.setValue(addressString);
+        this.province = address.province;
+        this.district = address.district;
+        this.ward = address.ward;
+        this.street = address.streetAddress;
+        this.calculateShippingFees();
+      }
+    });
   }
 }

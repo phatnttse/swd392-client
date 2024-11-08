@@ -11,6 +11,12 @@
     font-weight: bold;
   }
 
+  .red-text{
+    color: #FF0000;
+    font-weight: bold;
+  }
+
+  
   .status-pending {
     color: #FFA500; 
   }
@@ -56,4 +62,8 @@
     &.badge-manager {
         background-color: #17a2b8; 
     }
+    &.badge-ban{
+        background-color: #FF0000;
+    }
 }
+

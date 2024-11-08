@@ -21,6 +21,8 @@ import { Flower, FlowerPaginated } from '../../../../models/flower.model';
 import { UserAccount, UserAccountPaginatedResponse } from '../../../../models/account.model';
 import { AccountService } from '../../../../services/account.service';
 import { Role } from '../../../../models/enums';
+import { StatusService } from '../../../../services/status.service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -34,14 +36,16 @@ import { Role } from '../../../../models/enums';
     MatDatepickerModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    TranslateModule,],
+    TranslateModule,
+    CommonModule],
   templateUrl: './admin-dashboard-management.component.html',
   styleUrl: './admin-dashboard-management.component.scss'
 })
 export class AdminDashboardManagementComponent {
   @ViewChild('activeusercardchart') chart1: ChartComponent =
     Object.create(null);
-  public chartOptions!: Partial<ChartOptions> | any;
+  public revenueChartOptions!: Partial<ChartOptions> | any;
+  public orderChartOptions!: Partial<ChartOptions> | any;
 
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(
@@ -74,9 +78,11 @@ export class AdminDashboardManagementComponent {
     private toastr: ToastrService,
     private categoryService: CategoryService,
     private flowerService: ProductService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private statusService: StatusService
   ) {
-    this.chartOptions = {};
+    this.revenueChartOptions = {};
+    this.orderChartOptions = {};
     this.roleName = [Role.ADMIN, Role.MANAGER, Role.USER]
   }
 
@@ -91,22 +97,18 @@ export class AdminDashboardManagementComponent {
 
   // Lấy dữ liệu cho biểu đồ
   getOrderLineChart() {
+    this.statusService.statusLoadingSpinnerSource.next(true);
     const startDate = Utilities.formatDate(this.range.get('start')?.value!);
     const endDate = Utilities.formatDate(this.range.get('end')?.value!);
     this.orderService.getOrderLineChart(startDate, endDate).subscribe({
       next: (response: OrderLineChart[]) => {
         this.orderLineChart = response;
-        this.chartOptions = {
+        this.revenueChartOptions = {
           series: [
             {
               name: 'Doanh thu',
               data: response.map((item) => item.price),
               color: '#fb9678',
-            },
-            {
-              name: 'Số đơn hàng',
-              data: response.map((item) => item.orderCount),
-              color: '#03c9d7',
             },
           ],
           xaxis: {
@@ -127,14 +129,6 @@ export class AdminDashboardManagementComponent {
                 },
                 title: {
                   formatter: () => 'Doanh thu',
-                },
-              },
-              {
-                formatter: (val: number) => {
-                  return val.toString(); // Chỉ đơn giản chuyển sang chuỗi
-                },
-                title: {
-                  formatter: () => 'Số đơn hàng',
                 },
               },
             ],
@@ -158,14 +152,64 @@ export class AdminDashboardManagementComponent {
             colors: ['none'],
           },
           plotOptions: {
+            line: {
+              columnWidth: '45%',
+              borderRadius: 6,
+            },
+          },
+        };
+        this.orderChartOptions = {
+          series: [
+            {
+              name: 'Số đơn hàng',
+              data: response.map((item) => item.orderCount),
+              color: '#03c9d7',
+            },
+          ],
+          xaxis: {
+            categories: response.map((item) => item.time),
+          },
+          tooltip: {
+            y: [
+              {
+                formatter: (val: number) => {
+                  return val.toString(); // Chỉ đơn giản chuyển sang chuỗi
+                },
+                title: {
+                  formatter: () => 'Số đơn hàng',
+                },
+              },
+            ],
+          },
+          chart: {
+            toolbar: {
+              show: false,
+            },
+            type: 'area',
+            height: 300,
+          },
+          legend: {
+            show: false,
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
+            show: true,
+            width: 5,
+            colors: ['none'],
+          },
+          plotOptions: {
             bar: {
               columnWidth: '45%',
               borderRadius: 6,
             },
           },
         };
+        this.statusService.statusLoadingSpinnerSource.next(false);
       },
       error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
         console.log(error);
       },
     });
@@ -212,6 +256,7 @@ export class AdminDashboardManagementComponent {
       );
     } else {
       this.getOrderLineChart();
+      this.getReport();
     }
   }
 
@@ -262,7 +307,7 @@ export class AdminDashboardManagementComponent {
       order,
       sortBy,
       0, 
-      20,
+      200,
       roleName
     ).subscribe({
       next: (response: UserAccountPaginatedResponse) => {
@@ -287,14 +332,15 @@ export class AdminDashboardManagementComponent {
       order,
       sortBy,
       0, 
-      20,
+      200,
       roleName
     ).subscribe({
       next: (response: UserAccountPaginatedResponse) => {
         console.log('Total users count:', response.data.totalElements);
-        this.listStaff = response.data.content.filter(user => user.role === Role.ADMIN)
+        this.listStaff = response.data.content.filter(user => user.role === Role.ADMIN);
         console.log(this.listStaff)
-        this.staffCount = this.listStaff.length; // Gán tổng số lượng người dùng
+        this.staffCount = this.listStaff.length;
+        console.log(this.staffCount); 
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error fetching total users count:', error);

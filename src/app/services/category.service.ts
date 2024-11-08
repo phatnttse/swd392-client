@@ -84,6 +84,7 @@ export class CategoryService extends EndpointBase {
       );
   }
 
+
   deleteCategory(id: number): Observable<FlowerCategory> {
     return this.http
       .delete<FlowerCategory>(

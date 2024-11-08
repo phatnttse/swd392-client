@@ -34,6 +34,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
 import { ParentCategory } from '../../../../models/enums';
 import { TranslateModule } from '@ngx-translate/core';
+import { DeleteFlowerComponent } from '../../../dialogs/delete-flower/delete-flower.component';
+import { DeleteCategoryComponent } from '../../../dialogs/delete-category/delete-category.component';
 
 @Component({
   selector: 'app-admin-category-management',
@@ -72,7 +74,7 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
   fileImage: File | null = null; // File ảnh
   isPictureError: boolean = false; // Lỗi không tải ảnh
   categories = Object.values(ParentCategory);
-
+  isRejectFormVisible: boolean = false;
   selectedCategoryParent: string | null = null; // Biến để lưu giá trị được chọn
   searchQuery: string = ''; // Biến để lưu từ khóa tìm kiếm
 
@@ -162,6 +164,7 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
             this.dataSource = new MatTableDataSource(this.flowerCategories);
             this.dataSource.sort = this.sort;
             this.categoryService.categoryDataSource.next(this.flowerCategories);
+            this.statusPage = 0;
           },
           error: (error: HttpErrorResponse) => {
             this.toastr.error('Tạo hoa mới thất bại', 'Error');
@@ -233,7 +236,22 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
   }
   
 
- 
+  // Hàm để mở dialog
+  openDeleteDialog(id: number): void {
+    const dialogRef = this.dialog.open(DeleteCategoryComponent, {
+      width: '300px',
+      data: id
+    });
+
+    // Xử lý khi dialog đóng
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.btnDeleteCategory(id); 
+      }
+    });
+  }
+
+
 
   btnDeleteCategory(id: number){
     this.categoryService.deleteCategory(id).subscribe({

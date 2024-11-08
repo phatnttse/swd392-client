@@ -55,6 +55,10 @@
             <span class="text-black"> {{ order.orderSummary.buyerName }}</span>
           </div>
           <div class="col">
+            <strong class="fw-bold text-black">Thanh toán</strong> <br />
+            <span class="text-black"> {{ order.paymentMethod }}</span>
+          </div>
+          <div class="col">
             <strong class="fw-bold text-black">Ngày đặt hàng</strong> <br />
             <span class="text-black">
               {{ order.createAt | date : "dd-MM-yyyy HH:ss" }}</span
@@ -68,7 +72,10 @@
         <div
           class="step"
           [ngClass]="{
-            active: isActiveStep(order.status, step.status)
+            'active-cancel':
+              order.status === orderDetailStatus.BUYER_CANCELED ||
+              order.status === orderDetailStatus.SELLER_CANCELED,
+            'active-refund': order.status === orderDetailStatus.REFUNDED
           }"
         >
           <span class="icon"> <i [class]="step.icon"></i> </span>

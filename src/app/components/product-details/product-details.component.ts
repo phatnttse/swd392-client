@@ -111,6 +111,7 @@ export class ProductDetailsComponent implements OnInit {
         this.getSellerProfile(this.flower?.user.id || 0);
       },
       error: (error: HttpErrorResponse) => {
+        this.router.navigate(['pages/404']);
         console.log(error);
       },
     });
@@ -152,7 +153,7 @@ export class ProductDetailsComponent implements OnInit {
           this.toastr.success(
             `Bạn vừa thêm ${response.data.flowerName} vào giỏ hàng`,
             'Thành công',
-            { progressBar: true, positionClass: 'toast-bottom-right' }
+            { progressBar: true }
           );
           Utilities.openOffCanvas('offcanvasCart');
         } else {

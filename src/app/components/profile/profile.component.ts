@@ -13,7 +13,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../services/account.service';
-import { UserAccount, UserAccountResponse } from '../../models/account.model';
+import {
+  AccountAddress,
+  AccountAddressListResponse,
+  AccountAddressResponse,
+  UserAccount,
+  UserAccountResponse,
+} from '../../models/account.model';
 import { AuthService } from '../../services/auth.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,6 +43,9 @@ import { BreadcrumbComponent } from '../../layouts/breadcrumb/breadcrumb.compone
 import { Subscription } from 'rxjs';
 import { StatusService } from '../../services/status.service';
 import { NotificationService } from '../../services/notification.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddUpdateAddressComponent } from '../dialogs/add-update-address/add-update-address.component';
+import { DeleteAddressComponent } from '../dialogs/delete-address/delete-address.component';
 
 @Component({
   selector: 'app-profile',
@@ -75,13 +84,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   verifyOTPForm: FormGroup; // Form xác nhận OTP
   userAccount: UserAccount | null = null; // Thông tin tài khoản người dùng
   genders = Object.values(Gender); // Danh sách giới tính
-  statusPage: number = 0; // Trạng thái trang 0: overview, 1: change password, 2: change email
+  statusPage: number = 0; // Trạng thái trang 0: overview, 1: change password, 2: change email, 3: address
   hideCurrentPassword = signal(true); // Ẩn hiện mật khẩu hiện tại
   hideNewPassword = signal(true); // Ẩn hiện mật khẩu mới
   hideRepeatPassword = signal(true); // Ẩn hiện mật khẩu lặp lại
   selectedFile: File | null = null; // File ảnh đại diện
   isLinear = false; // Bước xác nhận email
   userAccountSubscription: Subscription = new Subscription(); // Subscription của user account
+  listAddress: AccountAddress[] = []; // Danh sách địa chỉ
 
   constructor(
     private formBuilder: FormBuilder,
@@ -93,7 +103,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private productService: ProductService,
     private statusService: StatusService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {
     this.profileForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -120,6 +131,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (user) {
           this.userAccount = user;
           this.getAccountProfile();
+          this.getAddressByAccount();
         }
       },
     });
@@ -212,7 +224,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         },
         error: (error: HttpErrorResponse) => {
           this.statusService.statusLoadingSpinnerSource.next(false);
-          this.toastr.warning(error.error.error, 'Error', {
+          this.toastr.warning(error.error.message, 'Error', {
             progressBar: true,
           });
         },
@@ -332,6 +344,49 @@ export class ProfileComponent implements OnInit, OnDestroy {
     } else if (field === 'repeat') {
       this.hideRepeatPassword.set(!this.hideRepeatPassword());
     }
+  }
+
+  getAddressByAccount() {
+    this.statusService.statusLoadingSpinnerSource.next(true);
+    this.accountService.getAddressByAccount().subscribe({
+      next: (response: AccountAddressListResponse) => {
+        this.listAddress = response.data;
+        this.statusService.statusLoadingSpinnerSource.next(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.statusService.statusLoadingSpinnerSource.next(false);
+      },
+    });
+  }
+
+  btnOpenDialogAddUpdateAddress(type: string, address: AccountAddress | null) {
+    const dialogRef = this.dialog.open(AddUpdateAddressComponent, {
+      width: '800px',
+      data: {
+        type: type,
+        address: address,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getAddressByAccount();
+      }
+    });
+  }
+
+  btnOpenDialogDeleteAddress(addressId: number) {
+    const dialogRef = this.dialog.open(DeleteAddressComponent, {
+      data: {
+        addressId: addressId,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getAddressByAccount();
+      }
+    });
   }
 
   // Đăng xuất

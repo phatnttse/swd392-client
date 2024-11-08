@@ -89,11 +89,11 @@ export class SignInComponent {
           this.getCartByUser();
           this.getAllNotifications();
           this.authService.redirectLogin();
+          this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.success(response.message, 'Success', {
             progressBar: true,
           });
-          this.statusService.statusLoadingSpinnerSource.next(false);
-        }, 700);
+        }, 800);
       },
 
       error: (error: HttpErrorResponse) => {
@@ -101,7 +101,6 @@ export class SignInComponent {
         this.toastr.warning(error.error.message, error.error.error, {
           progressBar: true,
         });
-        console.error('Error during login:', error);
       },
     });
   }

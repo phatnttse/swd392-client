@@ -1,0 +1,20 @@
+.address-item {
+  padding: 8px 0;
+}
+
+mat-radio-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+mat-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+hr {
+  margin: 8px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+}

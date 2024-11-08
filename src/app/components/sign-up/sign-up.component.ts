@@ -101,13 +101,12 @@ export class SignUpComponent {
         error: (errorResponse: HttpErrorResponse) => {
           this.statusService.statusLoadingSpinnerSource.next(false);
           this.toastr.warning(
-            errorResponse.error.error,
             errorResponse.error.message,
+            errorResponse.error.error,
             {
               progressBar: true,
             }
           );
-          console.error('Error during registration:', errorResponse);
         },
       });
   }

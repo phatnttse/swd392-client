@@ -10,7 +10,7 @@
   >
     <div class="p-16">
       <div class="mb-16">
-        @if (this.authService.isAdmin) {
+        @if (account) { @if (account.role === roles.ADMIN) {
         <a class="d-flex align-items-center justify-content-center mb-4">
           <img
             width="80"
@@ -19,7 +19,7 @@
             style="object-fit: cover"
           />
         </a>
-        }@else if (!this.authService.isAdmin || this.authService.isLoggedIn) {
+        }@else if (account.role === roles.USER) {
         <a
           routerLink="/"
           class="d-flex align-items-center justify-content-center mb-4"
@@ -31,11 +31,11 @@
             style="object-fit: cover"
           />
         </a>
-        }
+        } }
       </div>
       <ul>
-        @if (this.authService.isAdmin) { @for (sidenav of adminMenu; track
-        $index) {
+        @if (account) { @if (account.role === roles.ADMIN) { @for (sidenav of
+        adminMenu; track $index) {
         <li class="list-group mb-2">
           <a
             matRipple
@@ -49,8 +49,8 @@
             <span class="ps-3">{{ sidenav.menu }}</span>
           </a>
         </li>
-        } }@else if (this.authService.isLoggedIn || !this.authService.isAdmin) {
-        @for (sidenav of sellerChannelMenu; track $index) {
+        } }@else if (account.role === roles.USER) { @for (sidenav of
+        sellerChannelMenu; track $index) {
         <li class="list-group mb-2">
           <a
             matRipple
@@ -64,7 +64,7 @@
             <span class="ps-3">{{ sidenav.menu | translate }}</span>
           </a>
         </li>
-        } }
+        } } }
       </ul>
     </div>
   </mat-sidenav>
@@ -202,21 +202,17 @@
           [matMenuTriggerFor]="menu"
         >
           <div class="d-flex align-items-center">
-            <img
-              [src]="userAccount?.avatar"
-              width="20"
-              class="rounded"
-              alt=""
-            />
+            <img [src]="account?.avatar" width="20" class="rounded" alt="" />
             <span class="fw-light ms-2">
               <strong class="primary-color fw-bold">{{
-                userAccount?.name
+                account?.name
               }}</strong></span
             >
             <mat-icon>expand_more</mat-icon>
           </div>
         </button>
         <mat-menu #menu="matMenu" class="profile-dropdown">
+          @if (account) { @if (account.role === roles.USER) {
           <div class="mb-4 p-16">
             <button routerLink="/profile" mat-menu-item class="fs-16" extend>
               {{ "Header.MyAccount" | translate }}
@@ -237,12 +233,13 @@
           </div>
 
           <hr />
+          } }
 
           <div class="p-16">
             <button
               (click)="btnLogOut()"
               mat-flat-button
-              color="accent"
+              color="warn"
               class="w-100 text-white"
               extend
             >

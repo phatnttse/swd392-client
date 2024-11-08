@@ -1,0 +1,16 @@
+<h2 mat-dialog-title class="text-center my-2">Thông báo</h2>
+<mat-dialog-content>
+  <p>Bạn có chắc chắn muốn xoá danh mục này không ?</p>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="my-3">
+  <button mat-button mat-dialog-close>Đóng</button>
+  <button
+    type="button"
+    mat-raised-button
+    color="primary"
+    color="warn"
+    (click)="btnDeleteFlower()"
+  >
+    Xác nhận
+  </button>
+</mat-dialog-actions>

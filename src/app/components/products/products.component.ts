@@ -271,7 +271,7 @@ export class ProductsComponent implements OnInit {
           this.toastr.success(
             `Bạn vừa thêm ${response.data.flowerName} vào giỏ hàng`,
             'Thành công',
-            { progressBar: true, positionClass: 'toast-bottom-right' }
+            { progressBar: true }
           );
           Utilities.openOffCanvas('offcanvasCart');
         } else {
@@ -279,7 +279,6 @@ export class ProductsComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
         this.toastr.error(error.error.message);
       },
     });

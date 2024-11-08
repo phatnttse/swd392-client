@@ -91,8 +91,7 @@ export class ForgotPasswordComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.statusService.statusLoadingSpinnerSource.next(false);
-        this.toastr.error(error.error.error, 'Error');
-        console.log(error);
+        this.toastr.error(error.error.message, 'Error');
       },
     });
   }
