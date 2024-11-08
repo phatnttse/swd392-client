@@ -13,6 +13,7 @@ export interface UserAccount {
   gender: Gender;
   role: Role;
   avatar: string;
+  status: string;
   balance: number;
   externalAuthType: string;
   createAt: Date;

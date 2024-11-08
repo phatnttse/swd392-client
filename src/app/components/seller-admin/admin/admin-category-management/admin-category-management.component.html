@@ -68,21 +68,26 @@
   </mat-card-content>
 </mat-card>
 } @else if (statusPage == 1) {
+  <button mat-raised-button color="warn" extend class="btn me-2 fs-16 p-24 mb-2" style="padding: 20px"
+    (click)="btnChangeStatusPage(0)">
+    {{ "Back" | translate }}
+    <mat-icon>reply</mat-icon>
+  </button>
 <div class="card">
   <div class="card-body">
     <div class="d-flex align-items-center mb-4">
-      <a class="page-link primary-color me-2" href="javascript:;" (click)="btnBack()">
-        <mat-icon>arrow_back</mat-icon>
-      </a>
       <h3 class="primary-color m-0">Chi tiết danh mục</h3>
     </div>
     <form [formGroup]="categoryForm">
       <h6 class="mb-3 mt-5">Ảnh danh mục</h6>
       @if (!uploadedImage && selectedCategory?.imageUrl) {
-      <a [href]="selectedCategory?.imageUrl" target="_blank">
+        <div class="uploaded-images">
+          <div class="uploaded-image ms-2">
+
         <img width="100px" height="100px" style="object-fit: cover" [src]="selectedCategory?.imageUrl"
           alt="Category Image" />
-      </a>
+          </div>
+      </div>
       }
       @if (uploadedImage) {
       <div class="uploaded-images">

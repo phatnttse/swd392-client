@@ -164,6 +164,7 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
             this.dataSource = new MatTableDataSource(this.flowerCategories);
             this.dataSource.sort = this.sort;
             this.categoryService.categoryDataSource.next(this.flowerCategories);
+            this.statusPage = 0;
           },
           error: (error: HttpErrorResponse) => {
             this.toastr.error('Tạo hoa mới thất bại', 'Error');
