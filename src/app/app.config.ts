@@ -35,7 +35,7 @@ export const provideTranslation = () => ({
   },
 });
 
-// Hàm tải file ngôn ngữ
+// function loader language
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
