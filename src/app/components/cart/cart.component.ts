@@ -71,7 +71,9 @@ export class CartComponent implements OnInit {
     } else {
       this.cartService.insertUpdateCart(flowerId, quantity).subscribe({
         error: (error: HttpErrorResponse) => {
-          console.log(error);
+          this.toastr.error(error.error.message, 'Error', {
+            progressBar: true,
+          });
         },
       });
     }
@@ -80,7 +82,7 @@ export class CartComponent implements OnInit {
   btnRemoveCartItem(cartItemId: number) {
     this.cartService.removeCartItemById(cartItemId).subscribe({
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.toastr.error(error.error.message, 'Error', { progressBar: true });
       },
     });
   }
@@ -91,7 +93,7 @@ export class CartComponent implements OnInit {
         this.cartService.reset();
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.toastr.error(error.error.message, 'Error', { progressBar: true });
       },
     });
   }

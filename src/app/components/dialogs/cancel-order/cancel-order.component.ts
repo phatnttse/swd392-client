@@ -102,7 +102,7 @@ export class CancelOrderComponent {
           }
         },
         error: (error: HttpErrorResponse) => {
-          this.toastr.error(error.error.error, 'Error');
+          this.toastr.error(error.error.message, 'Error');
         },
       });
   }
