@@ -113,7 +113,7 @@ export class SellerProfileComponent {
           this.toastr.success(
             `Bạn vừa thêm ${response.data.flowerName} vào giỏ hàng`,
             'Thành công',
-            { progressBar: true, positionClass: 'toast-bottom-right' }
+            { progressBar: true }
           );
           Utilities.openOffCanvas('offcanvasCart');
         } else {
@@ -121,7 +121,7 @@ export class SellerProfileComponent {
         }
       },
       error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }

@@ -24,8 +24,11 @@
 .track .step.active:before {
   background: #148609;
 }
-.track .step.active-fail:before {
+.track .step.active-cancel:before {
   background: #aa1906;
+}
+.track .step.active-refund:before {
+  background: #e0de42;
 }
 .track .step::before {
   height: 7px;
@@ -37,6 +40,16 @@
 }
 .track .step.active .icon {
   background: #148609;
+  color: #fff;
+}
+
+.track .step.active-cancel .icon {
+  background: #aa1906;
+  color: #fff;
+}
+
+.track .step.active-refund .icon {
+  background: #e0de42;
   color: #fff;
 }
 

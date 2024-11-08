@@ -110,7 +110,7 @@ export class OrderHistoryComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           this.statusService.statusLoadingSpinnerSource.next(false);
-          console.log(error);
+          this.toastr.error(error.error.message, 'Get Order By Buyer Error');
         },
       });
   }
@@ -124,6 +124,9 @@ export class OrderHistoryComponent implements OnInit {
           this.tabs[1].count = this.orderStatusCount.preparingCount;
           this.tabs[2].count = this.orderStatusCount.shippedCount;
           this.tabs[3].count = this.orderStatusCount.deliveredCount;
+          this.tabs[4].count = this.orderStatusCount.buyerCancelledCount;
+          this.tabs[5].count = this.orderStatusCount.sellerCancelledCount;
+          this.tabs[6].count = this.orderStatusCount.refundedCount;
         }
       },
       error: (error: HttpErrorResponse) => {
@@ -206,6 +209,9 @@ export class OrderHistoryComponent implements OnInit {
     { label: 'Đang chuẩn bị', count: 0 },
     { label: 'Đang giao', count: 0 },
     { label: 'Đã giao', count: 0 },
+    { label: 'Đã hủy', count: 0 },
+    { label: 'Người bán huỷ', count: 0 },
+    { label: 'Hoàn trả', count: 0 },
   ];
 
   isNonProcessStatus(orderStatus: string): boolean {
@@ -233,8 +239,17 @@ export class OrderHistoryComponent implements OnInit {
       case 3:
         this.selectedStatus = OrderDetailStatus.DELIVERED;
         break;
+      case 4:
+        this.selectedStatus = OrderDetailStatus.BUYER_CANCELED;
+        break;
+      case 5:
+        this.selectedStatus = OrderDetailStatus.SELLER_CANCELED;
+        break;
+      case 6:
+        this.selectedStatus = OrderDetailStatus.REFUNDED;
+        break;
       default:
-        this.selectedStatus = '';
+        this.selectedStatus = OrderDetailStatus.PENDING;
         break;
     }
 
@@ -285,7 +300,7 @@ export class OrderHistoryComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           this.statusService.statusLoadingSpinnerSource.next(false);
-          this.toastr.error(error.error.error, 'Xác nhận nhận hàng thất bại');
+          this.toastr.error(error.error.message, 'Xác nhận nhận hàng thất bại');
         },
       });
   }

@@ -68,7 +68,10 @@
         <div
           class="step"
           [ngClass]="{
-            active: isActiveStep(order.status, step.status)
+            'active-cancel':
+              order.status === orderDetailStatus.BUYER_CANCELED ||
+              order.status === orderDetailStatus.SELLER_CANCELED,
+            'active-refund': order.status === orderDetailStatus.REFUNDED
           }"
         >
           <span class="icon"> <i [class]="step.icon"></i> </span>
