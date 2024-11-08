@@ -5,6 +5,8 @@ import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { catchError, Observable } from 'rxjs';
 import {
+  AccountAddressListResponse,
+  AccountAddressResponse,
   AddBalanceResponse,
   SellerProfileResponse,
   UserAccount,
@@ -197,16 +199,112 @@ export class AccountService extends EndpointBase {
     name: string,
     phone: string,
     gender: string,
-    status: string): Observable<UserAccountResponse> { 
-    return this.http.post<UserAccountResponse>(
-      `${this.API_URL}/account/update-status-user/${id}`, 
-      {name, phone, gender, status}
-    ,
-      this.requestHeaders
-    ).pipe(
-      catchError((error) => {
-        return this.handleError(error, () => this.updateStatusUser(id,name, phone, gender,status));
-      })
-    );
+    status: string
+  ): Observable<UserAccountResponse> {
+    return this.http
+      .post<UserAccountResponse>(
+        `${this.API_URL}/account/update-status-user/${id}`,
+        { name, phone, gender, status },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.updateStatusUser(id, name, phone, gender, status)
+          );
+        })
+      );
+  }
+
+  addAddress(
+    recipientName: string,
+    streetAddress: string,
+    ward: string,
+    district: string,
+    province: string,
+    phoneNumber: string
+  ): Observable<AccountAddressResponse> {
+    return this.http
+      .post<AccountAddressResponse>(
+        `${this.API_URL}/address/create`,
+        { recipientName, streetAddress, ward, district, province, phoneNumber },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.addAddress(
+              recipientName,
+              streetAddress,
+              ward,
+              district,
+              province,
+              phoneNumber
+            )
+          );
+        })
+      );
+  }
+
+  updateAddress(
+    id: number,
+    recipientName: string,
+    streetAddress: string,
+    ward: string,
+    district: string,
+    province: string,
+    phoneNumber: string
+  ): Observable<AccountAddressResponse> {
+    return this.http
+      .put<AccountAddressResponse>(
+        `${this.API_URL}/address/${id}`,
+        { recipientName, streetAddress, ward, district, province, phoneNumber },
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.updateAddress(
+              id,
+              recipientName,
+              streetAddress,
+              ward,
+              district,
+              province,
+              phoneNumber
+            )
+          );
+        })
+      );
+  }
+
+  getAddressByAccount(): Observable<AccountAddressListResponse> {
+    return this.http
+      .get<AccountAddressListResponse>(
+        `${this.API_URL}/address/by-account`,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.getAddressByAccount());
+        })
+      );
+  }
+
+  deleteAddress(id: number): Observable<AccountAddressResponse> {
+    return this.http
+      .delete<AccountAddressResponse>(
+        `${this.API_URL}/address/${id}`,
+        this.requestHeaders
+      )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.deleteAddress(id));
+        })
+      );
+  }
+
+  getProvinces(): Observable<any> {
+    return this.http.get<any>(`/assets/provinces.json`);
   }
 }

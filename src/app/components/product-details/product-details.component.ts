@@ -111,6 +111,7 @@ export class ProductDetailsComponent implements OnInit {
         this.getSellerProfile(this.flower?.user.id || 0);
       },
       error: (error: HttpErrorResponse) => {
+        this.router.navigate(['pages/404']);
         console.log(error);
       },
     });

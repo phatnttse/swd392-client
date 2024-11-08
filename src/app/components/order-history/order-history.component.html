@@ -55,6 +55,10 @@
             <span class="text-black"> {{ order.orderSummary.buyerName }}</span>
           </div>
           <div class="col">
+            <strong class="fw-bold text-black">Thanh toán</strong> <br />
+            <span class="text-black"> {{ order.paymentMethod }}</span>
+          </div>
+          <div class="col">
             <strong class="fw-bold text-black">Ngày đặt hàng</strong> <br />
             <span class="text-black">
               {{ order.createAt | date : "dd-MM-yyyy HH:ss" }}</span

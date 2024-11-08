@@ -32,7 +32,7 @@ import { SideBarMenu } from '../../models/base.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
 import { Notification } from '../../models/notification.model';
-import { NotificationType } from '../../models/enums';
+import { NotificationType, Role } from '../../models/enums';
 
 @Component({
   selector: 'app-seller-admin',
@@ -73,7 +73,7 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
       shareReplay()
     );
 
-  userAccount: UserAccount | null = null;
+  account: UserAccount | null = null;
   listLanguage: any = null; // Danh sách ngôn ngữ lấy từ config
   defaultLang: any = null; // Ngôn ngữ được chọn
   notifications: Notification[] = []; // Danh sách thông báo
@@ -82,6 +82,7 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
   notificationType = NotificationType; // Enum loại thông báo
   size: number = 5; // Số lượng thông báo hiển thị
   cursor: string = ''; // Con trỏ phân trang
+  roles = Role; // Enum quyền
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -96,13 +97,13 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userAccount = this.authService.currentUser;
+    this.account = this.authService.currentUser;
     if (this.authService.isLoggedIn) {
-      this.getFlowersByUserId(this.userAccount?.id!);
+      this.getFlowersByUserId(this.account?.id!);
       this.getOrdersBySeller();
 
       // Khởi tạo WebSocket và kết nối
-      this.notificationService.connectWebSocket(this.userAccount?.id!);
+      this.notificationService.connectWebSocket(this.account?.id!);
 
       // Lấy tất cả thông báo
       this.notificationService.notificationDataSource.subscribe({
@@ -198,7 +199,7 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
     this.cursor = this.notifications[this.notifications.length - 1]?.createdAt; // Lấy giá trị createdAt của thông báo cuối cùng
     // Lấy tất cả thông báo
     this.notificationService
-      .getAllNotifications(this.userAccount?.id!, this.size, this.cursor)
+      .getAllNotifications(this.account?.id!, this.size, this.cursor)
       .subscribe({
         next: (response: Notification[]) => {
           // Nếu không có thông báo mới, không cập nhật cursor
@@ -219,7 +220,7 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
   }
 
   btnMarkAllAsRead() {
-    this.notificationService.markAsReadAll(this.userAccount?.id!).subscribe({
+    this.notificationService.markAsReadAll(this.account?.id!).subscribe({
       next: () => {
         this.notifications.forEach(
           (notification) => (notification.isRead = true)

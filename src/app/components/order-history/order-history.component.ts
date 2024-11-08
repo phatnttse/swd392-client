@@ -93,6 +93,7 @@ export class OrderHistoryComponent implements OnInit {
     pageSize: number,
     selectedStatus: string
   ) {
+    this.statusService.statusLoadingSpinnerSource.next(true);
     this.orderService
       .getOrdersByAccount(order, sortBy, pageNumber, pageSize, selectedStatus)
       .subscribe({
@@ -110,7 +111,7 @@ export class OrderHistoryComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           this.statusService.statusLoadingSpinnerSource.next(false);
-          this.toastr.error(error.error.message, 'Get Order By Buyer Error');
+          this.toastr.error(error.error.message, 'Error');
         },
       });
   }
@@ -252,8 +253,6 @@ export class OrderHistoryComponent implements OnInit {
         this.selectedStatus = OrderDetailStatus.PENDING;
         break;
     }
-
-    this.statusService.statusLoadingSpinnerSource.next(true);
     this.getOrderByBuyer(
       this.order,
       this.sortBy,
