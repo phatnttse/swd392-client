@@ -1,3 +1,4 @@
+import { BanUserComponent } from './../../../dialogs/ban-user/ban-user.component';
 import {
   CommonModule
 } from '@angular/common';
@@ -60,6 +61,8 @@ import {
 } from '../../../../models/enums';
 import { TranslateModule } from '@ngx-translate/core';
 import { Toast, ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { UnbanUserComponent } from '../../../dialogs/unban-user/unban-user.component';
 
 @Component({
   selector: 'app-admin-user-management',
@@ -104,12 +107,15 @@ export class AdminUserManagementComponent {
     'email',
     'gender',
     'role',
+    'status',
     'action',
   ];
 
   constructor(
     private accountService: AccountService,
-    private toastr : ToastrService
+    private toastr : ToastrService,
+    public dialog: MatDialog
+
   ) {
     this.roleName = [Role.ADMIN, Role.MANAGER, Role.USER]
   }
@@ -202,20 +208,65 @@ export class AdminUserManagementComponent {
     );
   }
 
+  openBanDialog(id: number, phone: string, gender: string, name: string): void {
+    const dialogRef = this.dialog.open(BanUserComponent, {
+      width: '300px',
+      data: {id, name, phone, gender}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.toastr.success(`Chặn thành công tài khoản ID: ${id}`, `Thành công`);
+        this.ngOnInit();
+      } else{
+        this.toastr.warning(`Đã hủy việc chặn tài khoản ID: ${id}`, `Thông báo`);
+      }
+    });
+  }
+
+  openUnbanDialog(id: number, phone: string, gender: string, name: string): void{
+    const dialogRef = this.dialog.open(UnbanUserComponent, {
+      width: '300px',
+      data: {id, name, phone, gender}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.toastr.success(`Đã mở khóa tài khoản ID: ${id}`, `Thành công`);
+        this.ngOnInit();
+      } else{
+        this.toastr.warning(`Đã hủy việc mở khóa tài khoản ID: ${id}`, `Thông báo`);
+      }
+    });
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 
-  btnUpdateUserStatus(): void {
-    this.accountService.updateStatusUser(UserStatus.BAN).subscribe({
+  btnUpdateUserStatus(id: number, phone: string, gender: string, name: string): void {
+    this.accountService.updateStatusUser(id, name, phone, gender, UserStatus.BAN).subscribe({
       next: (response) => {
-        this.toastr.success(`Cập nhật trạng thái thành công cho tài khoản ID: ${response.data.id}`);
+        this.toastr.warning(`Chặn thành công tài khoản ID: ${response.data.id}`);
+        this.ngOnInit();
         console.log('Updated User:', response);
       },
       error: (error) => {
         this.toastr.error('Cập nhật trạng thái không thành công:', 'Lỗi');
+        console.error('Error updating user status:', error);
+      }
+    });
+  }
+
+  btnUnbanUserStatus(id: number, phone: string, gender: string, name: string): void {
+    this.accountService.updateStatusUser(id, name, phone, gender, UserStatus.VERIFIED).subscribe({
+      next: (response) => {
+        this.toastr.success(`Gỡ chặn thành công tài khoản ID: ${response.data.id}`,`Thành công`);
+        this.ngOnInit();
+      },
+      error: (error) => {
+        this.toastr.error('Gỡ chặn tài khoản không thành công:', 'Lỗi');
         console.error('Error updating user status:', error);
       }
     });
