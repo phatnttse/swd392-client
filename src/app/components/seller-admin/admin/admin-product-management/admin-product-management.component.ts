@@ -61,6 +61,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   numberOfElements: number = 0; // Số lượng sản phẩm hiện tại
   totalElements: number = 0; // Tổng số lượng sản phẩm
   currentPage: number = 0; // Trang hiện tại
+  status: number = 0; //Trạng thái trang
   visiblePages: number[] = []; // Các trang hiển thị
   isRejectFormVisible: boolean = false;
   displayedColumns: string[] = [
@@ -143,10 +144,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       )
       .subscribe({
         next: (response: FlowerPaginated) => {
-          console.log('This is response!');
-          console.log(response);
           this.listFlower = response.content;
-          console.log(this.listFlower);
           this.dataSource = new MatTableDataSource(this.listFlower);
           this.dataSource.sort = this.sort;
           this.pageNumber = response.pageNumber;
@@ -167,7 +165,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
 
   //Chuyển hướng sang admin-product-detail với id
   btnChangeStatusPage(status: number, flower?: Flower) {
-    this.currentPage = status;
+    this.status = status;
     if (flower) {
       this.flower = flower;
     }
@@ -175,7 +173,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
 
   //Chuyển hướng sang trang từ chối
   btnChangeStatusPageRejected(status: number, flower?: Flower) {
-    this.currentPage = status;
+    this.status = status;
     if (flower) {
       this.flower = flower;
     }
@@ -183,7 +181,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   }
 
   btnBack() {
-    this.currentPage = 0;
+    this.status = 0;
   }
 
   onPageChange(page: number) {
@@ -195,6 +193,10 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       this.currentPage,
       this.pageSize,
       this.categoryIds
+    );
+    this.visiblePages = Utilities.generateVisiblePageArray(
+      this.currentPage,
+      this.totalPages
     );
   }
 

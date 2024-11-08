@@ -194,23 +194,19 @@ export class AccountService extends EndpointBase {
 
   updateStatusUser(
     id: number,
-    status: string
-  ): Observable<UserAccountResponse> {
-    return this.http
-      .patch<UserAccountResponse>(
-        `${this.API_URL}/account/update-profile`,
-        {
-          id,
-          status,
-        },
-        this.requestHeaders
-      )
-      .pipe(
-        catchError((error) => {
-          return this.handleError(error, () =>
-            this.updateStatusUser(id, status)
-          );
-        })
-      );
+    name: string,
+    phone: string,
+    gender: string,
+    status: string): Observable<UserAccountResponse> { 
+    return this.http.post<UserAccountResponse>(
+      `${this.API_URL}/account/update-status-user/${id}`, 
+      {name, phone, gender, status}
+    ,
+      this.requestHeaders
+    ).pipe(
+      catchError((error) => {
+        return this.handleError(error, () => this.updateStatusUser(id,name, phone, gender,status));
+      })
+    );
   }
 }

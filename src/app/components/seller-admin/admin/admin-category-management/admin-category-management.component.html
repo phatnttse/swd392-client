@@ -25,7 +25,8 @@
     <div class="table-responsive mt-20">
       <table [dataSource]="dataSource" mat-table matSort class="w-100 text-nowrap">
         <ng-container matColumnDef="image">
-          <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">{{"Category.Image" | translate}}</th>
+          <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">{{"Category.Image" | translate}}
+          </th>
           <td mat-cell *matCellDef="let category">
             <a [href]="category.imageUrl[0]" target="_blank">
               <img class="rounded" width="50px" height="50px" [src]="category.imageUrl" alt="Image" />
@@ -41,7 +42,8 @@
         </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="name" class="fw-bold primary-color font-size">{{"Category.Name"| translate}}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="name" class="fw-bold primary-color font-size">
+            {{"Category.Name"| translate}}</th>
           <td mat-cell *matCellDef="let category">
             <p class="fw-medium mb-0 fw-bold">{{category.name}}</p>
           </td>
@@ -50,25 +52,15 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="fw-bold primary-color font-size">{{"Actions" | translate}}</th>
           <td mat-cell *matCellDef="let category">
-            <button 
-            type="button" 
-            mat-icon-button 
-            class="status-pending"
-            data-bs-target="#viewDetailChildren"
+            <button type="button" mat-icon-button class="status-pending" data-bs-target="#viewDetailChildren"
               (click)="btnChangeStatusPage(1,category)">
               <mat-icon aria-label="Edit">visibility</mat-icon>
             </button>
-            <button 
-            type="button" 
-            mat-icon-button 
-            class="status-rejected"
-            (click)="btnDeleteCategory(category.id)"
-            >
+            <button type="button" mat-icon-button class="status-rejected" (click)="openDeleteDialog(category.id)">
               <mat-icon aria-label="Delete">delete</mat-icon>
             </button>
           </td>
         </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
       </table>
@@ -76,85 +68,64 @@
   </mat-card-content>
 </mat-card>
 } @else if (statusPage == 1) {
+  <button mat-raised-button color="warn" extend class="btn me-2 fs-16 p-24 mb-2" style="padding: 20px"
+    (click)="btnChangeStatusPage(0)">
+    {{ "Back" | translate }}
+    <mat-icon>reply</mat-icon>
+  </button>
 <div class="card">
   <div class="card-body">
     <div class="d-flex align-items-center mb-4">
-      <a class="page-link primary-color me-2" href="javascript:;" (click)="btnBack()">
-        <mat-icon>arrow_back</mat-icon>
-      </a>
       <h3 class="primary-color m-0">Chi tiết danh mục</h3>
     </div>
     <form [formGroup]="categoryForm">
       <h6 class="mb-3 mt-5">Ảnh danh mục</h6>
       @if (!uploadedImage && selectedCategory?.imageUrl) {
-        <a [href]="selectedCategory?.imageUrl" target="_blank">
-          <img
-              width="100px"
-              height="100px"
-              style="object-fit: cover"
-              [src]="selectedCategory?.imageUrl"
-              alt="Category Image"
-            />
-        </a>
-      }
-      @if (uploadedImage) {
         <div class="uploaded-images">
           <div class="uploaded-image ms-2">
-            <img
-              width="100px"
-              height="100px"
-              style="object-fit: cover"
-              [src]="uploadedImage"
-              alt="Product Image"
-            />
+
+        <img width="100px" height="100px" style="object-fit: cover" [src]="selectedCategory?.imageUrl"
+          alt="Category Image" />
           </div>
+      </div>
+      }
+      @if (uploadedImage) {
+      <div class="uploaded-images">
+        <div class="uploaded-image ms-2">
+          <img width="100px" height="100px" style="object-fit: cover" [src]="uploadedImage" alt="Product Image" />
         </div>
-        }
+      </div>
+      }
       <div class="upload-section">
-        <div
-          class="file-square"
-          [ngClass]="{ 'file-square-error': isPictureError }"
-        >
-          <input
-            type="file"
-            id="cover-image"
-            (change)="onImageUpload($event)"
-            style="display: none"
-            accept="image/*"
-          />
+        <div class="file-square" [ngClass]="{ 'file-square-error': isPictureError }">
+          <input type="file" id="cover-image" (change)="onImageUpload($event)" style="display: none" accept="image/*" />
           <label for="cover-image">
             <i class="material-icons">add_photo_alternate</i>
             <span class="fs-12 mt-2 upload-title">Thêm hình ảnh</span>
           </label>
         </div>
-      <h6 class="mb-3">Tên danh mục</h6>
-      <mat-form-field class="w-100 fs-16" appearance="outline">
-        <mat-label>Nhập tên danh mục</mat-label>
-        <input matInput type="text" required formControlName="name" />
-      </mat-form-field>
+        <h6 class="mb-3">Tên danh mục</h6>
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+          <mat-label>Nhập tên danh mục</mat-label>
+          <input matInput type="text" required formControlName="name" />
+        </mat-form-field>
 
-      <mat-form-field class="w-100 fs-16" appearance="outline">
-        <mat-label>Danh mục tổng</mat-label>
-        <mat-select formControlName="parentCategory" [(value)]="selectedCategoryParent">
-          @for (category of categories; track $index) {
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+          <mat-label>Danh mục tổng</mat-label>
+          <mat-select formControlName="parentCategory" [(value)]="selectedCategoryParent">
+            @for (category of categories; track $index) {
             <mat-option [value]="category">{{ category }}</mat-option>
             }
-        </mat-select>
-      </mat-form-field>
+          </mat-select>
+        </mat-form-field>
 
-      <div class="d-flex justify-content-end mt-5">
-        <button 
-        mat-raised-button 
-        class="fs-20 p-15" 
-        color="accent" 
-        type="submit"
-        (click)="btnUpdateCategory()" 
-        extend
-        >
-          Cập nhật
-          <mat-icon>task_alt</mat-icon>
-        </button>
-      </div>
+        <div class="d-flex justify-content-end mt-5">
+          <button mat-raised-button class="fs-20 p-15" color="accent" type="submit" (click)="btnUpdateCategory()"
+            extend>
+            Cập nhật
+            <mat-icon>task_alt</mat-icon>
+          </button>
+        </div>
       </div>
     </form>
   </div>
@@ -167,17 +138,8 @@
     <form [formGroup]="categoryForm">
       <h6 class="mb-3 mt-5">Ảnh danh mục</h6>
       <div class="upload-section">
-        <div
-          class="file-square"
-          [ngClass]="{ 'file-square-error': isPictureError }"
-        >
-          <input
-            type="file"
-            id="cover-image"
-            (change)="onImageUpload($event)"
-            style="display: none"
-            accept="image/*"
-          />
+        <div class="file-square" [ngClass]="{ 'file-square-error': isPictureError }">
+          <input type="file" id="cover-image" (change)="onImageUpload($event)" style="display: none" accept="image/*" />
           <label for="cover-image">
             <i class="material-icons">add_photo_alternate</i>
             <span class="fs-12 mt-2 upload-title">Thêm hình ảnh</span>
@@ -187,22 +149,14 @@
         @if (uploadedImage) {
         <div class="uploaded-images">
           <div class="uploaded-image ms-2">
-            <img
-              width="100px"
-              height="100px"
-              style="object-fit: cover"
-              [src]="uploadedImage"
-              alt="Product Image"
-            />
+            <img width="100px" height="100px" style="object-fit: cover" [src]="uploadedImage" alt="Product Image" />
           </div>
         </div>
         }
       </div>
 
       @if (isPictureError) {
-      <mat-error class="fs-12 mb-2 ms-3" style="visibility: visible"
-        >Vui lòng tải ảnh bìa</mat-error
-      >
+      <mat-error class="fs-12 mb-2 ms-3" style="visibility: visible">Vui lòng tải ảnh bìa</mat-error>
       }@else {
       <mat-error style="visibility: hidden">Vui lòng tải ảnh bìa</mat-error>
       }
@@ -216,7 +170,7 @@
         <mat-label>Danh mục tổng</mat-label>
         <mat-select formControlName="parentCategory" [(value)]="selectedCategoryParent">
           @for (category of categories; track $index) {
-            <mat-option [value]="category">{{ category }}</mat-option>
+          <mat-option [value]="category">{{ category }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
