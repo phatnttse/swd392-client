@@ -80,7 +80,7 @@ export class SellerProfileComponent {
         this.listFlower = response;
       },
       error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }
