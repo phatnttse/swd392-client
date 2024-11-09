@@ -78,6 +78,44 @@ export class ProductService extends EndpointBase {
       );
   }
 
+  getFlowersAdmin(
+    searchString: string,
+    order: string,
+    sortBy: string,
+    pageNumber: number,
+    pageSize: number,
+    categoryIds: number[]
+  ): Observable<FlowerPaginated> {
+    const params = new HttpParams()
+      .set('searchString', searchString)
+      .set('order', order)
+      .set('sortBy', sortBy)
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString())
+      .set('categoryIds', categoryIds.join(',') ?? []);
+
+    return this.http
+      .get<FlowerPaginated>(`${this.API_URL}/flowers`, {
+        params: params,
+        headers: this.requestHeaders.headers
+      },
+    )
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () =>
+            this.getFlowers(
+              searchString,
+              order,
+              sortBy,
+              pageNumber,
+              pageSize,
+              categoryIds
+            )
+          );
+        })
+      );
+  }
+
   getFlowerById(id: number): Observable<Flower> {
     return this.http.get<Flower>(`${this.API_URL}/flowers/${id}`).pipe(
       catchError((error) => {
@@ -85,6 +123,8 @@ export class ProductService extends EndpointBase {
       })
     );
   }
+
+
 
   createFlower(formData: FormData): Observable<Flower> {
     return this.http
@@ -118,6 +158,16 @@ export class ProductService extends EndpointBase {
       .pipe(
         catchError((error) => {
           return this.handleError(error, () => this.deleteFlower(flowerId));
+        })
+      );
+  }
+
+  restoreFlower(flowerId: number): Observable<any> {
+    return this.http
+      .post<any>(`${this.API_URL}/flowers/${flowerId}/restore`,{}, this.requestHeaders)
+      .pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.restoreFlower(flowerId));
         })
       );
   }
