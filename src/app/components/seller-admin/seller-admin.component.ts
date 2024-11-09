@@ -99,8 +99,10 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.account = this.authService.currentUser;
     if (this.authService.isLoggedIn) {
-      this.getFlowersByUserId(this.account?.id!);
-      this.getOrdersBySeller();
+      if (!this.authService.isAdmin) {
+        this.getFlowersByUserId(this.account?.id!);
+        this.getOrdersBySeller();
+      }
 
       // Khởi tạo WebSocket và kết nối
       this.notificationService.connectWebSocket(this.account?.id!);
