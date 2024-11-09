@@ -424,6 +424,8 @@ export class OrderComponent implements OnInit {
     const dialogRef = this.dialog.open(SelectAddressComponent);
     dialogRef.afterClosed().subscribe((address: AccountAddress) => {
       if (address) {
+        this.shippingFee = 0;
+        this.shippingFees = [];
         const addressString = `${address.streetAddress}, ${address.ward}, ${address.district}, ${address.province}`;
         this.orderForm.get('deliveryAddress')?.setValue(addressString);
         this.province = address.province;
