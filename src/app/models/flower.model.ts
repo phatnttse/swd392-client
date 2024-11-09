@@ -26,6 +26,7 @@ export interface Flower {
   createdAt: string;
   updatedAt: string;
   deleted: boolean;
+  isDeleted: boolean;
 }
 
 export interface FlowerPaginated extends PaginatedResponse<Flower> {}

@@ -138,7 +138,7 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
     categoryIds: number[]
   ) {
     this.productService
-      .getFlowers(
+      .getFlowersAdmin(
         searchString,
         order,
         sortBy,
@@ -199,6 +199,19 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
       },
     });
   }
+
+  btnRestoreFlower(id: number){
+    this.productService.restoreFlower(id).subscribe({
+      next: (response: FlowerPaginated) => {
+        this.toastr.success(`Khôi phục thành công hoa có ID: ${id}`, 'Thành công');
+        this.ngOnInit();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
+  }
+
 
   openDeleteDialog(id: number): void {
     const dialogRef = this.dialog.open(DeleteFlowerComponent, {
