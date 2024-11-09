@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../../../services/notification.service';
 import { MatSort } from '@angular/material/sort';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Notification } from '../../../../models/notification.model';
+import { BroadCast, BroadCastResponse, Notification } from '../../../../models/notification.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
@@ -45,8 +45,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AdminNotificationManagementComponent {
   notifications: Notification[] = []; // Lưu trữ danh sách thông báo
+  broadcasts: BroadCast[] = []; // Lưu trữ danh sách thông báo
   notificationForm: FormGroup;
   dataSource: MatTableDataSource<Notification> = new MatTableDataSource<Notification>();
+  dataSourceBroadcast: MatTableDataSource<BroadCast> = new MatTableDataSource<BroadCast>();
   @ViewChild(MatSort) sort!: MatSort;
   displayedColumns: string[] = ['id','title', 'message', 'type', 'actions'];
   status: number = 0;
@@ -71,15 +73,19 @@ export class AdminNotificationManagementComponent {
   }
 
   ngOnInit(){
-    // Gọi phương thức lấy tất cả thông báo
-    this.notificationService.notification$.subscribe(
-      (response: Notification[]) => {
-        this.notifications = response;
-        this.dataSource = new MatTableDataSource(this.notifications);
+    this.getAllBroardNotifications();
+  }
+
+  getAllBroardNotifications(){
+    this.notificationService.getAllBroadcast().subscribe(
+      (response: BroadCastResponse) =>{
+        this.broadcasts = response.content;
+        console.log(this.broadcasts);
+        this.dataSourceBroadcast = new MatTableDataSource(this.broadcasts);
+        console.log(this.dataSource);
         this.dataSource.sort = this.sort;
-        console.log(response)
       }
-    );
+    )
   }
 
   onPageChange(statusPage: number){

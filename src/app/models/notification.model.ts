@@ -1,3 +1,5 @@
+import { BaseResponse } from "./base.model";
+
 export interface Notification {
   id: number;
   userId: number;
@@ -11,3 +13,20 @@ export interface Notification {
   updatedAt: string;
   isDeleted: boolean;
 }
+export interface BroadCast {
+  id: number;
+  title: string;
+  message: string;
+  type: string;
+  destinationScreen: string;
+  isExecuted: boolean;
+  scheduledTime: string;
+  executeTime: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BroadCastResponse{
+  content: BroadCast[];
+}
+
