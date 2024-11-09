@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { AppConfigurationService } from './configuration.service';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
-import { ConvertedCategory, FlowerCategory } from '../models/category.model';
+import { ConvertedCategory, FlowerCategory} from '../models/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -66,19 +66,19 @@ export class CategoryService extends EndpointBase {
   }
 
   updateCategory(
-    id: number,
-    updatedCategory: FlowerCategory
+    id: number|undefined,
+    formData : FormData
   ): Observable<FlowerCategory> {
     return this.http
       .put<FlowerCategory>(
         `${this.API_URL}/flower-categories/${id}`,
-        updatedCategory,
+       formData,
         this.requestHeaders
       )
       .pipe(
         catchError((error) => {
           return this.handleError(error, () =>
-            this.updateCategory(id, updatedCategory)
+            this.updateCategory(id, formData)
           );
         })
       );

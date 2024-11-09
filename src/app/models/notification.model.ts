@@ -6,6 +6,7 @@ export interface Notification {
   type: string;
   destinationScreen: string;
   isRead: boolean;
+  scheduledTime: string;
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;

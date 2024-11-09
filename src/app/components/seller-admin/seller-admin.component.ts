@@ -273,5 +273,10 @@ export class SellerAdminComponent implements OnInit, OnDestroy {
       icon: 'person',
       menu: 'Quản lý người dùng',
     },
+    {
+      link: '/admin/notification-management',
+      icon: 'mark_chat_unread',
+      menu: 'Quản lý thông báo',
+    },
   ];
 }
