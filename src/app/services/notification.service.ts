@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, Subject } from 'rxjs';
 import { Client } from '@stomp/stompjs';
 import { AppConfigurationService } from './configuration.service';
-import { Notification } from '../models/notification.model';
+import { BroadCast, BroadCastResponse, Notification } from '../models/notification.model';
 import { AuthService } from './auth.service';
 import { EndpointBase } from './endpoint-base.service';
 
@@ -75,6 +75,13 @@ export class NotificationService extends EndpointBase{
     return this.http.get<Notification[]>(
       `${this.NOTIFICATION_URL}/notifications/users/${userId}`,
       { params }
+    );
+  }
+
+  getAllBroadcast(): Observable<BroadCastResponse>{
+    return this.http.get<BroadCastResponse>(
+      `${this.NOTIFICATION_URL}/broadcast-notifications`,
+      this.requestHeaders
     );
   }
 
