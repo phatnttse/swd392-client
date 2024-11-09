@@ -23,6 +23,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { DeleteFlowerComponent } from '../../../dialogs/delete-flower/delete-flower.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-admin-product-management',
@@ -90,7 +92,9 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
-    private productService: ProductService
+    private productService: ProductService,
+    public dialog: MatDialog,
+
   ) {
     (this.productForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -183,6 +187,34 @@ export class AdminProductManagementComponent implements OnInit, AfterViewInit {
   btnBack() {
     this.status = 0;
   }
+
+  btnDeleteFlower(id: number){
+    this.productService.deleteFlower(id).subscribe({
+      next: (response: FlowerPaginated) => {
+        this.toastr.success(`Xóa thành công hoa có ID: ${id}`, 'Thành công');
+        this.ngOnInit();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
+  }
+
+  openDeleteDialog(id: number): void {
+    const dialogRef = this.dialog.open(DeleteFlowerComponent, {
+      width: '300px',
+      data: id
+    });
+
+    // Xử lý khi dialog đóng
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.toastr.success(`Xóa thành công hoa có ID: ${id}`, `Thành công`);
+        this.ngOnInit();
+      }
+    });
+  }
+
 
   onPageChange(page: number) {
     this.currentPage = page < 0 ? 0 : page;

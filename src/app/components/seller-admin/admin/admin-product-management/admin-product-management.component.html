@@ -73,11 +73,12 @@
             <button mat-icon-button class="status-approved" (click)="btnApproveFlower(product?.id)">
               <mat-icon aria-label="check" class="fw-bold">check</mat-icon>
             </button>
-            <button mat-icon-button class="status-rejected">
-              <mat-icon aria-label="do_not_disturb_on" class="fw-bold"
-                (click)="btnChangeStatusPageRejected(1, product)">do_not_disturb_on</mat-icon>
-            </button>
             }
+            <button mat-icon-button class="status-rejected">
+              <mat-icon aria-label="do_not_disturb_on" class="fw-bold" (click)="openDeleteDialog(product?.id)">delete
+              </mat-icon>
+            </button>
+
             <button type="button" mat-icon-button class="status-pending" (click)="btnChangeStatusPage(1, product)">
               <mat-icon aria-label="visibility" class="fw-bold">visibility</mat-icon>
             </button>
