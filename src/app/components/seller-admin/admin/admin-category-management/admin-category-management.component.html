@@ -98,7 +98,7 @@
       }
       <div class="upload-section">
         <div class="file-square" [ngClass]="{ 'file-square-error': isPictureError }">
-          <input type="file" id="cover-image" (change)="onImageUpload($event)" style="display: none" accept="image/*" />
+          <input type="file" id="cover-image" formControlName="image" (change)="onImageUpload($event)" style="display: none" accept="image/*" />
           <label for="cover-image">
             <i class="material-icons">add_photo_alternate</i>
             <span class="fs-12 mt-2 upload-title">Thêm hình ảnh</span>
@@ -120,7 +120,7 @@
         </mat-form-field>
 
         <div class="d-flex justify-content-end mt-5">
-          <button mat-raised-button class="fs-20 p-15" color="accent" type="submit" (click)="btnUpdateCategory()"
+          <button mat-raised-button class="fs-20 p-15" color="accent" type="submit" (click)="btnUpdateCategory(selectedCategory?.id)"
             extend>
             Cập nhật
             <mat-icon>task_alt</mat-icon>

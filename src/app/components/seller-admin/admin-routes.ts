@@ -38,6 +38,14 @@ export const AdminRoutes: Routes = [
         },
       },
       {
+        path: 'notification-management',
+        loadComponent() {
+          return import(
+            './../seller-admin/admin/admin-notification-management/admin-notification-management.component'
+          ).then((m) => m.AdminNotificationManagementComponent);
+        },
+      },
+      {
         path: '',
         loadComponent() {
           return import(
