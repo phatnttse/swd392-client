@@ -243,9 +243,9 @@
   "Type": "Loại",
   "SelectType": "Chọn loại",
   "Statistical": "Thống kê",
-  "ExpireDate": "Ngày hết hạn",
-  "ExpireDateRequired": "Vui lòng chọn ngày hết hạn",
-  "ShippingFee": "Phí vận chuyển",
+  "ExpireDate": "Ngày ngừng bán",
+  "ExpireDateRequired": "Vui lòng chọn ngày ngừng bán",
+  "ShippingFee": "Phí vận chuyển ước tính",
   "FreshFlowerBasket": "Giỏ hoa tươi",
   "SpecialBouquet": "Bó hoa đặc biệt",
   "FlowersForAllOccasions": "Hoa cho mọi dịp",
@@ -271,5 +271,6 @@
   "AddToCartNow": "Thêm vào giỏ ngay",
   "MyAddress": "Địa chỉ của tôi",
   "FlowerExpireDate": "Ngày hoa hết hạn",
+  "FlowerExpireDateRequired": "Vui lòng chọn ngày hoa hết hạn",
   "View": "Lượt xem"
 }

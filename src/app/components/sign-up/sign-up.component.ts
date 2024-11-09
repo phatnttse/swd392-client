@@ -58,6 +58,13 @@ export class SignUpComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       name: ['', Validators.required],
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g),
+        ],
+      ],
       accountGender: ['', Validators.required],
       repeatPassword: ['', Validators.required],
     });
@@ -83,10 +90,11 @@ export class SignUpComponent {
     const email = this.formSignUp.get('email')?.value;
     const password = this.formSignUp.get('password')?.value;
     const name = this.formSignUp.get('name')?.value;
+    const phone = this.formSignUp.get('phone')?.value;
     const accountGender = this.formSignUp.get('accountGender')?.value;
 
     this.authService
-      .registerAccount(email, password, name, accountGender)
+      .registerAccount(email, password, name, phone, accountGender)
       .subscribe({
         next: (response: BaseResponse<string>) => {
           this.statusService.statusLoadingSpinnerSource.next(false);

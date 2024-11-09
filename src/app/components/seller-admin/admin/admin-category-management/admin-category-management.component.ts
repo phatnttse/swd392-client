@@ -79,9 +79,7 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
   searchQuery: string = ''; // Biến để lưu từ khóa tìm kiếm
 
   constructor(
-    private localStorage: LocalStoreManager,
     private categoryService: CategoryService,
-    private cdr: ChangeDetectorRef,
     public dialog: MatDialog,
     public route: Router,
     private fb: FormBuilder, // Thêm FormBuilder
@@ -148,6 +146,7 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
       this.categoryForm.markAllAsTouched();
       return;
     }
+
       
       //Form 
       const formData = this.createFormData();
@@ -187,48 +186,44 @@ export class AdminCategoryManagementComponent implements OnInit, AfterViewInit {
     if (this.fileImage) {
       formData.append('image', this.fileImage);
     }
-
     return formData;
   }
 
+  
   btnBack(){
     this.statusPage = 0;
   }
     
 
-  btnUpdateCategory(){
+  btnUpdateCategory(id: number | undefined){
     if(this.categoryForm.invalid){
       this.categoryForm.markAllAsTouched();
       return;
     }
-    if (this.selectedCategory?.id !== undefined) {
-      const updatedCategory: FlowerCategory = {
-        id: this.selectedCategory.id, 
-        name: this.categoryForm.get('name')?.value, 
-        categoryParent: this.categoryForm.get('parentCategory')?.value, 
-        imageUrl: this.selectedCategory.imageUrl, 
-        createdAt: this.selectedCategory.createdAt, 
-        updatedAt: new Date().toISOString(), 
-      };
-
+    console.log(id);
+    if (id !== undefined) {
+      console.log(id);
+      //Form 
+      const formData = this.createFormData();
       // Gọi dịch vụ để cập nhật danh mục
-      this.categoryService.updateCategory(this.selectedCategory.id,updatedCategory)
+      this.categoryService.updateCategory(id,formData)
         .subscribe({
-          next: (response : FlowerCategory) => {
-            this.toastr.success(`Cập nhật ${response.name} thành công`,'SUCCESS',{
-              progressBar: true
-            })
-            this.flowerCategories.map((flowerCategory) => {
-              if(flowerCategory.id === response.id){
-                flowerCategory = response;
-              }
-            })
+          next: (response: FlowerCategory) => {
+            this.categoryForm.reset();
+            this.uploadedImage = '';
+            this.toastr.success('Cập nhật danh mục thành công', 'Success', {
+              progressBar: true,
+            });
+            this.flowerCategories.push(response);
             this.dataSource = new MatTableDataSource(this.flowerCategories);
             this.dataSource.sort = this.sort;
+            this.categoryService.categoryDataSource.next(this.flowerCategories);
+            this.statusPage=0;
           },
           error: (error: HttpErrorResponse) => {
-            console.error('Lỗi khi cập nhật danh mục:', error);
-          }
+            this.toastr.error('Tạo hoa mới thất bại', 'Error');
+            console.error('Error creating product: ', error);
+          },
         });
     } else {
       this.toastr.warning(`Vui lòng chọn danh mục`,`WARNING`);

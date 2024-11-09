@@ -71,6 +71,13 @@
 
           <div class="mb-3">
             <span class="text-black fw-bold"
+              >{{ "ExpireDate" | translate }}:
+              {{ flower.expireDate | date : "yyyy-MM-dd HH:mm" }}</span
+            >
+          </div>
+
+          <div class="mb-3">
+            <span class="text-black fw-bold"
               >{{ "FlowerExpireDate" | translate }}:
               {{ flower.flowerExpireDate | date : "yyyy-MM-dd HH:mm" }}</span
             >
@@ -347,30 +354,16 @@
                           >
                             <h3 class="fs-6 fw-normal">{{ flower.name }}</h3>
                           </a>
-                          <div>
-                            <span class="rating">
-                              <svg width="18" height="18" class="text-warning">
-                                <use xlink:href="#star-full"></use>
-                              </svg>
-                              <svg width="18" height="18" class="text-warning">
-                                <use xlink:href="#star-full"></use>
-                              </svg>
-                              <svg width="18" height="18" class="text-warning">
-                                <use xlink:href="#star-full"></use>
-                              </svg>
-                              <svg width="18" height="18" class="text-warning">
-                                <use xlink:href="#star-full"></use>
-                              </svg>
-                              <svg width="18" height="18" class="text-warning">
-                                <use xlink:href="#star-half"></use>
-                              </svg>
-                            </span>
-                            <span>(222)</span>
+
+                          <div class="product-description">
+                            <p class="m-0 p-0 fs-7">
+                              {{ flower.description | truncate : 20 }}
+                            </p>
                           </div>
+
                           <div
                             class="d-flex justify-content-center align-items-center gap-2"
                           >
-                            <del>{{ flower.price | number : "1.0" }}₫</del>
                             <span class="text-dark fw-semibold"
                               >{{ flower.price | number : "1.0" }}₫</span
                             >

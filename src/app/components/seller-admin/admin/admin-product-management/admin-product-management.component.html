@@ -73,11 +73,19 @@
             <button mat-icon-button class="status-approved" (click)="btnApproveFlower(product?.id)">
               <mat-icon aria-label="check" class="fw-bold">check</mat-icon>
             </button>
-            <button mat-icon-button class="status-rejected">
-              <mat-icon aria-label="do_not_disturb_on" class="fw-bold"
-                (click)="btnChangeStatusPageRejected(1, product)">do_not_disturb_on</mat-icon>
-            </button>
             }
+            @if(!product.isDeleted){
+            <button mat-icon-button class="status-rejected">
+              <mat-icon aria-label="do_not_disturb_on" class="fw-bold" (click)="openDeleteDialog(product?.id)">delete
+              </mat-icon>
+            </button>
+          }@else{
+            <button mat-icon-button class="status-rejected">
+              <mat-icon aria-label="do_not_disturb_on" class="fw-bold" (click)="btnRestoreFlower(product?.id)">restart_alt
+              </mat-icon>
+            </button>
+          }
+
             <button type="button" mat-icon-button class="status-pending" (click)="btnChangeStatusPage(1, product)">
               <mat-icon aria-label="visibility" class="fw-bold">visibility</mat-icon>
             </button>
@@ -164,17 +172,34 @@
                 'status-expired': flower?.status === 'EXPIRED'
               }" class="green-text fw-bold ">{{flower?.status}}</strong></span>
             </div>
+            @if(flower?.isDeleted){
+              <div class="fw-bold">
+                Trạng thái hoa:<span class="text-danger">Hoa đã xóa</span>
+              </div>
+            }
           </div>
 
           <!-- Thông tin chi tiết sản phẩm bằng bảng -->
           <table class="table table-bordered">
             <tr>
               <td><strong class="text-secondary">Giá sản phẩm (VNĐ)</strong></td>
-              <td class="fw-bold text-dark">{{flower?.price | number}} VNĐ</td>
+              <td class="fw-bold text-dark col-6">{{flower?.price | number}} VNĐ</td>
             </tr>
             <tr>
               <td><strong class="text-secondary">Số lượng sản phẩm (kg)</strong></td>
-              <td class="fw-bold text-dark">{{flower?.stockQuantity}}</td>
+              <td class="fw-bold text-dark col-6">{{flower?.stockQuantity}}</td>
+            </tr>
+            <tr>
+              <td><strong class="text-secondary">Ngày đăng</strong></td>
+              <td class="fw-bold text-dark col-6">{{flower?.createdAt | date: 'dd/MM/yyyy'}}</td>
+            </tr>
+            <tr>
+              <td><strong class="text-secondary">Địa chỉ</strong></td>
+              <td class="fw-bold text-dark col-6">{{flower?.address}}</td>
+            </tr>
+            <tr>
+              <td><strong class="text-secondary">Lượt xem</strong></td>
+              <td class="fw-bold text-dark col-6">{{flower?.views}}</td>
             </tr>
           </table>
 
@@ -211,14 +236,13 @@
     <div class="col-md-6">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h3 class="primary-color mb-4">Thông tin người đăng</h3>
-          <div class="d-flex flex-column align-items-center">
+          <h3 class="primary-color mb-5">Thông tin người đăng</h3>
+          <div class="d-flex flex-column align-items-center my-4">
             <!-- Avatar của người dùng -->
             <img [src]="flower?.user?.avatar || 'https://via.placeholder.com/170'" alt="User Avatar"
               class="rounded-circle mb-3" style="width: 170px; height: 170px; object-fit: cover; border: 1px solid;" />
             <!-- Tên người dùng -->
             <h4 class="font-weight-bold text-dark">{{flower?.user?.name}}</h4>
-            <p class="text-muted mb-2 fw-bold">Vai trò: <span class="blue-text">{{flower?.user?.role}}</span></p>
           </div>
 
           <!-- Thông tin chi tiết người dùng -->
@@ -245,6 +269,10 @@
             <li class="list-group-item">
               <strong>Số dư ví: </strong>
               <span class="text-success fw-bold">{{flower?.user?.balance | number}} VNĐ</span>
+            </li>
+            <li class="list-group-item">
+              <strong>Ngày tham gia: </strong>
+              <span class="text-success fw-bold">{{flower?.user?.createAt | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
             </li>
           </ul>
         </div>

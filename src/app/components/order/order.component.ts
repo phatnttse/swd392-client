@@ -224,6 +224,7 @@ export class OrderComponent implements OnInit {
             this.orderForm.reset();
             this.statusOrder = 1;
             this.statusService.statusLoadingSpinnerSource.next(false);
+            window.scrollTo(0, 0);
             this.startConfetti();
           },
           error: (error: HttpErrorResponse) => {
@@ -251,6 +252,7 @@ export class OrderComponent implements OnInit {
             this.orderForm.reset();
             this.statusOrder = 1;
             this.statusService.statusLoadingSpinnerSource.next(false);
+            window.scrollTo(0, 0);
             this.startConfetti();
           },
           error: (error: HttpErrorResponse) => {
@@ -383,7 +385,6 @@ export class OrderComponent implements OnInit {
           (acc, fee) => acc + fee.shippingFee,
           0
         );
-        this.totalAmount += this.shippingFee;
         // this.checkBalance();
         this.statusService.statusLoadingSpinnerSource.next(false);
       })
@@ -424,8 +425,12 @@ export class OrderComponent implements OnInit {
     const dialogRef = this.dialog.open(SelectAddressComponent);
     dialogRef.afterClosed().subscribe((address: AccountAddress) => {
       if (address) {
+        this.shippingFee = 0;
+        this.shippingFees = [];
         const addressString = `${address.streetAddress}, ${address.ward}, ${address.district}, ${address.province}`;
         this.orderForm.get('deliveryAddress')?.setValue(addressString);
+        this.orderForm.get('name')?.setValue(address.recipientName);
+        this.orderForm.get('phone')?.setValue(address.phoneNumber);
         this.province = address.province;
         this.district = address.district;
         this.ward = address.ward;

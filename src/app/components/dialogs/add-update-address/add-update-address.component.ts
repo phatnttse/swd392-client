@@ -100,7 +100,6 @@ export class AddUpdateAddressComponent implements OnInit {
   }
 
   btnAddUpdateAddress() {
-    debugger;
     if (this.formAddress.invalid) {
       this.formAddress.markAllAsTouched();
       return;
