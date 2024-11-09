@@ -22,6 +22,7 @@ export interface Flower {
   views: number;
   rejectReason: string;
   expireDate: string;
+  flowerExpireDate: string;
   createdAt: string;
   updatedAt: string;
   deleted: boolean;

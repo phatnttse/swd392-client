@@ -1,0 +1,144 @@
+<h1 mat-dialog-title class="text-center fw-bold my-3" style="font-size: 24px">
+  Địa chỉ mới
+</h1>
+<mat-dialog-content class="my-3">
+  <form [formGroup]="formAddress">
+    <div class="row my-3">
+      <div class="col-12 col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label> {{ "Sign.FullName" | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            required
+            formControlName="recipientName"
+            [class.is-invalid]="
+              formAddress.get('recipientName')?.invalid &&
+              formAddress.get('recipientName')?.touched
+            "
+          />
+          @if(formAddress.get('recipientName')?.hasError('required')) {
+          <mat-error class="fs-14">
+            {{ "Sign.NameRequired" | translate }}
+          </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-md-6">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>{{ "Order.Phone" | translate }}</mat-label>
+          <input
+            matInput
+            type="phone"
+            required
+            formControlName="phone"
+            [class.is-invalid]="
+              formAddress.get('phone')?.invalid &&
+              formAddress.get('phone')?.touched
+            "
+          />
+          @if(formAddress.get('phone')?.hasError('required')) {
+          <mat-error class="fs-14">
+            {{ "Order.PhoneRequired" | translate }}
+          </mat-error>
+          } @if(formAddress.get('phone')?.hasError('pattern')) {
+          <mat-error class="fs-14">
+            {{ "Order.PhoneInvalid" | translate }}
+          </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="mb-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Địa chỉ chi tiết</mat-label>
+        <input
+          matInput
+          type="text"
+          required
+          formControlName="streetAddress"
+          [class.is-invalid]="
+            formAddress.get('streetAddress')?.invalid &&
+            formAddress.get('streetAddress')?.touched
+          "
+          placeholder="Enter your name"
+        />
+        @if(formAddress.get('streetAddress')?.hasError('required')) {
+        <mat-error class="fs-14">
+          Địa chỉ chi tiết không được để trống
+        </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Chọn tỉnh/thành phố</mat-label>
+          <mat-select formControlName="province">
+            @for (province of listProvinces; track $index) {
+            <mat-option
+              [value]="province.provinceName"
+              (click)="onProvinceChange(province.provinceId)"
+            >
+              {{ province.provinceName }}
+            </mat-option>
+            }
+          </mat-select>
+          @if(formAddress.get('province')?.hasError('required')) {
+          <mat-error class="fs-14">
+            Tỉnh/Thành phố không được để trống
+          </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-md-4">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Chọn quận/huyện</mat-label>
+          <mat-select formControlName="district">
+            @for (district of listDistricts; track $index) {
+            <mat-option
+              [value]="district.districtName"
+              (click)="onDistrictChange(district.districtId)"
+            >
+              {{ district.districtName }}
+            </mat-option>
+            }
+          </mat-select>
+          @if(formAddress.get('district')?.hasError('required')) {
+          <mat-error class="fs-14"> Quận/Huyện không được để trống </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-md-4">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Chọn phường/xã</mat-label>
+          <mat-select formControlName="ward">
+            @for (commune of listCommunes; track $index) {
+            <mat-option
+              [value]="commune.communeName"
+              (click)="onWardChange(commune.communeId)"
+            >
+              {{ commune.communeName }}
+            </mat-option>
+            }
+          </mat-select>
+          @if(formAddress.get('ward')?.hasError('required')) {
+          <mat-error class="fs-14"> Phường/Xã không được để trống </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="my-3">
+  <button class="me-4" mat-button mat-dialog-close color="warn">Đóng</button>
+  <button
+    class="ms-4 text-white"
+    type="button"
+    mat-raised-button
+    style="background-color: var(--bs-success)"
+    (click)="btnAddUpdateAddress()"
+  >
+    Hoàn thành
+  </button>
+</mat-dialog-actions>

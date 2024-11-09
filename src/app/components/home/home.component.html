@@ -276,11 +276,15 @@
                   <h3 class="fs-6 fw-bold">{{ flower.name }}</h3>
                 </a>
                 <div class="product-description">
-                  <p class="m-0 p-0 fs-7">{{ flower.description | truncate : 50 }}</p>
+                  <p class="m-0 p-0 fs-7">
+                    {{ flower.description | truncate : 50 }}
+                  </p>
                 </div>
                 <div>
                   @for (category of flower.categories; track $index) {
-                    <span class="badge rounded-pill bg-light text-dark mx-1">{{ category.name }}</span>
+                  <span class="badge rounded-pill bg-light text-dark mx-1">{{
+                    category.name
+                  }}</span>
                   }
                 </div>
                 <div
@@ -298,13 +302,15 @@
                         href="javascript:;"
                         (click)="btnInsertUpdateCart(flower.id, 1)"
                         class="btn btn-primary rounded-1 p-2 fs-7 fw-bold btn-cart"
+                      >
+                        <div
+                          class="d-flex align-items-center justify-content-center gap-1"
                         >
-                          <div class="d-flex align-items-center justify-content-center gap-1">
-                            <svg width="28" height="28">
-                              <use xlink:href="#cart"></use>
-                            </svg>
-                            {{ "AddToCart" | translate }}
-                          </div>
+                          <svg width="24" height="24">
+                            <use xlink:href="#cart"></use>
+                          </svg>
+                          {{ "AddToCart" | translate }}
+                        </div>
                       </a>
                     </div>
                   </div>

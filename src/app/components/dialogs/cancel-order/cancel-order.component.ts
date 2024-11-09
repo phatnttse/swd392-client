@@ -27,6 +27,7 @@ import {
 import { UpdateOrderStatusResponse } from '../../../models/order.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { StatusService } from '../../../services/status.service';
 
 @Component({
   selector: 'app-cancel-order',
@@ -60,7 +61,8 @@ export class CancelOrderComponent {
     public data: { orderId: number; orderStatus: string },
     private toastr: ToastrService,
     private dialogRef: MatDialogRef<CancelOrderComponent>,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private statusService: StatusService
   ) {
     this.orderStatus = data.orderStatus;
     this.formCancelOrder = this.formBuilder.group({
@@ -90,6 +92,8 @@ export class CancelOrderComponent {
       reason = this.formCancelOrder.get('otherReason')?.value;
     }
 
+    this.statusService.statusLoadingSpinnerSource.next(true);
+
     const orderId = this.data.orderId;
     const orderStatus = this.data.orderStatus;
 
@@ -98,11 +102,15 @@ export class CancelOrderComponent {
       .subscribe({
         next: (response: UpdateOrderStatusResponse) => {
           if (response.success) {
+            this.statusService.statusLoadingSpinnerSource.next(false);
             this.dialogRef.close(true);
           }
         },
         error: (error: HttpErrorResponse) => {
-          this.toastr.error(error.error.message, 'Error');
+          this.statusService.statusLoadingSpinnerSource.next(false);
+          this.toastr.error(error.error.message, 'Error', {
+            progressBar: true,
+          });
         },
       });
   }

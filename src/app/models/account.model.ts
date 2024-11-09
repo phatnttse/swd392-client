@@ -51,6 +51,19 @@ export interface SellerProfile {
   productCount: number;
 }
 
+export interface AccountAddress {
+  id: number;
+  recipientName: string;
+  streetAddress: string;
+  ward: string;
+  district: string;
+  province: string;
+  phoneNumber: string;
+  account: UserAccount;
+  createAt: Date;
+  updateAt: Date;
+}
+
 export interface UserAccountResponse extends BaseResponse<UserAccount> {}
 
 export interface AccountPaginate extends PaginatedResponse<UserAccount> {}
@@ -59,3 +72,8 @@ export interface UserAccountPaginatedResponse
   extends BaseResponse<AccountPaginate> {}
 
 export interface SellerProfileResponse extends BaseResponse<SellerProfile> {}
+
+export interface AccountAddressResponse extends BaseResponse<AccountAddress> {}
+
+export interface AccountAddressListResponse
+  extends BaseResponse<AccountAddress[]> {}

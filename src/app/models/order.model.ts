@@ -1,5 +1,5 @@
 import { BaseResponse } from './base.model';
-import { OrderDetailStatus } from './enums';
+import { OrderDetailStatus, PaymentMethod } from './enums';
 import { Flower } from './flower.model';
 import { PaginatedPageableResponse } from './paginated.model';
 
@@ -41,6 +41,7 @@ export interface OrderByAccount {
   orderSummary: OrderSummary;
   quantity: number;
   price: number;
+  paymentMethod: PaymentMethod;
   status: OrderDetailStatus;
   createAt: Date;
 }

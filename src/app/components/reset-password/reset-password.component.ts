@@ -103,7 +103,7 @@ export class ResetPasswordComponent implements OnInit {
           this.router.navigate(['/signin']);
         },
         error: (error: HttpErrorResponse) => {
-          this.toastr.error(error.error.error, 'Đổi mật khẩu thất bại');
+          this.toastr.error(error.error.message, 'Đổi mật khẩu thất bại');
           this.statusService.statusLoadingSpinnerSource.next(false);
         },
       });

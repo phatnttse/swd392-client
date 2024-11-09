@@ -91,7 +91,7 @@ export class SellerProfileComponent {
         this.sellerInfo = response.data;
       },
       error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error.error);
+        this.toastr.error(error.error.message);
       },
     });
   }

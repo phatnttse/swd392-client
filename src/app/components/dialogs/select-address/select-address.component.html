@@ -1,0 +1,60 @@
+<h2
+  mat-dialog-title
+  class="text-center my-2 fw-bold primary-color"
+  style="font-size: 24px"
+>
+  Địa chỉ của tôi
+</h2>
+<mat-dialog-content class="my-5">
+  @if (listAddress.length > 0) {
+
+  <mat-radio-group aria-label="Select an option" [(ngModel)]="selectedAddress">
+    @for (address of listAddress; track $index) {
+    <mat-radio-button [value]="address" class="w-100 d-flex">
+      <div class="d-flex flex-column w-100">
+        <div
+          class="address-item d-flex flex-column justify-content-between align-items-start w-100"
+        >
+          <div>
+            <h6>{{ address.recipientName }} | {{ address.phoneNumber }}</h6>
+            <p class="mb-1">
+              {{ address.streetAddress }}
+            </p>
+            <p class="mb-0">
+              {{ address.ward }}, {{ address.district }} {{ address.province }}
+            </p>
+          </div>
+        </div>
+        <hr class="w-100" />
+      </div>
+    </mat-radio-button>
+    }
+  </mat-radio-group>
+  } @else {
+  <p class="text-center my-5 fw-bold">Bạn chưa cập nhật địa chỉ.</p>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="center" class="my-3">
+  <button mat-button mat-dialog-close>Đóng</button>
+  @if (listAddress.length > 0) {
+  <button
+    type="button"
+    mat-raised-button
+    color="accent"
+    (click)="btnSelectAddress()"
+  >
+    Xác nhận
+  </button>
+  } @else {
+  <button
+    type="button"
+    mat-raised-button
+    color="primary"
+    color="accent"
+    routerLink="/profile"
+    mat-dialog-close
+  >
+    Cập nhật ngay
+  </button>
+  }
+</mat-dialog-actions>

@@ -69,13 +69,20 @@
                 </div>
               </div>
 
-              <label for="c_lname" class="text-black">
-                {{ "Order.Address" | translate
-                }}<span class="text-danger ms-1">*</span></label
-              >
+              <div class="d-flex align-items-center mb-2">
+                <div class="d-flex align-items-center">
+                  <mat-icon matPrefix class="text-danger">location_on</mat-icon>
+                  <a
+                    href="javascript:;"
+                    class="text-danger fw-bold"
+                    (click)="btnOpenSelectAddress()"
+                    >Chọn địa chỉ của tôi</a
+                  >
+                </div>
+              </div>
+
               <mat-form-field class="w-100 fs-16" appearance="outline">
                 <mat-label>{{ "AddressEnter" | translate }}</mat-label>
-                <mat-icon matPrefix>location_on</mat-icon>
                 <input
                   matInput
                   type="text"

@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { UserGuard } from './guards/user.guard';
+import { SellerChannelRoutes } from './components/seller-admin/seller-channel-routes';
+import { AdminRoutes } from './components/seller-admin/admin-routes';
 
 export const routes: Routes = [
   {
@@ -154,4 +156,15 @@ export const routes: Routes = [
     },
     canActivate: [UserGuard],
   },
+  ...SellerChannelRoutes,
+  ...AdminRoutes,
+  {
+    path: 'pages/404',
+    loadComponent() {
+      return import('./pages/page-not-found/page-not-found.component').then(
+        (m) => m.PageNotFoundComponent
+      );
+    },
+  },
+  { path: '**', redirectTo: 'pages/404' },
 ];

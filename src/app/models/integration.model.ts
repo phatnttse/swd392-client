@@ -52,6 +52,30 @@ export interface FeeShipRequest {
   transport: string;
 }
 
+export interface FeeShipResponse {
+  headers: ResponseHeaders;
+  body: FeeResponseBody;
+  statusCode: string;
+  statusCodeValue: number;
+}
+
+export interface ResponseHeaders {
+  'cache-control': string[];
+  'content-type': string[];
+  date: string[];
+  server: string[];
+  'strict-transport-security': string[];
+  'transfer-encoding': string[];
+  vary: string[];
+  'x-rqid': string[];
+}
+
+export interface FeeResponseBody {
+  success: boolean;
+  fee: FeeDetails;
+  message: string;
+}
+
 export interface FeeDetails {
   name: string;
   fee: number;
@@ -111,10 +135,12 @@ export interface CornerDetail extends LocationDetail {
 
 export interface SuggestAddressResponse
   extends BaseResponse<SuggestAddress[]> {}
+
 export interface FeeShipResponse {
-  success: boolean;
-  fee: FeeDetails;
-  message: string;
+  headers: ResponseHeaders;
+  body: FeeResponseBody;
+  statusCode: string;
+  statusCodeValue: number;
 }
 
 export interface ParseAddressResponse extends BaseResponse<ParseAddress> {}

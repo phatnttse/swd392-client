@@ -276,7 +276,7 @@
               width="100px"
               height="100px"
               style="object-fit: cover"
-              [src]="image"
+              [src]="image.url"
               alt="Product Image"
             />
             <button
@@ -311,7 +311,7 @@
             width="100px"
             height="100px"
             style="object-fit: cover"
-            [src]="uploadedImages[0]"
+            [src]="uploadedImages[0].url"
             alt=""
           />
         </div>
@@ -465,13 +465,17 @@
               }
             </mat-form-field>
           </td>
+        </tr>
+      </table>
+      <table class="example-full-width" cellspacing="0">
+        <tr>
           <td>
             <h6 class="mb-3">{{ "ExpireDate" | translate }}</h6>
             <mat-form-field appearance="outline">
               <mat-label>{{ "ExpireDate" | translate }}</mat-label>
               <input
                 matInput
-                [matDatepicker]="picker"
+                [matDatepicker]="expireDatePicker"
                 formControlName="expireDate"
                 [class.is-invalid]="
                   productForm.get('expireDate')?.invalid &&
@@ -480,10 +484,35 @@
               />
               <mat-datepicker-toggle
                 matIconSuffix
-                [for]="picker"
+                [for]="expireDatePicker"
               ></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+              <mat-datepicker #expireDatePicker></mat-datepicker>
               @if (productForm.get('expireDate')?.hasError('required')) {
+              <mat-error class="fs-12">{{
+                "ExpireDateRequired" | translate
+              }}</mat-error>
+              }
+            </mat-form-field>
+          </td>
+          <td>
+            <h6 class="mb-3">{{ "FlowerExpireDate" | translate }}</h6>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ "FlowerExpireDate" | translate }}</mat-label>
+              <input
+                matInput
+                [matDatepicker]="flowerExpireDatePicker"
+                formControlName="flowerExpireDate"
+                [class.is-invalid]="
+                  productForm.get('flowerExpireDate')?.invalid &&
+                  productForm.get('flowerExpireDate')?.touched
+                "
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="flowerExpireDatePicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #flowerExpireDatePicker></mat-datepicker>
+              @if (productForm.get('flowerExpireDate')?.hasError('required')) {
               <mat-error class="fs-12">{{
                 "ExpireDateRequired" | translate
               }}</mat-error>
