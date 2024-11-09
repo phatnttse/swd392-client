@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject } from 'rxjs';
 import { Client } from '@stomp/stompjs';
 import { AppConfigurationService } from './configuration.service';
 import { Notification } from '../models/notification.model';
+import { AuthService } from './auth.service';
+import { EndpointBase } from './endpoint-base.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService {
+export class NotificationService extends EndpointBase{
   private NOTIFICATION_URL: string;
   private WEBSOCKET_URL: string;
   private client!: Client;
@@ -19,9 +21,11 @@ export class NotificationService {
   notification$ = this.notificationDataSource.asObservable();
 
   constructor(
+    http: HttpClient,
     private appConfig: AppConfigurationService,
-    private http: HttpClient
+    authService: AuthService,
   ) {
+    super(http, authService);
     this.NOTIFICATION_URL = appConfig['NOTIFICATION_URL'];
     this.WEBSOCKET_URL = appConfig['WEBSOCKET_URL'];
   }
@@ -72,6 +76,17 @@ export class NotificationService {
       `${this.NOTIFICATION_URL}/notifications/users/${userId}`,
       { params }
     );
+  }
+
+  addNewNotification(title: string, message: string, type: string, destinationScreen: string, scheduledTime: string): Observable<Notification>{
+      return this.http.post<Notification>(
+        `${this.NOTIFICATION_URL}/broadcast-notifications`,
+        {title, message, type, destinationScreen, scheduledTime},
+      this.requestHeaders).pipe(
+        catchError((error) => {
+          return this.handleError(error, () => this.addNewNotification(title, message, type, destinationScreen, scheduledTime));
+        })
+      );
   }
 
   markAsReadAll(userId: number): Observable<any> {

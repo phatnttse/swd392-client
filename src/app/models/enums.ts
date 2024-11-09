@@ -106,6 +106,13 @@ export enum NotificationType {
   MARKETING = 'WALLET_LOG',
 }
 
+export enum DestinationScreenEnum {
+  MY_FLOWER_LISTING = 'MY_FLOWER_LISTING',
+  MY_ORDER = 'MY_ORDER',
+  MY_WALLET = 'MY_WALLET',
+  HOME_PAGE = 'HOME_PAGE'
+}
+
 export enum PaymentStatus {
   CANCELLED = 'CANCELLED',
   PAID = 'PAID',
