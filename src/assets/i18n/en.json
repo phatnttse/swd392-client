@@ -249,8 +249,8 @@
   "Type": "Type",
   "SelectType": "Select type",
   "Statistical": "Statistical",
-  "ExpireDate": "Expire Date",
-  "ExpireDateRequired": "Please select an expiration date",
+  "ExpireDate": "Sale stop date",
+  "ExpireDateRequired": "Please select an sale stop date",
   "ShippingFee": "Shipping Fee",
   "FreshFlowerBasket": "Fresh Flower ",
   "SpecialBouquet": "Special Bouquet",
@@ -276,6 +276,7 @@
   "BuyNow": "Buy Now",
   "AddToCartNow": "Add to Cart Now",
   "MyAddress": "My Address",
-  "FlowerExpireDate": "Flower Expiration Date",
+  "FlowerExpireDate": "Flower expiration date",
+  "FlowerExpireDateRequired": "Flower expiration date is required",
   "View": "View"
 }

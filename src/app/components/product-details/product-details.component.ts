@@ -34,6 +34,7 @@ import {
   SellerProfileResponse,
 } from '../../models/account.model';
 import { AuthService } from '../../services/auth.service';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 @Component({
   selector: 'app-product-details',
@@ -53,6 +54,7 @@ import { AuthService } from '../../services/auth.service';
     ReactiveFormsModule,
     TypeTransformPipe,
     BreadcrumbComponent,
+    TruncatePipe,
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.scss',

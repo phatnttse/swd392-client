@@ -18,6 +18,8 @@ export interface WalletLog {
   status: WalletLogStatus;
   balance: number;
   createdAt: string;
+  updatedAt: string;
+  refund: boolean;
 }
 
 export interface WalletLogPaginated

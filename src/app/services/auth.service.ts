@@ -142,6 +142,7 @@ export class AuthService {
     email: string,
     password: string,
     name: string,
+    phone: string,
     accountGender: string
   ): Observable<BaseResponse<string>> {
     return this.http.post<BaseResponse<string>>(
@@ -150,6 +151,7 @@ export class AuthService {
         email,
         password,
         name,
+        phone,
         accountGender,
       }
     );

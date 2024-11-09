@@ -49,23 +49,48 @@
                 </mat-error>
                 }
               </mat-form-field>
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label style="font-size: 14px">{{
+                  "Sign.FullName" | translate
+                }}</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  required
+                  formControlName="name"
+                  [class.is-invalid]=""
+                />
+                @if (formSignUp.get('name')?.hasError('required')) {
+                <mat-error style="font-size: 12px">
+                  {{ "Sign.NameRequired" | translate }}
+                </mat-error>
+                }
+              </mat-form-field>
 
               <div class="row">
                 <div class="col-md-6">
                   <mat-form-field class="w-100" appearance="outline">
                     <mat-label style="font-size: 14px">{{
-                      "Sign.FullName" | translate
+                      "Order.Phone" | translate
                     }}</mat-label>
                     <input
                       matInput
                       type="text"
                       required
-                      formControlName="name"
-                      [class.is-invalid]=""
+                      formControlName="phone"
+                      [class.is-invalid]="
+                        formSignUp.get('phone')?.invalid &&
+                        formSignUp.get('phone')?.touched
+                      "
                     />
-                    @if (formSignUp.get('name')?.hasError('required')) {
+
+                    @if(formSignUp.get('phone')!.hasError('required')) {
                     <mat-error style="font-size: 12px">
-                      {{ "Sign.NameRequired" | translate }}
+                      {{ "Order.PhoneRequired" | translate }}
+                    </mat-error>
+                    } @if(formSignUp.get('phone')!.hasError('pattern')) {
+                    <mat-error style="font-size: 12px">
+                      {{ "Order.PhoneInvalid" | translate }}
                     </mat-error>
                     }
                   </mat-form-field>
